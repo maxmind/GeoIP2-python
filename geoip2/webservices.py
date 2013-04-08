@@ -27,7 +27,7 @@ class Client(object):
                                 headers={'Accept': 'application/json'})
         if (response.status_code == 200):
             body = self._handle_success(response, uri)
-            return model_class(**body)
+            return model_class(body)
         else:
             self._handle_error(response, uri)
 
