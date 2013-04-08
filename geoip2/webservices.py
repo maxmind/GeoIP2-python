@@ -4,7 +4,11 @@ from .errors import GeoIP2Error, GeoIP2HTTPError, GeoIP2WebServiceError
 
 
 class Client(object):
-    def __init__(self, user_id, license_key, host='geoip.maxmind.com'):
+    def __init__(self, user_id, license_key, host='geoip.maxmind.com',
+                 languages=None):
+        if languages is None:
+            languages=['en']
+        self.languages = languages
         self.user_id = user_id
         self.license_key = license_key
         self._base_uri = 'https://%s/geoip' % (host)
@@ -27,7 +31,7 @@ class Client(object):
                                 headers={'Accept': 'application/json'})
         if (response.status_code == 200):
             body = self._handle_success(response, uri)
-            return model_class(body)
+            return model_class(body, languages=self.languages)
         else:
             self._handle_error(response, uri)
 

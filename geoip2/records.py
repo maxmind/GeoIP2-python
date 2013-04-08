@@ -4,8 +4,7 @@ from abc import ABCMeta
 class Record(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self, languages=None, **args):
-        object.__setattr__(self, 'languages', languages)
+    def __init__(self, **args):
         self.__dict__.update({k: args.get(k) for k in self._valid_attributes})
 
     def __setattr__(self, name, value):
@@ -17,11 +16,16 @@ class PlaceRecord(Record):
 
     # XXX - why did we name it 'name' instead of 'names'?
     def __init__(self, languages=None, **args):
+        if languages is None:
+            languages=[]
+        object.__setattr__(self, 'languages', languages)
         args['names'] = args.pop('name', None)
-        super().__init__(languages, **args)
+        super().__init__(**args)
 
+    @property
     def name(self):
-        pass
+        return next((self.names.get(x) for x in self.languages if x in
+                     self.names), None)
 
 
 class City(PlaceRecord):

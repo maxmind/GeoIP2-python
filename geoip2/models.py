@@ -13,8 +13,7 @@ class Country(object):
             geoip2.records.Country(languages,
                                    **raw_response.get('registered_country',
                                                       {}))
-        self.traits = geoip2.records.Traits(languages,
-                                            **raw_response.get('traits', {}))
+        self.traits = geoip2.records.Traits(**raw_response.get('traits', {}))
         self.raw = raw_response
 
 
@@ -24,8 +23,7 @@ class City(Country):
         self.city = \
             geoip2.records.City(languages, **raw_response.get('city', {}))
         self.location = \
-            geoip2.records.Location(languages,
-                                    **raw_response.get('location', {}))
+            geoip2.records.Location(**raw_response.get('location', {}))
         self.region = \
             geoip2.records.Region(languages,
                                   **raw_response.get('region', {}))
