@@ -19,7 +19,7 @@ class PlaceRecord(Record):
         if languages is None:
             languages = []
         object.__setattr__(self, 'languages', languages)
-        args['names'] = args.pop('name', None)
+        args['names'] = args.pop('name', [])
         super().__init__(**args)
 
     @property
