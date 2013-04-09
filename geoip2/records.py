@@ -17,7 +17,7 @@ class PlaceRecord(Record):
     # XXX - why did we name it 'name' instead of 'names'?
     def __init__(self, languages=None, **args):
         if languages is None:
-            languages=[]
+            languages = []
         object.__setattr__(self, 'languages', languages)
         args['names'] = args.pop('name', None)
         super().__init__(**args)
@@ -62,3 +62,9 @@ class Traits(Record):
                          'ip_address',
                          'organization',
                          'user_type'}
+
+    def __init__(self, languages=None, **args):
+        for k in ['is_anonymous_proxy', 'is_satellite_provider',
+                  'is_transparent_proxy']:
+            args[k] = bool(args.get(k, False))
+        super().__init__(**args)

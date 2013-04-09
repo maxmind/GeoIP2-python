@@ -7,7 +7,7 @@ class Client(object):
     def __init__(self, user_id, license_key, host='geoip.maxmind.com',
                  languages=None):
         if languages is None:
-            languages=['en']
+            languages = ['en']
         self.languages = languages
         self.user_id = user_id
         self.license_key = license_key

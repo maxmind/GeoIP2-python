@@ -3,6 +3,8 @@ import geoip2.records
 
 class Country(object):
     def __init__(self, raw_response, languages=None):
+        if languages is None:
+            languages = ['en']
         self.continent = \
             geoip2.records.Continent(languages,
                                      **raw_response.get('continent', {}))
