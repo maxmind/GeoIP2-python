@@ -21,7 +21,7 @@ class Country(object):
 
 class City(Country):
     def __init__(self, raw_response, languages=None):
-        super().__init__(raw_response, languages)
+        super(City, self).__init__(raw_response, languages)
         self.city = \
             geoip2.records.City(languages, **raw_response.get('city', {}))
         self.location = \

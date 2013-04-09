@@ -5,7 +5,7 @@ class GeoIP2Error(RuntimeError):
 class GeoIP2HTTPError(GeoIP2Error):
     """There was an error when making your HTTP request."""
     def __init__(self, message, http_status=None, uri=None):
-        super().__init__(message)
+        super(GeoIP2HTTPError, self).__init__(message)
         self.http_status = http_status
         self.uri = uri
 
@@ -13,5 +13,5 @@ class GeoIP2HTTPError(GeoIP2Error):
 class GeoIP2WebServiceError(GeoIP2HTTPError):
     """The GeoIP2 web service returned an error."""
     def __init__(self, message, code=None, http_status=None, uri=None):
-        super().__init__(message, http_status, uri)
+        super(GeoIP2WebServiceError, self).__init__(message, http_status, uri)
         self.code = code
