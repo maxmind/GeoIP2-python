@@ -7,9 +7,13 @@ sys.path.append('..')
 import geoip2
 import json
 import requests
-import unittest
 from geoip2.errors import GeoIP2Error, GeoIP2HTTPError, GeoIP2WebServiceError
 from geoip2.webservices import Client
+
+if sys.version_info[:2] == (2, 6):
+    import unittest2 as unittest
+else:
+    import unittest
 
 try:
     from unittest.mock import MagicMock, patch
