@@ -1,5 +1,5 @@
 """
-GeoIP2 WebService Client API
+WebServices Client API
 ============================
 
 This class provides a client API for all the GeoIP Precision web service's end
@@ -26,8 +26,8 @@ Usage
 -----
 
 The basic API for this class is the same for all of the web service end
-points. First you create a web service object with your MaxMind C<user_id> and
-C<license_key>, then you call the method corresponding to a specific end
+points. First you create a web service object with your MaxMind ``user_id``
+and ``license_key``, then you call the method corresponding to a specific end
 point, passing it the IP address you want to look up.
 
 If the request succeeds, the method call will return a model class for the end
@@ -100,47 +100,46 @@ from .errors import GeoIP2Error, GeoIP2HTTPError, GeoIP2WebServiceError
 class Client(object):
     """This method creates a new client object.
 
-        It accepts the following required arguments:
+    It accepts the following required arguments:
 
-        :param user_id: Your MaxMind User ID.
-        :param license_key: Your MaxMind license key.
+    :param user_id: Your MaxMind User ID.
+    :param license_key: Your MaxMind license key.
 
-        Go to https://www.maxmind.com/en/my_license_key to see your MaxMind
-        User ID and license key.
+    Go to https://www.maxmind.com/en/my_license_key to see your MaxMind
+    User ID and license key.
 
-        The following keyword arguments are also accepted:
+    The following keyword arguments are also accepted:
 
-        :param host: The hostname to make a request against. This defaults to
-        "geoip.maxmind.com". In most cases, you should not need to set this
-        explicitly.
+    :param host: The hostname to make a request against. This defaults to
+      "geoip.maxmind.com". In most cases, you should not need to set this
+      explicitly.
+    :param languages: This is list of language codes. This argument will be
+      passed onto record classes to use when their name properties are
+      called. The default value is ['en'].
 
-        :param languages: This is list of language codes. This argument will be
-          passed onto record classes to use when their name properties are
-          called. The default value is ['en'].
+    Details on language handling:
 
-        Details on language handling:
+    The order of the languages is significant. When a record class has
+    multiple names (country, city, etc.), its name property will return
+    the name in the first language that has one.
 
-        The order of the languages is significant. When a record class has
-        multiple names (country, city, etc.), its name property will return
-        the name in the first language that has one.
+    Note that the only language which is always present in the GeoIP2
+    Precision data in "en". If you do not include this language, the 
+    name property may end up returning None even when the record hass
+    an English name.
 
-        Note that the only language which is always present in the GeoIP2
-        Precision data in "en". If you do not include this language, the 
-        name property may end up returning None even when the record hass
-        an English name.
+    Currently, the valid list of language codes is:
 
-        Currently, the valid list of language codes is:
+    * en -- English names may still include accented characters if that is
+      the accepted spelling in English. In other words, English does not
+      mean ASCII.
+    * ja -- Japanese
+    * ru -- Russian
+    * zh-CN -- Simplified Chinese.
 
-        en -- English names may still include accented characters if that is
-          the accepted spelling in English. In other words, English does not
-          mean ASCII.
-        ja -- Japanese
-        ru -- Russian
-        zh-CN -- Simplified Chinese.
+    Passing any other language code will result in an error.
 
-        Passing any other language code will result in an error.
-
-        """
+    """
 
     def __init__(self, user_id, license_key, host='geoip.maxmind.com',
                  languages=None):
@@ -154,8 +153,9 @@ class Client(object):
     def city(self, ip='me'):
         """This method calls the GeoIP2 Precision City endpoint.
 
-        :param ip:IPv4 or IPv6 address as a string. If no address is provided,
-        the address that the web service is called from will be used.
+        :param ip: IPv4 or IPv6 address as a string. If no address is provided,
+          the address that the web service is called from will be used.
+
         :returns: geoip2.models.City object
 
         """
@@ -165,7 +165,8 @@ class Client(object):
         """This method calls the GeoIP2 Precision City/ISP/Org endpoint.
 
         :param ip: IPv4 or IPv6 address as a string. If no address is provided,
-        the address that the web service is called from will be used.
+          the address that the web service is called from will be used.
+
         :returns: geoip2.models.CityISPOrg object
 
         """
@@ -175,7 +176,8 @@ class Client(object):
         """This method calls the GeoIP2 Country endpoint.
 
         :param ip: IPv4 or IPv6 address as a string. If no address is provided,
-        the address that the web service is called from will be used.
+          the address that the web service is called from will be used.
+
         :returns: geoip2.models.Country object
 
         """
@@ -185,7 +187,8 @@ class Client(object):
         """This method calls the GeoIP2 Precision Omni endpoint.
 
         :param ip: IPv4 or IPv6 address as a string. If no address is provided,
-        the address that the web service is called from will be used.
+          the address that the web service is called from will be used.
+
         :returns: geoip2.models.Omni object
 
         """
