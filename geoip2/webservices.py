@@ -159,7 +159,7 @@ class Client(object):
         :returns: :py:class:`geoip2.models.City` object
 
         """
-        return self._response_for('city', geoip2.models.City, ip)
+        return self._response_for('city', geoip2.models.City, ip_address)
 
     def city_isp_org(self, ip_address='me'):
         """This method calls the GeoIP2 Precision City/ISP/Org endpoint.
@@ -171,7 +171,8 @@ class Client(object):
         :returns: :py:class:`geoip2.models.CityISPOrg` object
 
         """
-        return self._response_for('city_isp_org', geoip2.models.CityISPOrg, ip)
+        return self._response_for('city_isp_org', geoip2.models.CityISPOrg,
+                                  ip_address)
 
     def country(self, ip_address='me'):
         """This method calls the GeoIP2 Country endpoint.
@@ -196,10 +197,10 @@ class Client(object):
         :returns: :py:class:`geoip2.models.Omni` object
 
         """
-        return self._response_for('omni', geoip2.models.Omni, ip)
+        return self._response_for('omni', geoip2.models.Omni, ip_address)
 
-    def _response_for(self, path, model_class, ip):
-        uri = '/'.join([self._base_uri, path, ip])
+    def _response_for(self, path, model_class, ip_address):
+        uri = '/'.join([self._base_uri, path, ip_address])
         response = requests.get(uri, auth=(self.user_id, self.license_key),
                                 headers={'Accept': 'application/json'})
         if (response.status_code == 200):
