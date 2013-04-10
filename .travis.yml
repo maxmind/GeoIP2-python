@@ -8,6 +8,7 @@ python:
 script: nosetests
 install:
   - pip install -r requirements.txt
+  - pip install unittest2
 notifications:
   email:
     recipients:
