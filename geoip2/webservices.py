@@ -118,27 +118,25 @@ class Client(object):
       passed onto record classes to use when their name properties are
       called. The default value is ['en'].
 
-    Details on language handling:
+      The order of the languages is significant. When a record class has
+      multiple names (country, city, etc.), its name property will return
+      the name in the first language that has one.
 
-    The order of the languages is significant. When a record class has
-    multiple names (country, city, etc.), its name property will return
-    the name in the first language that has one.
+      Note that the only language which is always present in the GeoIP2
+      Precision data in "en". If you do not include this language, the 
+      name property may end up returning None even when the record hass
+      an English name.
 
-    Note that the only language which is always present in the GeoIP2
-    Precision data in "en". If you do not include this language, the 
-    name property may end up returning None even when the record hass
-    an English name.
+      Currently, the valid list of language codes is:
 
-    Currently, the valid list of language codes is:
+      * en -- English names may still include accented characters if that is
+        the accepted spelling in English. In other words, English does not
+        mean ASCII.
+      * ja -- Japanese
+      * ru -- Russian
+      * zh-CN -- Simplified Chinese.
 
-    * en -- English names may still include accented characters if that is
-      the accepted spelling in English. In other words, English does not
-      mean ASCII.
-    * ja -- Japanese
-    * ru -- Russian
-    * zh-CN -- Simplified Chinese.
-
-    Passing any other language code will result in an error.
+      Passing any other language code will result in an error.
 
     """
 

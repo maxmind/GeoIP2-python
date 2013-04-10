@@ -19,16 +19,16 @@ class Country(object):
     This class provides the following methods, each of which returns a record
     object.
 
-    :ivar continent: Returns a ``geoip2.records.Continent`` object
+    :ivar continent: :py:class:`geoip2.records.Continent` object
       representing continent data for the requested IP address.
-    :ivar country: Returns a ``geoip2.recordsCountry`` object representing
+    :ivar country: :py:class:`geoip2.recordsCountry` object representing
       country data for the requested IP address. This record represents the
       country where MaxMind believes the IP is located in.
-    :ivar registered_country: Returns a ``geoip2.recordsCountry`` object
+    :ivar registered_country: :py:class:`geoip2.recordsCountry` object
       representing the registered country data for the requested IP address.
       This record represents the country where the ISP has registered a given
       IP block in and may differ from the user's country.
-    :ivar traits: Returns ``a geoip2.records.Traits`` object representing
+    :ivar traits: :py:class:`geoip2.records.Traits` object representing
       the traits for the request IP address.
 
     """
@@ -52,22 +52,22 @@ class Country(object):
 class City(Country):
     """Model class for the GeoIP2 Precision City end point
 
-    :ivar city: Returns a ``geoip2.records.City`` object representing
+    :ivar city: :py:class:`geoip2.records.City` object representing
       country data for the requested IP address.
-    :ivar continent: Returns a ``geoip2.records.Continent`` object
+    :ivar continent: :py:class:`geoip2.records.Continent` object
       representing continent data for the requested IP address.
-    :ivar country: Returns a ``geoip2.recordsCountry`` object representing
+    :ivar country: :py:class:`geoip2.recordsCountry` object representing
       country data for the requested IP address. This record represents the
       country where MaxMind believes the IP is located in.
-    :ivar location: Returns a ``geoip2.records.Location`` object
+    :ivar location: :py:class:`geoip2.records.Location` object
       representing country data for the requested IP address.
-    :ivar region: Returns a ``geoip2.records.Region`` object representing
+    :ivar region: :py:class:`geoip2.records.Region` object representing
       country data for the requested IP address.
-    :ivar registered_country: Returns a ``geoip2.recordsCountry`` object
+    :ivar registered_country: :py:class:`geoip2.recordsCountry` object
       representing the registered country data for the requested IP address.
       This record represents the country where the ISP has registered a given
       IP block in and may differ from the user's country.
-    :ivar traits: Returns ``a geoip2.records.Traits`` object representing
+    :ivar traits: :py:class:`geoip2.records.Traits` object representing
       the traits for the request IP address.
 
 """
@@ -85,22 +85,22 @@ class City(Country):
 class CityISPOrg(City):
     """Model class for the GeoIP2 Precision City/ISP/Org end point
 
-    :ivar city: Returns a ``geoip2.records.City`` object representing
+    :ivar city: :py:class:`geoip2.records.City` object representing
       country data for the requested IP address.
-    :ivar continent: Returns a ``geoip2.records.Continent`` object
+    :ivar continent: :py:class:`geoip2.records.Continent` object
       representing continent data for the requested IP address.
-    :ivar country: Returns a ``geoip2.recordsCountry`` object representing
+    :ivar country: :py:class:`geoip2.recordsCountry` object representing
       country data for the requested IP address. This record represents the
       country where MaxMind believes the IP is located in.
-    :ivar location: Returns a ``geoip2.records.Location`` object
+    :ivar location: :py:class:`geoip2.records.Location` object
       representing country data for the requested IP address.
-    :ivar region: Returns a ``geoip2.records.Region`` object representing
+    :ivar region: :py:class:`geoip2.records.Region` object representing
       country data for the requested IP address.
-    :ivar registered_country: Returns a ``geoip2.recordsCountry`` object
+    :ivar registered_country: :py:class`geoip2.recordsCountry` object
       representing the registered country data for the requested IP address.
       This record represents the country where the ISP has registered a given
       IP block in and may differ from the user's country.
-    :ivar traits: Returns ``a geoip2.records.Traits`` object representing
+    :ivar traits: :py:class:`geoip2.records.Traits` object representing
       the traits for the request IP address.
 
     """
@@ -109,22 +109,22 @@ class CityISPOrg(City):
 class Omni(CityISPOrg):
     """Model class for the GeoIP2 Precision Omni end point
 
-    :ivar city: Returns a ``geoip2.records.City`` object representing
+    :ivar city: :py:class:`geoip2.records.City` object representing
       country data for the requested IP address.
-    :ivar continent: Returns a ``geoip2.records.Continent`` object
+    :ivar continent: :py:class:`geoip2.records.Continent` object
       representing continent data for the requested IP address.
-    :ivar country: Returns a ``geoip2.recordsCountry`` object representing
+    :ivar country: :py:class:`geoip2.recordsCountry` object representing
       country data for the requested IP address. This record represents the
       country where MaxMind believes the IP is located in.
-    :ivar location: Returns a ``geoip2.records.Location`` object
+    :ivar location: :py:class:`geoip2.records.Location` object
       representing country data for the requested IP address.
-    :ivar region: Returns a ``geoip2.records.Region`` object representing
+    :ivar region: :py:class:`geoip2.records.Region` object representing
       country data for the requested IP address.
-    :ivar registered_country: Returns a ``geoip2.recordsCountry`` object
+    :ivar registered_country: :py:class:`geoip2.recordsCountry` object
       representing the registered country data for the requested IP address.
       This record represents the country where the ISP has registered a given
       IP block in and may differ from the user's country.
-    :ivar traits: Returns ``a geoip2.records.Traits`` object representing
+    :ivar traits: :py:class:`geoip2.records.Traits` object representing
       the traits for the request IP address.
 
     """
