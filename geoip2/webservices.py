@@ -1,4 +1,5 @@
 """
+============================
 WebServices Client API
 ============================
 
@@ -85,8 +86,8 @@ where some or all of the attributes are unpopulated.
 See http://dev.maxmind.com/geoip/precision for details on what data each end
 point may return.
 
-The only piece of data which is always returned is the ip_address key in
-the geoip.records.Traits record.
+The only piece of data which is always returned is the :py:attr:`ip_address` 
+attribute in the :py:class:`geoip2.records.Traits` record.
 
 Every record class attribute has a corresponding predicate method so you can
 check to see if the attribute is set.
@@ -150,46 +151,50 @@ class Client(object):
         self.license_key = license_key
         self._base_uri = 'https://%s/geoip' % (host)
 
-    def city(self, ip='me'):
+    def city(self, ip_address='me'):
         """This method calls the GeoIP2 Precision City endpoint.
 
-        :param ip: IPv4 or IPv6 address as a string. If no address is provided,
-          the address that the web service is called from will be used.
+        :param ip_address: IPv4 or IPv6 address as a string. If no
+           address is provided, the address that the web service is
+           called from will be used.
 
-        :returns: geoip2.models.City object
+        :returns: :py:class:`geoip2.models.City` object
 
         """
         return self._response_for('city', geoip2.models.City, ip)
 
-    def city_isp_org(self, ip='me'):
+    def city_isp_org(self, ip_address='me'):
         """This method calls the GeoIP2 Precision City/ISP/Org endpoint.
 
-        :param ip: IPv4 or IPv6 address as a string. If no address is provided,
-          the address that the web service is called from will be used.
+        :param ip_address: IPv4 or IPv6 address as a string. If no
+          address is provided, the address that the web service is called
+          from will be used.
 
-        :returns: geoip2.models.CityISPOrg object
+        :returns: :py:class:`geoip2.models.CityISPOrg` object
 
         """
         return self._response_for('city_isp_org', geoip2.models.CityISPOrg, ip)
 
-    def country(self, ip='me'):
+    def country(self, ip_address='me'):
         """This method calls the GeoIP2 Country endpoint.
 
-        :param ip: IPv4 or IPv6 address as a string. If no address is provided,
-          the address that the web service is called from will be used.
+        :param ip_address: IPv4 or IPv6 address as a string. If no address
+          is provided, the address that the web service is called from will
+          be used.
 
-        :returns: geoip2.models.Country object
+        :returns: :py:class:`geoip2.models.Country` object
 
         """
         return self._response_for('country', geoip2.models.Country, ip)
 
-    def omni(self, ip='me'):
+    def omni(self, ip_address='me'):
         """This method calls the GeoIP2 Precision Omni endpoint.
 
-        :param ip: IPv4 or IPv6 address as a string. If no address is provided,
-          the address that the web service is called from will be used.
+        :param ip_address: IPv4 or IPv6 address as a string. If no address
+          is provided, the address that the web service is called from will
+          be used.
 
-        :returns: geoip2.models.Omni object
+        :returns: :py:class:`geoip2.models.Omni` object
 
         """
         return self._response_for('omni', geoip2.models.Omni, ip)
@@ -208,10 +213,10 @@ class Client(object):
         try:
             return response.json()
         except ValueError as e:
-            raise GeoIP2HTTPError('Received a 200 response for %(uri)s'
-                                  ' but could not decode the response as '
-                                  'JSON: ' % locals() +
-                                  ', '.join(e.args), 200, uri)
+            raise GeoIP2Error('Received a 200 response for %(uri)s'
+                              ' but could not decode the response as '
+                              'JSON: ' % locals() +
+                              ', '.join(e.args), 200, uri)
 
     def _handle_error(self, response, uri):
         status = response.status_code
@@ -256,6 +261,6 @@ class Client(object):
 """
 
 :copyright: (c) 2013 by MaxMind, Inc.
-:license: LGPL 2.1 or greater, see LICENSE for more details.
+:license: GNU Lesser General Public License v2 or later (LGPLv2+)
 
 """

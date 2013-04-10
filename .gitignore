@@ -1,0 +1,12 @@
+*~
+build
+dist
+docs/_build
+docs/html
+env/
+geoip2.egg-info/
+MANIFEST
+*.pyc
+pylint.txt
+*.swp
+violations.pyflakes.txt

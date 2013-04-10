@@ -3,8 +3,14 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-MaxMind GeoIP2 Python API
-=========================
+.. toctree::
+   :maxdepth: 3
+
+.. include:: ../README.rst
+
+=======
+Modules
+=======
 
 .. automodule:: geoip2
     :members:
@@ -21,10 +27,14 @@ MaxMind GeoIP2 Python API
 .. automodule:: geoip2.errors
     :members:
 
+==================
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+:copyright: (c) 2013 by MaxMind, Inc.
+:license: GNU Lesser General Public License v2 or later (LGPLv2+)
 
