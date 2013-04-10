@@ -225,6 +225,7 @@ class Traits(Record):
       * cellular
       * college
       * content_delivery_network
+      * dialup
       * government
       * hosting
       * library

@@ -35,8 +35,10 @@ class GeoIP2WebServiceError(GeoIP2HTTPError):
     This class represents an error returned by MaxMind's GeoIP2 Precision
     web service. It extends :py:exc:`GeoIP2HTTPError`.
 
+    :ivar code: The code returned by the MaxMind web service
     :ivar http_status: The HTTP status code returned
     :ivar uri: The URI queried
+
     """
     def __init__(self, message, code=None, http_status=None, uri=None):
         super(GeoIP2WebServiceError, self).__init__(message, http_status, uri)
