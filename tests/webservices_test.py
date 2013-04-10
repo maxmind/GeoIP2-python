@@ -171,5 +171,23 @@ class TestClient(unittest.TestCase):
                                headers={'Accept': 'application/json'},
                                auth=(42, 'abcdef123456'))
 
+    def test_city_ok(self, get):
+        self._setup_get(get, 'city', 200, self.country)
+        city = self.client.city('1.2.3.4')
+        self.assertEqual(type(city), geoip2.models.City,
+                          'return value of client.city')
+
+    def test_city_isp_org_ok(self, get):
+        self._setup_get(get, 'city_isp_org', 200, self.country)
+        city_isp_org = self.client.city_isp_org('1.2.3.4')
+        self.assertEqual(type(city_isp_org), geoip2.models.CityISPOrg,
+                          'return value of client.city_isp_org')
+
+    def test_omni_ok(self, get):
+        self._setup_get(get, 'omni', 200, self.country)
+        omni = self.client.omni('1.2.3.4')
+        self.assertEqual(type(omni), geoip2.models.Omni,
+                          'return value of client.omni')
+
 if __name__ == '__main__':
     unittest.main()
