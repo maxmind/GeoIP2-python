@@ -9,8 +9,8 @@ class Record(object):
     """All records are subclasses of ``Record``"""
     __metaclass__ = ABCMeta
 
-    def __init__(self, **args):
-        valid_args = dict((k, args.get(k)) for k in self._valid_attributes)
+    def __init__(self, **kwargs):
+        valid_args = dict((k, kwargs.get(k)) for k in self._valid_attributes)
         self.__dict__.update(valid_args)
 
     def __setattr__(self, name, value):
@@ -18,16 +18,16 @@ class Record(object):
 
 
 class PlaceRecord(Record):
-    """All records with ```names``` subclass ``PlaceRecord```"""
+    """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`"""
     __metaclass__ = ABCMeta
 
     # XXX - why did we name it 'name' instead of 'names'?
-    def __init__(self, languages=None, **args):
+    def __init__(self, languages=None, **kwargs):
         if languages is None:
             languages = []
         object.__setattr__(self, 'languages', languages)
-        args['names'] = args.pop('name', [])
-        super(PlaceRecord, self).__init__(**args)
+        kwargs['names'] = kwargs.pop('name', [])
+        super(PlaceRecord, self).__init__(**kwargs)
 
     @property
     def name(self):
@@ -219,6 +219,7 @@ class Traits(Record):
       and Omni end points.
     :ivar user_type: This returns the user type associated with the IP
       address. This can be one of the following values:
+
       * business
       * cafe
       * cellular
@@ -233,6 +234,7 @@ class Traits(Record):
       * school
       * search_engine_spider
       * traveler
+
       This attribute is only available from the Omni end point.
 
 """
@@ -247,8 +249,8 @@ class Traits(Record):
                              'organization',
                              'user_type'])
 
-    def __init__(self, languages=None, **args):
+    def __init__(self, languages=None, **kwargs):
         for k in ['is_anonymous_proxy', 'is_satellite_provider',
                   'is_transparent_proxy']:
-            args[k] = bool(args.get(k, False))
-        super(Traits, self).__init__(**args)
+            kwargs[k] = bool(kwargs.get(k, False))
+        super(Traits, self).__init__(**kwargs)
