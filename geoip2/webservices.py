@@ -185,7 +185,8 @@ class Client(object):
         :returns: :py:class:`geoip2.models.Country` object
 
         """
-        return self._response_for('country', geoip2.models.Country, ip)
+        return self._response_for('country', geoip2.models.Country,
+                                  ip_address)
 
     def omni(self, ip_address='me'):
         """This method calls the GeoIP2 Precision Omni endpoint.
