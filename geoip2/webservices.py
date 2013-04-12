@@ -86,7 +86,7 @@ where some or all of the attributes are unpopulated.
 See http://dev.maxmind.com/geoip/precision for details on what data each end
 point may return.
 
-The only piece of data which is always returned is the :py:attr:`ip_address` 
+The only piece of data which is always returned is the :py:attr:`ip_address`
 attribute in the :py:class:`geoip2.records.Traits` record.
 
 Every record class attribute has a corresponding predicate method so you can
@@ -123,7 +123,7 @@ class Client(object):
       the name in the first language that has one.
 
       Note that the only language which is always present in the GeoIP2
-      Precision data in "en". If you do not include this language, the 
+      Precision data in "en". If you do not include this language, the
       name property may end up returning None even when the record hass
       an English name.
 

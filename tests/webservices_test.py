@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 import sys
 sys.path.append('..')
@@ -34,13 +34,13 @@ class TestClient(unittest.TestCase):
         'continent': {
             'continent_code': 'NA',
             'geoname_id': 42,
-            'name': { 'en': 'North America' }
+            'names': { 'en': 'North America' }
             },
         'country': {
             'geoname_id': 1,
             'iso_3166_1_alpha_2': 'US',
             'iso_3166_1_alpha_3': 'USA',
-            'name': { 'en': 'United States of America'}
+            'names': { 'en': 'United States of America'}
             },
         'traits': {'ip_address': '1.2.3.4',},
         }
@@ -134,7 +134,7 @@ class TestClient(unittest.TestCase):
         with self.assertRaisesRegex(GeoIP2HTTPError,
                                     'Received a 400 error for .* with no body'):
             self.client.country('1.2.3.7')
-        
+
     def test_weird_body_error(self, get):
         self._setup_get(get, status=400, body={ 'weird': 42 },)
         with self.assertRaisesRegex(GeoIP2HTTPError,

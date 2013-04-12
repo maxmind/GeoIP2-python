@@ -17,11 +17,12 @@ class GeoIP2Error(RuntimeError):
 class GeoIP2HTTPError(GeoIP2Error):
     """There was an error when making your HTTP request.
 
-    This class represents an HTTP transport error. It extends 
+    This class represents an HTTP transport error. It extends
     :py:exc:`GeoIP2Error` and adds attributes of its own.
 
     :ivar http_status: The HTTP status code returned
     :ivar uri: The URI queried
+
     """
     def __init__(self, message, http_status=None, uri=None):
         super(GeoIP2HTTPError, self).__init__(message)

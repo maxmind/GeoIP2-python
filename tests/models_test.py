@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
 
@@ -17,19 +17,19 @@ class TestModels(unittest.TestCase):
             'city': {
                 'confidence': 76,
                 'geoname_id': 9876,
-                'name': {'en': 'Minneapolis'},
+                'names': {'en': 'Minneapolis'},
                 },
             'continent': {
                 'continent_code': 'NA',
                 'geoname_id': 42,
-                'name': {'en': 'North America'},
+                'names': {'en': 'North America'},
                 },
             'country': {
                 'confidence': 99,
                 'geoname_id': 1,
                 'iso_3166_1_alpha_2': 'US',
                 'iso_3166_1_alpha_3': 'USA',
-                'name': {'en': 'United States of America'},
+                'names': {'en': 'United States of America'},
                 },
             'location': {
                 'accuracy_radius': 1500,
@@ -44,13 +44,13 @@ class TestModels(unittest.TestCase):
                 'confidence': 88,
                 'geoname_id': 574635,
                 'iso_3166_2': 'MN',
-                'name': {'en': 'Minnesota'},
+                'names': {'en': 'Minnesota'},
                 },
             'registered_country': {
                 'geoname_id': 2,
                 'iso_3166_1_alpha_2': 'CA',
                 'iso_3166_1_alpha_3': 'CAN',
-                'name': {'en': 'Canada'},
+                'names': {'en': 'Canada'},
                 },
             'traits': {
                 'autonomous_system_number': 1234,
@@ -112,19 +112,19 @@ class TestModels(unittest.TestCase):
             'continent': {
                 'continent_code': 'NA',
                 'geoname_id': 42,
-                'name': {'en': 'North America'},
+                'names': {'en': 'North America'},
                 },
             'country': {
                 'geoname_id': 1,
                 'iso_3166_1_alpha_2': 'US',
                 'iso_3166_1_alpha_3': 'USA',
-                'name': {'en': 'United States of America'}, 
+                'names': {'en': 'United States of America'},
                 },
             'registered_country': {
                 'geoname_id': 2,
                 'iso_3166_1_alpha_2': 'CA',
                 'iso_3166_1_alpha_3': 'CAN',
-                'name': {'en': 'Canada'}, 
+                'names': {'en': 'Canada'},
                 },
             'traits': {
                 'ip_address': '1.2.3.4',
@@ -193,17 +193,17 @@ class TestModels(unittest.TestCase):
         raw = {
             'continent': {
                 'continent_code': 'NA',
-                'geoname_id': 42, 
-                'name': {     
+                'geoname_id': 42,
+                'names': {
                     'en': 'North America',
                     'zh-CN': '北美洲',
                     },
                 },
             'country': {
-                'geoname_id': 1,   
+                'geoname_id': 1,
                 'iso_3166_1_alpha_2': 'US',
                 'iso_3166_1_alpha_3': 'USA',
-                'name': {         
+                'names': {
                     'en': 'United States of America',
                     'fr': 'États-Unis',
                     'zh-CN': '美国',
@@ -231,7 +231,7 @@ class TestModels(unittest.TestCase):
                          'continent name is undef (no German available)')
         self.assertEqual(model.country.name, None,
                          'country name is in None (no German available)')
-        
+
 
 if __name__ == '__main__':
     unittest.main()

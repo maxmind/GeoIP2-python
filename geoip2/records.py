@@ -21,12 +21,10 @@ class PlaceRecord(Record):
     """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`"""
     __metaclass__ = ABCMeta
 
-    # XXX - why did we name it 'name' instead of 'names'?
     def __init__(self, languages=None, **kwargs):
         if languages is None:
             languages = []
         object.__setattr__(self, 'languages', languages)
-        kwargs['names'] = kwargs.pop('name', [])
         super(PlaceRecord, self).__init__(**kwargs)
 
     @property
@@ -53,6 +51,7 @@ class City(PlaceRecord):
       passed to the constructor. This attribute is returned by all end points.
     :ivar names: This returns a dictionary where the keys are language codes
       and the values are names. This attribute is returned by all end points.
+
     """
     _valid_attributes = set(['confidence', 'geoname_id', 'names'])
 
@@ -76,6 +75,7 @@ class Continent(PlaceRecord):
       passed to the constructor. This attribute is returned by all end points.
     :ivar names: This returns a dictionary where the keys are language codes
       and the values are names. This attribute is returned by all end points.
+
     """
     _valid_attributes = set(['continent_code', 'geoname_id', 'names'])
 
@@ -132,7 +132,8 @@ class Location(Record):
       location is in the US. MaxMind returns the same metro codes as the
       Google AdWords API
       (https://developers.google.com/adwords/api/docs/appendix/cities-DMAregions).
-      This attribute is returned by all end points except the Country end point.
+      This attribute is returned by all end points except the Country end
+      point.
     :ivar postal_code: This returns the postal code of the location. Postal
       codes are not available for all countries. In some countries, this will
       only contain part of the postal code. This attribute is returned by all
@@ -141,9 +142,9 @@ class Location(Record):
       MaxMind's confidence that the postal code is correct. This attribute is
       only available from the Omni end point.
     :ivar time_zone: This returns the time zone associated with location, as
-      specified by the IANA Time Zone Database (http://www.iana.org/time-zones),
-      e.g., "America/New_York". This attribute is returned by all end points
-      except the Country end point.
+      specified by the IANA Time Zone Database
+      (http://www.iana.org/time-zones), e.g., "America/New_York". This
+      attribute is returned by all end points except the Country end point.
 
     """
     _valid_attributes = set(['accuracy_radius', 'latitude', 'longitude'
@@ -166,7 +167,7 @@ class Region(PlaceRecord):
     :ivar geoname_id: This is a GeoName ID for the region. This attribute
       is returned by all end points.
     :ivar iso_3166_2: This is a string up to three characters long
-      contain the region portion of the ISO 3166-2 code 
+      contain the region portion of the ISO 3166-2 code
       (http://en.wikipedia.org/wiki/ISO_3166-2). This attribute is returned
       by all end points.
     :ivar name: The name of the region based on the languages list
@@ -208,12 +209,13 @@ class Traits(Record):
       address locally assigned to it. This attribute is returned by all end
       points.
     :ivar is_anonymous_proxy: This returns true if the IP is an anonymous
-      proxy. See http://dev.maxmind.com/faq/geoip#anonproxy for further details.
-      This attribute is returned by all end points.
+      proxy. See http://dev.maxmind.com/faq/geoip#anonproxy for further
+      details. This attribute is returned by all end points.
     :ivar is_transparent_proxy: This returns true if the IP is a transparent
       proxy. This attribute is returned by all end points.
     :ivar isp: This returns the name of the ISP associated the IP address.
-      This attribute is only available from the City/ISP/Org and Omni end points.
+      This attribute is only available from the City/ISP/Org and Omni end
+      points.
     :ivar organization: This returns the name of the organization associated
       the IP address. This attribute is only available from the City/ISP/Org
       and Omni end points.
