@@ -50,7 +50,7 @@ class City(PlaceRecord):
       confidence that the city is correct. This attribute is only available
       from the Omni end point.
     :ivar geoname_id: This returns a GeoName ID for the city. This attribute
- N     is returned by all end points.
+      is returned by all end points.
     :ivar name: Returns the name of the city based on the languages list
       passed to the constructor. This attribute is returned by all end points.
     :ivar names: This returns a dictionary where the keys are language codes
