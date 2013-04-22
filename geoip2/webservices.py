@@ -147,7 +147,7 @@ class Client(object):
         self.languages = languages
         self.user_id = user_id
         self.license_key = license_key
-        self._base_uri = 'https://%s/geoip' % (host)
+        self._base_uri = 'https://%s/geoip/v1' % (host)
 
     def city(self, ip_address='me'):
         """This method calls the GeoIP2 Precision City endpoint.
