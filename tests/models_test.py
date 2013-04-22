@@ -38,15 +38,21 @@ class TestModels(unittest.TestCase):
                 'time_zone': 'America/Chicago',
                 },
             'postal': {
-                code: '55401',
-                confidence: 33,
+                'code': '55401',
+                'confidence': 33,
                 },
             'subdivisions': [{
                 'confidence': 88,
                 'geoname_id': 574635,
                 'iso_code': 'MN',
                 'names': {'en': 'Minnesota'},
-                }],
+                },
+                {
+                'geoname_id': 123,
+                'iso_code': 'HP',
+                'names': {'en': 'Hennepin'},
+                }
+            ],
             'registered_country': {
                 'geoname_id': 2,
                 'iso_code': 'CA',
@@ -58,7 +64,6 @@ class TestModels(unittest.TestCase):
                 'domain': 'example.com',
                 'ip_address': '1.2.3.4',
                 'is_anonymous_proxy': 0,
-                'is_transparent_proxy': 1,
                 'is_us_military': 1,
                 'isp': 'Comcast',
                 'network_speed': 'cable/DSL',
@@ -81,11 +86,22 @@ class TestModels(unittest.TestCase):
                          'geoip2.records.Country object')
         self.assertEqual(type(model.location), geoip2.records.Location,
                          'geoip2.records.Location object')
-        self.assertEqual(type(model.region), geoip2.records.Region,
-                         'geoip2.records.Regin object')
+        self.assertEqual(type(model.subdivisions.subdivision_1),
+                         geoip2.records.Subdivision,
+                         'geoip2.records.Subdivision object')
         self.assertEqual(type(model.traits), geoip2.records.Traits,
                          'geoip2.records.Traits object')
         self.assertEqual(model.raw, raw, 'raw method returns raw input')
+        self.assertEqual(model.subdivisions.subdivision_1.iso_code, 'MN',
+                         'div 1 has correct iso_code')
+        self.assertEqual(model.subdivisions.subdivision_1.confidence, 88,
+                         'div 1 has correct confidence')
+        self.assertEqual(model.subdivisions.subdivision_1.geoname_id, 574635,
+                         'div 1 has correct geoname_id')
+        self.assertEqual(model.subdivisions.subdivision_1.names,
+                         {'en': 'Minnesota'}, 'div 1 names are correct')
+        self.assertEqual(model.subdivisions.subdivision_2.name, 'Hennepin',
+                         'div 2 has correct name')
 
     def test_omni_min(self):
         model = geoip2.models.Omni({'traits': {'ip_address': '5.6.7.8'}})
@@ -102,8 +118,9 @@ class TestModels(unittest.TestCase):
                          'geoip2.records.Country object')
         self.assertEqual(type(model.location), geoip2.records.Location,
                          'geoip2.records.Location object')
-        self.assertEqual(type(model.region), geoip2.records.Region,
-                         'geoip2.records.Regin object')
+        self.assertEqual(type(model.subdivisions.subdivision_1),
+                         geoip2.records.Subdivision,
+                         'geoip2.records.Subdivision object')
         self.assertEqual(type(model.traits), geoip2.records.Traits,
                          'geoip2.records.Traits object')
 
@@ -143,8 +160,9 @@ class TestModels(unittest.TestCase):
                          'geoip2.records.Country object')
         self.assertEqual(type(model.location), geoip2.records.Location,
                          'geoip2.records.Location object')
-        self.assertEqual(type(model.region), geoip2.records.Region,
-                         'geoip2.records.Regin object')
+        self.assertEqual(type(model.subdivisions.subdivision_1), 
+                         geoip2.records.Subdivision,
+                         'geoip2.records.Subdivision object')
         self.assertEqual(type(model.traits), geoip2.records.Traits,
                          'geoip2.records.Traits object')
         self.assertEqual(model.raw, raw, 'raw method returns raw input')
@@ -176,8 +194,6 @@ class TestModels(unittest.TestCase):
                          'Canada',
                          'registered_country name is correct')
         self.assertEqual(model.traits.is_anonymous_proxy, False,
-                         'traits is_anonymous_proxy returns False by default')
-        self.assertEqual(model.traits.is_transparent_proxy, False,
                          'traits is_anonymous_proxy returns False by default')
         self.assertEqual(model.traits.is_satellite_provider, True,
                          'traits is_setellite_provider is True')

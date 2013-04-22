@@ -77,9 +77,11 @@ class City(Country):
             geoip2.records.City(languages, **raw_response.get('city', {}))
         self.location = \
             geoip2.records.Location(**raw_response.get('location', {}))
-        self.region = \
-            geoip2.records.Region(languages,
-                                  **raw_response.get('region', {}))
+        self.postal = \
+            geoip2.records.Postal(**raw_response.get('postal', {}))
+        self.subdivisions = \
+            geoip2.records.Subdivisions(languages,
+                                        *raw_response.get('subdivisions', []))
 
 
 class CityISPOrg(City):

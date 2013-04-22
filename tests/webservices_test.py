@@ -38,8 +38,7 @@ class TestClient(unittest.TestCase):
             },
         'country': {
             'geoname_id': 1,
-            'iso_3166_1_alpha_2': 'US',
-            'iso_3166_1_alpha_3': 'USA',
+            'iso_code': 'US',
             'names': { 'en': 'United States of America'}
             },
         'traits': {'ip_address': '1.2.3.4',},
@@ -83,10 +82,8 @@ class TestClient(unittest.TestCase):
                          'continent name is North America')
         self.assertEqual(country.country.geoname_id, 1,
                          'country geoname_id is 1')
-        self.assertEqual(country.country.iso_3166_1_alpha_2, 'US',
-                         'country iso_3166_1_alpha_2 is US')
-        self.assertEqual(country.country.iso_3166_1_alpha_3, 'USA',
-                         'country iso_3166_1_alpha_3 is USA')
+        self.assertEqual(country.country.iso_code, 'US',
+                         'country iso_code is US')
         self.assertEqual(country.country.names,
                          { 'en': 'United States of America' },
                          'country names' )
