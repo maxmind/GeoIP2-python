@@ -214,7 +214,7 @@ class Subdivisions(collections.namedtuple('Subdivisions',
     :ivar subdivision_2: The second-level subdivision associated with the
       location of the IP address.
     :ivar subdivision_3: The third-level subdivsion associated with the
-      locatin of the IP address.
+      location of the IP address.
 
     """
     __slots__ = ()
