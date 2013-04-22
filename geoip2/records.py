@@ -193,46 +193,22 @@ class Subdivision(PlaceRecord):
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names'])
 
 
-class Subdivisions(collections.namedtuple('Subdivisions',
-                                          'subdivision_1 subdivision_2 '
-                                          'subdivision_3')):
-    """Contains data for the subdivisions associated with an IP address
+class Subdivisions(tuple):
+    """A tuple-like collection of subdivisions associated with an IP address
 
     This class contains the subdivisions of the country associated with the
-    IP address.
+    IP address from largest to smallest.
 
     For instance, the response for Oxford in the United Kingdom would have
-    England as subdivision_1 and Oxfordshire as subdivision_2.
+    England as the first element and Oxfordshire as the second element.
 
-    This record is returned by all the end points except the Country end point.
-
-    Attributes:
-
-    :ivar subdivision_1: The first-level (largest) subdivision associated with
-      the location of the IP address. Many countries will only have this
-      subdivision. For instance, in the United States, this would be a state.
-    :ivar subdivision_2: The second-level subdivision associated with the
-      location of the IP address.
-    :ivar subdivision_3: The third-level subdivsion associated with the
-      location of the IP address.
+    This collection is returned by all the end points except the Country
+    end point.
 
     """
-    __slots__ = ()
-
-    def __new__(cls, languages, subdivision_1=None, subdivision_2=None,
-                subdivision_3=None):
-        if subdivision_1 is None:
-            subdivision_1 = {}
-        if subdivision_2 is None:
-            subdivision_2 = {}
-        if subdivision_3 is None:
-            subdivision_3 = {}
-
-        subdivision_1 = Subdivision(languages, **subdivision_1)
-        subdivision_2 = Subdivision(languages, **subdivision_2)
-        subdivision_3 = Subdivision(languages, **subdivision_3)
-        return super(cls, Subdivisions).__new__(cls, subdivision_1,
-                                                subdivision_2, subdivision_3)
+    def __new__(cls, languages, *subdivisions):
+        subdivisions = [Subdivision(languages, **x) for x in subdivisions]
+        return super(cls, Subdivisions).__new__(cls, subdivisions)
 
 
 class Traits(Record):

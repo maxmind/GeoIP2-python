@@ -86,21 +86,21 @@ class TestModels(unittest.TestCase):
                          'geoip2.records.Country object')
         self.assertEqual(type(model.location), geoip2.records.Location,
                          'geoip2.records.Location object')
-        self.assertEqual(type(model.subdivisions.subdivision_1),
+        self.assertEqual(type(model.subdivisions[0]),
                          geoip2.records.Subdivision,
                          'geoip2.records.Subdivision object')
         self.assertEqual(type(model.traits), geoip2.records.Traits,
                          'geoip2.records.Traits object')
         self.assertEqual(model.raw, raw, 'raw method returns raw input')
-        self.assertEqual(model.subdivisions.subdivision_1.iso_code, 'MN',
+        self.assertEqual(model.subdivisions[0].iso_code, 'MN',
                          'div 1 has correct iso_code')
-        self.assertEqual(model.subdivisions.subdivision_1.confidence, 88,
+        self.assertEqual(model.subdivisions[0].confidence, 88,
                          'div 1 has correct confidence')
-        self.assertEqual(model.subdivisions.subdivision_1.geoname_id, 574635,
+        self.assertEqual(model.subdivisions[0].geoname_id, 574635,
                          'div 1 has correct geoname_id')
-        self.assertEqual(model.subdivisions.subdivision_1.names,
+        self.assertEqual(model.subdivisions[0].names,
                          {'en': 'Minnesota'}, 'div 1 names are correct')
-        self.assertEqual(model.subdivisions.subdivision_2.name, 'Hennepin',
+        self.assertEqual(model.subdivisions[1].name, 'Hennepin',
                          'div 2 has correct name')
 
     def test_omni_min(self):
@@ -118,9 +118,6 @@ class TestModels(unittest.TestCase):
                          'geoip2.records.Country object')
         self.assertEqual(type(model.location), geoip2.records.Location,
                          'geoip2.records.Location object')
-        self.assertEqual(type(model.subdivisions.subdivision_1),
-                         geoip2.records.Subdivision,
-                         'geoip2.records.Subdivision object')
         self.assertEqual(type(model.traits), geoip2.records.Traits,
                          'geoip2.records.Traits object')
 
@@ -160,9 +157,6 @@ class TestModels(unittest.TestCase):
                          'geoip2.records.Country object')
         self.assertEqual(type(model.location), geoip2.records.Location,
                          'geoip2.records.Location object')
-        self.assertEqual(type(model.subdivisions.subdivision_1), 
-                         geoip2.records.Subdivision,
-                         'geoip2.records.Subdivision object')
         self.assertEqual(type(model.traits), geoip2.records.Traits,
                          'geoip2.records.Traits object')
         self.assertEqual(model.raw, raw, 'raw method returns raw input')
