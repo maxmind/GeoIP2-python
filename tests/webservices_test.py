@@ -167,7 +167,7 @@ class TestClient(unittest.TestCase):
         self._setup_get(get, 'country', 200, self.country)
         country = self.client.country('1.2.3.4')
         get.assert_called_with('https://geoip.maxmind.com'
-                               '/geoip/v1/country/1.2.3.4',
+                               '/geoip/v2.0/country/1.2.3.4',
                                headers={'Accept': 'application/json'},
                                auth=(42, 'abcdef123456'))
 
