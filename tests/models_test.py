@@ -27,8 +27,7 @@ class TestModels(unittest.TestCase):
             'country': {
                 'confidence': 99,
                 'geoname_id': 1,
-                'iso_3166_1_alpha_2': 'US',
-                'iso_3166_1_alpha_3': 'USA',
+                'iso_code': 'US',
                 'names': {'en': 'United States of America'},
                 },
             'location': {
@@ -36,20 +35,21 @@ class TestModels(unittest.TestCase):
                 'latitude': 44.98,
                 'longitude': 93.2636,
                 'metro_code': 765,
-                'postal_code': '55401',
-                'postal_confidence': 33,
                 'time_zone': 'America/Chicago',
                 },
-            'region': {
+            'postal': {
+                code: '55401',
+                confidence: 33,
+                },
+            'subdivisions': [{
                 'confidence': 88,
                 'geoname_id': 574635,
-                'iso_3166_2': 'MN',
+                'iso_code': 'MN',
                 'names': {'en': 'Minnesota'},
-                },
+                }],
             'registered_country': {
                 'geoname_id': 2,
-                'iso_3166_1_alpha_2': 'CA',
-                'iso_3166_1_alpha_3': 'CAN',
+                'iso_code': 'CA',
                 'names': {'en': 'Canada'},
                 },
             'traits': {
@@ -116,14 +116,12 @@ class TestModels(unittest.TestCase):
                 },
             'country': {
                 'geoname_id': 1,
-                'iso_3166_1_alpha_2': 'US',
-                'iso_3166_1_alpha_3': 'USA',
+                'iso_code': 'US',
                 'names': {'en': 'United States of America'},
                 },
             'registered_country': {
                 'geoname_id': 2,
-                'iso_3166_1_alpha_2': 'CA',
-                'iso_3166_1_alpha_3': 'CAN',
+                'iso_code': 'CA',
                 'names': {'en': 'Canada'},
                 },
             'traits': {
@@ -160,10 +158,8 @@ class TestModels(unittest.TestCase):
                          'continent name is correct')
         self.assertEqual(model.country.geoname_id, 1,
                          'country geoname_id is 1')
-        self.assertEqual(model.country.iso_3166_1_alpha_2, 'US',
-                         'country iso_3166_1_alpha_2 is US')
-        self.assertEqual(model.country.iso_3166_1_alpha_3, 'USA',
-                         'country iso_3166_1_alpha_3 is USA')
+        self.assertEqual(model.country.iso_code, 'US',
+                         'country iso_code is US')
         self.assertEqual(model.country.names,
                          {'en': 'United States of America'},
                          'country names is correct')
@@ -171,10 +167,8 @@ class TestModels(unittest.TestCase):
                          'country name is correct')
         self.assertEqual(model.country.confidence, None,
                          'country confidence is None')
-        self.assertEqual(model.registered_country.iso_3166_1_alpha_2, 'CA',
-                         'registered_country iso_3166_1_alpha_2 is CA')
-        self.assertEqual(model.registered_country.iso_3166_1_alpha_3, 'CAN',
-                         'registered_country iso_3166_1_alpha_3 is CAN')
+        self.assertEqual(model.registered_country.iso_code, 'CA',
+                         'registered_country iso_code is CA')
         self.assertEqual(model.registered_country.names,
                          {'en': 'Canada'},
                          'registered_country names is correct')
@@ -201,8 +195,7 @@ class TestModels(unittest.TestCase):
                 },
             'country': {
                 'geoname_id': 1,
-                'iso_3166_1_alpha_2': 'US',
-                'iso_3166_1_alpha_3': 'USA',
+                'iso_code': 'US',
                 'names': {
                     'en': 'United States of America',
                     'fr': 'États-Unis',
