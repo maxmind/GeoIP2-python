@@ -167,7 +167,7 @@ class Postal(Record):
 
 
 class Subdivision(PlaceRecord):
-    """Contains data a subdivisions associated with an IP address
+    """Contains data for the subdivisions associated with an IP address
 
     This class contains the subdivision data associated with an IP address.
 
