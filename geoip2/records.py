@@ -210,6 +210,18 @@ class Subdivisions(tuple):
         subdivisions = [Subdivision(languages, **x) for x in subdivisions]
         return super(cls, Subdivisions).__new__(cls, subdivisions)
 
+    def most_specific(self):
+        """The most specific subdivision available
+
+        :returns: The most specific (smallest) :py:class:`Subdivision`
+        :raises: :py:exc:`ValueError` if :py:class:`Subdivisions` does
+          not contain any :py:class:`Subdivision` objects
+
+        """
+        try:
+            return self[-1]
+        except IndexError:
+            raise ValueError('No subdivisions are available');
 
 class Traits(Record):
     """ Contains data for the traits record associated with an IP address
