@@ -109,7 +109,7 @@ class TestModels(unittest.TestCase):
                          {'en': 'Minnesota'}, 'div 1 names are correct')
         self.assertEqual(model.subdivisions[1].name, 'Hennepin',
                          'div 2 has correct name')
-        self.assertEqual(model.subdivisions.most_specific().iso_code, 'HP',
+        self.assertEqual(model.subdivisions.most_specific.iso_code, 'HP',
                           'subdivisions.most_specific returns HP')
 
     def test_omni_min(self):
@@ -129,9 +129,13 @@ class TestModels(unittest.TestCase):
                          'geoip2.records.Location object')
         self.assertEqual(type(model.traits), geoip2.records.Traits,
                          'geoip2.records.Traits object')
-        with self.assertRaisesRegex(ValueError,
-                                    'No subdivisions are available'):
-            model.subdivisions.most_specific()
+        self.assertEqual(type(model.subdivisions.most_specific),
+                         geoip2.records.Subdivision,
+                         'geoip2.records.Subdivision object returned even'
+                         'when none are available.')
+        self.assertEqual(model.subdivisions.most_specific.names, {},
+                         'Empty names hash returned')
+
 
     def test_city_full(self):
         raw = {

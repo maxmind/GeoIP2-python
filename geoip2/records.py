@@ -28,12 +28,14 @@ class PlaceRecord(Record):
     def __init__(self, languages=None, **kwargs):
         if languages is None:
             languages = ['en']
-        object.__setattr__(self, 'languages', languages)
+        if kwargs.get('names') is None:
+            kwargs['names'] = {}
+        object.__setattr__(self, '_languages', languages)
         super(PlaceRecord, self).__init__(**kwargs)
 
     @property
     def name(self):
-        return next((self.names.get(x) for x in self.languages if x in
+        return next((self.names.get(x) for x in self._languages if x in
                      self.names), None)
 
 
@@ -208,20 +210,24 @@ class Subdivisions(tuple):
     """
     def __new__(cls, languages, *subdivisions):
         subdivisions = [Subdivision(languages, **x) for x in subdivisions]
-        return super(cls, Subdivisions).__new__(cls, subdivisions)
+        obj = super(cls, Subdivisions).__new__(cls, subdivisions)
+        obj._languages = languages
+        return obj
 
+    @property
     def most_specific(self):
         """The most specific subdivision available
 
-        :returns: The most specific (smallest) :py:class:`Subdivision`
-        :raises: :py:exc:`ValueError` if :py:class:`Subdivisions` does
-          not contain any :py:class:`Subdivision` objects
+        :returns: The most specific (smallest) :py:class:`Subdivision`. If there
+          are no :py:class:`Subdivision` objects for the response, this returns an
+          empty :py:class:`Subdivision`.
 
         """
         try:
             return self[-1]
         except IndexError:
-            raise ValueError('No subdivisions are available');
+            return Subdivision(self._languages)
+
 
 class Traits(Record):
     """ Contains data for the traits record associated with an IP address
