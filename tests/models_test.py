@@ -65,6 +65,12 @@ class TestModels(unittest.TestCase):
                 'iso_code': 'CA',
                 'names': {'en': 'Canada'},
                 },
+            'represented_country': {
+                'geoname_id': 3,
+                'iso_code': 'GB',
+                'names': {'en': 'United Kingdom'},
+                'type': 'military',
+                },
             'traits': {
                 'autonomous_system_number': 1234,
                 'autonomous_system_organization': 'AS Organization',
@@ -91,6 +97,9 @@ class TestModels(unittest.TestCase):
         self.assertEqual(type(model.registered_country),
                          geoip2.records.Country,
                          'geoip2.records.Country object')
+        self.assertEqual(type(model.represented_country),
+                         geoip2.records.RepresentedCountry,
+                         'geoip2.records.RepresentedCountry object')
         self.assertEqual(type(model.location), geoip2.records.Location,
                          'geoip2.records.Location object')
         self.assertEqual(type(model.subdivisions[0]),
@@ -111,6 +120,13 @@ class TestModels(unittest.TestCase):
                          'div 2 has correct name')
         self.assertEqual(model.subdivisions.most_specific.iso_code, 'HP',
                           'subdivisions.most_specific returns HP')
+        self.assertEqual(model.represented_country.name,
+                         'United Kingdom',
+                         'represented_country name is correct')
+        self.assertEqual(model.represented_country.type,
+                         'military',
+                         'represented_country type is correct')
+
 
     def test_omni_min(self):
         model = geoip2.models.Omni({'traits': {'ip_address': '5.6.7.8'}})
