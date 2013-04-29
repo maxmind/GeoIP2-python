@@ -31,7 +31,7 @@ class Country(object):
     :ivar represented_country: :py:class:`geoip2.records.RepresentedCountry`
       object containing details about the country represented by the users
       of the IP address when that country is different than the country in
-      ``county``. For instance, the country represented by an
+      ``country``. For instance, the country represented by an
       overseas military base or embassy.
     :ivar traits: :py:class:`geoip2.records.Traits` object representing
       the traits for the request IP address.
@@ -80,7 +80,7 @@ class City(Country):
     :ivar represented_country: :py:class:`geoip2.records.RepresentedCountry`
       object containing details about the country represented by the users
       of the IP address when that country is different than the country in
-      ``county``. For instance, the country represented by an
+      ``country``. For instance, the country represented by an
       overseas military base or embassy.
     :ivar traits: :py:class:`geoip2.records.Traits` object representing
       the traits for the request IP address.
@@ -120,7 +120,7 @@ class CityISPOrg(City):
     :ivar represented_country: :py:class:`geoip2.records.RepresentedCountry`
       object containing details about the country represented by the users
       of the IP address when that country is different than the country in
-      ``county``. For instance, the country represented by an
+      ``country``. For instance, the country represented by an
       overseas military base or embassy.
     :ivar traits: :py:class:`geoip2.records.Traits` object representing
       the traits for the request IP address.
@@ -149,7 +149,7 @@ class Omni(CityISPOrg):
     :ivar represented_country: :py:class:`geoip2.records.RepresentedCountry`
       object containing details about the country represented by the users
       of the IP address when that country is different than the country in
-      ``county``. For instance, the country represented by an
+      ``country``. For instance, the country represented by an
       overseas military base or embassy.
     :ivar traits: :py:class:`geoip2.records.Traits` object representing
       the traits for the request IP address.
