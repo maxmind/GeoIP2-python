@@ -48,14 +48,14 @@ class City(PlaceRecord):
 
     Attributes:
 
-    :ivar confidence: This returns a value from 0-100 indicating MaxMind's
+    :ivar confidence: A value from 0-100 indicating MaxMind's
       confidence that the city is correct. This attribute is only available
       from the Omni end point.
-    :ivar geoname_id: This returns a GeoName ID for the city. This attribute
+    :ivar geoname_id: The GeoName ID for the city. This attribute
       is returned by all end points.
-    :ivar name: Returns the name of the city based on the languages list
+    :ivar name: The name of the city based on the languages list
       passed to the constructor. This attribute is returned by all end points.
-    :ivar names: This returns a dictionary where the keys are language codes
+    :ivar names: A dictionary where the keys are language codes
       and the values are names. This attribute is returned by all end points.
 
     """
@@ -72,14 +72,14 @@ class Continent(PlaceRecord):
 
     Attributes:
 
-    :ivar continent_code:  This returns a two character continent code
+    :ivar continent_code: A two character continent code
       like "NA" (North America) or "OC" (Oceania). This attribute is returned
       by all end points.
-    :ivar geoname_id: This returns a GeoName ID for the continent. This
+    :ivar geoname_id: The GeoName ID for the continent. This
       attribute is returned by all end points.
     :ivar name: Returns the name of the continent based on the languages list
       passed to the constructor. This attribute is returned by all end points.
-    :ivar names: This returns a dictionary where the keys are language codes
+    :ivar names: A dictionary where the keys are language codes
       and the values are names. This attribute is returned by all end points.
 
     """
@@ -91,25 +91,59 @@ class Country(PlaceRecord):
 
     This class contains the country-level data associated with an IP address.
 
-    This record is returned by all the end points except the Country end point.
+    This record is returned by all the end points.
 
     Attributes:
 
-    :ivar confidence: This returns a value from 0-100 indicating MaxMind's
-      confidence that the country is correct. This attribute is only available
-      from the Omni end point.
-    :ivar geoname_id: This returns a GeoName ID for the country. This attribute
-      is returned by all end points.
-    :ivar iso_code: This returns the two-character ISO 3166-1
+    :ivar confidence: A value from 0-100 indicating MaxMind's confidence that
+      the country is correct. This attribute is only available from the Omni
+      end point.
+    :ivar geoname_id: The GeoName ID for the country. This attribute is
+      returned by all end points.
+    :ivar iso_code: The two-character ISO 3166-1
       (http://en.wikipedia.org/wiki/ISO_3166-1) alpha code for the country.
       This attribute is returned by all end points.
-    :ivar name: Returns the name of the country based on the languages list
+    :ivar name: The name of the country based on the languages list
       passed to the constructor. This attribute is returned by all end points.
-    :ivar names: This returns a dictionary where the keys are language codes
-      and the values are names. This attribute is returned by all end points.
+    :ivar names: A dictionary where the keys are language codes and the values
+      are names. This attribute is returned by all end points.
 
     """
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names'])
+
+
+class RepresentedCountry(Country):
+    """Contains data for the represented country associated with an IP address
+
+    This class contains the country-level data associated with an IP address for
+    the IP's represented country. The represented country is the country
+    represented by something like a military base or embassy.
+
+    This record is returned by all the end points.
+
+    Attributes:
+
+    :ivar confidence: A value from 0-100 indicating MaxMind's confidence that
+      the country is correct. This attribute is only available from the Omni
+      end point.
+    :ivar geoname_id: The GeoName ID for the country. This attribute is
+      returned by all end points.
+    :ivar iso_code: The two-character ISO 3166-1
+      (http://en.wikipedia.org/wiki/ISO_3166-1) alpha code for the country.
+      This attribute is returned by all end points.
+    :ivar name: The name of the country based on the languages list
+      passed to the constructor. This attribute is returned by all end points.
+    :ivar names: A dictionary where the keys are language codes and the values
+      are names. This attribute is returned by all end points.
+    :var type: A string indicating the type of entity that is representing the
+      country. Currently we only return ``military`` but this could expand to
+      include other types such as ``embassy`` in the future. Returned by all
+      endpoints.
+
+
+
+    """
+    _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names', 'type'])
 
 
 class Location(Record):
@@ -121,22 +155,22 @@ class Location(Record):
 
     Attributes:
 
-    :ivar accuracy_radius: This returns the radius in kilometers around the
+    :ivar accuracy_radius: The radius in kilometers around the
       specified location where the IP address is likely to be. This attribute
       is only available from the Omni end point.
-    :ivar latitude: This returns the latitude of the location as a floating
+    :ivar latitude: The latitude of the location as a floating
       point number. This attribute is returned by all end points except the
       Country end point.
-    :ivar longitude: This returns the longitude of the location as a
+    :ivar longitude: The longitude of the location as a
       floating point number. This attribute is returned by all end points
       except the Country end point.
-    :ivar metro_code: This returns the metro code of the location if the
+    :ivar metro_code: The metro code of the location if the
       location is in the US. MaxMind returns the same metro codes as the
       Google AdWords API
       (https://developers.google.com/adwords/api/docs/appendix/cities-DMAregions).
       This attribute is returned by all end points except the Country end
       point.
-    :ivar time_zone: This returns the time zone associated with location, as
+    :ivar time_zone: The time zone associated with location, as
       specified by the IANA Time Zone Database
       (http://www.iana.org/time-zones), e.g., "America/New_York". This
       attribute is returned by all end points except the Country end point.
@@ -156,11 +190,11 @@ class Postal(Record):
 
     Attributes:
 
-    :ivar code: This returns the postal code of the location. Postal
+    :ivar code: The postal code of the location. Postal
       codes are not available for all countries. In some countries, this will
       only contain part of the postal code. This attribute is returned by all
       end points except the Country end point.
-    :ivar confidence: This returns a value from 0-100 indicating
+    :ivar confidence: A value from 0-100 indicating
       MaxMind's confidence that the postal code is correct. This attribute is
       only available from the Omni end point.
 
@@ -238,35 +272,35 @@ class Traits(Record):
 
     This class has the following attributes:
 
-    :ivar autonomous_system_number: This returns the autonomous system
+    :ivar autonomous_system_number: The autonomous system
       number (http://en.wikipedia.org/wiki/Autonomous_system_(Internet))
       associated with the IP address. This attribute is only available from
       the City/ISP/Org and Omni end points.
-    :ivar autonomous_system_organization: This returns the organization
+    :ivar autonomous_system_organization: The organization
       associated with the registered autonomous system number
       (http://en.wikipedia.org/wiki/Autonomous_system_(Internet)) for the IP
       address. This attribute is only available from the City/ISP/Org and
       Omni end points.
-    :ivar domain: This returns the second level domain associated with the
+    :ivar domain: The second level domain associated with the
       IP address. This will be something like "example.com" or
       "example.co.uk", not "foo.example.com". This attribute is only available
       from the City/ISP/Org and Omni end points.
-    :ivar ip_address: This returns the IP address that the data in the model
+    :ivar ip_address: The IP address that the data in the model
       is for. If you performed a "me" lookup against the web service, this
       will be the externally routable IP address for the system the code is
       running on. If the system is behind a NAT, this may differ from the IP
       address locally assigned to it. This attribute is returned by all end
       points.
-    :ivar is_anonymous_proxy: This returns true if the IP is an anonymous
+    :ivar is_anonymous_proxy: This is true if the IP is an anonymous
       proxy. See http://dev.maxmind.com/faq/geoip#anonproxy for further
       details. This attribute is returned by all end points.
-    :ivar isp: This returns the name of the ISP associated the IP address.
+    :ivar isp: The name of the ISP associated the IP address.
       This attribute is only available from the City/ISP/Org and Omni end
       points.
-    :ivar organization: This returns the name of the organization associated
+    :ivar organization: The name of the organization associated
       the IP address. This attribute is only available from the City/ISP/Org
       and Omni end points.
-    :ivar user_type: This returns the user type associated with the IP
+    :ivar user_type: The user type associated with the IP
       address. This can be one of the following values:
 
       * business
