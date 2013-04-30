@@ -267,6 +267,16 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.country.name, None,
                          'country name is in None (no German available)')
 
+    def test_unknown_keys(self):
+        model = geoip2.models.CityISPOrg({'traits': {'ip_address': '1.2.3.4',
+                                                     'invalid': 'blah'},
+                                          'unk_base': {'blah': 1}})
+        with self.assertRaises(AttributeError):
+            model.unk_base
+        with self.assertRaises(AttributeError):
+            model.traits.invalid
+        self.assertEqual(model.traits.ip_address, '1.2.3.4', 'correct ip')
+
 
 if __name__ == '__main__':
     unittest.main()
