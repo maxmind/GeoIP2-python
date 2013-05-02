@@ -22,6 +22,8 @@ except ImportError:
 
 if sys.version_info[0] == 2:
     unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
+
 
 
 @patch.object(requests, 'get')
@@ -163,10 +165,17 @@ class TestClient(unittest.TestCase):
     def test_request(self, get):
         self._setup_get(get, 'country', 200, self.country)
         country = self.client.country('1.2.3.4')
-        get.assert_called_with('https://geoip.maxmind.com'
-                               '/geoip/v2.0/country/1.2.3.4',
-                               headers={'Accept': 'application/json'},
-                               auth=(42, 'abcdef123456'))
+        args, kwargs = get.call_args
+        self.assertEqual(args[0], 'https://geoip.maxmind.com'
+                         '/geoip/v2.0/country/1.2.3.4',
+                         'correct URI is used')
+        self.assertEqual(kwargs.get('headers').get('Accept'),
+                         'application/json',
+                         'correct Accept header')
+        self.assertRegex(kwargs.get('headers').get('User-Agent'),
+                                 '^GeoIP2 Python Client v',
+                                 'Correct User-Agent')
+        self.assertEqual(kwargs.get('auth'), (42, 'abcdef123456'))
 
     def test_city_ok(self, get):
         self._setup_get(get, 'city', 200, self.country)

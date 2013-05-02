@@ -93,8 +93,11 @@ Every record class attribute has a corresponding predicate method so you can
 check to see if the attribute is set.
 
 """
+
+import geoip2
 import geoip2.models
 import requests
+from requests.utils import default_user_agent
 from .errors import GeoIP2Error, GeoIP2HTTPError, GeoIP2WebServiceError
 
 
@@ -202,12 +205,17 @@ class Client(object):
     def _response_for(self, path, model_class, ip_address):
         uri = '/'.join([self._base_uri, path, ip_address])
         response = requests.get(uri, auth=(self.user_id, self.license_key),
-                                headers={'Accept': 'application/json'})
+                                headers={'Accept': 'application/json',
+                                         'User-Agent': self._user_agent() })
         if (response.status_code == 200):
             body = self._handle_success(response, uri)
             return model_class(body, languages=self.languages)
         else:
             self._handle_error(response, uri)
+
+    def _user_agent(self):
+        return 'GeoIP2 Python Client v%s (%s)' % (geoip2.__version__,
+                                                 default_user_agent())
 
     def _handle_success(self, response, uri):
         try:
