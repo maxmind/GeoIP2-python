@@ -147,7 +147,6 @@ class TestClient(unittest.TestCase):
                                     'specify code or error keys'):
             self.client.country('1.2.3.8')
 
-    @httpretty.activate
     def test_bad_body_error(self):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/' + '1.2.3.9',
@@ -159,7 +158,6 @@ class TestClient(unittest.TestCase):
                                     ):
             self.client.country('1.2.3.9')
 
-    @httpretty.activate
     def test_bad_body_error(self):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/' + '1.2.3.9',
