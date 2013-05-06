@@ -116,14 +116,14 @@ class TestClient(unittest.TestCase):
                              'exception object contains expected code'
                              )
 
-# XXX - this test does not currently work with HTTPretty
-#    def test_no_body_error(self):
-#        httpretty.register_uri(httpretty.GET,
-#                               self.base_uri + 'country/' + '1.2.3.7',
-#                               status=400)
-#        with self.assertRaisesRegex(GeoIP2HTTPError,
-#                                    'Received a 400 error for .* with no body'):
-#            self.client.country('1.2.3.7')
+    def test_no_body_error(self):
+        httpretty.register_uri(httpretty.GET,
+                               self.base_uri + 'country/' + '1.2.3.7',
+                               body ='',
+                               status=400)
+        with self.assertRaisesRegex(GeoIP2HTTPError,
+                                    'Received a 400 error for .* with no body'):
+            self.client.country('1.2.3.7')
 
     def test_weird_body_error(self):
         httpretty.register_uri(httpretty.GET,
