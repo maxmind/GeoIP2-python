@@ -48,11 +48,16 @@ class TestClient(unittest.TestCase):
         'traits': {'ip_address': '1.2.3.4',},
         }
 
+    def _content_type(self, endpoint):
+        return ('application/vnd.maxmind.com-' +
+                endpoint + '+json; charset=UTF-8; version=1.0')
+
     def test_country_ok(self):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/1.2.3.4',
                                body = json.dumps(self.country),
-                               status = 200)
+                               status = 200,
+                               content_type = self._content_type('country'))
         country = self.client.country('1.2.3.4')
         self.assertEqual(type(country), geoip2.models.Country,
                           'return value of client.country')
@@ -77,7 +82,8 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/me',
                                body = json.dumps(self.country),
-                               status = 200)
+                               status = 200,
+                               content_type = self._content_type('country'))
         implicit_me = self.client.country()
         self.assertEqual(type(implicit_me), geoip2.models.Country,
                           'country() returns Country object')
@@ -88,7 +94,8 @@ class TestClient(unittest.TestCase):
     def test_200_error(self):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/1.1.1.1',
-                               status = 200)
+                               status = 200,
+                               content_type = self._content_type('country'))
         with self.assertRaisesRegex(GeoIP2Error,
                                      'could not decode the response as JSON'):
             self.client.country('1.1.1.1')
@@ -100,7 +107,8 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/1.2.3',
                                body = json.dumps(body),
-                               status = 400)
+                               status = 400,
+                               content_type = self._content_type('country'))
         with self.assertRaisesRegex(WebServiceError,
                                      'The value "1.2.3" is not a valid '
                                     'ip address'):
@@ -122,6 +130,9 @@ class TestClient(unittest.TestCase):
                                body ='',
                                status=400)
         with self.assertRaisesRegex(HTTPError,
+                               status=400,
+                               content_type = self._content_type('country'))
+        with self.assertRaisesRegex(HTTPError,
                                     'Received a 400 error for .* with no body'):
             self.client.country('1.2.3.7')
 
@@ -129,7 +140,8 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/' + '1.2.3.8',
                                body='{"wierd": 42}',
-                               status=400)
+                               status=400,
+                               content_type = self._content_type('country'))
         with self.assertRaisesRegex(HTTPError,
                                     'Response contains JSON but it does not '
                                     'specify code or error keys'):
@@ -140,9 +152,22 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/' + '1.2.3.9',
                                body='bad body',
-                               status=400)
+                               status=400,
+                               content_type = self._content_type('country'))
         with self.assertRaisesRegex(HTTPError,
                                     'it did not include the expected JSON body'
+                                    ):
+            self.client.country('1.2.3.9')
+
+    @httpretty.activate
+    def test_bad_body_error(self):
+        httpretty.register_uri(httpretty.GET,
+                               self.base_uri + 'country/' + '1.2.3.9',
+                               body='bad body',
+                               status=400,
+                               content_type = 'text/plain')
+        with self.assertRaisesRegex(GeoIP2HTTPError,
+                                    'Received a .* with the following body'
                                     ):
             self.client.country('1.2.3.9')
 
@@ -157,7 +182,8 @@ class TestClient(unittest.TestCase):
     def test_300_error(self):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/' + '1.2.3.11',
-                               status=300)
+                               status=300,
+                               content_type = self._content_type('country'))
         with self.assertRaisesRegex(HTTPError,
                                     'Received a very surprising HTTP status '
                                     '\(300\) for'):
@@ -168,7 +194,8 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/' + '1.2.3.4',
                                body = json.dumps(self.country),
-                               status = 200)
+                               status = 200,
+                               content_type = self._content_type('country'))
         country = self.client.country('1.2.3.4')
         request = httpretty.core.httpretty.latest_requests[-1]
 
@@ -188,7 +215,8 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'city/' + '1.2.3.4',
                                body = json.dumps(self.country),
-                               status = 200)
+                               status = 200,
+                               content_type = self._content_type('city'))
         city = self.client.city('1.2.3.4')
         self.assertEqual(type(city), geoip2.models.City,
                           'return value of client.city')
@@ -197,7 +225,8 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'city_isp_org/1.2.3.4',
                                body = json.dumps(self.country),
-                               status = 200)
+                               status = 200,
+                               content_type = self._content_type('country'))
         city_isp_org = self.client.city_isp_org('1.2.3.4')
         self.assertEqual(type(city_isp_org), geoip2.models.CityISPOrg,
                           'return value of client.city_isp_org')
@@ -206,7 +235,8 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'omni/1.2.3.4',
                                body = json.dumps(self.country),
-                               status = 200)
+                               status = 200,
+                               content_type = self._content_type('country'))
         omni = self.client.omni('1.2.3.4')
         self.assertEqual(type(omni), geoip2.models.Omni,
                           'return value of client.omni')

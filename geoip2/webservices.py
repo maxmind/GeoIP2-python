@@ -237,7 +237,8 @@ class Client(object):
             self._handle_non_200_status(status, uri)
 
     def _handle_4xx_status(self, response, status, uri):
-        if response.content:
+        if response.content and \
+                response.headers['Content-Type'].find('json') >= 0:
             try:
                 body = response.json()
             except ValueError as ex:
@@ -254,6 +255,11 @@ class Client(object):
                     raise HTTPError(
                         'Response contains JSON but it does not specify '
                         'code or error keys', status, uri)
+        elif response.content:
+            raise GeoIP2HTTPError('Received a %i for %s with the following '
+                                  'body: %s' %
+                                  (status, uri, response.content),
+                                  status, uri)
         else:
             raise HTTPError('Received a %(status)i error for %(uri)s '
                             'with no body.' % locals(), status, uri)
