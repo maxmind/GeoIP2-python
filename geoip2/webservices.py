@@ -208,6 +208,7 @@ class Client(object):
                                 headers={'Accept': 'application/json',
                                          'User-Agent': self._user_agent()})
         if (response.status_code == 200):  #pylint:disable=E1103
+        if (response.status_code == 200):
             body = self._handle_success(response, uri)
             return model_class(body, languages=self.languages)
         else:

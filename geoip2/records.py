@@ -256,9 +256,9 @@ class Subdivisions(tuple):
     def most_specific(self):
         """The most specific subdivision available
 
-        :returns: The most specific (smallest) :py:class:`Subdivision`.
-          If there are no :py:class:`Subdivision` objects for the response,
-          this returns an empty :py:class:`Subdivision`.
+        :returns: The most specific (smallest) :py:class:`Subdivision`. If
+          there are no :py:class:`Subdivision` objects for the response, this
+          returns an empty :py:class:`Subdivision`.
 
         """
         try:
