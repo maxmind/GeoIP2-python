@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import httpretty
+import httpretty.core
 import sys
 sys.path.append('..')
 
@@ -168,17 +169,19 @@ class TestClient(unittest.TestCase):
                                body = json.dumps(self.country),
                                status = 200)
         country = self.client.country('1.2.3.4')
-        args, kwargs = get.call_args
-        self.assertEqual(args[0], 'https://geoip.maxmind.com'
+        request = httpretty.core.httpretty.latest_requests[-1]
+
+        self.assertEqual(request.path,
                          '/geoip/v2.0/country/1.2.3.4',
                          'correct URI is used')
-        self.assertEqual(kwargs.get('headers').get('Accept'),
+        self.assertEqual(request.headers['Accept'],
                          'application/json',
                          'correct Accept header')
-        self.assertRegex(kwargs.get('headers').get('User-Agent'),
+        self.assertRegex(request.headers['User-Agent'],
                                  '^GeoIP2 Python Client v',
                                  'Correct User-Agent')
-        self.assertEqual(kwargs.get('auth'), (42, 'abcdef123456'))
+        self.assertEqual(request.headers['Authorization'],
+                    'Basic NDI6YWJjZGVmMTIzNDU2', 'correct auth')
 
     def test_city_ok(self):
         httpretty.register_uri(httpretty.GET,
