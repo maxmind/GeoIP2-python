@@ -225,48 +225,6 @@ class TestModels(unittest.TestCase):
                          'traits is_setellite_provider is True')
         self.assertEqual(model.raw, raw, 'raw method produces raw output')
 
-    def test_names(self):
-        raw = {
-            'continent': {
-                'continent_code': 'NA',
-                'geoname_id': 42,
-                'names': {
-                    'en': 'North America',
-                    'zh-CN': '北美洲',
-                    },
-                },
-            'country': {
-                'geoname_id': 1,
-                'iso_code': 'US',
-                'names': {
-                    'en': 'United States of America',
-                    'fr': 'États-Unis',
-                    'zh-CN': '美国',
-                    },
-                },
-            'traits': {
-                'ip_address': '1.2.3.4',
-                },
-            }
-
-        model = geoip2.models.Country(raw, languages=['fr', 'zh-CN', 'en'])
-        self.assertEqual(model.continent.name, '北美洲',
-                         'continent name is in Chinese (no French available)')
-        self.assertEqual(model.country.name, 'États-Unis',
-                         'country name is in French')
-
-        model = geoip2.models.Country(raw, languages=['fr', 'de'])
-        self.assertEqual(model.continent.name, None,
-                         'continent name is undef (no fr or de available)')
-        self.assertEqual(model.country.name, 'États-Unis',
-                         'country name is in French')
-
-        model = geoip2.models.Country(raw, languages=['de'])
-        self.assertEqual(model.continent.name, None,
-                         'continent name is undef (no German available)')
-        self.assertEqual(model.country.name, None,
-                         'country name is in None (no German available)')
-
     def test_unknown_keys(self):
         model = geoip2.models.CityISPOrg({'traits': {'ip_address': '1.2.3.4',
                                                      'invalid': 'blah'},
@@ -276,6 +234,74 @@ class TestModels(unittest.TestCase):
         with self.assertRaises(AttributeError):
             model.traits.invalid
         self.assertEqual(model.traits.ip_address, '1.2.3.4', 'correct ip')
+
+
+class TestNamess(unittest.TestCase):
+
+    raw = {
+        'continent': {
+            'continent_code': 'NA',
+            'geoname_id': 42,
+            'names': {
+                'de': 'Nordamerika',
+                'en': 'North America',
+                'es': 'América del Norte',
+                'ja': '北アメリカ',
+                'pt-BR': 'América do Norte',
+                'ru': 'Северная Америка',
+                'zh-CN': '北美洲',
+                },
+            },
+        'country': {
+            'geoname_id': 1,
+            'iso_code': 'US',
+            'names': {
+                'en': 'United States of America',
+                'fr': 'États-Unis',
+                'zh-CN': '美国',
+                },
+            },
+        'traits': {
+            'ip_address': '1.2.3.4',
+            },
+        }
+
+    def test_names(self):
+        model = geoip2.models.Country(self.raw, languages=['sq', 'ar'])
+        self.assertEqual(model.continent.names,
+                         self.raw['continent']['names'],
+                         'Correct names dict for continent')
+        self.assertEqual(model.country.names,
+                         self.raw['country']['names'],
+                         'Correct names dict for country')
+
+    def test_three_languages(self):
+        model = geoip2.models.Country(self.raw,
+                                      languages=['fr', 'zh-CN', 'en'])
+        self.assertEqual(model.continent.name, '北美洲',
+                         'continent name is in Chinese (no French available)')
+        self.assertEqual(model.country.name, 'États-Unis',
+                         'country name is in French')
+
+    def test_two_languages(self):
+        model = geoip2.models.Country(self.raw, languages=['ak', 'fr'])
+        self.assertEqual(model.continent.name, None,
+                         'continent name is undef (no Akan or French '
+                         'available)')
+        self.assertEqual(model.country.name, 'États-Unis',
+                         'country name is in French')
+
+    def test_unknown_language(self):
+        model = geoip2.models.Country(self.raw, languages=['aa'])
+        self.assertEqual(model.continent.name, None,
+                         'continent name is undef (no Afar available)')
+        self.assertEqual(model.country.name, None,
+                         'country name is in None (no Afar available)')
+
+    def test_german(self):
+        model = geoip2.models.Country(self.raw, languages=['de'])
+        self.assertEqual(model.continent.name, 'Nordamerika',
+                         'Correct german name for continent')
 
 
 if __name__ == '__main__':
