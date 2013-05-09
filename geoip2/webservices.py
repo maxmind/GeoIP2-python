@@ -129,16 +129,18 @@ class Client(object):
       data in "en". If you do not include this language, the name property
       may end up returning None even when the record hass an English name.
 
-      Currently, the valid list of language codes is:
+      Currently, the valid language codes are:
 
+      * de -- German
       * en -- English names may still include accented characters if that is
         the accepted spelling in English. In other words, English does not
         mean ASCII.
+      * es -- Spanish
+      * fr -- French
       * ja -- Japanese
+      * pt-BR -- Brazilian Portuguese
       * ru -- Russian
       * zh-CN -- Simplified Chinese.
-
-      Passing any other language code will result in an error.
 
     """
 
