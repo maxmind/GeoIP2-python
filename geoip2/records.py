@@ -140,8 +140,6 @@ class RepresentedCountry(Country):
       include other types such as ``embassy`` in the future. Returned by all
       endpoints.
 
-
-
     """
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names', 'type'])
 
@@ -215,15 +213,16 @@ class Subdivision(PlaceRecord):
       confidence that the subdivision is correct. This attribute is only
       available from the Omni end point.
     :ivar geoname_id: This is a GeoName ID for the subdivision. This
-      attribute is returned by all end points.
+      attribute is returned by all end points except Country.
     :ivar iso_code: This is a string up to three characters long
       contain the subdivision portion of the ISO 3166-2 code
       (http://en.wikipedia.org/wiki/ISO_3166-2). This attribute is returned
-      by all end points.
+      by all end points except Country.
     :ivar name: The name of the subdivision based on the languages list
       passed to the constructor. This attribute is returned by all end points.
     :ivar names: A dictionary where the keys are language codes and the
-      values are names. This attribute is returned by all end points.
+      values are names. This attribute is returned by all end points except
+      Country.
 
     """
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names'])
@@ -252,9 +251,9 @@ class Subdivisions(tuple):
     def most_specific(self):
         """The most specific subdivision available
 
-        :returns: The most specific (smallest) :py:class:`Subdivision`. If there
-          are no :py:class:`Subdivision` objects for the response, this returns an
-          empty :py:class:`Subdivision`.
+        :returns: The most specific (smallest) :py:class:`Subdivision`.
+          If there are no :py:class:`Subdivision` objects for the response,
+          this returns an empty :py:class:`Subdivision`.
 
         """
         try:
