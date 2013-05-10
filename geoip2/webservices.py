@@ -50,7 +50,7 @@ Example
     >>> client = geoip2.webservices.Client(42, 'abcdef123456')
     >>> omni = client.omni('24.24.24.24')
     >>> country = omni.country
-    >>> print(country.iso_3166_alpha_2)
+    >>> print(country.iso_code)
 
 Exceptions
 ----------
