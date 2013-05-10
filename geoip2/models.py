@@ -7,7 +7,7 @@ Precision City end point.
 
 The only difference between the City, City/ISP/Org, and Omni model classes is
 which fields in each record may be populated. See
-http://dev.maxmind.com/geoip/precision for more details.
+http://dev.maxmind.com/geoip/geoip2/web-services for more details.
 
 """
 import geoip2.records

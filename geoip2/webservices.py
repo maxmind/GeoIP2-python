@@ -56,8 +56,8 @@ Exceptions
 ----------
 
 For details on the possible errors returned by the web service itself, see
-http://dev.maxmind.com/geoip/precision for the GeoIP Precision web service
-docs.
+http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP Precision
+web service docs.
 
 If the web service returns an explicit error document, this is thrown as a
 GeoIP2WebServiceError exception. If some other sort of error occurs, this is
@@ -83,8 +83,8 @@ piece of data for any given IP address.
 Because of these factors, it is possible for any end point to return a record
 where some or all of the attributes are unpopulated.
 
-See http://dev.maxmind.com/geoip/precision for details on what data each end
-point may return.
+See http://dev.maxmind.com/geoip/geoip2/web-services for details on what
+data each end point may return.
 
 The only piece of data which is always returned is the :py:attr:`ip_address`
 attribute in the :py:class:`geoip2.records.Traits` record.
