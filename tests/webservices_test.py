@@ -9,7 +9,7 @@ sys.path.append('..')
 import geoip2
 import json
 import requests
-from geoip2.errors import GeoIP2Error, GeoIP2HTTPError, GeoIP2WebServiceError
+from geoip2.errors import GeoIP2Error, HTTPError, WebServiceError
 from geoip2.webservices import Client
 
 if sys.version_info[:2] == (2, 6):
@@ -101,14 +101,14 @@ class TestClient(unittest.TestCase):
                                self.base_uri + 'country/1.2.3',
                                body = json.dumps(body),
                                status = 400)
-        with self.assertRaisesRegex(GeoIP2WebServiceError,
+        with self.assertRaisesRegex(WebServiceError,
                                      'The value "1.2.3" is not a valid '
                                     'ip address'):
             self.client.country('1.2.3')
         # XXX - there might be a better way to do this
         try:
             self.client.country('1.2.3')
-        except GeoIP2WebServiceError as e:
+        except WebServiceError as e:
             self.assertEqual(e.http_status, 400,
                              'exception object contains expected http_status'
                              )
@@ -121,7 +121,7 @@ class TestClient(unittest.TestCase):
                                self.base_uri + 'country/' + '1.2.3.7',
                                body ='',
                                status=400)
-        with self.assertRaisesRegex(GeoIP2HTTPError,
+        with self.assertRaisesRegex(HTTPError,
                                     'Received a 400 error for .* with no body'):
             self.client.country('1.2.3.7')
 
@@ -130,7 +130,7 @@ class TestClient(unittest.TestCase):
                                self.base_uri + 'country/' + '1.2.3.8',
                                body='{"wierd": 42}',
                                status=400)
-        with self.assertRaisesRegex(GeoIP2HTTPError,
+        with self.assertRaisesRegex(HTTPError,
                                     'Response contains JSON but it does not '
                                     'specify code or error keys'):
             self.client.country('1.2.3.8')
@@ -141,7 +141,7 @@ class TestClient(unittest.TestCase):
                                self.base_uri + 'country/' + '1.2.3.9',
                                body='bad body',
                                status=400)
-        with self.assertRaisesRegex(GeoIP2HTTPError,
+        with self.assertRaisesRegex(HTTPError,
                                     'it did not include the expected JSON body'
                                     ):
             self.client.country('1.2.3.9')
@@ -150,7 +150,7 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/' + '1.2.3.10',
                                status=500)
-        with self.assertRaisesRegex(GeoIP2HTTPError,
+        with self.assertRaisesRegex(HTTPError,
                                     'Received a server error \(500\) for'):
             self.client.country('1.2.3.10')
 
@@ -158,7 +158,7 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/' + '1.2.3.11',
                                status=300)
-        with self.assertRaisesRegex(GeoIP2HTTPError,
+        with self.assertRaisesRegex(HTTPError,
                                     'Received a very surprising HTTP status '
                                     '\(300\) for'):
 

@@ -14,7 +14,7 @@ class GeoIP2Error(RuntimeError):
     """
 
 
-class GeoIP2HTTPError(GeoIP2Error):
+class HTTPError(GeoIP2Error):
     """There was an error when making your HTTP request.
 
     This class represents an HTTP transport error. It extends
@@ -25,16 +25,16 @@ class GeoIP2HTTPError(GeoIP2Error):
 
     """
     def __init__(self, message, http_status=None, uri=None):
-        super(GeoIP2HTTPError, self).__init__(message)
+        super(HTTPError, self).__init__(message)
         self.http_status = http_status
         self.uri = uri
 
 
-class GeoIP2WebServiceError(GeoIP2HTTPError):
+class WebServiceError(HTTPError):
     """The GeoIP2 web service returned an error.
 
     This class represents an error returned by MaxMind's GeoIP2 Precision
-    web service. It extends :py:exc:`GeoIP2HTTPError`.
+    web service. It extends :py:exc:`HTTPError`.
 
     :ivar code: The code returned by the MaxMind web service
     :ivar http_status: The HTTP status code returned
@@ -42,5 +42,5 @@ class GeoIP2WebServiceError(GeoIP2HTTPError):
 
     """
     def __init__(self, message, code=None, http_status=None, uri=None):
-        super(GeoIP2WebServiceError, self).__init__(message, http_status, uri)
+        super(WebServiceError, self).__init__(message, http_status, uri)
         self.code = code

@@ -60,14 +60,14 @@ http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP Precision
 web service docs.
 
 If the web service returns an explicit error document, this is thrown as a
-GeoIP2WebServiceError exception. If some other sort of error occurs, this is
-thrown as a GeoIP2HTTPError. The difference is that the webservice error
+WebServiceError exception. If some other sort of error occurs, this is
+thrown as a HTTPError. The difference is that the webservice error
 includes an error message and error code delivered by the web service. The
 latter is thrown when some sort of unanticipated error occurs, such as the
 web service returning a 500 or an invalid error document.
 
 If the web service returns any status code besides 200, 4xx, or 5xx, this also
-becomes a GeoIP2HTTPError.
+becomes a HTTPError.
 
 Finally, if the web service returns a 200 but the body is invalid, the client
 throws a GeoIP2Error object.
@@ -98,7 +98,7 @@ import geoip2
 import geoip2.models
 import requests
 from requests.utils import default_user_agent
-from .errors import GeoIP2Error, GeoIP2HTTPError, GeoIP2WebServiceError
+from .errors import GeoIP2Error, HTTPError, WebServiceError
 
 
 class Client(object):
@@ -206,8 +206,8 @@ class Client(object):
         uri = '/'.join([self._base_uri, path, ip_address])
         response = requests.get(uri, auth=(self.user_id, self.license_key),
                                 headers={'Accept': 'application/json',
-                                         'User-Agent': self._user_agent() })
-        if (response.status_code == 200):
+                                         'User-Agent': self._user_agent()})
+        if (response.status_code == 200):  #pylint:disable=E1103
             body = self._handle_success(response, uri)
             return model_class(body, languages=self.languages)
         else:
@@ -215,16 +215,16 @@ class Client(object):
 
     def _user_agent(self):
         return 'GeoIP2 Python Client v%s (%s)' % (geoip2.__version__,
-                                                 default_user_agent())
+                                                  default_user_agent())
 
     def _handle_success(self, response, uri):
         try:
             return response.json()
-        except ValueError as e:
+        except ValueError as ex:
             raise GeoIP2Error('Received a 200 response for %(uri)s'
                               ' but could not decode the response as '
                               'JSON: ' % locals() +
-                              ', '.join(e.args), 200, uri)
+                              ', '.join(ex.args), 200, uri)
 
     def _handle_error(self, response, uri):
         status = response.status_code
@@ -232,40 +232,40 @@ class Client(object):
         if status >= 400 and status < 499:
             self._handle_4xx_status(response, status, uri)
         elif status >= 500 and status < 599:
-            self._handle_5xx_status(response, status, uri)
+            self._handle_5xx_status(status, uri)
         else:
-            self._handle_non_200_status(response, status, uri)
+            self._handle_non_200_status(status, uri)
 
     def _handle_4xx_status(self, response, status, uri):
         if response.content:
             try:
                 body = response.json()
-            except ValueError as e:
-                raise GeoIP2HTTPError(
+            except ValueError as ex:
+                raise HTTPError(
                     'Received a %(status)i error for %(uri)s but it did'
                     ' not include the expected JSON body: ' % locals() +
-                    ', '.join(e.args), status, uri)
+                    ', '.join(ex.args), status, uri)
             else:
                 if 'code' in body and 'error' in body:
-                    raise GeoIP2WebServiceError(body.get('error'),
-                                                body.get('code'),
-                                                status, uri)
+                    raise WebServiceError(body.get('error'),
+                                          body.get('code'),
+                                          status, uri)
                 else:
-                    raise GeoIP2HTTPError(
+                    raise HTTPError(
                         'Response contains JSON but it does not specify '
                         'code or error keys', status, uri)
         else:
-            raise GeoIP2HTTPError('Received a %(status)i error for %(uri)s '
-                                  'with no body.' % locals(), status, uri)
+            raise HTTPError('Received a %(status)i error for %(uri)s '
+                            'with no body.' % locals(), status, uri)
 
-    def _handle_5xx_status(self, response, status, uri):
-        raise GeoIP2HTTPError('Received a server error (%(status)i) for '
-                              '%(uri)s' % locals(), status, uri)
+    def _handle_5xx_status(self, status, uri):
+        raise HTTPError('Received a server error (%(status)i) for '
+                        '%(uri)s' % locals(), status, uri)
 
-    def _handle_non_200_status(self, response, status, uri):
-        raise GeoIP2HTTPError('Received a very surprising HTTP status '
-                              '(%(status)i) for %(uri)s' % locals(), status,
-                              uri)
+    def _handle_non_200_status(self, status, uri):
+        raise HTTPError('Received a very surprising HTTP status '
+                        '(%(status)i) for %(uri)s' % locals(), status,
+                        uri)
 """
 
 :copyright: (c) 2013 by MaxMind, Inc.

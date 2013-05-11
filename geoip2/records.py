@@ -4,21 +4,22 @@ Records
 =======
 
 """
-
+#pylint:disable=R0903
 from abc import ABCMeta
-import collections
 
 
 class Record(object):
     """All records are subclasses of ``Record``"""
     __metaclass__ = ABCMeta
 
+    _valid_attributes = None
+
     def __init__(self, **kwargs):
         valid_args = dict((k, kwargs.get(k)) for k in self._valid_attributes)
         self.__dict__.update(valid_args)
 
     def __setattr__(self, name, value):
-        raise NotImplementedError(name + ' is read-only.')
+        raise AttributeError("can't set attribute")
 
 
 class PlaceRecord(Record):
@@ -35,6 +36,8 @@ class PlaceRecord(Record):
 
     @property
     def name(self):
+        """Dict with language codes as keys and localized name as value"""
+        #pylint:disable=E1101
         return next((self.names.get(x) for x in self._languages if x in
                      self.names), None)
 
@@ -100,9 +103,9 @@ class Country(PlaceRecord):
       end point.
     :ivar geoname_id: The GeoName ID for the country. This attribute is
       returned by all end points.
-    :ivar iso_code: The two-character ISO 3166-1
-      (http://en.wikipedia.org/wiki/ISO_3166-1) alpha code for the country.
-      This attribute is returned by all end points.
+    :ivar iso_code: The two-character `ISO 3166-1
+      <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the
+      country. This attribute is returned by all end points.
     :ivar name: The name of the country based on the languages list
       passed to the constructor. This attribute is returned by all end points.
     :ivar names: A dictionary where the keys are language codes and the values
@@ -115,8 +118,8 @@ class Country(PlaceRecord):
 class RepresentedCountry(Country):
     """Contains data for the represented country associated with an IP address
 
-    This class contains the country-level data associated with an IP address for
-    the IP's represented country. The represented country is the country
+    This class contains the country-level data associated with an IP address
+    for the IP's represented country. The represented country is the country
     represented by something like a military base or embassy.
 
     This record is returned by all the end points.
@@ -128,8 +131,8 @@ class RepresentedCountry(Country):
       end point.
     :ivar geoname_id: The GeoName ID for the country. This attribute is
       returned by all end points.
-    :ivar iso_code: The two-character ISO 3166-1
-      (http://en.wikipedia.org/wiki/ISO_3166-1) alpha code for the country.
+    :ivar iso_code: The two-character `ISO 3166-1
+      <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the country.
       This attribute is returned by all end points.
     :ivar name: The name of the country based on the languages list
       passed to the constructor. This attribute is returned by all end points.
@@ -141,7 +144,8 @@ class RepresentedCountry(Country):
       endpoints.
 
     """
-    _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names', 'type'])
+    _valid_attributes = set(['confidence', 'geoname_id', 'iso_code',
+                             'names', 'type'])
 
 
 class Location(Record):
@@ -164,13 +168,13 @@ class Location(Record):
       except the Country end point.
     :ivar metro_code: The metro code of the location if the
       location is in the US. MaxMind returns the same metro codes as the
-      Google AdWords API
-      (https://developers.google.com/adwords/api/docs/appendix/cities-DMAregions).
+      `Google AdWords API
+      <https://developers.google.com/adwords/api/docs/appendix/cities-DMAregions>`_.
       This attribute is returned by all end points except the Country end
       point.
     :ivar time_zone: The time zone associated with location, as
-      specified by the IANA Time Zone Database
-      (http://www.iana.org/time-zones), e.g., "America/New_York". This
+      specified by the `IANA Time Zone Database
+      <http://www.iana.org/time-zones>`_, e.g., "America/New_York". This
       attribute is returned by all end points except the Country end point.
 
     """
@@ -215,9 +219,9 @@ class Subdivision(PlaceRecord):
     :ivar geoname_id: This is a GeoName ID for the subdivision. This
       attribute is returned by all end points except Country.
     :ivar iso_code: This is a string up to three characters long
-      contain the subdivision portion of the ISO 3166-2 code
-      (http://en.wikipedia.org/wiki/ISO_3166-2). This attribute is returned
-      by all end points except Country.
+      contain the subdivision portion of the `ISO 3166-2 code
+      <http://en.wikipedia.org/wiki/ISO_3166-2>`_. This attribute is
+      returned by all end points except Country.
     :ivar name: The name of the subdivision based on the languages list
       passed to the constructor. This attribute is returned by all end points.
     :ivar names: A dictionary where the keys are language codes and the
@@ -241,6 +245,7 @@ class Subdivisions(tuple):
     end point.
 
     """
+    #pylint:disable=R0924,W0212,W0142
     def __new__(cls, languages, *subdivisions):
         subdivisions = [Subdivision(languages, **x) for x in subdivisions]
         obj = super(cls, Subdivisions).__new__(cls, subdivisions)
@@ -271,14 +276,14 @@ class Traits(Record):
 
     This class has the following attributes:
 
-    :ivar autonomous_system_number: The autonomous system
-      number (http://en.wikipedia.org/wiki/Autonomous_system_(Internet))
+    :ivar autonomous_system_number: The `autonomous system
+      number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_
       associated with the IP address. This attribute is only available from
       the City/ISP/Org and Omni end points.
     :ivar autonomous_system_organization: The organization
-      associated with the registered autonomous system number
-      (http://en.wikipedia.org/wiki/Autonomous_system_(Internet)) for the IP
-      address. This attribute is only available from the City/ISP/Org and
+      associated with the registered `autonomous system number
+      <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for the
+      IP address. This attribute is only available from the City/ISP/Org and
       Omni end points.
     :ivar domain: The second level domain associated with the
       IP address. This will be something like "example.com" or
@@ -331,7 +336,7 @@ class Traits(Record):
                              'organization',
                              'user_type'])
 
-    def __init__(self, languages=None, **kwargs):
+    def __init__(self, **kwargs):
         for k in ['is_anonymous_proxy', 'is_satellite_provider']:
             kwargs[k] = bool(kwargs.get(k, False))
         super(Traits, self).__init__(**kwargs)

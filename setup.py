@@ -30,6 +30,7 @@ setup(
     package_dir={'geoip2': 'geoip2'},
     include_package_data=True,
     install_requires=['requests'],
+    test_suite="tests",
     license=open('LICENSE').read(),
     classifiers=(
         'Development Status :: 3 - Alpha',

@@ -1,0 +1,6 @@
+[MESSAGES CONTROL]
+disable=R0201,W0105
+
+[BASIC]
+
+no-docstring-rgx=_.*

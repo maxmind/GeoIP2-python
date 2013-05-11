@@ -10,6 +10,7 @@ which fields in each record may be populated. See
 http://dev.maxmind.com/geoip/geoip2/web-services for more details.
 
 """
+#pylint:disable=R0903
 import geoip2.records
 
 
@@ -50,10 +51,10 @@ class Country(object):
             geoip2.records.Country(languages,
                                    **raw_response.get('registered_country',
                                                       {}))
-        self.represented_country = \
-            geoip2.records.RepresentedCountry(languages,
-                                   **raw_response.get('represented_country',
-                                                      {}))
+        self.represented_country \
+            = geoip2.records.RepresentedCountry(languages,
+                                                **raw_response.get(
+                                                'represented_country', {}))
 
         self.traits = geoip2.records.Traits(**raw_response.get('traits', {}))
         self.raw = raw_response

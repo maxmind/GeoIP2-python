@@ -1,3 +1,8 @@
+"""
+=================
+GeoIP2 Python API
+=================
+"""
 __title__ = 'geoip2'
 __version__ = '0.1'
 __author__ = 'Gregory Oschwald'
