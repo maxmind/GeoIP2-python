@@ -12,7 +12,7 @@ install:
   - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi
 script:
   - nosetests
-  - pylint geoip2
+  - if [[ $TRAVIS_PYTHON_VERSION != '3.3' ]]; then pylint geoip2; fi
 notifications:
   email:
     recipients:
