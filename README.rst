@@ -53,6 +53,11 @@ Python version support
 
 This code requires Python 2.6+ or 3.1+. Older versions are not supported.
 
+Versioning
+----------
+
+The GeoIP2 Python API uses `Semantic Versioning <http://semver.org/>`_.
+
 Support
 -------
 
