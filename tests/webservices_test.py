@@ -128,12 +128,10 @@ class TestClient(unittest.TestCase):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/' + '1.2.3.7',
                                body ='',
-                               status=400)
-        with self.assertRaisesRegex(HTTPError,
                                status=400,
                                content_type = self._content_type('country'))
         with self.assertRaisesRegex(HTTPError,
-                                    'Received a 400 error for .* with no body'):
+                               'Received a 400 error for .* with no body'):
             self.client.country('1.2.3.7')
 
     def test_weird_body_error(self):
@@ -164,7 +162,7 @@ class TestClient(unittest.TestCase):
                                body='bad body',
                                status=400,
                                content_type = 'text/plain')
-        with self.assertRaisesRegex(GeoIP2HTTPError,
+        with self.assertRaisesRegex(HTTPError,
                                     'Received a .* with the following body'
                                     ):
             self.client.country('1.2.3.9')

@@ -208,7 +208,6 @@ class Client(object):
                                 headers={'Accept': 'application/json',
                                          'User-Agent': self._user_agent()})
         if (response.status_code == 200):  #pylint:disable=E1103
-        if (response.status_code == 200):
             body = self._handle_success(response, uri)
             return model_class(body, languages=self.languages)
         else:
@@ -257,10 +256,10 @@ class Client(object):
                         'Response contains JSON but it does not specify '
                         'code or error keys', status, uri)
         elif response.content:
-            raise GeoIP2HTTPError('Received a %i for %s with the following '
-                                  'body: %s' %
-                                  (status, uri, response.content),
-                                  status, uri)
+            raise HTTPError('Received a %i for %s with the following '
+                            'body: %s' %
+                            (status, uri, response.content),
+                            status, uri)
         else:
             raise HTTPError('Received a %(status)i error for %(uri)s '
                             'with no body.' % locals(), status, uri)
