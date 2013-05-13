@@ -3,7 +3,7 @@
 WebServices Client API
 ============================
 
-This class provides a client API for all the GeoIP Precision web service's end
+This class provides a client API for all the GeoIP2 web service's end
 points. The end points are Country, City, City/ISP/Org, and Omni. Each end
 point returns a different set of data about an IP address, with Country
 returning the least data and Omni the most.
@@ -21,7 +21,7 @@ case all of the attributes for that record class will be empty.
 SSL
 ---
 
-Requests to the GeoIP Precision web service are always made with SSL.
+Requests to the GeoIP2 web service are always made with SSL.
 
 Usage
 -----
@@ -56,8 +56,8 @@ Exceptions
 ----------
 
 For details on the possible errors returned by the web service itself, see
-http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP Precision
-web service docs.
+http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP2 web service
+docs.
 
 If the web service returns an explicit error document, this is thrown as a
 WebServiceError exception. If some other sort of error occurs, this is
@@ -126,9 +126,8 @@ class Client(object):
       the name in the first language that has one.
 
       Note that the only language which is always present in the GeoIP2
-      Precision data in "en". If you do not include this language, the
-      name property may end up returning None even when the record hass
-      an English name.
+      data in "en". If you do not include this language, the name property
+      may end up returning None even when the record hass an English name.
 
       Currently, the valid list of language codes is:
 

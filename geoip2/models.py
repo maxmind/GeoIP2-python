@@ -3,7 +3,7 @@ Models
 ======
 
 These classes provide models for the data returned by the GeoIP2
-Precision City end point.
+end points.
 
 The only difference between the City, City/ISP/Org, and Omni model classes is
 which fields in each record may be populated. See
@@ -15,7 +15,7 @@ import geoip2.records
 
 
 class Country(object):
-    """Model class for the GeoIP2 Precision Country end point
+    """Model class for the GeoIP2 Country end point
 
     This class provides the following methods, each of which returns a record
     object.

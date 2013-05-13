@@ -33,7 +33,7 @@ class HTTPError(GeoIP2Error):
 class WebServiceError(HTTPError):
     """The GeoIP2 web service returned an error.
 
-    This class represents an error returned by MaxMind's GeoIP2 Precision
+    This class represents an error returned by MaxMind's GeoIP2
     web service. It extends :py:exc:`HTTPError`.
 
     :ivar code: The code returned by the MaxMind web service
