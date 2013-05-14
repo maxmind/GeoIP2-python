@@ -3,7 +3,7 @@
 History
 -------
 
-???
+0.1.1 (2013-05-14)
 ++++++++++++++++++
 
 * Documentation and packaging updates
