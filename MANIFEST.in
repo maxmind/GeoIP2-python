@@ -1,2 +1,2 @@
-include README.rst LICENSE
+include HISTORY.rst README.rst LICENSE requirements.txt tests/webservices_test.py tests/models_test.py
 graft docs/html
