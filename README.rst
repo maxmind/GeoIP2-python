@@ -6,7 +6,7 @@ MaxMind GeoIP2 Python API
 Description
 -----------
 
-Currently, this distribution provides an `API for the GeoIP2 web services
+Currently, this distribution provides an API for the `GeoIP2 web services
 <http://dev.maxmind.com/geoip/geoip2/web-services>`_.
 
 In the future, this distribution will also provide the same API for the GeoIP2
