@@ -8,11 +8,13 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install git+https://github.com/maxmind/HTTPretty.git
-  - pip install pylint
+  - pip install pylint coveralls
   - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi
 script:
-  - nosetests
+  - coverage run --source=geoip2 setup.py test
   - if [[ $TRAVIS_PYTHON_VERSION != '3.3' ]]; then pylint geoip2; fi
+after_success:
+  - coveralls
 notifications:
   email:
     recipients:
