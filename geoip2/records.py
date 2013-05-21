@@ -182,6 +182,16 @@ class Location(Record):
                              'time_zone'])
 
 class MaxMind(Record):
+    """Contains data related to your MaxMind account
+
+    This record is returned by all the end points.
+
+    Attributes:
+
+    :ivar queries_remaining: The number of remaining queries you have
+      for the end point you are calling.
+
+    """
     _valid_attributes = set(['queries_remaining'])
 
 class Postal(Record):

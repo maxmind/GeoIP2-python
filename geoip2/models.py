@@ -25,6 +25,8 @@ class Country(object):
     :ivar country: :py:class:`geoip2.records.Country` object representing
       country data for the requested IP address. This record represents the
       country where MaxMind believes the IP is located in.
+    :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
+      information related to your MaxMind account.
     :ivar registered_country: :py:class:`geoip2.records.Country` object
       representing the registered country data for the requested IP address.
       This record represents the country where the ISP has registered a given
@@ -75,6 +77,8 @@ class City(Country):
       country where MaxMind believes the IP is located in.
     :ivar location: :py:class:`geoip2.records.Location` object
       representing country data for the requested IP address.
+    :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
+      information related to your MaxMind account.
     :ivar region: :py:class:`geoip2.records.Region` object representing
       country data for the requested IP address.
     :ivar registered_country: :py:class:`geoip2.records.Country` object
@@ -115,6 +119,8 @@ class CityISPOrg(City):
       country where MaxMind believes the IP is located in.
     :ivar location: :py:class:`geoip2.records.Location` object
       representing country data for the requested IP address.
+    :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
+      information related to your MaxMind account.
     :ivar region: :py:class:`geoip2.records.Region` object representing
       country data for the requested IP address.
     :ivar registered_country: :py:class`geoip2.records.Country` object
@@ -144,6 +150,8 @@ class Omni(CityISPOrg):
       country where MaxMind believes the IP is located in.
     :ivar location: :py:class:`geoip2.records.Location` object
       representing country data for the requested IP address.
+    :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
+      information related to your MaxMind account.
     :ivar region: :py:class:`geoip2.records.Region` object representing
       country data for the requested IP address.
     :ivar registered_country: :py:class:`geoip2.records.Country` object
