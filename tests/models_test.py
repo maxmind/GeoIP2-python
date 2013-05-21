@@ -27,7 +27,7 @@ class TestModels(unittest.TestCase):
                 'names': {'en': 'Minneapolis'},
                 },
             'continent': {
-                'continent_code': 'NA',
+                'code': 'NA',
                 'geoname_id': 42,
                 'names': {'en': 'North America'},
                 },
@@ -156,7 +156,7 @@ class TestModels(unittest.TestCase):
     def test_city_full(self):
         raw = {
             'continent': {
-                'continent_code': 'NA',
+                'code': 'NA',
                 'geoname_id': 42,
                 'names': {'en': 'North America'},
                 },
@@ -194,8 +194,8 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.raw, raw, 'raw method returns raw input')
         self.assertEqual(model.continent.geoname_id, 42,
                          'continent geoname_id is 42')
-        self.assertEqual(model.continent.continent_code, 'NA',
-                         'continent continent_code is NA')
+        self.assertEqual(model.continent.code, 'NA',
+                         'continent code is NA')
         self.assertEqual(model.continent.names, {'en': 'North America'},
                          'continent names is correct')
         self.assertEqual(model.continent.name, 'North America',
@@ -240,7 +240,7 @@ class TestNamess(unittest.TestCase):
 
     raw = {
         'continent': {
-            'continent_code': 'NA',
+            'code': 'NA',
             'geoname_id': 42,
             'names': {
                 'de': 'Nordamerika',

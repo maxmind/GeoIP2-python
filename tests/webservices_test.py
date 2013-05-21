@@ -36,7 +36,7 @@ class TestClient(unittest.TestCase):
     base_uri = 'https://geoip.maxmind.com/geoip/v2.0/'
     country = {
         'continent': {
-            'continent_code': 'NA',
+            'code': 'NA',
             'geoname_id': 42,
             'names': { 'en': 'North America' }
             },
@@ -63,8 +63,8 @@ class TestClient(unittest.TestCase):
                           'return value of client.country')
         self.assertEqual(country.continent.geoname_id, 42,
                          'continent geoname_id is 42')
-        self.assertEqual(country.continent.continent_code, 'NA',
-                         'continent continent_code is NA')
+        self.assertEqual(country.continent.code, 'NA',
+                         'continent code is NA')
         self.assertEqual(country.continent.name, 'North America',
                          'continent name is North America')
         self.assertEqual(country.country.geoname_id, 1,

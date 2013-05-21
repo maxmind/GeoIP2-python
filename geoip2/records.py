@@ -75,9 +75,8 @@ class Continent(PlaceRecord):
 
     Attributes:
 
-    :ivar continent_code: A two character continent code
-      like "NA" (North America) or "OC" (Oceania). This attribute is returned
-      by all end points.
+    :ivar code: A two character continent code like "NA" (North America)
+      or "OC" (Oceania). This attribute is returned by all end points.
     :ivar geoname_id: The GeoName ID for the continent. This
       attribute is returned by all end points.
     :ivar name: Returns the name of the continent based on the languages list
@@ -86,7 +85,7 @@ class Continent(PlaceRecord):
       and the values are names. This attribute is returned by all end points.
 
     """
-    _valid_attributes = set(['continent_code', 'geoname_id', 'names'])
+    _valid_attributes = set(['code', 'geoname_id', 'names'])
 
 
 class Country(PlaceRecord):
