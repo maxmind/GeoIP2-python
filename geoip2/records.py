@@ -181,6 +181,8 @@ class Location(Record):
                              'metro_code', 'postal_code', 'postal_confidence',
                              'time_zone'])
 
+class MaxMind(Record):
+    _valid_attributes = set(['queries_remaining'])
 
 class Postal(Record):
     """Contains data for the postal record associated with an IP address

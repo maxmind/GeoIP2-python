@@ -45,7 +45,8 @@ class TestClient(unittest.TestCase):
             'iso_code': 'US',
             'names': { 'en': 'United States of America'}
             },
-        'traits': {'ip_address': '1.2.3.4',},
+        'maxmind': {'queries_remaining': 11},
+        'traits': {'ip_address': '1.2.3.4'},
         }
 
     def _content_type(self, endpoint):
@@ -76,6 +77,8 @@ class TestClient(unittest.TestCase):
                          'country names' )
         self.assertEqual(country.country.name, 'United States of America',
                          'country name is United States of America')
+        self.assertEqual(country.maxmind.queries_remaining, 11,
+                         'queries_remaining is 11')
         self.assertEqual(country.raw, self.country, 'raw response is correct')
 
     def test_me(self):

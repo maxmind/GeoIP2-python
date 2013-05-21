@@ -56,6 +56,9 @@ class Country(object):
                                                 **raw_response.get(
                                                 'represented_country', {}))
 
+        self.maxmind = \
+            geoip2.records.MaxMind(**raw_response.get('maxmind', {}))
+
         self.traits = geoip2.records.Traits(**raw_response.get('traits', {}))
         self.raw = raw_response
 
