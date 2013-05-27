@@ -104,28 +104,10 @@ class TestClient(unittest.TestCase):
             self.client.country('1.1.1.1')
 
     def test_400_error(self):
-        body = {'code': 'IP_ADDRESS_INVALID',
-                'error': 'The value "1.2.3" is not a '
-                'valid ip address',}
-        httpretty.register_uri(httpretty.GET,
-                               self.base_uri + 'country/1.2.3',
-                               body = json.dumps(body),
-                               status = 400,
-                               content_type = self._content_type('country'))
-        with self.assertRaisesRegex(WebServiceError,
-                                     'The value "1.2.3" is not a valid '
-                                    'ip address'):
+        with self.assertRaisesRegex(ValueError,
+                                    "'1.2.3' does not appear to be an IPv4 "
+                                    "or IPv6 address"):
             self.client.country('1.2.3')
-        # XXX - there might be a better way to do this
-        try:
-            self.client.country('1.2.3')
-        except WebServiceError as e:
-            self.assertEqual(e.http_status, 400,
-                             'exception object contains expected http_status'
-                             )
-            self.assertEqual(e.code,'IP_ADDRESS_INVALID',
-                             'exception object contains expected code'
-                             )
 
     def test_no_body_error(self):
         httpretty.register_uri(httpretty.GET,

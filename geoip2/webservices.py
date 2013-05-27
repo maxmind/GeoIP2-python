@@ -100,6 +100,13 @@ import requests
 from requests.utils import default_user_agent
 from .errors import GeoIP2Error, HTTPError, WebServiceError
 
+import sys
+
+if sys.version_info[0] == 2:
+    import ipaddr as ipaddress
+    ipaddress.ip_address = ipaddress.IPAddress
+else:
+    import ipaddress
 
 class Client(object):
     """This method creates a new client object.
@@ -204,6 +211,8 @@ class Client(object):
         return self._response_for('omni', geoip2.models.Omni, ip_address)
 
     def _response_for(self, path, model_class, ip_address):
+        if ip_address != 'me':
+            ip_address = str(ipaddress.ip_address(ip_address))
         uri = '/'.join([self._base_uri, path, ip_address])
         response = requests.get(uri, auth=(self.user_id, self.license_key),
                                 headers={'Accept': 'application/json',

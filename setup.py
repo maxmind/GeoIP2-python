@@ -16,6 +16,10 @@ if sys.argv[-1] == 'publish':
 
 packages = ['geoip2']
 
+requirements = [i.strip() for i in open("requirements.txt").readlines()]
+
+if sys.version_info[0] == 2:
+    requirements.append('ipaddr')
 
 setup(
     name='geoip2',
@@ -30,7 +34,7 @@ setup(
     package_data={'': ['LICENSE'] },
     package_dir={'geoip2': 'geoip2'},
     include_package_data=True,
-    install_requires=['requests'],
+    install_requires=requirements,
     test_suite="tests",
     license=open('LICENSE').read(),
     classifiers=(
