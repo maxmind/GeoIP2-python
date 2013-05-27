@@ -102,11 +102,12 @@ from .errors import GeoIP2Error, HTTPError, WebServiceError
 
 import sys
 
-if sys.version_info[0] == 2:
-    import ipaddr as ipaddress
+if sys.version_info[0] == 2 or (sys.version_info[0] == 3
+                                and sys.version_info[1] < 3):
+    import ipaddr as ipaddress #pylint:disable=F0401
     ipaddress.ip_address = ipaddress.IPAddress
 else:
-    import ipaddress
+    import ipaddress #pylint:disable=F0401
 
 class Client(object):
     """This method creates a new client object.

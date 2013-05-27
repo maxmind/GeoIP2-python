@@ -18,7 +18,8 @@ packages = ['geoip2']
 
 requirements = [i.strip() for i in open("requirements.txt").readlines()]
 
-if sys.version_info[0] == 2:
+if sys.version_info[0] == 2 or (sys.version_info[0] == 3
+                                and sys.version_info[1] < 3):
     requirements.append('ipaddr')
 
 setup(

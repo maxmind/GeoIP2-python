@@ -11,8 +11,8 @@ install:
   - pip install -r requirements.txt
   - pip install git+https://github.com/maxmind/HTTPretty.git
   - pip install pylint coveralls
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2 ipaddr; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install ipaddr; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2; fi
+  - if [[ $TRAVIS_PYTHON_VERSION != '3.3' ]]; then pip install ipaddr; fi
 
 script:
   - coverage run --source=geoip2 setup.py test
