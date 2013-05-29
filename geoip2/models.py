@@ -24,7 +24,7 @@ class Country(object):
       representing continent data for the requested IP address.
     :ivar country: :py:class:`geoip2.records.Country` object representing
       country data for the requested IP address. This record represents the
-      country where MaxMind believes the IP is located in.
+      country where MaxMind believes the IP is located.
     :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
       information related to your MaxMind account.
     :ivar registered_country: :py:class:`geoip2.records.Country` object
@@ -74,7 +74,7 @@ class City(Country):
       representing continent data for the requested IP address.
     :ivar country: :py:class:`geoip2.records.Country` object representing
       country data for the requested IP address. This record represents the
-      country where MaxMind believes the IP is located in.
+      country where MaxMind believes the IP is located.
     :ivar location: :py:class:`geoip2.records.Location` object
       representing country data for the requested IP address.
     :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
@@ -116,7 +116,7 @@ class CityISPOrg(City):
       representing continent data for the requested IP address.
     :ivar country: :py:class:`geoip2.records.Country` object representing
       country data for the requested IP address. This record represents the
-      country where MaxMind believes the IP is located in.
+      country where MaxMind believes the IP is located.
     :ivar location: :py:class:`geoip2.records.Location` object
       representing country data for the requested IP address.
     :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
@@ -147,7 +147,7 @@ class Omni(CityISPOrg):
       representing continent data for the requested IP address.
     :ivar country: :py:class:`geoip2.records.Country` object representing
       country data for the requested IP address. This record represents the
-      country where MaxMind believes the IP is located in.
+      country where MaxMind believes the IP is located.
     :ivar location: :py:class:`geoip2.records.Location` object
       representing country data for the requested IP address.
     :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
