@@ -37,7 +37,7 @@ class Country(object):
       ``country``. For instance, the country represented by an
       overseas military base or embassy.
     :ivar traits: :py:class:`geoip2.records.Traits` object representing
-      the traits for the request IP address.
+      the traits for the requested IP address.
 
     """
     def __init__(self, raw_response, languages=None):
@@ -91,7 +91,7 @@ class City(Country):
       ``country``. For instance, the country represented by an
       overseas military base or embassy.
     :ivar traits: :py:class:`geoip2.records.Traits` object representing
-      the traits for the request IP address.
+      the traits for the requested IP address.
 
 """
     def __init__(self, raw_response, languages=None):
@@ -133,7 +133,7 @@ class CityISPOrg(City):
       ``country``. For instance, the country represented by an
       overseas military base or embassy.
     :ivar traits: :py:class:`geoip2.records.Traits` object representing
-      the traits for the request IP address.
+      the traits for the requested IP address.
 
     """
 
@@ -164,6 +164,6 @@ class Omni(CityISPOrg):
       ``country``. For instance, the country represented by an
       overseas military base or embassy.
     :ivar traits: :py:class:`geoip2.records.Traits` object representing
-      the traits for the request IP address.
+      the traits for the requested IP address.
 
     """
