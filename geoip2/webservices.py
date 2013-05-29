@@ -9,7 +9,7 @@ point returns a different set of data about an IP address, with Country
 returning the least data and Omni the most.
 
 Each web service end point is represented by a different model class, and
-these model classes in turn contain multiple Record classes. The record
+these model classes in turn contain multiple record classes. The record
 classes have attributes which contain data about the IP address.
 
 If the web service does not return a particular piece of data for an IP
