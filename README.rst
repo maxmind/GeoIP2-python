@@ -3,7 +3,7 @@ MaxMind GeoIP2 Python API
 =========================
 
 **NOTE**: This is an alpha release. The API may change before the final
-production release.
+production release. The first production release will be numbered 2.0.0.
 
 Description
 -----------
