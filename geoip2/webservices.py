@@ -61,13 +61,13 @@ docs.
 
 If the web service returns an explicit error document, this is thrown as a
 WebServiceError exception. If some other sort of error occurs, this is
-thrown as a HTTPError. The difference is that the webservice error
+thrown as an HTTPError. The difference is that the WebServiceError
 includes an error message and error code delivered by the web service. The
 latter is thrown when some sort of unanticipated error occurs, such as the
 web service returning a 500 or an invalid error document.
 
 If the web service returns any status code besides 200, 4xx, or 5xx, this also
-becomes a HTTPError.
+becomes an HTTPError.
 
 Finally, if the web service returns a 200 but the body is invalid, the client
 throws a GeoIP2Error object.
@@ -126,7 +126,7 @@ class Client(object):
       "geoip.maxmind.com". In most cases, you should not need to set this
       explicitly.
     :param languages: This is list of language codes. This argument will be
-      passed onto record classes to use when their name properties are
+      passed on to record classes to use when their name properties are
       called. The default value is ['en'].
 
       The order of the languages is significant. When a record class has
@@ -134,8 +134,8 @@ class Client(object):
       the name in the first language that has one.
 
       Note that the only language which is always present in the GeoIP2
-      data in "en". If you do not include this language, the name property
-      may end up returning None even when the record hass an English name.
+      data is "en". If you do not include this language, the name property
+      may end up returning None even when the record has an English name.
 
       Currently, the valid language codes are:
 
