@@ -309,10 +309,10 @@ class Traits(Record):
     :ivar is_anonymous_proxy: This is true if the IP is an anonymous
       proxy. See http://dev.maxmind.com/faq/geoip#anonproxy for further
       details. This attribute is returned by all end points.
-    :ivar isp: The name of the ISP associated the IP address.
+    :ivar isp: The name of the ISP associated with the IP address.
       This attribute is only available from the City/ISP/Org and Omni end
       points.
-    :ivar organization: The name of the organization associated
+    :ivar organization: The name of the organization associated with
       the IP address. This attribute is only available from the City/ISP/Org
       and Omni end points.
     :ivar user_type: The user type associated with the IP
