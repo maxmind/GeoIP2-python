@@ -1,5 +1,6 @@
 *~
 build
+.coverage
 dist
 docs/_build
 docs/html
