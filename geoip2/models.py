@@ -79,8 +79,8 @@ class City(Country):
       representing country data for the requested IP address.
     :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
       information related to your MaxMind account.
-    :ivar region: :py:class:`geoip2.records.Region` object representing
-      country data for the requested IP address.
+    :ivar subdivisions: :py:class:`geoip2.records.Subdivisions` object representing
+      country subdivisions for the requested IP address.
     :ivar registered_country: :py:class:`geoip2.records.Country` object
       representing the registered country data for the requested IP address.
       This record represents the country where the ISP has registered a given
@@ -121,8 +121,8 @@ class CityISPOrg(City):
       representing country data for the requested IP address.
     :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
       information related to your MaxMind account.
-    :ivar region: :py:class:`geoip2.records.Region` object representing
-      country data for the requested IP address.
+    :ivar subdivisions: :py:class:`geoip2.records.Subdivisions` object representing
+      country subdivisions for the requested IP address.
     :ivar registered_country: :py:class`geoip2.records.Country` object
       representing the registered country data for the requested IP address.
       This record represents the country where the ISP has registered a given
@@ -152,8 +152,8 @@ class Omni(CityISPOrg):
       representing country data for the requested IP address.
     :ivar maxmind: :py:class:`geoip2.records.MaxMind` object with
       information related to your MaxMind account.
-    :ivar region: :py:class:`geoip2.records.Region` object representing
-      country data for the requested IP address.
+    :ivar subdivisions: :py:class:`geoip2.records.Subdivisions` object representing
+      country subdivisions for the requested IP address.
     :ivar registered_country: :py:class:`geoip2.records.Country` object
       representing the registered country data for the requested IP address.
       This record represents the country where the ISP has registered a given
