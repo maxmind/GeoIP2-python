@@ -9,7 +9,7 @@ from abc import ABCMeta
 
 
 class Record(object):
-    """All records are subclasses of ``Record``"""
+    """All records are subclasses of the abstract class ``Record``"""
     __metaclass__ = ABCMeta
 
     _valid_attributes = None
@@ -51,15 +51,34 @@ class City(PlaceRecord):
 
     Attributes:
 
-    :ivar confidence: A value from 0-100 indicating MaxMind's
+    .. attribute:: confidence
+
+      A value from 0-100 indicating MaxMind's
       confidence that the city is correct. This attribute is only available
       from the Omni end point.
-    :ivar geoname_id: The GeoName ID for the city. This attribute
-      is returned by all end points.
-    :ivar name: The name of the city based on the languages list
+
+      :type: int
+
+    .. attribute:: geoname_id
+
+      The GeoName ID for the city. This attribute is returned by all end
+      points.
+
+      :type: int
+
+    .. attribute:: name
+
+      The name of the city based on the languages list
       passed to the constructor. This attribute is returned by all end points.
-    :ivar names: A dictionary where the keys are language codes
+
+      :type: unicode
+
+    .. attribute:: names
+
+      A dictionary where the keys are language codes
       and the values are names. This attribute is returned by all end points.
+
+      :type: dict
 
     """
     _valid_attributes = set(['confidence', 'geoname_id', 'names'])
@@ -75,14 +94,34 @@ class Continent(PlaceRecord):
 
     Attributes:
 
-    :ivar code: A two character continent code like "NA" (North America)
+
+    .. attribute:: code
+
+      A two character continent code like "NA" (North America)
       or "OC" (Oceania). This attribute is returned by all end points.
-    :ivar geoname_id: The GeoName ID for the continent. This
+
+      :type: unicode
+
+    .. attribute:: geoname_id
+
+      The GeoName ID for the continent. This
       attribute is returned by all end points.
-    :ivar name: Returns the name of the continent based on the languages list
+
+      :type: int
+
+    .. attribute:: name
+
+      Returns the name of the continent based on the languages list
       passed to the constructor. This attribute is returned by all end points.
-    :ivar names: A dictionary where the keys are language codes
+
+      :type: unicode
+
+    .. attribute:: names
+
+      A dictionary where the keys are language codes
       and the values are names. This attribute is returned by all end points.
+
+      :type: dict
 
     """
     _valid_attributes = set(['code', 'geoname_id', 'names'])
@@ -97,18 +136,43 @@ class Country(PlaceRecord):
 
     Attributes:
 
-    :ivar confidence: A value from 0-100 indicating MaxMind's confidence that
+
+    .. attribute:: confidence
+
+      A value from 0-100 indicating MaxMind's confidence that
       the country is correct. This attribute is only available from the Omni
       end point.
-    :ivar geoname_id: The GeoName ID for the country. This attribute is
+
+      :type: int
+
+    .. attribute:: geoname_id
+
+      The GeoName ID for the country. This attribute is
       returned by all end points.
-    :ivar iso_code: The two-character `ISO 3166-1
+
+      :type: int
+
+    .. attribute:: iso_code
+
+      The two-character `ISO 3166-1
       <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the
       country. This attribute is returned by all end points.
-    :ivar name: The name of the country based on the languages list
+
+      :type: unicode
+
+    .. attribute:: name
+
+      The name of the country based on the languages list
       passed to the constructor. This attribute is returned by all end points.
-    :ivar names: A dictionary where the keys are language codes and the values
+
+      :type: unicode
+
+    .. attribute:: names
+
+      A dictionary where the keys are language codes and the values
       are names. This attribute is returned by all end points.
+
+      :type: dict
 
     """
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names'])
@@ -125,22 +189,53 @@ class RepresentedCountry(Country):
 
     Attributes:
 
-    :ivar confidence: A value from 0-100 indicating MaxMind's confidence that
+
+    .. attribute:: confidence
+
+      A value from 0-100 indicating MaxMind's confidence that
       the country is correct. This attribute is only available from the Omni
       end point.
-    :ivar geoname_id: The GeoName ID for the country. This attribute is
+
+      :type: int
+
+    .. attribute:: geoname_id
+
+      The GeoName ID for the country. This attribute is
       returned by all end points.
-    :ivar iso_code: The two-character `ISO 3166-1
+
+      :type: int
+
+    .. attribute:: iso_code
+
+      The two-character `ISO 3166-1
       <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the country.
       This attribute is returned by all end points.
-    :ivar name: The name of the country based on the languages list
+
+      :type: unicode
+
+    .. attribute:: name
+
+      The name of the country based on the languages list
       passed to the constructor. This attribute is returned by all end points.
-    :ivar names: A dictionary where the keys are language codes and the values
+
+      :type: unicode
+
+    .. attribute:: names
+
+      A dictionary where the keys are language codes and the values
       are names. This attribute is returned by all end points.
-    :var type: A string indicating the type of entity that is representing the
+
+      :type: dict
+
+
+    .. attribute:: type
+
+      A string indicating the type of entity that is representing the
       country. Currently we only return ``military`` but this could expand to
       include other types such as ``embassy`` in the future. Returned by all
       endpoints.
+
+      :type: unicode
 
     """
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code',
@@ -156,25 +251,50 @@ class Location(Record):
 
     Attributes:
 
-    :ivar accuracy_radius: The radius in kilometers around the
+    .. attribute:: accuracy_radius
+
+      The radius in kilometers around the
       specified location where the IP address is likely to be. This attribute
       is only available from the Omni end point.
-    :ivar latitude: The latitude of the location as a floating
+
+      :type: int
+
+    .. attribute:: latitude
+
+      The latitude of the location as a floating
       point number. This attribute is returned by all end points except the
       Country end point.
-    :ivar longitude: The longitude of the location as a
+
+      :type: float
+
+
+    .. attribute:: longitude
+
+      The longitude of the location as a
       floating point number. This attribute is returned by all end points
       except the Country end point.
-    :ivar metro_code: The metro code of the location if the
+
+      :type: float
+
+    .. attribute:: metro_code
+
+      The metro code of the location if the
       location is in the US. MaxMind returns the same metro codes as the
       `Google AdWords API
       <https://developers.google.com/adwords/api/docs/appendix/cities-DMAregions>`_.
       This attribute is returned by all end points except the Country end
       point.
-    :ivar time_zone: The time zone associated with location, as
+
+      :type: int
+
+    .. attribute:: time_zone
+
+      The time zone associated with location, as
       specified by the `IANA Time Zone Database
       <http://www.iana.org/time-zones>`_, e.g., "America/New_York". This
       attribute is returned by all end points except the Country end point.
+
+      :type: unicode
 
     """
     _valid_attributes = set(['accuracy_radius', 'latitude', 'longitude'
@@ -188,8 +308,12 @@ class MaxMind(Record):
 
     Attributes:
 
-    :ivar queries_remaining: The number of remaining queries you have
+    .. attribute:: queries_remaining
+
+      The number of remaining queries you have
       for the end point you are calling.
+
+      :type: int
 
     """
     _valid_attributes = set(['queries_remaining'])
@@ -203,13 +327,22 @@ class Postal(Record):
 
     Attributes:
 
-    :ivar code: The postal code of the location. Postal
+    .. attribute:: code
+
+      The postal code of the location. Postal
       codes are not available for all countries. In some countries, this will
       only contain part of the postal code. This attribute is returned by all
       end points except the Country end point.
-    :ivar confidence: A value from 0-100 indicating
+
+      :type: unicode
+
+    .. attribute:: confidence
+
+      A value from 0-100 indicating
       MaxMind's confidence that the postal code is correct. This attribute is
       only available from the Omni end point.
+
+      :type: int
 
     """
     _valid_attributes = set(['code', 'confidence'])
@@ -224,20 +357,44 @@ class Subdivision(PlaceRecord):
 
     Attributes:
 
-    :ivar confidence: This is a value from 0-100 indicating MaxMind's
+    .. attribute:: confidence
+
+      This is a value from 0-100 indicating MaxMind's
       confidence that the subdivision is correct. This attribute is only
       available from the Omni end point.
-    :ivar geoname_id: This is a GeoName ID for the subdivision. This
+
+      :type: int
+
+    .. attribute:: geoname_id
+
+      This is a GeoName ID for the subdivision. This
       attribute is returned by all end points except Country.
-    :ivar iso_code: This is a string up to three characters long
+
+      :type: int
+
+    .. attribute:: iso_code
+
+      This is a string up to three characters long
       contain the subdivision portion of the `ISO 3166-2 code
       <http://en.wikipedia.org/wiki/ISO_3166-2>`_. This attribute is
       returned by all end points except Country.
-    :ivar name: The name of the subdivision based on the languages list
+
+      :type: unicode
+
+    .. attribute:: name
+
+      The name of the subdivision based on the languages list
       passed to the constructor. This attribute is returned by all end points.
-    :ivar names: A dictionary where the keys are language codes and the
+
+      :type: unicode
+
+    .. attribute:: names
+
+      A dictionary where the keys are language codes and the
       values are names. This attribute is returned by all end points except
       Country.
+
+      :type: dict
 
     """
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names'])
@@ -265,12 +422,12 @@ class Subdivisions(tuple):
 
     @property
     def most_specific(self):
-        """The most specific subdivision available
+        """The most specific (smallest) subdivision available.
 
-        :returns: The most specific (smallest) :py:class:`Subdivision`. If
-          there are no :py:class:`Subdivision` objects for the response, this
-          returns an empty :py:class:`Subdivision`.
+          If there are no :py:class:`Subdivision` objects for the response,
+          this returns an empty :py:class:`Subdivision`.
 
+          :type: :py:class:`Subdivision`
         """
         try:
             return self[-1]
@@ -287,35 +444,81 @@ class Traits(Record):
 
     This class has the following attributes:
 
-    :ivar autonomous_system_number: The `autonomous system
+
+    .. attribute:: autonomous_system_number
+
+      The `autonomous system
       number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_
       associated with the IP address. This attribute is only available from
       the City/ISP/Org and Omni end points.
-    :ivar autonomous_system_organization: The organization
+
+      :type: int
+
+    .. attribute:: autonomous_system_organization
+
+      The organization
       associated with the registered `autonomous system number
       <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for the
       IP address. This attribute is only available from the City/ISP/Org and
       Omni end points.
-    :ivar domain: The second level domain associated with the
+
+      :type: unicode
+
+    .. attribute:: domain
+
+      The second level domain associated with the
       IP address. This will be something like "example.com" or
       "example.co.uk", not "foo.example.com". This attribute is only available
       from the City/ISP/Org and Omni end points.
-    :ivar ip_address: The IP address that the data in the model
+
+      :type: unicode
+
+    .. attribute:: ip_address
+
+      The IP address that the data in the model
       is for. If you performed a "me" lookup against the web service, this
       will be the externally routable IP address for the system the code is
       running on. If the system is behind a NAT, this may differ from the IP
       address locally assigned to it. This attribute is returned by all end
       points.
-    :ivar is_anonymous_proxy: This is true if the IP is an anonymous
+
+      :type: unicode
+
+    .. attribute:: is_anonymous_proxy
+
+      This is true if the IP is an anonymous
       proxy. See http://dev.maxmind.com/faq/geoip#anonproxy for further
       details. This attribute is returned by all end points.
-    :ivar isp: The name of the ISP associated with the IP address.
+
+      :type: bool
+
+    .. attribute:: is_satellite_provider
+
+      This is true if the IP address is from a satellite provider that
+      provides service to multiple countries. This attribute is returned
+      by all end points.
+
+      :type: bool
+
+    .. attribute:: isp
+
+      The name of the ISP associated with the IP address.
       This attribute is only available from the City/ISP/Org and Omni end
       points.
-    :ivar organization: The name of the organization associated with
+
+      :type: unicode
+
+    .. attribute:: organization
+
+      The name of the organization associated with
       the IP address. This attribute is only available from the City/ISP/Org
       and Omni end points.
-    :ivar user_type: The user type associated with the IP
+
+      :type: unicode
+
+    .. attribute:: user_type
+
+      The user type associated with the IP
       address. This can be one of the following values:
 
       * business
@@ -335,6 +538,8 @@ class Traits(Record):
       * traveler
 
       This attribute is only available from the Omni end point.
+
+      :type: unicode
 
 """
     _valid_attributes = set(['autonomous_system_number',
