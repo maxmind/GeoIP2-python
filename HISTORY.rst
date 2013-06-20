@@ -3,6 +3,12 @@
 History
 -------
 
+0.2.2 (2013-06-20)
+++++++++++++++++++
+
+* Fixed a bug in the model objects that prevented `longitude` and `metro_code`
+  from being used.
+
 0.2.1 (2013-06-10)
 ++++++++++++++++++
 
