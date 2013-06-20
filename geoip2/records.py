@@ -297,7 +297,7 @@ class Location(Record):
       :type: unicode
 
     """
-    _valid_attributes = set(['accuracy_radius', 'latitude', 'longitude'
+    _valid_attributes = set(['accuracy_radius', 'latitude', 'longitude',
                              'metro_code', 'postal_code', 'postal_confidence',
                              'time_zone'])
 

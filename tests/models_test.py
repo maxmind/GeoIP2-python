@@ -119,14 +119,19 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.subdivisions[1].name, 'Hennepin',
                          'div 2 has correct name')
         self.assertEqual(model.subdivisions.most_specific.iso_code, 'HP',
-                          'subdivisions.most_specific returns HP')
+                         'subdivisions.most_specific returns HP')
         self.assertEqual(model.represented_country.name,
                          'United Kingdom',
                          'represented_country name is correct')
         self.assertEqual(model.represented_country.type,
                          'military',
                          'represented_country type is correct')
-
+        self.assertEqual(model.location.latitude, 44.98,
+                         'correct latitude')
+        self.assertEqual(model.location.longitude, 93.2636,
+                         'correct longitude')
+        self.assertEqual(model.location.metro_code, 765,
+                         'correct metro_code')
 
     def test_omni_min(self):
         model = geoip2.models.Omni({'traits': {'ip_address': '5.6.7.8'}})
