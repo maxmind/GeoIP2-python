@@ -61,7 +61,7 @@ correction, please `contact MaxMind support
 Python version support
 ----------------------
 
-This code requires Python 2.6+ or 3.1+. Older versions are not supported.
+This code requires Python 2.6+ or 3.3+. Older versions are not supported.
 
 Versioning
 ----------
