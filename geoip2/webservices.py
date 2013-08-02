@@ -23,75 +23,6 @@ SSL
 
 Requests to the GeoIP2 web service are always made with SSL.
 
-Usage
------
-
-The basic API for this class is the same for all of the web service end
-points. First you create a web service object with your MaxMind ``user_id``
-and ``license_key``, then you call the method corresponding to a specific end
-point, passing it the IP address you want to look up.
-
-If the request succeeds, the method call will return a model class for the end
-point you called. This model in turn contains multiple record classes, each of
-which represents part of the data returned by the web service.
-
-If the request fails, the client class throws an exception.
-
-Requirements
-------------
-
-This library works on Python 2.6+ and Python 3. It requires that the requests
-HTTP library is installed. See <http://python-requests.org> for details.
-
-Example
--------
-
-    >>> import geoip2.webservices
-    >>> client = geoip2.webservices.Client(42, 'abcdef123456')
-    >>> omni = client.omni('24.24.24.24')
-    >>> country = omni.country
-    >>> print(country.iso_code)
-
-Exceptions
-----------
-
-For details on the possible errors returned by the web service itself, see
-http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP2 web service
-docs.
-
-If the web service returns an explicit error document, this is thrown as a
-WebServiceError exception. If some other sort of error occurs, this is
-thrown as an HTTPError. The difference is that the WebServiceError
-includes an error message and error code delivered by the web service. The
-latter is thrown when some sort of unanticipated error occurs, such as the
-web service returning a 500 or an invalid error document.
-
-If the web service returns any status code besides 200, 4xx, or 5xx, this also
-becomes an HTTPError.
-
-Finally, if the web service returns a 200 but the body is invalid, the client
-throws a GeoIP2Error object.
-
-What data is returned?
-----------------------
-
-While many of the end points return the same basic records, the attributes
-which can be populated vary between end points. In addition, while an end
-point may offer a particular piece of data, MaxMind does not always have every
-piece of data for any given IP address.
-
-Because of these factors, it is possible for any end point to return a record
-where some or all of the attributes are unpopulated.
-
-See http://dev.maxmind.com/geoip/geoip2/web-services for details on what
-data each end point may return.
-
-The only piece of data which is always returned is the :py:attr:`ip_address`
-attribute in the :py:class:`geoip2.records.Traits` record.
-
-Every record class attribute has a corresponding predicate method so you can
-check to see if the attribute is set.
-
 """
 
 import geoip2
@@ -104,12 +35,14 @@ import sys
 
 if sys.version_info[0] == 2 or (sys.version_info[0] == 3
                                 and sys.version_info[1] < 3):
-    import ipaddr as ipaddress #pylint:disable=F0401
+    import ipaddr as ipaddress  # pylint:disable=F0401
     ipaddress.ip_address = ipaddress.IPAddress
 else:
-    import ipaddress #pylint:disable=F0401
+    import ipaddress  # pylint:disable=F0401
+
 
 class Client(object):
+
     """This method creates a new client object.
 
     It accepts the following required arguments:
@@ -218,7 +151,7 @@ class Client(object):
         response = requests.get(uri, auth=(self.user_id, self.license_key),
                                 headers={'Accept': 'application/json',
                                          'User-Agent': self._user_agent()})
-        if (response.status_code == 200):  #pylint:disable=E1103
+        if (response.status_code == 200):  # pylint:disable=E1103
             body = self._handle_success(response, uri)
             return model_class(body, languages=self.languages)
         else:

@@ -10,11 +10,12 @@ which fields in each record may be populated. See
 http://dev.maxmind.com/geoip/geoip2/web-services for more details.
 
 """
-#pylint:disable=R0903
+# pylint:disable=R0903
 import geoip2.records
 
 
 class Country(object):
+
     """Model class for the GeoIP2 Country end point
 
     This class provides the following methods, each of which returns a record
@@ -63,6 +64,7 @@ class Country(object):
       :type: :py:class:`geoip2.records.Traits`
 
     """
+
     def __init__(self, raw_response, languages=None):
         if languages is None:
             languages = ['en']
@@ -89,6 +91,7 @@ class Country(object):
 
 
 class City(Country):
+
     """Model class for the GeoIP2 Precision City end point
 
     .. attribute:: city
@@ -151,6 +154,7 @@ class City(Country):
       :type: :py:class:`geoip2.records.Traits`
 
 """
+
     def __init__(self, raw_response, languages=None):
         super(City, self).__init__(raw_response, languages)
         self.city = \
@@ -165,6 +169,7 @@ class City(Country):
 
 
 class CityISPOrg(City):
+
     """Model class for the GeoIP2 Precision City/ISP/Org end point
 
     .. attribute:: city
@@ -230,6 +235,7 @@ class CityISPOrg(City):
 
 
 class Omni(CityISPOrg):
+
     """Model class for the GeoIP2 Precision Omni end point
 
     .. attribute:: city

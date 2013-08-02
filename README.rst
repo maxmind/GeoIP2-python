@@ -25,6 +25,84 @@ downloadable product.
 
 See geoip2.webservices.Client for details on the web service client API.
 
+
+Usage
+-----
+
+To use this API, you first create a web service object with your MaxMind
+``user_id`` and ``license_key``, then you call the method corresponding
+to a specific web-service end point, passing it the IP address you want
+to look up.
+
+If the request succeeds, the method call will return a model class for the
+end point you called. This model in turn contains multiple record classes,
+each of which represents part of the data returned by the web service.
+
+If the request fails, the client class throws an exception.
+
+
+Example
+-------
+
+    >>> import geoip2.webservices
+    >>>
+    >>> client = geoip2.webservices.Client(42, 'abcdef123456')
+    >>> record = client.omni('128.101.101.101')
+    >>>
+    >>> print(record.country.iso_code); # 'US'
+    >>> print(record.country.name); # 'United States'
+    >>> print(record.country.names['zh-CN']); # u'美国'
+    >>>
+    >>> print(record.subdivisions.most_specific.name); # 'Minnesota'
+    >>> print(record.subdivisions.most_specific.iso_code); # 'MN'
+    >>>
+    >>> print(record.city.name); # 'Minneapolis'
+    >>>
+    >>> print(record.postal.code); # '55455'
+    >>>
+    >>> print(record.location.latitude); # 44.9733
+    >>> print(record.location.longitude); # -93.2323
+
+Exceptions
+----------
+
+For details on the possible errors returned by the web service itself, see
+http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP2 web service
+docs.
+
+If the web service returns an explicit error document, this is thrown as a
+WebServiceError exception. If some other sort of error occurs, this is
+thrown as an HTTPError. The difference is that the WebServiceError
+includes an error message and error code delivered by the web service. The
+latter is thrown when some sort of unanticipated error occurs, such as the
+web service returning a 500 or an invalid error document.
+
+If the web service returns any status code besides 200, 4xx, or 5xx, this also
+becomes an HTTPError.
+
+Finally, if the web service returns a 200 but the body is invalid, the client
+throws a GeoIP2Error object.
+
+What data is returned?
+----------------------
+
+While many of the end points return the same basic records, the attributes
+which can be populated vary between end points. In addition, while an end
+point may offer a particular piece of data, MaxMind does not always have every
+piece of data for any given IP address.
+
+Because of these factors, it is possible for any end point to return a record
+where some or all of the attributes are unpopulated.
+
+See http://dev.maxmind.com/geoip/geoip2/web-services for details on what
+data each end point may return.
+
+The only piece of data which is always returned is the :py:attr:`ip_address`
+attribute in the :py:class:`geoip2.records.Traits` record.
+
+Every record class attribute has a corresponding predicate method so you can
+check to see if the attribute is set.
+
 Integration with GeoNames
 -------------------------
 
@@ -58,10 +136,14 @@ If you are a paying MaxMind customer and you're not sure where to submit a
 correction, please `contact MaxMind support
 <http://www.maxmind.com/en/support>`_ for help.
 
-Python version support
-----------------------
+Requirements
+------------
 
 This code requires Python 2.6+ or 3.3+. Older versions are not supported.
+
+The Requests HTTP library is also required. See
+<http://python-requests.org> for details.
+
 
 Versioning
 ----------
