@@ -47,7 +47,7 @@ Example
     >>> import geoip2.webservices
     >>>
     >>> # This creates a Client object that can be reused across requests.
-    >>> # Replace 42 with your user id and license_key with your license
+    >>> # Replace "42" with your user ID and "license_key" with your license
     >>> # key.
     >>> client = geoip2.webservices.Client(42, 'license_key')
     >>>
