@@ -46,7 +46,13 @@ Example
 
     >>> import geoip2.webservices
     >>>
-    >>> client = geoip2.webservices.Client(42, 'abcdef123456')
+    >>> # This creates a Client object that can be reused across requests.
+    >>> # Replace 42 with your user id and license_key with your license
+    >>> # key.
+    >>> client = geoip2.webservices.Client(42, 'license_key')
+    >>>
+    >>> # Replace "omni" with the method corresponding to the web service
+    >>> # that you are using, e.g., "country", "city_isp_org", "city".
     >>> record = client.omni('128.101.101.101')
     >>>
     >>> print(record.country.iso_code); # 'US'
