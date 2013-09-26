@@ -36,6 +36,7 @@ setup(
     package_dir={'geoip2': 'geoip2'},
     include_package_data=True,
     install_requires=requirements,
+    test_requires=['httpretty>=0.6.1'],
     test_suite="tests",
     license=open('LICENSE').read(),
     classifiers=(
