@@ -44,6 +44,8 @@ If the request fails, the client class throws an exception.
 Example
 -------
 
+.. code-block:: pycon
+
     >>> import geoip2.webservices
     >>>
     >>> # This creates a Client object that can be reused across requests.
@@ -55,19 +57,28 @@ Example
     >>> # that you are using, e.g., "country", "city_isp_org", "city".
     >>> record = client.omni('128.101.101.101')
     >>>
-    >>> print(record.country.iso_code); # 'US'
-    >>> print(record.country.name); # 'United States'
-    >>> print(record.country.names['zh-CN']); # u'美国'
+    >>> record.country.iso_code
+    'US'
+    >>> record.country.name
+    'United States'
+    >>> record.country.names['zh-CN']
+    u'美国'
     >>>
-    >>> print(record.subdivisions.most_specific.name); # 'Minnesota'
-    >>> print(record.subdivisions.most_specific.iso_code); # 'MN'
+    >>> record.subdivisions.most_specific.name
+    'Minnesota'
+    >>> record.subdivisions.most_specific.iso_code
+    'MN'
     >>>
-    >>> print(record.city.name); # 'Minneapolis'
+    >>> record.city.name
+    'Minneapolis'
     >>>
-    >>> print(record.postal.code); # '55455'
+    >>> record.postal.code
+    '55455'
     >>>
-    >>> print(record.location.latitude); # 44.9733
-    >>> print(record.location.longitude); # -93.2323
+    >>> record.location.latitude
+    44.9733
+    >>> record.location.longitude
+    -93.2323
 
 Exceptions
 ----------

@@ -32,7 +32,7 @@ setup(
     url='http://www.maxmind.com/',
     bugtrack_url='https://github.com/maxmind/GeoIP2-python/issues',
     packages=['geoip2'],
-    package_data={'': ['LICENSE'] },
+    package_data={'': ['LICENSE']},
     package_dir={'geoip2': 'geoip2'},
     include_package_data=True,
     install_requires=requirements,
