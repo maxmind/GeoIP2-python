@@ -6,6 +6,19 @@ python:
   - 3.3
   - pypy
 
+before_install:
+  - git submodule update --init --recursive
+  - git clone git://github.com/maxmind/libmaxminddb
+  - cd libmaxminddb
+  - git checkout dave/major-refactor
+  - ./bootstrap
+  - ./configure
+  - make
+  - sudo make install
+  - sudo ldconfig
+  - cd ..
+  - pip3 install -e git+https://github.com/maxmind/MaxMind-DB-Reader-python#egg=maxminddb
+
 install:
   - pip install -r requirements.txt
   - pip install httpretty pylint coveralls
