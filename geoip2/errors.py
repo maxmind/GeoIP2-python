@@ -20,6 +20,11 @@ class AddressNotFoundError(GeoIP2Error):
     """The address you were looking up was not found."""
 
 
+class AuthenticationError(GeoIP2Error):
+
+    """There was a problem authenticating the request."""
+
+
 class HTTPError(GeoIP2Error):
 
     """There was an error when making your HTTP request.
@@ -38,19 +43,11 @@ class HTTPError(GeoIP2Error):
         self.uri = uri
 
 
-class WebServiceError(HTTPError):
+class InvalidRequestError(GeoIP2Error):
 
-    """The GeoIP2 web service returned an error.
+    """The request was invalid."""
 
-    This class represents an error returned by MaxMind's GeoIP2
-    web service. It extends :py:exc:`HTTPError`.
 
-    :ivar code: The code returned by the MaxMind web service
-    :ivar http_status: The HTTP status code returned
-    :ivar uri: The URI queried
+class OutOfQueriesError(GeoIP2Error):
 
-    """
-
-    def __init__(self, message, code=None, http_status=None, uri=None):
-        super(WebServiceError, self).__init__(message, http_status, uri)
-        self.code = code
+    """Your account is out of funds for the service queried."""

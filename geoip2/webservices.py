@@ -29,7 +29,8 @@ import geoip2
 import geoip2.models
 import requests
 from requests.utils import default_user_agent
-from .errors import GeoIP2Error, HTTPError, WebServiceError
+from .errors import AddressNotFoundError, AuthenticationError, \
+    GeoIP2Error, HTTPError, InvalidRequestError, OutOfQueriesError
 
 import sys
 
@@ -192,9 +193,8 @@ class Client(object):
                     ', '.join(ex.args), status, uri)
             else:
                 if 'code' in body and 'error' in body:
-                    raise WebServiceError(body.get('error'),
-                                          body.get('code'),
-                                          status, uri)
+                    self._handle_web_service_error(
+                        body.get('error'), body.get('code'), status, uri)
                 else:
                     raise HTTPError(
                         'Response contains JSON but it does not specify '
@@ -207,6 +207,18 @@ class Client(object):
         else:
             raise HTTPError('Received a %(status)i error for %(uri)s '
                             'with no body.' % locals(), status, uri)
+
+    def _handle_web_service_error(self, message, code, status, uri):
+        if code == 'IP_ADDRESS_NOT_FOUND' or code == 'IP_ADDRESS_RESERVED':
+            raise AddressNotFoundError(message)
+        elif code == 'AUTHORIZATION_INVALID' or \
+                code == 'LICENSE_KEY_REQUIRED' or \
+                code == 'USER_ID_REQUIRED':
+            raise AuthenticationError(message)
+        elif code == 'OUT_OF_QUERIES':
+                raise OutOfQueriesError(message)
+
+        raise InvalidRequestError(message, code, status, uri)
 
     def _handle_5xx_status(self, status, uri):
         raise HTTPError('Received a server error (%(status)i) for '

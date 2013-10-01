@@ -4,8 +4,8 @@ GeoIP2 Database Reader
 ======================
 
 """
+import geoip2
 import maxminddb
-import geoip2.models
 
 
 class Reader(object):

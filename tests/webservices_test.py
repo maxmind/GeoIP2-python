@@ -9,7 +9,8 @@ sys.path.append('..')
 import geoip2
 import json
 import requests
-from geoip2.errors import GeoIP2Error, HTTPError, WebServiceError
+from geoip2.errors import AddressNotFoundError, AuthenticationError, \
+    GeoIP2Error, HTTPError, InvalidRequestError, OutOfQueriesError
 from geoip2.webservices import Client
 
 if sys.version_info[:2] == (2, 6):
@@ -103,7 +104,7 @@ class TestClient(unittest.TestCase):
                                     'could not decode the response as JSON'):
             self.client.country('1.1.1.1')
 
-    def test_400_error(self):
+    def test_bad_ip_address(self):
         with self.assertRaisesRegex(ValueError,
                                     "'1.2.3' does not appear to be an IPv4 "
                                     "or IPv6 address"):
@@ -170,6 +171,67 @@ class TestClient(unittest.TestCase):
                                     '\(300\) for'):
 
             self.client.country('1.2.3.11')
+
+    def test_address_not_found_error(self):
+        body = {'error': 'Not in DB', 'code': 'IP_ADDRESS_NOT_FOUND'}
+        httpretty.register_uri(httpretty.GET,
+                               self.base_uri + 'country/' + '1.2.3.13',
+                               body=json.dumps(body),
+                               status=404,
+                               content_type=self._content_type('country'))
+        with self.assertRaisesRegex(AddressNotFoundError,
+                                    'Not in DB'):
+            self.client.country('1.2.3.13')
+
+    def test_private_address_error(self):
+        body = {'error': 'Private', 'code': 'IP_ADDRESS_RESERVED'}
+        httpretty.register_uri(httpretty.GET,
+                               self.base_uri + 'country/' + '1.2.3.14',
+                               body=json.dumps(body),
+                               status=401,
+                               content_type=self._content_type('country'))
+        with self.assertRaisesRegex(AddressNotFoundError, 'Private'):
+            self.client.country('1.2.3.14')
+
+    def test_auth_invalid(self):
+        body = {'error': 'Invalid auth', 'code': 'AUTHORIZATION_INVALID'}
+        httpretty.register_uri(httpretty.GET,
+                               self.base_uri + 'country/' + '1.2.3.15',
+                               body=json.dumps(body),
+                               status=400,
+                               content_type=self._content_type('country'))
+        with self.assertRaisesRegex(AuthenticationError, 'Invalid auth'):
+            self.client.country('1.2.3.15')
+
+    def test_license_required(self):
+        body = {'error': 'License required', 'code': 'LICENSE_KEY_REQUIRED'}
+        httpretty.register_uri(httpretty.GET,
+                               self.base_uri + 'country/' + '1.2.3.16',
+                               body=json.dumps(body),
+                               status=401,
+                               content_type=self._content_type('country'))
+        with self.assertRaisesRegex(AuthenticationError, 'License required'):
+            self.client.country('1.2.3.16')
+
+    def test_user_id_required(self):
+        body = {'error': 'User ID required', 'code': 'USER_ID_REQUIRED'}
+        httpretty.register_uri(httpretty.GET,
+                               self.base_uri + 'country/' + '1.2.3.17',
+                               body=json.dumps(body),
+                               status=401,
+                               content_type=self._content_type('country'))
+        with self.assertRaisesRegex(AuthenticationError, 'User ID required'):
+            self.client.country('1.2.3.17')
+
+    def test_out_of_queries_error(self):
+        body = {'error': 'Out of Queries', 'code': 'OUT_OF_QUERIES'}
+        httpretty.register_uri(httpretty.GET,
+                               self.base_uri + 'country/' + '1.2.3.18',
+                               body=json.dumps(body),
+                               status=402,
+                               content_type=self._content_type('country'))
+        with self.assertRaisesRegex(OutOfQueriesError, 'Out of Queries',):
+            self.client.country('1.2.3.18')
 
     def test_request(self):
         httpretty.register_uri(httpretty.GET,
