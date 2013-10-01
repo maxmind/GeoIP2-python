@@ -11,7 +11,7 @@ import json
 import requests
 from geoip2.errors import AddressNotFoundError, AuthenticationError, \
     GeoIP2Error, HTTPError, InvalidRequestError, OutOfQueriesError
-from geoip2.webservices import Client
+from geoip2.webservice import Client
 
 if sys.version_info[:2] == (2, 6):
     import unittest2 as unittest

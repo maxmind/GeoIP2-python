@@ -216,7 +216,7 @@ class Client(object):
                 code == 'USER_ID_REQUIRED':
             raise AuthenticationError(message)
         elif code == 'OUT_OF_QUERIES':
-                raise OutOfQueriesError(message)
+            raise OutOfQueriesError(message)
 
         raise InvalidRequestError(message, code, status, uri)
 

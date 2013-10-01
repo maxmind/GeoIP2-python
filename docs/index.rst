@@ -15,7 +15,10 @@ Modules
 .. automodule:: geoip2
     :members:
 
-.. automodule:: geoip2.webservices
+.. automodule:: geoip2.database
+    :members:
+
+.. automodule:: geoip2.webservice
     :members:
 
 .. automodule:: geoip2.models

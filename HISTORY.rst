@@ -6,8 +6,11 @@ History
 0.3.0 (2013-10-01)
 ++++++++++++++++++
 
+* IMPORTANT: `geoip.webservices` was renamed `geoip.webservice` as it
+  contains only one class.
 * Added GeoIP2 database reader using maxminddb. This does not work with PyPy
   as it relies on a C extension.
+* Added more specific exceptions for web service client.
 
 0.2.2 (2013-06-20)
 ++++++++++++++++++

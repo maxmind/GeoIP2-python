@@ -23,7 +23,7 @@ In the future, this distribution will also provide the same API for the GeoIP2
 downloadable databases. These databases have not yet been released as a
 downloadable product.
 
-See geoip2.webservices.Client for details on the web service client API.
+See geoip2.webservice.Client for details on the web service client API.
 
 
 Usage
@@ -46,12 +46,12 @@ Example
 
 .. code-block:: pycon
 
-    >>> import geoip2.webservices
+    >>> import geoip2.webservice
     >>>
     >>> # This creates a Client object that can be reused across requests.
     >>> # Replace "42" with your user ID and "license_key" with your license
     >>> # key.
-    >>> client = geoip2.webservices.Client(42, 'license_key')
+    >>> client = geoip2.webservice.Client(42, 'license_key')
     >>>
     >>> # Replace "omni" with the method corresponding to the web service
     >>> # that you are using, e.g., "country", "city_isp_org", "city".
