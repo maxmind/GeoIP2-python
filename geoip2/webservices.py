@@ -43,7 +43,7 @@ else:
 
 class Client(object):
 
-    """This method creates a new client object.
+    """Creates a new client object.
 
     It accepts the following required arguments:
 
