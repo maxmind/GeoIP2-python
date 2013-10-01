@@ -6,6 +6,7 @@ Errors
 
 
 class GeoIP2Error(RuntimeError):
+
     """There was a generic error in GeoIP2.
 
     This class represents a generic error. It extends :py:exc:`RuntimeError`
@@ -14,7 +15,13 @@ class GeoIP2Error(RuntimeError):
     """
 
 
+class AddressNotFoundError(GeoIP2Error):
+
+    """The address you were looking up was not found."""
+
+
 class HTTPError(GeoIP2Error):
+
     """There was an error when making your HTTP request.
 
     This class represents an HTTP transport error. It extends
@@ -24,6 +31,7 @@ class HTTPError(GeoIP2Error):
     :ivar uri: The URI queried
 
     """
+
     def __init__(self, message, http_status=None, uri=None):
         super(HTTPError, self).__init__(message)
         self.http_status = http_status
@@ -31,6 +39,7 @@ class HTTPError(GeoIP2Error):
 
 
 class WebServiceError(HTTPError):
+
     """The GeoIP2 web service returned an error.
 
     This class represents an error returned by MaxMind's GeoIP2
@@ -41,6 +50,7 @@ class WebServiceError(HTTPError):
     :ivar uri: The URI queried
 
     """
+
     def __init__(self, message, code=None, http_status=None, uri=None):
         super(WebServiceError, self).__init__(message, http_status, uri)
         self.code = code
