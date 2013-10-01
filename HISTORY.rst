@@ -3,6 +3,12 @@
 History
 -------
 
+0.3.0 (2013-10-01)
+++++++++++++++++++
+
+* Added GeoIP2 database reader using maxminddb. This does not work with PyPy
+  as it relies on a C extension.
+
 0.2.2 (2013-06-20)
 ++++++++++++++++++
 
