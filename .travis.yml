@@ -16,7 +16,7 @@ before_install:
   - sudo make install
   - sudo ldconfig
   - cd ..
-  - pip3 install -e git+https://github.com/maxmind/MaxMind-DB-Reader-python#egg=maxminddb
+  - pip install -e git+https://github.com/maxmind/MaxMind-DB-Reader-python#egg=maxminddb
 
 install:
   - pip install -r requirements.txt
