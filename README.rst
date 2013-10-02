@@ -10,29 +10,38 @@ release, which will be numbered 2.0.0.
 You may find information on the GeoIP2 beta release process on `our
 website <http://www.maxmind.com/en/geoip2_beta>`_.
 
-To provide feedback or get support during the beta, please see the
-`MaxMind Customer Community <https://getsatisfaction.com/maxmind>`_.
-
 Description
 -----------
 
-Currently, this distribution provides an API for the `GeoIP2 web services
-<http://dev.maxmind.com/geoip/geoip2/web-services>`_.
+This package provides an API for the `GeoIP2 web services
+<(http://dev.maxmind.com/geoip/geoip2/web-services>`_ and the `GeoLite2
+databases <http://dev.maxmind.com/geoip/geoip2/geolite2/>`_. The commercial
+GeoIP2 databases have not yet been released as a downloadable product.
 
-In the future, this distribution will also provide the same API for the GeoIP2
-downloadable databases. These databases have not yet been released as a
-downloadable product.
+Installation
+------------
 
-See geoip2.webservice.Client for details on the web service client API.
+To install the `geoip2` module, type:
 
+.. code-block:: bash
+
+    $ pip install geoip2
+
+If you are not able to use pip, you may also use easy_install from the
+source directory:
+
+.. code-block:: bash
+
+    $ easy_install .
 
 Usage
 -----
 
-To use this API, you first create a web service object with your MaxMind
-``user_id`` and ``license_key``, then you call the method corresponding
-to a specific web-service end point, passing it the IP address you want
-to look up.
+To use this API, you first create either a web service object with your
+MaxMind ``user_id`` and ``license_key`` or a database reader object with the
+path to your database file. After doing this, you may call the method
+corresponding to request type (e.g., ``city`` or ``country``), passing it the
+IP address you wantto look up.
 
 If the request succeeds, the method call will return a model class for the
 end point you called. This model in turn contains multiple record classes,
@@ -40,9 +49,8 @@ each of which represents part of the data returned by the web service.
 
 If the request fails, the client class throws an exception.
 
-
-Example
--------
+Web Service Example
+-------------------
 
 .. code-block:: pycon
 
@@ -55,70 +63,111 @@ Example
     >>>
     >>> # Replace "omni" with the method corresponding to the web service
     >>> # that you are using, e.g., "country", "city_isp_org", "city".
-    >>> record = client.omni('128.101.101.101')
+    >>> response = client.omni('128.101.101.101')
     >>>
-    >>> record.country.iso_code
+    >>> response.country.iso_code
     'US'
-    >>> record.country.name
+    >>> response.country.name
     'United States'
-    >>> record.country.names['zh-CN']
+    >>> response.country.names['zh-CN']
     u'美国'
     >>>
-    >>> record.subdivisions.most_specific.name
+    >>> response.subdivisions.most_specific.name
     'Minnesota'
-    >>> record.subdivisions.most_specific.iso_code
+    >>> response.subdivisions.most_specific.iso_code
     'MN'
     >>>
-    >>> record.city.name
+    >>> response.city.name
     'Minneapolis'
     >>>
-    >>> record.postal.code
+    >>> response.postal.code
     '55455'
     >>>
-    >>> record.location.latitude
+    >>> response.location.latitude
     44.9733
-    >>> record.location.longitude
+    >>> response.location.longitude
     -93.2323
 
-Exceptions
-----------
+Database Example
+-------------------
+
+.. code-block:: pycon
+
+    >>> import geoip2.database
+    >>>
+    >>> # This creates a Reader object. You should use the same object
+    >>> # across multiple requests as creation of it is expensive.
+    >>> reader = geoip2.database.Reader('/path/to/GeoLite2-City.mmdb')
+    >>>
+    >>> # Replace "city" with the method corresponding to the database
+    >>> # that you are using, e.g., "country".
+    >>> response = reader.city('128.101.101.101')
+    >>>
+    >>> response.country.iso_code
+    'US'
+    >>> response.country.name
+    'United States'
+    >>> response.country.names['zh-CN']
+    u'美国'
+    >>>
+    >>> response.subdivisions.most_specific.name
+    'Minnesota'
+    >>> response.subdivisions.most_specific.iso_code
+    'MN'
+    >>>
+    >>> response.city.name
+    'Minneapolis'
+    >>>
+    >>> response.postal.code
+    '55455'
+    >>>
+    >>> response.location.latitude
+    44.9733
+    >>> response.location.longitude
+    -93.2323
+
+Web Service Client Exceptions
+-----------------------------
 
 For details on the possible errors returned by the web service itself, see
 http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP2 web service
 docs.
 
 If the web service returns an explicit error document, this is thrown as a
-WebServiceError exception. If some other sort of error occurs, this is
-thrown as an HTTPError. The difference is that the WebServiceError
-includes an error message and error code delivered by the web service. The
-latter is thrown when some sort of unanticipated error occurs, such as the
-web service returning a 500 or an invalid error document.
+``AddressNotFoundError``, ``AuthenticationError``, ``InvalidRequestError``, or
+``OutOfQueriesError`` as appropriate. These all subclass ``GeoIP2Error``.
 
-If the web service returns any status code besides 200, 4xx, or 5xx, this also
-becomes an HTTPError.
+If some other sort of error occurs, this is thrown as an ``HTTPError``. This
+is thrown when some sort of unanticipated error occurs, such as the web
+service returning a 500 or an invalid error document. If the web service
+returns any status code besides 200, 4xx, or 5xx, this also becomes an
+``HTTPError``.
 
 Finally, if the web service returns a 200 but the body is invalid, the client
-throws a GeoIP2Error object.
+throws a ``GeoIP2Error``.
+
+Database Reader Exceptions
+--------------------------
+
+If the database file does not exist or is not readable, a ``ValueError`` will
+be thrown. If the file is invalid or there is a bug in the reader, a
+``maxminddb.InvalidDatabaseError`` will be thrown with a description of the
+problem. If an IP address is not in the database, a ``AddressNotFoundError``
+exception will be thrown.
 
 What data is returned?
 ----------------------
 
-While many of the end points return the same basic records, the attributes
-which can be populated vary between end points. In addition, while an end
-point may offer a particular piece of data, MaxMind does not always have every
-piece of data for any given IP address.
+While many of the models contain the same basic records, the attributes which
+can be populated vary between web service end points or databases. In
+addition, while a model may offer a particular piece of data, MaxMind does not
+always have every piece of data for any given IP address.
 
-Because of these factors, it is possible for any end point to return a record
+Because of these factors, it is possible for any request to return a record
 where some or all of the attributes are unpopulated.
-
-See http://dev.maxmind.com/geoip/geoip2/web-services for details on what
-data each end point may return.
 
 The only piece of data which is always returned is the :py:attr:`ip_address`
 attribute in the :py:class:`geoip2.records.Traits` record.
-
-Every record class attribute has a corresponding predicate method so you can
-check to see if the attribute is set.
 
 Integration with GeoNames
 -------------------------
