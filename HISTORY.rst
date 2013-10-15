@@ -3,7 +3,7 @@
 History
 -------
 
-0.3.0 (2013-10-01)
+0.3.0 (2013-10-15)
 ++++++++++++++++++
 
 * IMPORTANT: `geoip.webservices` was renamed `geoip.webservice` as it
