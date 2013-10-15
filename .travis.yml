@@ -19,7 +19,7 @@ before_install:
 
 install:
   - pip install -r requirements.txt
-  - pip install httpretty pylint coveralls
+  - pip install httpretty==0.6.5 pylint coveralls
   - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2 ipaddr; fi
   - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install ipaddr; fi
 
