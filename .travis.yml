@@ -9,7 +9,6 @@ before_install:
   - git submodule update --init --recursive
   - git clone git://github.com/maxmind/libmaxminddb
   - cd libmaxminddb
-  - git checkout dave/major-refactor
   - ./bootstrap
   - ./configure
   - make
