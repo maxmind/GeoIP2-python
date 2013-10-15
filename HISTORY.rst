@@ -3,6 +3,11 @@
 History
 -------
 
+0.3.1 (2013-10-15)
+++++++++++++++++++
+
+* Fixed packaging issue with extras_require.
+
 0.3.0 (2013-10-15)
 ++++++++++++++++++
 

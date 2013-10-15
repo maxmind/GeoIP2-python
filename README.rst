@@ -25,7 +25,9 @@ To install the `geoip2` module, type:
 
 .. code-block:: bash
 
-    $ pip install geoip2
+    $ pip install geoip2[DB]
+
+If you do not need the database reader, you may omit `[DB]`.
 
 If you are not able to use pip, you may also use easy_install from the
 source directory:

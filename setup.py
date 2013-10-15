@@ -36,7 +36,7 @@ setup(
     package_dir={'geoip2': 'geoip2'},
     include_package_data=True,
     install_requires=requirements,
-    extras_require={'Database Reader': ['maxminddb']},
+    extras_require={'DB': ['maxminddb']},
     tests_require=['httpretty>=0.6.1'],
     test_suite="tests",
     license=open('LICENSE').read(),
