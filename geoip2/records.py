@@ -4,11 +4,12 @@ Records
 =======
 
 """
-#pylint:disable=R0903
+# pylint:disable=R0903
 from abc import ABCMeta
 
 
 class Record(object):
+
     """All records are subclasses of the abstract class ``Record``"""
     __metaclass__ = ABCMeta
 
@@ -23,6 +24,7 @@ class Record(object):
 
 
 class PlaceRecord(Record):
+
     """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`"""
     __metaclass__ = ABCMeta
 
@@ -36,13 +38,14 @@ class PlaceRecord(Record):
 
     @property
     def name(self):
-        """Dict with language codes as keys and localized name as value"""
-        #pylint:disable=E1101
+        """Dict with locale codes as keys and localized name as value"""
+        # pylint:disable=E1101
         return next((self.names.get(x) for x in self._languages if x in
                      self.names), None)
 
 
 class City(PlaceRecord):
+
     """Contains data for the city record associated with an IP address
 
     This class contains the city-level data associated with an IP address.
@@ -75,7 +78,7 @@ class City(PlaceRecord):
 
     .. attribute:: names
 
-      A dictionary where the keys are language codes
+      A dictionary where the keys are locale codes
       and the values are names. This attribute is returned by all end points.
 
       :type: dict
@@ -85,6 +88,7 @@ class City(PlaceRecord):
 
 
 class Continent(PlaceRecord):
+
     """Contains data for the continent record associated with an IP address
 
     This class contains the continent-level data associated with an IP
@@ -118,7 +122,7 @@ class Continent(PlaceRecord):
 
     .. attribute:: names
 
-      A dictionary where the keys are language codes
+      A dictionary where the keys are locale codes
       and the values are names. This attribute is returned by all end points.
 
       :type: dict
@@ -128,6 +132,7 @@ class Continent(PlaceRecord):
 
 
 class Country(PlaceRecord):
+
     """Contains data for the country record associated with an IP address
 
     This class contains the country-level data associated with an IP address.
@@ -169,7 +174,7 @@ class Country(PlaceRecord):
 
     .. attribute:: names
 
-      A dictionary where the keys are language codes and the values
+      A dictionary where the keys are locale codes and the values
       are names. This attribute is returned by all end points.
 
       :type: dict
@@ -179,6 +184,7 @@ class Country(PlaceRecord):
 
 
 class RepresentedCountry(Country):
+
     """Contains data for the represented country associated with an IP address
 
     This class contains the country-level data associated with an IP address
@@ -222,7 +228,7 @@ class RepresentedCountry(Country):
 
     .. attribute:: names
 
-      A dictionary where the keys are language codes and the values
+      A dictionary where the keys are locale codes and the values
       are names. This attribute is returned by all end points.
 
       :type: dict
@@ -243,6 +249,7 @@ class RepresentedCountry(Country):
 
 
 class Location(Record):
+
     """Contains data for the location record associated with an IP address
 
     This class contains the location data associated with an IP address.
@@ -301,7 +308,9 @@ class Location(Record):
                              'metro_code', 'postal_code', 'postal_confidence',
                              'time_zone'])
 
+
 class MaxMind(Record):
+
     """Contains data related to your MaxMind account
 
     This record is returned by all the end points.
@@ -318,7 +327,9 @@ class MaxMind(Record):
     """
     _valid_attributes = set(['queries_remaining'])
 
+
 class Postal(Record):
+
     """Contains data for the postal record associated with an IP address
 
     This class contains the postal data associated with an IP address.
@@ -349,6 +360,7 @@ class Postal(Record):
 
 
 class Subdivision(PlaceRecord):
+
     """Contains data for the subdivisions associated with an IP address
 
     This class contains the subdivision data associated with an IP address.
@@ -390,7 +402,7 @@ class Subdivision(PlaceRecord):
 
     .. attribute:: names
 
-      A dictionary where the keys are language codes and the
+      A dictionary where the keys are locale codes and the
       values are names. This attribute is returned by all end points except
       Country.
 
@@ -401,6 +413,7 @@ class Subdivision(PlaceRecord):
 
 
 class Subdivisions(tuple):
+
     """A tuple-like collection of subdivisions associated with an IP address
 
     This class contains the subdivisions of the country associated with the
@@ -413,7 +426,7 @@ class Subdivisions(tuple):
     end point.
 
     """
-    #pylint:disable=R0924,W0212,W0142
+    # pylint:disable=R0924,W0212,W0142
     def __new__(cls, languages, *subdivisions):
         subdivisions = [Subdivision(languages, **x) for x in subdivisions]
         obj = super(cls, Subdivisions).__new__(cls, subdivisions)
@@ -436,6 +449,7 @@ class Subdivisions(tuple):
 
 
 class Traits(Record):
+
     """ Contains data for the traits record associated with an IP address
 
     This class contains the traits data associated with an IP address.

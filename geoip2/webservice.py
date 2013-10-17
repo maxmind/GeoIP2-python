@@ -59,7 +59,7 @@ class Client(object):
     :param host: The hostname to make a request against. This defaults to
       "geoip.maxmind.com". In most cases, you should not need to set this
       explicitly.
-    :param languages: This is list of language codes. This argument will be
+    :param languages: This is list of locale codes. This argument will be
       passed on to record classes to use when their name properties are
       called. The default value is ['en'].
 
@@ -71,7 +71,7 @@ class Client(object):
       data is "en". If you do not include this language, the name property
       may end up returning None even when the record has an English name.
 
-      Currently, the valid language codes are:
+      Currently, the valid locale codes are:
 
       * de -- German
       * en -- English names may still include accented characters if that is
