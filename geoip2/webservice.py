@@ -59,16 +59,16 @@ class Client(object):
     :param host: The hostname to make a request against. This defaults to
       "geoip.maxmind.com". In most cases, you should not need to set this
       explicitly.
-    :param languages: This is list of locale codes. This argument will be
+    :param locales: This is list of locale codes. This argument will be
       passed on to record classes to use when their name properties are
       called. The default value is ['en'].
 
-      The order of the languages is significant. When a record class has
+      The order of the locales is significant. When a record class has
       multiple names (country, city, etc.), its name property will return
-      the name in the first language that has one.
+      the name in the first locale that has one.
 
-      Note that the only language which is always present in the GeoIP2
-      data is "en". If you do not include this language, the name property
+      Note that the only locale which is always present in the GeoIP2
+      data is "en". If you do not include this locale, the name property
       may end up returning None even when the record has an English name.
 
       Currently, the valid locale codes are:
@@ -87,10 +87,10 @@ class Client(object):
     """
 
     def __init__(self, user_id, license_key, host='geoip.maxmind.com',
-                 languages=None):
-        if languages is None:
-            languages = ['en']
-        self.languages = languages
+                 locales=None):
+        if locales is None:
+            locales = ['en']
+        self.locales = locales
         self.user_id = user_id
         self.license_key = license_key
         self._base_uri = 'https://%s/geoip/v2.0' % (host)
@@ -154,7 +154,7 @@ class Client(object):
                                          'User-Agent': self._user_agent()})
         if (response.status_code == 200):  # pylint:disable=E1103
             body = self._handle_success(response, uri)
-            return model_class(body, languages=self.languages)
+            return model_class(body, locales=self.locales)
         else:
             self._handle_error(response, uri)
 

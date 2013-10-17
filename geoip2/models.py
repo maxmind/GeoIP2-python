@@ -65,21 +65,21 @@ class Country(object):
 
     """
 
-    def __init__(self, raw_response, languages=None):
-        if languages is None:
-            languages = ['en']
+    def __init__(self, raw_response, locales=None):
+        if locales is None:
+            locales = ['en']
         self.continent = \
-            geoip2.records.Continent(languages,
+            geoip2.records.Continent(locales,
                                      **raw_response.get('continent', {}))
         self.country = \
-            geoip2.records.Country(languages,
+            geoip2.records.Country(locales,
                                    **raw_response.get('country', {}))
         self.registered_country = \
-            geoip2.records.Country(languages,
+            geoip2.records.Country(locales,
                                    **raw_response.get('registered_country',
                                                       {}))
         self.represented_country \
-            = geoip2.records.RepresentedCountry(languages,
+            = geoip2.records.RepresentedCountry(locales,
                                                 **raw_response.get(
                                                 'represented_country', {}))
 
@@ -155,16 +155,16 @@ class City(Country):
 
 """
 
-    def __init__(self, raw_response, languages=None):
-        super(City, self).__init__(raw_response, languages)
+    def __init__(self, raw_response, locales=None):
+        super(City, self).__init__(raw_response, locales)
         self.city = \
-            geoip2.records.City(languages, **raw_response.get('city', {}))
+            geoip2.records.City(locales, **raw_response.get('city', {}))
         self.location = \
             geoip2.records.Location(**raw_response.get('location', {}))
         self.postal = \
             geoip2.records.Postal(**raw_response.get('postal', {}))
         self.subdivisions = \
-            geoip2.records.Subdivisions(languages,
+            geoip2.records.Subdivisions(locales,
                                         *raw_response.get('subdivisions', []))
 
 

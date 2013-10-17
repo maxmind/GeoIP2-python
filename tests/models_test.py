@@ -25,52 +25,52 @@ class TestModels(unittest.TestCase):
                 'confidence': 76,
                 'geoname_id': 9876,
                 'names': {'en': 'Minneapolis'},
-                },
+            },
             'continent': {
                 'code': 'NA',
                 'geoname_id': 42,
                 'names': {'en': 'North America'},
-                },
+            },
             'country': {
                 'confidence': 99,
                 'geoname_id': 1,
                 'iso_code': 'US',
                 'names': {'en': 'United States of America'},
-                },
+            },
             'location': {
                 'accuracy_radius': 1500,
                 'latitude': 44.98,
                 'longitude': 93.2636,
                 'metro_code': 765,
                 'time_zone': 'America/Chicago',
-                },
+            },
             'postal': {
                 'code': '55401',
                 'confidence': 33,
-                },
+            },
             'subdivisions': [{
                 'confidence': 88,
                 'geoname_id': 574635,
                 'iso_code': 'MN',
                 'names': {'en': 'Minnesota'},
-                },
+            },
                 {
-                'geoname_id': 123,
-                'iso_code': 'HP',
-                'names': {'en': 'Hennepin'},
+                    'geoname_id': 123,
+                    'iso_code': 'HP',
+                    'names': {'en': 'Hennepin'},
                 }
             ],
             'registered_country': {
                 'geoname_id': 2,
                 'iso_code': 'CA',
                 'names': {'en': 'Canada'},
-                },
+            },
             'represented_country': {
                 'geoname_id': 3,
                 'iso_code': 'GB',
                 'names': {'en': 'United Kingdom'},
                 'type': 'military',
-                },
+            },
             'traits': {
                 'autonomous_system_number': 1234,
                 'autonomous_system_organization': 'AS Organization',
@@ -82,8 +82,8 @@ class TestModels(unittest.TestCase):
                 'network_speed': 'cable/DSL',
                 'organization': 'Blorg',
                 'user_type': 'college',
-                },
-            }
+            },
+        }
 
         model = geoip2.models.Omni(raw)
         self.assertEqual(type(model), geoip2.models.Omni,
@@ -157,29 +157,28 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.subdivisions.most_specific.names, {},
                          'Empty names hash returned')
 
-
     def test_city_full(self):
         raw = {
             'continent': {
                 'code': 'NA',
                 'geoname_id': 42,
                 'names': {'en': 'North America'},
-                },
+            },
             'country': {
                 'geoname_id': 1,
                 'iso_code': 'US',
                 'names': {'en': 'United States of America'},
-                },
+            },
             'registered_country': {
                 'geoname_id': 2,
                 'iso_code': 'CA',
                 'names': {'en': 'Canada'},
-                },
+            },
             'traits': {
                 'ip_address': '1.2.3.4',
                 'is_satellite_provider': True,
-                },
-            }
+            },
+        }
         model = geoip2.models.City(raw)
         self.assertEqual(type(model), geoip2.models.City,
                          'geoip2.models.City object')
@@ -255,8 +254,8 @@ class TestNamess(unittest.TestCase):
                 'pt-BR': 'América do Norte',
                 'ru': 'Северная Америка',
                 'zh-CN': '北美洲',
-                },
             },
+        },
         'country': {
             'geoname_id': 1,
             'iso_code': 'US',
@@ -264,15 +263,15 @@ class TestNamess(unittest.TestCase):
                 'en': 'United States of America',
                 'fr': 'États-Unis',
                 'zh-CN': '美国',
-                },
             },
+        },
         'traits': {
             'ip_address': '1.2.3.4',
-            },
-        }
+        },
+    }
 
     def test_names(self):
-        model = geoip2.models.Country(self.raw, languages=['sq', 'ar'])
+        model = geoip2.models.Country(self.raw, locales=['sq', 'ar'])
         self.assertEqual(model.continent.names,
                          self.raw['continent']['names'],
                          'Correct names dict for continent')
@@ -280,31 +279,31 @@ class TestNamess(unittest.TestCase):
                          self.raw['country']['names'],
                          'Correct names dict for country')
 
-    def test_three_languages(self):
+    def test_three_locales(self):
         model = geoip2.models.Country(self.raw,
-                                      languages=['fr', 'zh-CN', 'en'])
+                                      locales=['fr', 'zh-CN', 'en'])
         self.assertEqual(model.continent.name, '北美洲',
                          'continent name is in Chinese (no French available)')
         self.assertEqual(model.country.name, 'États-Unis',
                          'country name is in French')
 
-    def test_two_languages(self):
-        model = geoip2.models.Country(self.raw, languages=['ak', 'fr'])
+    def test_two_locales(self):
+        model = geoip2.models.Country(self.raw, locales=['ak', 'fr'])
         self.assertEqual(model.continent.name, None,
                          'continent name is undef (no Akan or French '
                          'available)')
         self.assertEqual(model.country.name, 'États-Unis',
                          'country name is in French')
 
-    def test_unknown_language(self):
-        model = geoip2.models.Country(self.raw, languages=['aa'])
+    def test_unknown_locale(self):
+        model = geoip2.models.Country(self.raw, locales=['aa'])
         self.assertEqual(model.continent.name, None,
                          'continent name is undef (no Afar available)')
         self.assertEqual(model.country.name, None,
                          'country name is in None (no Afar available)')
 
     def test_german(self):
-        model = geoip2.models.Country(self.raw, languages=['de'])
+        model = geoip2.models.Country(self.raw, locales=['de'])
         self.assertEqual(model.continent.name, 'Nordamerika',
                          'Correct german name for continent')
 

@@ -20,7 +20,7 @@ if sys.version_info[0] == 2:
 
 class TestReader(unittest.TestCase):
 
-    def test_default_language(self):
+    def test_default_locale(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-City-Test.mmdb')
         record = reader.city('81.2.69.160')

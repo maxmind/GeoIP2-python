@@ -28,19 +28,19 @@ class PlaceRecord(Record):
     """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`"""
     __metaclass__ = ABCMeta
 
-    def __init__(self, languages=None, **kwargs):
-        if languages is None:
-            languages = ['en']
+    def __init__(self, locales=None, **kwargs):
+        if locales is None:
+            locales = ['en']
         if kwargs.get('names') is None:
             kwargs['names'] = {}
-        object.__setattr__(self, '_languages', languages)
+        object.__setattr__(self, '_locales', locales)
         super(PlaceRecord, self).__init__(**kwargs)
 
     @property
     def name(self):
         """Dict with locale codes as keys and localized name as value"""
         # pylint:disable=E1101
-        return next((self.names.get(x) for x in self._languages if x in
+        return next((self.names.get(x) for x in self._locales if x in
                      self.names), None)
 
 
@@ -71,8 +71,8 @@ class City(PlaceRecord):
 
     .. attribute:: name
 
-      The name of the city based on the languages list
-      passed to the constructor. This attribute is returned by all end points.
+      The name of the city based on the locales list passed to the
+      constructor. This attribute is returned by all end points.
 
       :type: unicode
 
@@ -115,8 +115,8 @@ class Continent(PlaceRecord):
 
     .. attribute:: name
 
-      Returns the name of the continent based on the languages list
-      passed to the constructor. This attribute is returned by all end points.
+      Returns the name of the continent based on the locales list passed to
+      the constructor. This attribute is returned by all end points.
 
       :type: unicode
 
@@ -167,8 +167,8 @@ class Country(PlaceRecord):
 
     .. attribute:: name
 
-      The name of the country based on the languages list
-      passed to the constructor. This attribute is returned by all end points.
+      The name of the country based on the locales list passed to the
+      constructor. This attribute is returned by all end points.
 
       :type: unicode
 
@@ -221,8 +221,8 @@ class RepresentedCountry(Country):
 
     .. attribute:: name
 
-      The name of the country based on the languages list
-      passed to the constructor. This attribute is returned by all end points.
+      The name of the country based on the locales list passed to the
+      constructor. This attribute is returned by all end points.
 
       :type: unicode
 
@@ -395,8 +395,8 @@ class Subdivision(PlaceRecord):
 
     .. attribute:: name
 
-      The name of the subdivision based on the languages list
-      passed to the constructor. This attribute is returned by all end points.
+      The name of the subdivision based on the locales list passed to the
+      constructor. This attribute is returned by all end points.
 
       :type: unicode
 
@@ -427,10 +427,10 @@ class Subdivisions(tuple):
 
     """
     # pylint:disable=R0924,W0212,W0142
-    def __new__(cls, languages, *subdivisions):
-        subdivisions = [Subdivision(languages, **x) for x in subdivisions]
+    def __new__(cls, locales, *subdivisions):
+        subdivisions = [Subdivision(locales, **x) for x in subdivisions]
         obj = super(cls, Subdivisions).__new__(cls, subdivisions)
-        obj._languages = languages
+        obj._locales = locales
         return obj
 
     @property
@@ -445,7 +445,7 @@ class Subdivisions(tuple):
         try:
             return self[-1]
         except IndexError:
-            return Subdivision(self._languages)
+            return Subdivision(self._locales)
 
 
 class Traits(Record):
