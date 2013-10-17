@@ -93,7 +93,7 @@ class Client(object):
         self.locales = locales
         self.user_id = user_id
         self.license_key = license_key
-        self._base_uri = 'https://%s/geoip/v2.0' % (host)
+        self._base_uri = 'https://%s/geoip/v2.0' % host
 
     def city(self, ip_address='me'):
         """This method calls the GeoIP2 Precision City endpoint.
@@ -152,7 +152,7 @@ class Client(object):
         response = requests.get(uri, auth=(self.user_id, self.license_key),
                                 headers={'Accept': 'application/json',
                                          'User-Agent': self._user_agent()})
-        if (response.status_code == 200):  # pylint:disable=E1103
+        if response.status_code == 200:  # pylint:disable=E1103
             body = self._handle_success(response, uri)
             return model_class(body, locales=self.locales)
         else:
@@ -174,9 +174,9 @@ class Client(object):
     def _handle_error(self, response, uri):
         status = response.status_code
 
-        if status >= 400 and status < 499:
+        if 400 <= status < 499:
             self._handle_4xx_status(response, status, uri)
-        elif status >= 500 and status < 599:
+        elif 500 <= status < 599:
             self._handle_5xx_status(status, uri)
         else:
             self._handle_non_200_status(status, uri)

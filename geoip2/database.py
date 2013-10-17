@@ -100,7 +100,7 @@ class Reader(object):
         record = self.db_reader.get(ip_address)
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
-                "The address %s is not in the database." % (ip_address))
+                "The address %s is not in the database." % ip_address)
         record.setdefault('traits', {})['ip_address'] = ip_address
         return model_class(record, locales=self.locales)
 

@@ -433,6 +433,9 @@ class Subdivisions(tuple):
         obj._locales = locales
         return obj
 
+    def __init__(self, locales, *subdivisions):
+        super(Subdivisions, self).__init__()
+
     @property
     def most_specific(self):
         """The most specific (smallest) subdivision available.
