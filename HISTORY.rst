@@ -3,6 +3,12 @@
 History
 -------
 
+0.4.0 (2013-XX-XX)
+++++++++++++++++++
+
+* Changed the `languages` keyword argument to `locales` on the constructors
+  for `geoip.webservice.Client` and `geoip.database.Reader`.
+
 0.3.1 (2013-10-15)
 ++++++++++++++++++
 
