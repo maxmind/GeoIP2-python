@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import codecs
 import os
 import sys
 
@@ -26,7 +27,7 @@ setup(
     name='geoip2',
     version=geoip2.__version__,
     description='MaxMind GeoIP2 API',
-    long_description=open('README.rst').read(),
+    long_description=codecs.open('README.rst', 'r', 'utf-8').read(),
     author='Gregory Oschwald',
     author_email='goschwald@maxmind.com',
     url='http://www.maxmind.com/',
