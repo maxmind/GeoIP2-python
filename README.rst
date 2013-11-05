@@ -21,13 +21,14 @@ GeoIP2 databases have not yet been released as a downloadable product.
 Installation
 ------------
 
+Web Service Client Only
+^^^^^^^^^^^^^^^^^^^^^^^
+
 To install the `geoip2` module, type:
 
 .. code-block:: bash
 
-    $ pip install geoip2[DB]
-
-If you do not need the database reader, you may omit `[DB]`.
+    $ pip install geoip2
 
 If you are not able to use pip, you may also use easy_install from the
 source directory:
@@ -35,6 +36,30 @@ source directory:
 .. code-block:: bash
 
     $ easy_install .
+
+Database Reader and Web Service Client
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You must first install the `libmaxminddb C API
+<https://github.com/maxmind/libmaxminddb>`_. Please `see the instructions
+distributed with it <https://github.com/maxmind/libmaxminddb/blob/master/README.md#installing-from-a-tarball>`_.
+
+After installing `libmaxminddb`, install the `geoip2` module with the database
+reader dependencies by typing:
+
+.. code-block:: bash
+
+    $ pip install geoip2[DB]
+
+If you are not able to use pip, you may also use easy_install. To do this, you
+must first install `maxminddb<maxminddb.readthedocs.org>`_ and
+`requests<http://www.python-requests.org/en/latest/>`_. Once these
+dependencies have been satisfied, `cd` to the source directory and type:
+
+.. code-block:: bash
+
+    $ easy_install .
+
 
 Usage
 -----
