@@ -52,8 +52,8 @@ reader dependencies by typing:
     $ pip install geoip2[DB]
 
 If you are not able to use pip, you may also use easy_install. To do this, you
-must first install `maxminddb<maxminddb.readthedocs.org>`_ and
-`requests<http://www.python-requests.org/en/latest/>`_. Once these
+must first install `maxminddb <http://maxminddb.readthedocs.org/>`_ and
+`requests <http://www.python-requests.org/en/latest/>`_. Once these
 dependencies have been satisfied, `cd` to the source directory and type:
 
 .. code-block:: bash
@@ -68,7 +68,7 @@ To use this API, you first create either a web service object with your
 MaxMind ``user_id`` and ``license_key`` or a database reader object with the
 path to your database file. After doing this, you may call the method
 corresponding to request type (e.g., ``city`` or ``country``), passing it the
-IP address you wantto look up.
+IP address you want to look up.
 
 If the request succeeds, the method call will return a model class for the
 end point you called. This model in turn contains multiple record classes,
@@ -193,8 +193,8 @@ always have every piece of data for any given IP address.
 Because of these factors, it is possible for any request to return a record
 where some or all of the attributes are unpopulated.
 
-The only piece of data which is always returned is the :py:attr:`ip_address`
-attribute in the :py:class:`geoip2.records.Traits` record.
+The only piece of data which is always returned is the `ip_address` attribute
+in the `geoip2.records.Traits` record.
 
 Integration with GeoNames
 -------------------------
