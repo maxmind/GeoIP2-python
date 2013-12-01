@@ -5,6 +5,7 @@ GeoIP2 Database Reader
 
 """
 import geoip2
+import geoip2.models
 import maxminddb
 
 
