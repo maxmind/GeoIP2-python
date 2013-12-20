@@ -25,7 +25,7 @@ Installation
 Web Service Client Only
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-To install the `geoip2` module, type:
+To install the ``geoip2`` module, type:
 
 .. code-block:: bash
 
@@ -45,8 +45,8 @@ You must first install the `libmaxminddb C API
 <https://github.com/maxmind/libmaxminddb>`_. Please `see the instructions
 distributed with it <https://github.com/maxmind/libmaxminddb/blob/master/README.md#installing-from-a-tarball>`_.
 
-After installing `libmaxminddb`, install the `geoip2` module with the database
-reader dependencies by typing:
+After installing ``libmaxminddb``, install the ``geoip2`` module with the
+database reader dependencies by typing:
 
 .. code-block:: bash
 
@@ -55,7 +55,7 @@ reader dependencies by typing:
 If you are not able to use pip, you may also use easy_install. To do this, you
 must first install `maxminddb <http://maxminddb.readthedocs.org/>`_ and
 `requests <http://www.python-requests.org/en/latest/>`_. Once these
-dependencies have been satisfied, `cd` to the source directory and type:
+dependencies have been satisfied, ``cd`` to the source directory and type:
 
 .. code-block:: bash
 
@@ -195,7 +195,7 @@ Because of these factors, it is possible for any request to return a record
 where some or all of the attributes are unpopulated.
 
 The only piece of data which is always returned is the `ip_address` attribute
-in the `geoip2.records.Traits` record.
+in the ``geoip2.records.Traits`` record.
 
 Integration with GeoNames
 -------------------------
