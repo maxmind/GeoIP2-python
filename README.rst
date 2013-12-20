@@ -14,7 +14,7 @@ Description
 -----------
 
 This package provides an API for the GeoIP2 `web services
-<(http://dev.maxmind.com/geoip/geoip2/web-services>`_ and `databases
+<http://dev.maxmind.com/geoip/geoip2/web-services>`_ and `databases
 <http://dev.maxmind.com/geoip/geoip2/downloadable>`_. The API also works with
 MaxMind's free `GeoLite2 databases
 <http://dev.maxmind.com/geoip/geoip2/geolite2/>`_.
