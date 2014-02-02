@@ -211,9 +211,8 @@ class Client(object):
     def _handle_web_service_error(self, message, code, status, uri):
         if code == 'IP_ADDRESS_NOT_FOUND' or code == 'IP_ADDRESS_RESERVED':
             raise AddressNotFoundError(message)
-        elif code == 'AUTHORIZATION_INVALID' or \
-                code == 'LICENSE_KEY_REQUIRED' or \
-                code == 'USER_ID_REQUIRED':
+        elif code in ('AUTHORIZATION_INVALID', 'LICENSE_KEY_REQUIRED',
+                      'USER_ID_REQUIRED'):
             raise AuthenticationError(message)
         elif code == 'OUT_OF_QUERIES':
             raise OutOfQueriesError(message)
