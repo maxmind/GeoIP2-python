@@ -36,10 +36,10 @@ import sys
 
 if sys.version_info[0] == 2 or (sys.version_info[0] == 3
                                 and sys.version_info[1] < 3):
-    import ipaddr as ipaddress  # pylint:disable=F0401
+    import ipaddr as ipaddress
     ipaddress.ip_address = ipaddress.IPAddress
 else:
-    import ipaddress  # pylint:disable=F0401
+    import ipaddress
 
 
 class Client(object):
@@ -152,7 +152,7 @@ class Client(object):
         response = requests.get(uri, auth=(self.user_id, self.license_key),
                                 headers={'Accept': 'application/json',
                                          'User-Agent': self._user_agent()})
-        if response.status_code == 200:  # pylint:disable=E1103
+        if response.status_code == 200:
             body = self._handle_success(response, uri)
             return model_class(body, locales=self.locales)
         else:
@@ -174,42 +174,40 @@ class Client(object):
     def _handle_error(self, response, uri):
         status = response.status_code
 
-        if 400 <= status < 499:
+        if 400 <= status < 500:
             self._handle_4xx_status(response, status, uri)
-        elif 500 <= status < 599:
+        elif 500 <= status < 600:
             self._handle_5xx_status(status, uri)
         else:
             self._handle_non_200_status(status, uri)
 
     def _handle_4xx_status(self, response, status, uri):
-        if response.content and \
-                response.headers['Content-Type'].find('json') >= 0:
-            try:
-                body = response.json()
-            except ValueError as ex:
-                raise HTTPError(
-                    'Received a %(status)i error for %(uri)s but it did'
-                    ' not include the expected JSON body: ' % locals() +
-                    ', '.join(ex.args), status, uri)
-            else:
-                if 'code' in body and 'error' in body:
-                    self._handle_web_service_error(
-                        body.get('error'), body.get('code'), status, uri)
-                else:
-                    raise HTTPError(
-                        'Response contains JSON but it does not specify '
-                        'code or error keys', status, uri)
-        elif response.content:
-            raise HTTPError('Received a %i for %s with the following '
-                            'body: %s' %
-                            (status, uri, response.content),
-                            status, uri)
-        else:
+        if not response.content:
             raise HTTPError('Received a %(status)i error for %(uri)s '
                             'with no body.' % locals(), status, uri)
+        elif response.headers['Content-Type'].find('json') == -1:
+            raise HTTPError('Received a %i for %s with the following '
+                            'body: %s' %
+                           (status, uri, response.content),
+                            status, uri)
+        try:
+            body = response.json()
+        except ValueError as ex:
+            raise HTTPError(
+                'Received a %(status)i error for %(uri)s but it did'
+                ' not include the expected JSON body: ' % locals() +
+                ', '.join(ex.args), status, uri)
+        else:
+            if 'code' in body and 'error' in body:
+                self._handle_web_service_error(
+                    body.get('error'), body.get('code'), status, uri)
+            else:
+                raise HTTPError(
+                    'Response contains JSON but it does not specify '
+                    'code or error keys', status, uri)
 
     def _handle_web_service_error(self, message, code, status, uri):
-        if code == 'IP_ADDRESS_NOT_FOUND' or code == 'IP_ADDRESS_RESERVED':
+        if code in ('IP_ADDRESS_NOT_FOUND', 'IP_ADDRESS_RESERVED'):
             raise AddressNotFoundError(message)
         elif code in ('AUTHORIZATION_INVALID', 'LICENSE_KEY_REQUIRED',
                       'USER_ID_REQUIRED'):
