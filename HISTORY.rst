@@ -3,6 +3,12 @@
 History
 -------
 
+0.4.2 (2013-12-20)
+++++++++++++++++++
+
+* Added missing geoip2.models import to geoip.database.
+* Documentation updates.
+
 0.4.1 (2013-10-25)
 ++++++++++++++++++
 

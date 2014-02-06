@@ -426,7 +426,7 @@ class Subdivisions(tuple):
     end point.
 
     """
-    # pylint:disable=R0924,W0142
+    # pylint:disable=W0142
     def __new__(cls, locales, *subdivisions):
         subdivisions = [Subdivision(locales, **x) for x in subdivisions]
         obj = super(cls, Subdivisions).__new__(cls, subdivisions)
