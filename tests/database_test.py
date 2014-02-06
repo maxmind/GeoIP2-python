@@ -7,7 +7,6 @@ import sys
 sys.path.append('..')
 
 import geoip2.database
-import geoip2.errors
 
 if sys.version_info[:2] == (2, 6):
     import unittest2 as unittest
