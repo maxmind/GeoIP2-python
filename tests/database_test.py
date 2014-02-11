@@ -58,6 +58,6 @@ class TestReader(unittest.TestCase):
             'tests/data/test-data/GeoIP2-City-Test.mmdb')
         with self.assertRaisesRegex(ValueError,
                                     "u?'invalid' does not appear to be an "
-                                    "IPv4 or IPv6 address."):
+                                    "IPv4 or IPv6 address"):
             reader.city('invalid')
         reader.close()
