@@ -3,6 +3,15 @@
 History
 -------
 
+0.5.0 (2014-02-11)
+++++++++++++++++++
+
+* Fixed missing import statements for geoip2.errors and geoip2.models.
+  (Gustavo J. A. M. Carneiro)
+* Minor documentation and code cleanup
+* Added requirement for maxminddb v0.3.0, which includes a pure Python
+  database reader.
+
 0.4.2 (2013-12-20)
 ++++++++++++++++++
 
