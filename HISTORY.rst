@@ -10,7 +10,7 @@ History
   (Gustavo J. A. M. Carneiro)
 * Minor documentation and code cleanup
 * Added requirement for maxminddb v0.3.0, which includes a pure Python
-  database reader.
+  database reader. Removed the ``extras_require`` for maxminddb.
 
 0.4.2 (2013-12-20)
 ++++++++++++++++++
