@@ -45,8 +45,8 @@ class Reader(object):
     def __init__(self, filename, locales=None):
         if locales is None:
             locales = ['en']
-        self.db_reader = maxminddb.Reader(filename)
-        self.locales = locales
+        self._db_reader = maxminddb.Reader(filename)
+        self._locales = locales
 
     def country(self, ip_address):
         """Get the Country record object for the IP address
@@ -99,14 +99,14 @@ class Reader(object):
         return self._model_for(geoip2.models.Omni, ip_address)
 
     def _model_for(self, model_class, ip_address):
-        record = self.db_reader.get(ip_address)
+        record = self._db_reader.get(ip_address)
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
                 "The address %s is not in the database." % ip_address)
         record.setdefault('traits', {})['ip_address'] = ip_address
-        return model_class(record, locales=self.locales)
+        return model_class(record, locales=self._locales)
 
     def close(self):
         """Closes the GeoIP2 database"""
 
-        self.db_reader.close()
+        self._db_reader.close()

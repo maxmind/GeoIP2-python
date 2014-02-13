@@ -29,8 +29,9 @@ import geoip2
 import geoip2.models
 import requests
 from requests.utils import default_user_agent
-from .errors import AddressNotFoundError, AuthenticationError, \
-    GeoIP2Error, HTTPError, InvalidRequestError, OutOfQueriesError
+from .errors import (AddressNotFoundError, AuthenticationError,
+                     GeoIP2Error, HTTPError, InvalidRequestError,
+                     OutOfQueriesError)
 
 import sys
 
@@ -90,9 +91,9 @@ class Client(object):
                  locales=None):
         if locales is None:
             locales = ['en']
-        self.locales = locales
-        self.user_id = user_id
-        self.license_key = license_key
+        self._locales = locales
+        self._user_id = user_id
+        self._license_key = license_key
         self._base_uri = 'https://%s/geoip/v2.0' % host
 
     def city(self, ip_address='me'):
@@ -149,12 +150,12 @@ class Client(object):
         if ip_address != 'me':
             ip_address = str(ipaddress.ip_address(ip_address))
         uri = '/'.join([self._base_uri, path, ip_address])
-        response = requests.get(uri, auth=(self.user_id, self.license_key),
+        response = requests.get(uri, auth=(self._user_id, self._license_key),
                                 headers={'Accept': 'application/json',
                                          'User-Agent': self._user_agent()})
         if response.status_code == 200:
             body = self._handle_success(response, uri)
-            return model_class(body, locales=self.locales)
+            return model_class(body, locales=self._locales)
         else:
             self._handle_error(response, uri)
 
