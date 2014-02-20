@@ -228,7 +228,7 @@ class Client(object):
                         uri)
 """
 
-:copyright: (c) 2013 by MaxMind, Inc.
-:license: GNU Lesser General Public License v2 or later (LGPLv2+)
+:copyright: (c) 2014 by MaxMind, Inc.
+:license: Apache License, Version 2.0
 
 """
