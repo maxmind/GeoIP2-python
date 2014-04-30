@@ -19,10 +19,6 @@ packages = ['geoip2']
 
 requirements = [i.strip() for i in open("requirements.txt").readlines()]
 
-if sys.version_info[0] == 2 or (sys.version_info[0] == 3
-                                and sys.version_info[1] < 3):
-    requirements.append('ipaddr')
-
 setup(
     name='geoip2',
     version=geoip2.__version__,
@@ -37,6 +33,7 @@ setup(
     package_dir={'geoip2': 'geoip2'},
     include_package_data=True,
     install_requires=requirements,
+    extra_require={':python_version<"3.3"': ['ipaddr']},
     tests_require=['httpretty>=0.6.1'],
     test_suite="tests",
     license=geoip2.__license__,
