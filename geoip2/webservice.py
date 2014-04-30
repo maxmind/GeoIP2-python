@@ -189,7 +189,7 @@ class Client(object):
         elif response.headers['Content-Type'].find('json') == -1:
             raise HTTPError('Received a %i for %s with the following '
                             'body: %s' %
-                           (status, uri, response.content),
+                            (status, uri, response.content),
                             status, uri)
         try:
             body = response.json()

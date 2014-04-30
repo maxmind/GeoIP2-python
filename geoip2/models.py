@@ -78,6 +78,7 @@ class Country(object):
             geoip2.records.Country(locales,
                                    **raw_response.get('registered_country',
                                                       {}))
+        # pylint:disable=bad-continuation
         self.represented_country \
             = geoip2.records.RepresentedCountry(locales,
                                                 **raw_response.get(
