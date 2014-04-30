@@ -33,7 +33,7 @@ setup(
     package_dir={'geoip2': 'geoip2'},
     include_package_data=True,
     install_requires=requirements,
-    extra_require={':python_version<"3.3"': ['ipaddr']},
+    extras_require={':python_version<"3.3"': ['ipaddr']},
     tests_require=['httpretty>=0.6.1'],
     test_suite="tests",
     license=geoip2.__license__,
