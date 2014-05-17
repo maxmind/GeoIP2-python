@@ -142,17 +142,6 @@ class TestClient(unittest.TestCase):
                                     ):
             self.client.country('1.2.3.9')
 
-    def test_bad_body_error(self):
-        httpretty.register_uri(httpretty.GET,
-                               self.base_uri + 'country/' + '1.2.3.9',
-                               body='bad body',
-                               status=400,
-                               content_type='text/plain')
-        with self.assertRaisesRegex(HTTPError,
-                                    'Received a .* with the following body'
-                                    ):
-            self.client.country('1.2.3.9')
-
     def test_500_error(self):
         httpretty.register_uri(httpretty.GET,
                                self.base_uri + 'country/' + '1.2.3.10',
