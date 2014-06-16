@@ -394,6 +394,7 @@ class ISPOrg(object):
       :type: unicode
     """
 
+    # pylint:disable=too-many-arguments
     def __init__(self, ip_address=None,
                  autonomous_system_number=None,
                  autonomous_system_organization=None,
