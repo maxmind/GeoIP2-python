@@ -51,9 +51,7 @@ class Reader(object):
     def country(self, ip_address):
         """Get the Country record object for the IP address
 
-        :param ip_address: IPv4 or IPv6 address as a string. If no address
-          is provided, the address that the web service is called from will
-          be used.
+        :param ip_address: IPv4 or IPv6 address as a string.
 
         :returns: :py:class:`geoip2.models.Country` object
 
@@ -64,9 +62,7 @@ class Reader(object):
     def city(self, ip_address):
         """Get the City record object for the IP address
 
-        :param ip_address: IPv4 or IPv6 address as a string. If no address
-          is provided, the address that the web service is called from will
-          be used.
+        :param ip_address: IPv4 or IPv6 address as a string.
 
         :returns: :py:class:`geoip2.models.City` object
 
@@ -77,8 +73,7 @@ class Reader(object):
         """Get the CityISPOrg record object for the IP address
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
-          is provided, the address that the web service is called from will
-          be used.
+          is provided.
 
         :returns: :py:class:`geoip2.models.CityISPOrg` object
 
@@ -89,20 +84,64 @@ class Reader(object):
     def omni(self, ip_address):
         """Get the Omni record object for the IP address
 
-        :param ip_address: IPv4 or IPv6 address as a string. If no address
-          is provided, the address that the web service is called from will
-          be used.
+        :param ip_address: IPv4 or IPv6 address as a string.
 
         :returns: :py:class:`geoip2.models.Omni` object
 
         """
         return self._model_for(geoip2.models.Omni, ip_address)
 
-    def _model_for(self, model_class, ip_address):
+    def connection_type(self, ip_address):
+        """Get the ConnectionType object for the IP address
+
+        :param ip_address: IPv4 or IPv6 address as a string.
+
+        :returns: :py:class:`geoip2.models.ConnectionType` object
+
+        """
+        record = self._get(ip_address)
+        return geoip2.models.ConnectionType(ip_address=ip_address,
+                                            connection_type=record.get(
+                                                'connection_type'))
+
+    def domain(self, ip_address):
+        """Get the Domain object for the IP address
+
+        :param ip_address: IPv4 or IPv6 address as a string.
+
+        :returns: :py:class:`geoip2.models.Domain` object
+
+        """
+        record = self._get(ip_address)
+        return geoip2.models.Domain(ip_address=ip_address,
+                                    domain=record.get('domain'))
+
+    def isp_org(self, ip_address):
+        """Get the ISPOrg object for the IP address
+
+        :param ip_address: IPv4 or IPv6 address as a string.
+
+        :returns: :py:class:`geoip2.models.ISPOrg` object
+
+        """
+        record = self._get(ip_address)
+        return geoip2.models.ISPOrg(ip_address=ip_address,
+                                    autonomous_system_number=record.get(
+                                        'autonomous_system_number'),
+                                    autonomous_system_organization=record.get(
+                                        'autonomous_system_organization'),
+                                    isp=record.get('isp'),
+                                    organization=record.get('organization'))
+
+    def _get(self, ip_address):
         record = self._db_reader.get(ip_address)
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
                 "The address %s is not in the database." % ip_address)
+        return record
+
+    def _model_for(self, model_class, ip_address):
+        record = self._get(ip_address)
         record.setdefault('traits', {})['ip_address'] = ip_address
         return model_class(record, locales=self._locales)
 

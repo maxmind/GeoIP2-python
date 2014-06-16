@@ -40,7 +40,6 @@ class TestReader(unittest.TestCase):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-City-Test.mmdb')
         record = reader.country('81.2.69.160')
-        record = reader.omni('81.2.69.160')
         self.assertEqual(record.traits.ip_address, '81.2.69.160')
         reader.close()
 
@@ -60,4 +59,39 @@ class TestReader(unittest.TestCase):
                                     "u?'invalid' does not appear to be an "
                                     "IPv4 or IPv6 address"):
             reader.city('invalid')
+        reader.close()
+
+    def test_connection_type(self):
+        reader = geoip2.database.Reader(
+            'tests/data/test-data/GeoIP2-Connection-Type-Test.mmdb')
+        ip_address = '1.0.1.0'
+
+        record = reader.connection_type(ip_address)
+        self.assertEqual(record.connection_type, 'Cable/DSL')
+        self.assertEqual(record.ip_address, ip_address)
+        reader.close()
+
+    def test_domain(self):
+        reader = geoip2.database.Reader(
+            'tests/data/test-data/GeoIP2-Domain-Test.mmdb')
+
+        ip_address = '1.2.0.0'
+        record = reader.domain(ip_address)
+        self.assertEqual(record.domain, 'maxmind.com')
+        self.assertEqual(record.ip_address, ip_address)
+
+        reader.close()
+
+    def test_isp_org(self):
+        reader = geoip2.database.Reader(
+            'tests/data/test-data/GeoIP2-ISP-Org-Test.mmdb')
+
+        ip_address = '2001:1700::'
+        record = reader.isp_org(ip_address)
+        self.assertEqual(record.autonomous_system_number, 6730)
+        self.assertEqual(record.autonomous_system_organization,
+                         'Sunrise Communications AG')
+        # XXX - Add org/isp when available
+        self.assertEqual(record.ip_address, ip_address)
+
         reader.close()

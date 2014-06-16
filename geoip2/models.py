@@ -16,10 +16,9 @@ import geoip2.records
 
 class Country(object):
 
-    """Model class for the GeoIP2 Country end point
+    """Model class for the GeoIP2 Country Web Service or Database
 
-    This class provides the following methods, each of which returns a record
-    object.
+    This class provides the following attributes:
 
     .. attribute:: continent
 
@@ -93,7 +92,7 @@ class Country(object):
 
 class City(Country):
 
-    """Model class for the GeoIP2 Precision City end point
+    """Model class for the GeoIP2 Precision City Web Service or City Database
 
     .. attribute:: city
 
@@ -299,3 +298,109 @@ class Omni(CityISPOrg):
       :type: :py:class:`geoip2.records.Traits`
 
     """
+
+
+class ConnectionType(object):
+
+    """Model class for the GeoIP2 Connection-Type Database
+
+    This class provides the following attribute:
+
+    .. attribute:: connection_type
+
+      The connection type may take the following values:
+
+      - Dialup
+      - Cable/DSL
+      - Corporate
+      - Cellular
+
+      Additional values may be added in the future.
+
+      :type: unicode
+
+    .. attribute:: ip_address
+
+      The IP address used in the lookup.
+
+      :type: unicode
+    """
+
+    def __init__(self, ip_address=None, connection_type=None):
+        self.connection_type = connection_type
+        self.ip_address = ip_address
+
+
+class Domain(object):
+
+    """Model class for the GeoIP2 Domain Database
+
+    This class provides the following attribute:
+
+    .. attribute:: domain
+
+      The domain associated with the IP address.
+
+      :type: unicode
+
+    .. attribute:: ip_address
+
+      The IP address used in the lookup.
+
+      :type: unicode
+
+    """
+
+    def __init__(self, ip_address=None, domain=None):
+        self.domain = domain
+        self.ip_address = ip_address
+
+
+class ISPOrg(object):
+
+    """Model class for the GeoIP2 ISP-Org Database
+
+    This class provides the following attribute:
+
+    .. attribute:: autonomous_system_number
+
+      The autonomous system number associated with the IP address.
+
+      :type: int
+
+    .. attribute:: autonomous_system_organization
+
+      The organization associated with the registered autonomous system number
+      for the IP address.
+
+      :type: unicode
+
+    .. attribute:: isp
+
+      The name of the ISP associated with the IP address.
+
+      :type: unicode
+
+    .. attribute:: organization
+
+      The name of the organization associated with the IP address.
+
+      :type: unicode
+
+    .. attribute:: ip_address
+
+      The IP address used in the lookup.
+
+      :type: unicode
+    """
+
+    def __init__(self, ip_address=None,
+                 autonomous_system_number=None,
+                 autonomous_system_organization=None,
+                 isp=None,
+                 organization=None):
+        self.autonomous_system_number = autonomous_system_number
+        self.autonomous_system_organization = autonomous_system_organization
+        self.isp = isp
+        self.organization = organization
+        self.ip_address = ip_address
