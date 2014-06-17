@@ -16,7 +16,7 @@ import geoip2.records
 
 class Country(object):
 
-    """Model class for the GeoIP2 Country Web Service or Database
+    """Model class for the GeoIP2 Country
 
     This class provides the following attributes:
 
@@ -92,7 +92,7 @@ class Country(object):
 
 class City(Country):
 
-    """Model class for the GeoIP2 Precision City Web Service or City Database
+    """Model class for the GeoIP2 Precision City
 
     .. attribute:: city
 
@@ -170,7 +170,7 @@ class City(Country):
 
 class CityISPOrg(City):
 
-    """Model class for the GeoIP2 Precision City/ISP/Org end point
+    """Model class for the GeoIP2 Precision City/ISP/Org
 
     .. attribute:: city
 
@@ -236,7 +236,7 @@ class CityISPOrg(City):
 
 class Omni(CityISPOrg):
 
-    """Model class for the GeoIP2 Precision Omni end point
+    """Model class for the GeoIP2 Precision Omni
 
     .. attribute:: city
 
@@ -302,7 +302,7 @@ class Omni(CityISPOrg):
 
 class ConnectionType(object):
 
-    """Model class for the GeoIP2 Connection-Type Database
+    """Model class for the GeoIP2 Connection-Type
 
     This class provides the following attribute:
 
@@ -334,7 +334,7 @@ class ConnectionType(object):
 
 class Domain(object):
 
-    """Model class for the GeoIP2 Domain Database
+    """Model class for the GeoIP2 Domain
 
     This class provides the following attribute:
 
@@ -360,7 +360,7 @@ class Domain(object):
 
 class ISPOrg(object):
 
-    """Model class for the GeoIP2 ISP-Org Database
+    """Model class for the GeoIP2 ISP-Org
 
     This class provides the following attribute:
 

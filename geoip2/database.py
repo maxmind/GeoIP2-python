@@ -17,9 +17,7 @@ class Reader(object):
     Instances of this class provide a reader for the GeoIP2 database format.
     IP addresses can be looked up using the ``country`` and ``city`` methods.
     We also provide ``city_isp_org`` and ``omni`` methods to ease
-    compatibility with the web service client, although we may offer the
-    ability to specify additional databases to replicate these web services in
-    the future (e.g., the ISP/Org database).
+    compatibility with the web service client.
 
      Usage
      -----
@@ -49,7 +47,7 @@ class Reader(object):
         self._locales = locales
 
     def country(self, ip_address):
-        """Get the Country record object for the IP address
+        """Get the Country object for the IP address
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
@@ -60,7 +58,7 @@ class Reader(object):
         return self._model_for(geoip2.models.Country, ip_address)
 
     def city(self, ip_address):
-        """Get the City record object for the IP address
+        """Get the City object for the IP address
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
@@ -70,7 +68,7 @@ class Reader(object):
         return self._model_for(geoip2.models.City, ip_address)
 
     def city_isp_org(self, ip_address):
-        """Get the CityISPOrg record object for the IP address
+        """Get the CityISPOrg object for the IP address
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
           is provided.
@@ -82,7 +80,7 @@ class Reader(object):
         return self._model_for(geoip2.models.CityISPOrg, ip_address)
 
     def omni(self, ip_address):
-        """Get the Omni record object for the IP address
+        """Get the Omni object for the IP address
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
