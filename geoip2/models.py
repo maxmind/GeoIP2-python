@@ -326,9 +326,10 @@ class ConnectionType(object):
       :type: unicode
     """
 
-    def __init__(self, ip_address=None, connection_type=None):
-        self.connection_type = connection_type
-        self.ip_address = ip_address
+    def __init__(self, raw):
+        self.connection_type = raw.get('connection_type')
+        self.ip_address = raw.get('ip_address')
+        self.raw = raw
 
 
 class Domain(object):
@@ -351,9 +352,10 @@ class Domain(object):
 
     """
 
-    def __init__(self, ip_address=None, domain=None):
-        self.domain = domain
-        self.ip_address = ip_address
+    def __init__(self, raw):
+        self.domain = raw.get('domain')
+        self.ip_address = raw.get('ip_address')
+        self.raw = raw
 
 
 class ISPOrg(object):
@@ -395,13 +397,11 @@ class ISPOrg(object):
     """
 
     # pylint:disable=too-many-arguments
-    def __init__(self, ip_address=None,
-                 autonomous_system_number=None,
-                 autonomous_system_organization=None,
-                 isp=None,
-                 organization=None):
-        self.autonomous_system_number = autonomous_system_number
-        self.autonomous_system_organization = autonomous_system_organization
-        self.isp = isp
-        self.organization = organization
-        self.ip_address = ip_address
+    def __init__(self, raw):
+        self.autonomous_system_number = raw.get('autonomous_system_number')
+        self.autonomous_system_organization = raw.get(
+            'autonomous_system_organization')
+        self.isp = raw.get('isp')
+        self.organization = raw.get('organization')
+        self.ip_address = raw.get('ip_address')
+        self.raw = raw

@@ -99,10 +99,7 @@ class Reader(object):
         :returns: :py:class:`geoip2.models.ConnectionType` object
 
         """
-        record = self._get(ip_address)
-        return geoip2.models.ConnectionType(ip_address=ip_address,
-                                            connection_type=record.get(
-                                                'connection_type'))
+        return self._flat_model_for(geoip2.models.ConnectionType, ip_address)
 
     def domain(self, ip_address):
         """Get the Domain object for the IP address
@@ -112,9 +109,7 @@ class Reader(object):
         :returns: :py:class:`geoip2.models.Domain` object
 
         """
-        record = self._get(ip_address)
-        return geoip2.models.Domain(ip_address=ip_address,
-                                    domain=record.get('domain'))
+        return self._flat_model_for(geoip2.models.Domain, ip_address)
 
     def isp_org(self, ip_address):
         """Get the ISPOrg object for the IP address
@@ -124,14 +119,7 @@ class Reader(object):
         :returns: :py:class:`geoip2.models.ISPOrg` object
 
         """
-        record = self._get(ip_address)
-        return geoip2.models.ISPOrg(ip_address=ip_address,
-                                    autonomous_system_number=record.get(
-                                        'autonomous_system_number'),
-                                    autonomous_system_organization=record.get(
-                                        'autonomous_system_organization'),
-                                    isp=record.get('isp'),
-                                    organization=record.get('organization'))
+        return self._flat_model_for(geoip2.models.ISPOrg, ip_address)
 
     def _get(self, ip_address):
         record = self._db_reader.get(ip_address)
@@ -144,6 +132,11 @@ class Reader(object):
         record = self._get(ip_address)
         record.setdefault('traits', {})['ip_address'] = ip_address
         return model_class(record, locales=self._locales)
+
+    def _flat_model_for(self, model_class, ip_address):
+        record = self._get(ip_address)
+        record['ip_address'] = ip_address
+        return model_class(record)
 
     def close(self):
         """Closes the GeoIP2 database"""
