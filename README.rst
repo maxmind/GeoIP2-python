@@ -97,8 +97,31 @@ Web Service Example
     >>> response.location.longitude
     -93.2323
 
+Web Service Client Exceptions
+-----------------------------
+
+For details on the possible errors returned by the web service itself, see
+http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP2 web service
+docs.
+
+If the web service returns an explicit error document, this is thrown as a
+``AddressNotFoundError``, ``AuthenticationError``, ``InvalidRequestError``, or
+``OutOfQueriesError`` as appropriate. These all subclass ``GeoIP2Error``.
+
+If some other sort of error occurs, this is thrown as an ``HTTPError``. This
+is thrown when some sort of unanticipated error occurs, such as the web
+service returning a 500 or an invalid error document. If the web service
+returns any status code besides 200, 4xx, or 5xx, this also becomes an
+``HTTPError``.
+
+Finally, if the web service returns a 200 but the body is invalid, the client
+throws a ``GeoIP2Error``.
+
 Database Example
 -------------------
+
+City Database
+^^^^^^^^^^^^^
 
 .. code-block:: pycon
 
@@ -134,26 +157,65 @@ Database Example
     44.9733
     >>> response.location.longitude
     -93.2323
+    >>> reader.close()
 
-Web Service Client Exceptions
------------------------------
+Connection-Type Database
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-For details on the possible errors returned by the web service itself, see
-http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP2 web service
-docs.
+    >>> import geoip2.database
+    >>>
+    >>> # This creates a Reader object. You should use the same object
+    >>> # across multiple requests as creation of it is expensive.
+    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-Connection-Type.mmdb')
+    >>>
+    >>> response = reader.connection_type('128.101.101.101')
+    >>>
+    >>> response.connection_type
+    'Corporate'
+    >>> response.ip_address
+    '128.101.101.101'
+    >>> reader.close()
 
-If the web service returns an explicit error document, this is thrown as a
-``AddressNotFoundError``, ``AuthenticationError``, ``InvalidRequestError``, or
-``OutOfQueriesError`` as appropriate. These all subclass ``GeoIP2Error``.
 
-If some other sort of error occurs, this is thrown as an ``HTTPError``. This
-is thrown when some sort of unanticipated error occurs, such as the web
-service returning a 500 or an invalid error document. If the web service
-returns any status code besides 200, 4xx, or 5xx, this also becomes an
-``HTTPError``.
+Domain Database
+^^^^^^^^^^^^^^^
 
-Finally, if the web service returns a 200 but the body is invalid, the client
-throws a ``GeoIP2Error``.
+    >>> import geoip2.database
+    >>>
+    >>> # This creates a Reader object. You should use the same object
+    >>> # across multiple requests as creation of it is expensive.
+    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-Domain.mmdb')
+    >>>
+    >>> response = reader.domain('128.101.101.101')
+    >>>
+    >>> response.domain
+    'umn.edu'
+    >>> response.ip_address
+    '128.101.101.101'
+    >>> reader.close()
+
+ISP Database
+^^^^^^^^^^^^
+
+    >>> import geoip2.database
+    >>>
+    >>> # This creates a Reader object. You should use the same object
+    >>> # across multiple requests as creation of it is expensive.
+    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-ISP.mmdb')
+    >>>
+    >>> response = reader.isp('1.128.0.0')
+    >>>
+    >>> response.autonomous_system_number
+    1221
+    >>> response.autonomous_system_organization
+    'Telstra Pty Ltd'
+    >>> response.isp
+    'Telstra Internet'
+    >>> response.organization
+    'Telstra Internet'
+    >>> response.ip_address
+    '128.101.101.101'
+    >>> reader.close()
 
 Database Reader Exceptions
 --------------------------

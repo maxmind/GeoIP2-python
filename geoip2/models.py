@@ -358,9 +358,9 @@ class Domain(object):
         self.raw = raw
 
 
-class ISPOrg(object):
+class ISP(object):
 
-    """Model class for the GeoIP2 ISP-Org
+    """Model class for the GeoIP2 ISP
 
     This class provides the following attribute:
 

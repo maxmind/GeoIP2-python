@@ -109,15 +109,15 @@ class Reader(object):
         """
         return self._flat_model_for(geoip2.models.Domain, ip_address)
 
-    def isp_org(self, ip_address):
-        """Get the ISPOrg object for the IP address
+    def isp(self, ip_address):
+        """Get the ISP object for the IP address
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
-        :returns: :py:class:`geoip2.models.ISPOrg` object
+        :returns: :py:class:`geoip2.models.ISP` object
 
         """
-        return self._flat_model_for(geoip2.models.ISPOrg, ip_address)
+        return self._flat_model_for(geoip2.models.ISP, ip_address)
 
     def _get(self, ip_address):
         record = self._db_reader.get(ip_address)

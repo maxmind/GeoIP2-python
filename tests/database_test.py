@@ -82,16 +82,17 @@ class TestReader(unittest.TestCase):
 
         reader.close()
 
-    def test_isp_org(self):
+    def test_isp(self):
         reader = geoip2.database.Reader(
-            'tests/data/test-data/GeoIP2-ISP-Org-Test.mmdb')
+            'tests/data/test-data/GeoIP2-ISP-Test.mmdb')
 
-        ip_address = '2001:1700::'
-        record = reader.isp_org(ip_address)
-        self.assertEqual(record.autonomous_system_number, 6730)
+        ip_address = '1.128.0.0'
+        record = reader.isp(ip_address)
+        self.assertEqual(record.autonomous_system_number, 1221)
         self.assertEqual(record.autonomous_system_organization,
-                         'Sunrise Communications AG')
-        # XXX - Add org/isp when available
+                         'Telstra Pty Ltd')
+        self.assertEqual(record.isp, 'Telstra Internet')
+        self.assertEqual(record.organization, 'Telstra Internet')
         self.assertEqual(record.ip_address, ip_address)
 
         reader.close()
