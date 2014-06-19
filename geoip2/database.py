@@ -17,9 +17,7 @@ class Reader(object):
     Instances of this class provide a reader for the GeoIP2 database format.
     IP addresses can be looked up using the ``country`` and ``city`` methods.
     We also provide ``city_isp_org`` and ``omni`` methods to ease
-    compatibility with the web service client, although we may offer the
-    ability to specify additional databases to replicate these web services in
-    the future (e.g., the ISP/Org database).
+    compatibility with the web service client.
 
      Usage
      -----
@@ -49,11 +47,9 @@ class Reader(object):
         self._locales = locales
 
     def country(self, ip_address):
-        """Get the Country record object for the IP address
+        """Get the Country object for the IP address
 
-        :param ip_address: IPv4 or IPv6 address as a string. If no address
-          is provided, the address that the web service is called from will
-          be used.
+        :param ip_address: IPv4 or IPv6 address as a string.
 
         :returns: :py:class:`geoip2.models.Country` object
 
@@ -62,11 +58,9 @@ class Reader(object):
         return self._model_for(geoip2.models.Country, ip_address)
 
     def city(self, ip_address):
-        """Get the City record object for the IP address
+        """Get the City object for the IP address
 
-        :param ip_address: IPv4 or IPv6 address as a string. If no address
-          is provided, the address that the web service is called from will
-          be used.
+        :param ip_address: IPv4 or IPv6 address as a string.
 
         :returns: :py:class:`geoip2.models.City` object
 
@@ -74,11 +68,10 @@ class Reader(object):
         return self._model_for(geoip2.models.City, ip_address)
 
     def city_isp_org(self, ip_address):
-        """Get the CityISPOrg record object for the IP address
+        """Get the CityISPOrg object for the IP address
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
-          is provided, the address that the web service is called from will
-          be used.
+          is provided.
 
         :returns: :py:class:`geoip2.models.CityISPOrg` object
 
@@ -87,24 +80,61 @@ class Reader(object):
         return self._model_for(geoip2.models.CityISPOrg, ip_address)
 
     def omni(self, ip_address):
-        """Get the Omni record object for the IP address
+        """Get the Omni object for the IP address
 
-        :param ip_address: IPv4 or IPv6 address as a string. If no address
-          is provided, the address that the web service is called from will
-          be used.
+        :param ip_address: IPv4 or IPv6 address as a string.
 
         :returns: :py:class:`geoip2.models.Omni` object
 
         """
         return self._model_for(geoip2.models.Omni, ip_address)
 
-    def _model_for(self, model_class, ip_address):
+    def connection_type(self, ip_address):
+        """Get the ConnectionType object for the IP address
+
+        :param ip_address: IPv4 or IPv6 address as a string.
+
+        :returns: :py:class:`geoip2.models.ConnectionType` object
+
+        """
+        return self._flat_model_for(geoip2.models.ConnectionType, ip_address)
+
+    def domain(self, ip_address):
+        """Get the Domain object for the IP address
+
+        :param ip_address: IPv4 or IPv6 address as a string.
+
+        :returns: :py:class:`geoip2.models.Domain` object
+
+        """
+        return self._flat_model_for(geoip2.models.Domain, ip_address)
+
+    def isp(self, ip_address):
+        """Get the ISP object for the IP address
+
+        :param ip_address: IPv4 or IPv6 address as a string.
+
+        :returns: :py:class:`geoip2.models.ISP` object
+
+        """
+        return self._flat_model_for(geoip2.models.ISP, ip_address)
+
+    def _get(self, ip_address):
         record = self._db_reader.get(ip_address)
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
                 "The address %s is not in the database." % ip_address)
+        return record
+
+    def _model_for(self, model_class, ip_address):
+        record = self._get(ip_address)
         record.setdefault('traits', {})['ip_address'] = ip_address
         return model_class(record, locales=self._locales)
+
+    def _flat_model_for(self, model_class, ip_address):
+        record = self._get(ip_address)
+        record['ip_address'] = ip_address
+        return model_class(record)
 
     def close(self):
         """Closes the GeoIP2 database"""

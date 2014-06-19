@@ -16,10 +16,9 @@ import geoip2.records
 
 class Country(object):
 
-    """Model class for the GeoIP2 Country end point
+    """Model class for the GeoIP2 Country
 
-    This class provides the following methods, each of which returns a record
-    object.
+    This class provides the following attributes:
 
     .. attribute:: continent
 
@@ -93,7 +92,7 @@ class Country(object):
 
 class City(Country):
 
-    """Model class for the GeoIP2 Precision City end point
+    """Model class for the GeoIP2 Precision City
 
     .. attribute:: city
 
@@ -171,7 +170,7 @@ class City(Country):
 
 class CityISPOrg(City):
 
-    """Model class for the GeoIP2 Precision City/ISP/Org end point
+    """Model class for the GeoIP2 Precision City/ISP/Org
 
     .. attribute:: city
 
@@ -237,7 +236,7 @@ class CityISPOrg(City):
 
 class Omni(CityISPOrg):
 
-    """Model class for the GeoIP2 Precision Omni end point
+    """Model class for the GeoIP2 Precision Omni
 
     .. attribute:: city
 
@@ -299,3 +298,110 @@ class Omni(CityISPOrg):
       :type: :py:class:`geoip2.records.Traits`
 
     """
+
+
+class ConnectionType(object):
+
+    """Model class for the GeoIP2 Connection-Type
+
+    This class provides the following attribute:
+
+    .. attribute:: connection_type
+
+      The connection type may take the following values:
+
+      - Dialup
+      - Cable/DSL
+      - Corporate
+      - Cellular
+
+      Additional values may be added in the future.
+
+      :type: unicode
+
+    .. attribute:: ip_address
+
+      The IP address used in the lookup.
+
+      :type: unicode
+    """
+
+    def __init__(self, raw):
+        self.connection_type = raw.get('connection_type')
+        self.ip_address = raw.get('ip_address')
+        self.raw = raw
+
+
+class Domain(object):
+
+    """Model class for the GeoIP2 Domain
+
+    This class provides the following attribute:
+
+    .. attribute:: domain
+
+      The domain associated with the IP address.
+
+      :type: unicode
+
+    .. attribute:: ip_address
+
+      The IP address used in the lookup.
+
+      :type: unicode
+
+    """
+
+    def __init__(self, raw):
+        self.domain = raw.get('domain')
+        self.ip_address = raw.get('ip_address')
+        self.raw = raw
+
+
+class ISP(object):
+
+    """Model class for the GeoIP2 ISP
+
+    This class provides the following attribute:
+
+    .. attribute:: autonomous_system_number
+
+      The autonomous system number associated with the IP address.
+
+      :type: int
+
+    .. attribute:: autonomous_system_organization
+
+      The organization associated with the registered autonomous system number
+      for the IP address.
+
+      :type: unicode
+
+    .. attribute:: isp
+
+      The name of the ISP associated with the IP address.
+
+      :type: unicode
+
+    .. attribute:: organization
+
+      The name of the organization associated with the IP address.
+
+      :type: unicode
+
+    .. attribute:: ip_address
+
+      The IP address used in the lookup.
+
+      :type: unicode
+    """
+
+    # pylint:disable=too-many-arguments
+    def __init__(self, raw):
+        self.autonomous_system_number = raw.get('autonomous_system_number')
+        self.autonomous_system_organization = raw.get(
+            'autonomous_system_organization')
+        self.isp = raw.get('isp')
+        self.organization = raw.get('organization')
+        self.ip_address = raw.get('ip_address')
+        self.raw = raw
