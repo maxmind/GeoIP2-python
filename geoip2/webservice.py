@@ -149,7 +149,8 @@ class Client(object):
            Use :py:method:`insights` instead.
 
         """
-        return self._response_for('insights', geoip2.models.Insights, ip_address)
+        return self._response_for('insights', geoip2.models.Insights,
+                                  ip_address)
 
     def omni(self, ip_address='me'):
         """This method calls the GeoIP2 Precision: Insights endpoint.
