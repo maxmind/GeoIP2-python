@@ -58,7 +58,7 @@ class City(PlaceRecord):
 
       A value from 0-100 indicating MaxMind's
       confidence that the city is correct. This attribute is only available
-      from the Omni end point.
+      from the Insights end point.
 
       :type: int
 
@@ -145,8 +145,8 @@ class Country(PlaceRecord):
     .. attribute:: confidence
 
       A value from 0-100 indicating MaxMind's confidence that
-      the country is correct. This attribute is only available from the Omni
-      end point.
+      the country is correct. This attribute is only available from the
+      Insights end point.
 
       :type: int
 
@@ -199,8 +199,8 @@ class RepresentedCountry(Country):
     .. attribute:: confidence
 
       A value from 0-100 indicating MaxMind's confidence that
-      the country is correct. This attribute is only available from the Omni
-      end point.
+      the country is correct. This attribute is only available from the
+      Insights end point.
 
       :type: int
 
@@ -262,7 +262,7 @@ class Location(Record):
 
       The radius in kilometers around the
       specified location where the IP address is likely to be. This attribute
-      is only available from the Omni end point.
+      is only available from the Insights end point.
 
       :type: int
 
@@ -351,7 +351,7 @@ class Postal(Record):
 
       A value from 0-100 indicating
       MaxMind's confidence that the postal code is correct. This attribute is
-      only available from the Omni end point.
+      only available from the Insights end point.
 
       :type: int
 
@@ -373,7 +373,7 @@ class Subdivision(PlaceRecord):
 
       This is a value from 0-100 indicating MaxMind's
       confidence that the subdivision is correct. This attribute is only
-      available from the Omni end point.
+      available from the Insights end point.
 
       :type: int
 
@@ -467,17 +467,16 @@ class Traits(Record):
       The `autonomous system
       number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_
       associated with the IP address. This attribute is only available from
-      the City/ISP/Org and Omni end points.
+      the City and Insights web service end points.
 
       :type: int
 
     .. attribute:: autonomous_system_organization
 
-      The organization
-      associated with the registered `autonomous system number
-      <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for the
-      IP address. This attribute is only available from the City/ISP/Org and
-      Omni end points.
+      The organization associated with the registered `autonomous system
+      number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for
+      the IP address. This attribute is only available from the City and
+      Insights web service end points.
 
       :type: unicode
 
@@ -486,7 +485,7 @@ class Traits(Record):
       The second level domain associated with the
       IP address. This will be something like "example.com" or
       "example.co.uk", not "foo.example.com". This attribute is only available
-      from the City/ISP/Org and Omni end points.
+      from the City and Insights web service end points.
 
       :type: unicode
 
@@ -519,17 +518,16 @@ class Traits(Record):
 
     .. attribute:: isp
 
-      The name of the ISP associated with the IP address.
-      This attribute is only available from the City/ISP/Org and Omni end
-      points.
+      The name of the ISP associated with the IP address. This attribute is
+      only available from the City and Insights web service end points.
 
       :type: unicode
 
     .. attribute:: organization
 
-      The name of the organization associated with
-      the IP address. This attribute is only available from the City/ISP/Org
-      and Omni end points.
+      The name of the organization associated with the IP address. This
+      attribute is only available from the City and Insights web service end
+      points.
 
       :type: unicode
 
@@ -554,7 +552,7 @@ class Traits(Record):
       * search_engine_spider
       * traveler
 
-      This attribute is only available from the Omni end point.
+      This attribute is only available from the Insights end point.
 
       :type: unicode
 

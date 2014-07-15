@@ -70,9 +70,9 @@ Web Service Example
     >>> # key.
     >>> client = geoip2.webservice.Client(42, 'license_key')
     >>>
-    >>> # Replace "omni" with the method corresponding to the web service
-    >>> # that you are using, e.g., "country", "city_isp_org", "city".
-    >>> response = client.omni('128.101.101.101')
+    >>> # Replace "insights" with the method corresponding to the web service
+    >>> # that you are using, e.g., "country", "city".
+    >>> response = client.insights('128.101.101.101')
     >>>
     >>> response.country.iso_code
     'US'
@@ -101,8 +101,8 @@ Web Service Client Exceptions
 -----------------------------
 
 For details on the possible errors returned by the web service itself, see
-http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP2 web service
-docs.
+http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP2 Precision web
+service docs.
 
 If the web service returns an explicit error document, this is thrown as a
 ``AddressNotFoundError``, ``AuthenticationError``, ``InvalidRequestError``, or
