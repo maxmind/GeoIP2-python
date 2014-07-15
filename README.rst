@@ -162,6 +162,8 @@ City Database
 Connection-Type Database
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. code-block:: pycon
+
     >>> import geoip2.database
     >>>
     >>> # This creates a Reader object. You should use the same object
@@ -180,6 +182,8 @@ Connection-Type Database
 Domain Database
 ^^^^^^^^^^^^^^^
 
+.. code-block:: pycon
+
     >>> import geoip2.database
     >>>
     >>> # This creates a Reader object. You should use the same object
@@ -196,6 +200,8 @@ Domain Database
 
 ISP Database
 ^^^^^^^^^^^^
+
+.. code-block:: pycon
 
     >>> import geoip2.database
     >>>
