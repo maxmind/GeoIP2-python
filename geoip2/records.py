@@ -50,7 +50,7 @@ class City(PlaceRecord):
 
     This class contains the city-level data associated with an IP address.
 
-    This record is returned by all the end points except the Country end point.
+    This record is returned by ``city`` and ``insights``.
 
     Attributes:
 
@@ -58,28 +58,27 @@ class City(PlaceRecord):
 
       A value from 0-100 indicating MaxMind's
       confidence that the city is correct. This attribute is only available
-      from the Omni end point.
+      from the Insights end point.
 
       :type: int
 
     .. attribute:: geoname_id
 
-      The GeoName ID for the city. This attribute is returned by all end
-      points.
+      The GeoName ID for the city.
 
       :type: int
 
     .. attribute:: name
 
       The name of the city based on the locales list passed to the
-      constructor. This attribute is returned by all end points.
+      constructor.
 
       :type: unicode
 
     .. attribute:: names
 
       A dictionary where the keys are locale codes
-      and the values are names. This attribute is returned by all end points.
+      and the values are names.
 
       :type: dict
 
@@ -94,36 +93,33 @@ class Continent(PlaceRecord):
     This class contains the continent-level data associated with an IP
     address.
 
-    This record is returned by all the end points.
-
     Attributes:
 
 
     .. attribute:: code
 
       A two character continent code like "NA" (North America)
-      or "OC" (Oceania). This attribute is returned by all end points.
+      or "OC" (Oceania).
 
       :type: unicode
 
     .. attribute:: geoname_id
 
-      The GeoName ID for the continent. This
-      attribute is returned by all end points.
+      The GeoName ID for the continent.
 
       :type: int
 
     .. attribute:: name
 
       Returns the name of the continent based on the locales list passed to
-      the constructor. This attribute is returned by all end points.
+      the constructor.
 
       :type: unicode
 
     .. attribute:: names
 
       A dictionary where the keys are locale codes
-      and the values are names. This attribute is returned by all end points.
+      and the values are names.
 
       :type: dict
 
@@ -137,23 +133,20 @@ class Country(PlaceRecord):
 
     This class contains the country-level data associated with an IP address.
 
-    This record is returned by all the end points.
-
     Attributes:
 
 
     .. attribute:: confidence
 
       A value from 0-100 indicating MaxMind's confidence that
-      the country is correct. This attribute is only available from the Omni
-      end point.
+      the country is correct. This attribute is only available from the
+      Insights end point.
 
       :type: int
 
     .. attribute:: geoname_id
 
-      The GeoName ID for the country. This attribute is
-      returned by all end points.
+      The GeoName ID for the country.
 
       :type: int
 
@@ -161,21 +154,21 @@ class Country(PlaceRecord):
 
       The two-character `ISO 3166-1
       <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the
-      country. This attribute is returned by all end points.
+      country.
 
       :type: unicode
 
     .. attribute:: name
 
       The name of the country based on the locales list passed to the
-      constructor. This attribute is returned by all end points.
+      constructor.
 
       :type: unicode
 
     .. attribute:: names
 
       A dictionary where the keys are locale codes and the values
-      are names. This attribute is returned by all end points.
+      are names.
 
       :type: dict
 
@@ -189,9 +182,7 @@ class RepresentedCountry(Country):
 
     This class contains the country-level data associated with an IP address
     for the IP's represented country. The represented country is the country
-    represented by something like a military base or embassy.
-
-    This record is returned by all the end points.
+    represented by something like a military base.
 
     Attributes:
 
@@ -199,15 +190,14 @@ class RepresentedCountry(Country):
     .. attribute:: confidence
 
       A value from 0-100 indicating MaxMind's confidence that
-      the country is correct. This attribute is only available from the Omni
-      end point.
+      the country is correct. This attribute is only available from the
+      Insights end point.
 
       :type: int
 
     .. attribute:: geoname_id
 
-      The GeoName ID for the country. This attribute is
-      returned by all end points.
+      The GeoName ID for the country.
 
       :type: int
 
@@ -215,21 +205,20 @@ class RepresentedCountry(Country):
 
       The two-character `ISO 3166-1
       <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the country.
-      This attribute is returned by all end points.
 
       :type: unicode
 
     .. attribute:: name
 
       The name of the country based on the locales list passed to the
-      constructor. This attribute is returned by all end points.
+      constructor.
 
       :type: unicode
 
     .. attribute:: names
 
       A dictionary where the keys are locale codes and the values
-      are names. This attribute is returned by all end points.
+      are names.
 
       :type: dict
 
@@ -238,8 +227,7 @@ class RepresentedCountry(Country):
 
       A string indicating the type of entity that is representing the
       country. Currently we only return ``military`` but this could expand to
-      include other types such as ``embassy`` in the future. Returned by all
-      endpoints.
+      include other types in the future.
 
       :type: unicode
 
@@ -254,7 +242,7 @@ class Location(Record):
 
     This class contains the location data associated with an IP address.
 
-    This record is returned by all the end points except the Country end point.
+    This record is returned by `city` and `insights`.
 
     Attributes:
 
@@ -262,15 +250,13 @@ class Location(Record):
 
       The radius in kilometers around the
       specified location where the IP address is likely to be. This attribute
-      is only available from the Omni end point.
+      is only available from the Insights end point.
 
       :type: int
 
     .. attribute:: latitude
 
-      The latitude of the location as a floating
-      point number. This attribute is returned by all end points except the
-      Country end point.
+      The latitude of the location as a floating point number.
 
       :type: float
 
@@ -278,8 +264,7 @@ class Location(Record):
     .. attribute:: longitude
 
       The longitude of the location as a
-      floating point number. This attribute is returned by all end points
-      except the Country end point.
+      floating point number.
 
       :type: float
 
@@ -289,8 +274,6 @@ class Location(Record):
       location is in the US. MaxMind returns the same metro codes as the
       `Google AdWords API
       <https://developers.google.com/adwords/api/docs/appendix/cities-DMAregions>`_.
-      This attribute is returned by all end points except the Country end
-      point.
 
       :type: int
 
@@ -298,8 +281,7 @@ class Location(Record):
 
       The time zone associated with location, as
       specified by the `IANA Time Zone Database
-      <http://www.iana.org/time-zones>`_, e.g., "America/New_York". This
-      attribute is returned by all end points except the Country end point.
+      <http://www.iana.org/time-zones>`_, e.g., "America/New_York".
 
       :type: unicode
 
@@ -312,8 +294,6 @@ class Location(Record):
 class MaxMind(Record):
 
     """Contains data related to your MaxMind account
-
-    This record is returned by all the end points.
 
     Attributes:
 
@@ -334,7 +314,7 @@ class Postal(Record):
 
     This class contains the postal data associated with an IP address.
 
-    This record is returned by all the end points except the Country end point.
+    This attribute is returned by ``city`` and ``insights``.
 
     Attributes:
 
@@ -342,8 +322,7 @@ class Postal(Record):
 
       The postal code of the location. Postal
       codes are not available for all countries. In some countries, this will
-      only contain part of the postal code. This attribute is returned by all
-      end points except the Country end point.
+      only contain part of the postal code.
 
       :type: unicode
 
@@ -351,7 +330,7 @@ class Postal(Record):
 
       A value from 0-100 indicating
       MaxMind's confidence that the postal code is correct. This attribute is
-      only available from the Omni end point.
+      only available from the Insights end point.
 
       :type: int
 
@@ -365,7 +344,7 @@ class Subdivision(PlaceRecord):
 
     This class contains the subdivision data associated with an IP address.
 
-    This record is returned by all the end points except the Country end point.
+    This attribute is returned by ``city`` and ``insights``.
 
     Attributes:
 
@@ -373,14 +352,13 @@ class Subdivision(PlaceRecord):
 
       This is a value from 0-100 indicating MaxMind's
       confidence that the subdivision is correct. This attribute is only
-      available from the Omni end point.
+      available from the Insights end point.
 
       :type: int
 
     .. attribute:: geoname_id
 
-      This is a GeoName ID for the subdivision. This
-      attribute is returned by all end points except Country.
+      This is a GeoName ID for the subdivision.
 
       :type: int
 
@@ -388,23 +366,21 @@ class Subdivision(PlaceRecord):
 
       This is a string up to three characters long
       contain the subdivision portion of the `ISO 3166-2 code
-      <http://en.wikipedia.org/wiki/ISO_3166-2>`_. This attribute is
-      returned by all end points except Country.
+      <http://en.wikipedia.org/wiki/ISO_3166-2>`_.
 
       :type: unicode
 
     .. attribute:: name
 
       The name of the subdivision based on the locales list passed to the
-      constructor. This attribute is returned by all end points.
+      constructor.
 
       :type: unicode
 
     .. attribute:: names
 
       A dictionary where the keys are locale codes and the
-      values are names. This attribute is returned by all end points except
-      Country.
+      values are names
 
       :type: dict
 
@@ -422,9 +398,7 @@ class Subdivisions(tuple):
     For instance, the response for Oxford in the United Kingdom would have
     England as the first element and Oxfordshire as the second element.
 
-    This collection is returned by all the end points except the Country
-    end point.
-
+    This attribute is returned by ``city`` and ``insights``.
     """
     # pylint:disable=W0142
     def __new__(cls, locales, *subdivisions):
@@ -457,8 +431,6 @@ class Traits(Record):
 
     This class contains the traits data associated with an IP address.
 
-    This record is returned by all the end points.
-
     This class has the following attributes:
 
 
@@ -467,17 +439,16 @@ class Traits(Record):
       The `autonomous system
       number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_
       associated with the IP address. This attribute is only available from
-      the City/ISP/Org and Omni end points.
+      the City and Insights web service end points.
 
       :type: int
 
     .. attribute:: autonomous_system_organization
 
-      The organization
-      associated with the registered `autonomous system number
-      <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for the
-      IP address. This attribute is only available from the City/ISP/Org and
-      Omni end points.
+      The organization associated with the registered `autonomous system
+      number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for
+      the IP address. This attribute is only available from the City and
+      Insights web service end points.
 
       :type: unicode
 
@@ -486,7 +457,7 @@ class Traits(Record):
       The second level domain associated with the
       IP address. This will be something like "example.com" or
       "example.co.uk", not "foo.example.com". This attribute is only available
-      from the City/ISP/Org and Omni end points.
+      from the City and Insights web service end points.
 
       :type: unicode
 
@@ -496,8 +467,7 @@ class Traits(Record):
       is for. If you performed a "me" lookup against the web service, this
       will be the externally routable IP address for the system the code is
       running on. If the system is behind a NAT, this may differ from the IP
-      address locally assigned to it. This attribute is returned by all end
-      points.
+      address locally assigned to it.
 
       :type: unicode
 
@@ -505,31 +475,29 @@ class Traits(Record):
 
       This is true if the IP is an anonymous
       proxy. See http://dev.maxmind.com/faq/geoip#anonproxy for further
-      details. This attribute is returned by all end points.
+      details.
 
       :type: bool
 
     .. attribute:: is_satellite_provider
 
       This is true if the IP address is from a satellite provider that
-      provides service to multiple countries. This attribute is returned
-      by all end points.
+      provides service to multiple countries.
 
       :type: bool
 
     .. attribute:: isp
 
-      The name of the ISP associated with the IP address.
-      This attribute is only available from the City/ISP/Org and Omni end
-      points.
+      The name of the ISP associated with the IP address. This attribute is
+      only available from the City and Insights web service end points.
 
       :type: unicode
 
     .. attribute:: organization
 
-      The name of the organization associated with
-      the IP address. This attribute is only available from the City/ISP/Org
-      and Omni end points.
+      The name of the organization associated with the IP address. This
+      attribute is only available from the City and Insights web service end
+      points.
 
       :type: unicode
 
@@ -554,7 +522,7 @@ class Traits(Record):
       * search_engine_spider
       * traveler
 
-      This attribute is only available from the Omni end point.
+      This attribute is only available from the Insights end point.
 
       :type: unicode
 

@@ -3,6 +3,16 @@
 History
 -------
 
+0.6.0 (2014-07-XX)
+++++++++++++++++++
+
+* The web service client API has been updated for the v2.1 release of the web
+  service. In particular, the ``city_isp_org`` and ``omni`` methods on
+  ``geoip2.webservice.Client`` should be considered deprecated. The ``city``
+  method now provides all of the data formerly provided by ``city_isp_org``,
+  and the ``omni`` method has been replaced by the ``insights`` method.
+
+
 0.5.1 (2014-03-28)
 ++++++++++++++++++
 
@@ -26,13 +36,13 @@ History
 0.4.1 (2013-10-25)
 ++++++++++++++++++
 
-* Read in `README.rst` as UTF-8 in `setup.py`.
+* Read in ``README.rst`` as UTF-8 in ``setup.py``.
 
 0.4.0 (2013-10-21)
 ++++++++++++++++++
 
-* API CHANGE: Changed the `languages` keyword argument to `locales` on the
-  constructors for `geoip.webservice.Client` and `geoip.database.Reader`.
+* API CHANGE: Changed the ``languages`` keyword argument to ``locales`` on the
+  constructors for ``geoip.webservice.Client`` and ``geoip.database.Reader``.
 
 0.3.1 (2013-10-15)
 ++++++++++++++++++
@@ -42,17 +52,17 @@ History
 0.3.0 (2013-10-15)
 ++++++++++++++++++
 
-* IMPORTANT: `geoip.webservices` was renamed `geoip.webservice` as it
+* IMPORTANT: ``geoip.webservices`` was renamed ``geoip.webservice`` as it
   contains only one class.
-* Added GeoIP2 database reader using maxminddb. This does not work with PyPy
-  as it relies on a C extension.
+* Added GeoIP2 database reader using ``maxminddb``. This does not work with
+  PyPy as it relies on a C extension.
 * Added more specific exceptions for web service client.
 
 0.2.2 (2013-06-20)
 ++++++++++++++++++
 
-* Fixed a bug in the model objects that prevented `longitude` and `metro_code`
-  from being used.
+* Fixed a bug in the model objects that prevented ``longitude`` and
+  ``metro_code`` from being used.
 
 0.2.1 (2013-06-10)
 ++++++++++++++++++
@@ -64,9 +74,9 @@ History
 ++++++++++++++++++
 
 * Support for Python 3.2 was dropped.
-* The methods to call the web service on the `Client` object now validate
+* The methods to call the web service on the ``Client`` object now validate
   the IP addresses before calling the web service. This requires the
-  `ipaddr` module on Python 2.x.
+  ``ipaddr`` module on Python 2.x.
 * We now support more languages. The new languages are de, es, fr, and pt-BR.
 * The REST API now returns a record with data about your account. There is
   a new geoip.records.MaxMind class for this data.

@@ -3,10 +3,10 @@
 WebServices Client API
 ============================
 
-This class provides a client API for all the GeoIP2 web service's end
-points. The end points are Country, City, City/ISP/Org, and Omni. Each end
-point returns a different set of data about an IP address, with Country
-returning the least data and Omni the most.
+This class provides a client API for all the GeoIP2 Precision web service end
+points. The end points are Country, City, and Insights. Each end point returns
+a different set of data about an IP address, with Country returning the least
+data and Insights the most.
 
 Each web service end point is represented by a different model class, and
 these model classes in turn contain multiple record classes. The record
@@ -21,7 +21,7 @@ case all of the attributes for that record class will be empty.
 SSL
 ---
 
-Requests to the GeoIP2 web service are always made with SSL.
+Requests to the GeoIP2 Precision web service are always made with SSL.
 
 """
 
@@ -94,7 +94,7 @@ class Client(object):
         self._locales = locales
         self._user_id = user_id
         self._license_key = license_key
-        self._base_uri = 'https://%s/geoip/v2.0' % host
+        self._base_uri = 'https://%s/geoip/v2.1' % host
 
     def city(self, ip_address='me'):
         """This method calls the GeoIP2 Precision City endpoint.
@@ -109,17 +109,19 @@ class Client(object):
         return self._response_for('city', geoip2.models.City, ip_address)
 
     def city_isp_org(self, ip_address='me'):
-        """This method calls the GeoIP2 Precision City/ISP/Org endpoint.
+        """This method calls the GeoIP2 Precision: City endpoint.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no
           address is provided, the address that the web service is called
           from will be used.
 
-        :returns: :py:class:`geoip2.models.CityISPOrg` object
+        :returns: :py:class:`geoip2.models.City` object
+
+        .. deprecated:: 0.6.0
+           Use :py:method:`city` instead.
 
         """
-        return self._response_for('city_isp_org', geoip2.models.CityISPOrg,
-                                  ip_address)
+        return self.city(ip_address)
 
     def country(self, ip_address='me'):
         """This method calls the GeoIP2 Country endpoint.
@@ -134,17 +136,36 @@ class Client(object):
         return self._response_for('country', geoip2.models.Country,
                                   ip_address)
 
-    def omni(self, ip_address='me'):
-        """This method calls the GeoIP2 Precision Omni endpoint.
+    def insights(self, ip_address='me'):
+        """This method calls the GeoIP2 Precision: Insights endpoint.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
           is provided, the address that the web service is called from will
           be used.
 
-        :returns: :py:class:`geoip2.models.Omni` object
+        :returns: :py:class:`geoip2.models.Insights` object
+
+        .. deprecated:: 0.6.0
+           Use :py:method:`insights` instead.
 
         """
-        return self._response_for('omni', geoip2.models.Omni, ip_address)
+        return self._response_for('insights', geoip2.models.Insights,
+                                  ip_address)
+
+    def omni(self, ip_address='me'):
+        """This method calls the GeoIP2 Precision: Insights endpoint.
+
+        :param ip_address: IPv4 or IPv6 address as a string. If no address
+          is provided, the address that the web service is called from will
+          be used.
+
+        :returns: :py:class:`geoip2.models.Insights` object
+
+        .. deprecated:: 0.6.0
+           Use :py:method:`insights` instead.
+
+        """
+        return self.insights(ip_address)
 
     def _response_for(self, path, model_class, ip_address):
         if ip_address != 'me':

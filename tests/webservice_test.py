@@ -34,7 +34,7 @@ class TestClient(unittest.TestCase):
     def setUp(self):
         self.client = Client(42, 'abcdef123456',)
 
-    base_uri = 'https://geoip.maxmind.com/geoip/v2.0/'
+    base_uri = 'https://geoip.maxmind.com/geoip/v2.1/'
     country = {
         'continent': {
             'code': 'NA',
@@ -232,7 +232,7 @@ class TestClient(unittest.TestCase):
         request = httpretty.core.httpretty.latest_requests[-1]
 
         self.assertEqual(request.path,
-                         '/geoip/v2.0/country/1.2.3.4',
+                         '/geoip/v2.1/country/1.2.3.4',
                          'correct URI is used')
         self.assertEqual(request.headers['Accept'],
                          'application/json',
@@ -255,23 +255,33 @@ class TestClient(unittest.TestCase):
 
     def test_city_isp_org_ok(self):
         httpretty.register_uri(httpretty.GET,
-                               self.base_uri + 'city_isp_org/1.2.3.4',
+                               self.base_uri + 'city/1.2.3.4',
                                body=json.dumps(self.country),
                                status=200,
                                content_type=self._content_type('country'))
         city_isp_org = self.client.city_isp_org('1.2.3.4')
-        self.assertEqual(type(city_isp_org), geoip2.models.CityISPOrg,
+        self.assertEqual(type(city_isp_org), geoip2.models.City,
                          'return value of client.city_isp_org')
 
-    def test_omni_ok(self):
+    def test_insights_ok(self):
         httpretty.register_uri(httpretty.GET,
-                               self.base_uri + 'omni/1.2.3.4',
+                               self.base_uri + 'insights/1.2.3.4',
                                body=json.dumps(self.country),
                                status=200,
                                content_type=self._content_type('country'))
-        omni = self.client.omni('1.2.3.4')
-        self.assertEqual(type(omni), geoip2.models.Omni,
+        omni = self.client.insights('1.2.3.4')
+        self.assertEqual(type(omni), geoip2.models.Insights,
                          'return value of client.omni')
+
+    def test_insights_ok(self):
+        httpretty.register_uri(httpretty.GET,
+                               self.base_uri + 'insights/1.2.3.4',
+                               body=json.dumps(self.country),
+                               status=200,
+                               content_type=self._content_type('country'))
+        insights = self.client.insights('1.2.3.4')
+        self.assertEqual(type(insights), geoip2.models.Insights,
+                         'return value of client.insights')
 
 if __name__ == '__main__':
     unittest.main()

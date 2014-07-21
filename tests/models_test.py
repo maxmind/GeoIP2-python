@@ -19,7 +19,7 @@ if sys.version_info[0] == 2:
 
 class TestModels(unittest.TestCase):
 
-    def test_omni_full(self):
+    def test_insights_full(self):
         raw = {
             'city': {
                 'confidence': 76,
@@ -85,9 +85,9 @@ class TestModels(unittest.TestCase):
             },
         }
 
-        model = geoip2.models.Omni(raw)
-        self.assertEqual(type(model), geoip2.models.Omni,
-                         'geoip2.models.Omni object')
+        model = geoip2.models.Insights(raw)
+        self.assertEqual(type(model), geoip2.models.Insights,
+                         'geoip2.models.Insights object')
         self.assertEqual(type(model.city), geoip2.records.City,
                          'geoip2.records.City object')
         self.assertEqual(type(model.continent), geoip2.records.Continent,
@@ -133,10 +133,10 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.location.metro_code, 765,
                          'correct metro_code')
 
-    def test_omni_min(self):
-        model = geoip2.models.Omni({'traits': {'ip_address': '5.6.7.8'}})
-        self.assertEqual(type(model), geoip2.models.Omni,
-                         'geoip2.models.Omni object')
+    def test_insights_min(self):
+        model = geoip2.models.Insights({'traits': {'ip_address': '5.6.7.8'}})
+        self.assertEqual(type(model), geoip2.models.Insights,
+                         'geoip2.models.Insights object')
         self.assertEqual(type(model.city), geoip2.records.City,
                          'geoip2.records.City object')
         self.assertEqual(type(model.continent), geoip2.records.Continent,
@@ -230,9 +230,9 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.raw, raw, 'raw method produces raw output')
 
     def test_unknown_keys(self):
-        model = geoip2.models.CityISPOrg({'traits': {'ip_address': '1.2.3.4',
-                                                     'invalid': 'blah'},
-                                          'unk_base': {'blah': 1}})
+        model = geoip2.models.City({'traits': {'ip_address': '1.2.3.4',
+                                               'invalid': 'blah'},
+                                    'unk_base': {'blah': 1}})
         with self.assertRaises(AttributeError):
             model.unk_base
         with self.assertRaises(AttributeError):

@@ -16,8 +16,6 @@ class Reader(object):
 
     Instances of this class provide a reader for the GeoIP2 database format.
     IP addresses can be looked up using the ``country`` and ``city`` methods.
-    We also provide ``city_isp_org`` and ``omni`` methods to ease
-    compatibility with the web service client.
 
      Usage
      -----
@@ -68,26 +66,30 @@ class Reader(object):
         return self._model_for(geoip2.models.City, ip_address)
 
     def city_isp_org(self, ip_address):
-        """Get the CityISPOrg object for the IP address
+        """Get the City object for the IP address
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
           is provided.
 
-        :returns: :py:class:`geoip2.models.CityISPOrg` object
+        :returns: :py:class:`geoip2.models.City` object
 
+        .. deprecated:: 0.6.0
+           Use :py:method:`city` instead.
         """
 
-        return self._model_for(geoip2.models.CityISPOrg, ip_address)
+        return self.city(ip_address)
 
     def omni(self, ip_address):
-        """Get the Omni object for the IP address
+        """Get the Insights object for the IP address
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
-        :returns: :py:class:`geoip2.models.Omni` object
+        :returns: :py:class:`geoip2.models.Insights` object
 
+        .. deprecated:: 0.6.0
+           Use :py:method:`city` instead.
         """
-        return self._model_for(geoip2.models.Omni, ip_address)
+        return self._model_for(geoip2.models.Insights, ip_address)
 
     def connection_type(self, ip_address):
         """Get the ConnectionType object for the IP address
