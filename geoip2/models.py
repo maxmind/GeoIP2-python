@@ -51,8 +51,7 @@ class Country(object):
 
       Object for the country represented by the users of the IP address
       when that country is different than the country in ``country``. For
-      instance, the country represented by an overseas military base or
-      embassy.
+      instance, the country represented by an overseas military base.
 
       :type: :py:class:`geoip2.records.RepresentedCountry`
 
@@ -134,8 +133,7 @@ class City(Country):
 
       Object for the country represented by the users of the IP address
       when that country is different than the country in ``country``. For
-      instance, the country represented by an overseas military base or
-      embassy.
+      instance, the country represented by an overseas military base.
 
       :type: :py:class:`geoip2.records.RepresentedCountry`
 
@@ -212,8 +210,7 @@ class Insights(City):
 
       Object for the country represented by the users of the IP address
       when that country is different than the country in ``country``. For
-      instance, the country represented by an overseas military base or
-      embassy.
+      instance, the country represented by an overseas military base.
 
       :type: :py:class:`geoip2.records.RepresentedCountry`
 
