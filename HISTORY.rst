@@ -3,7 +3,7 @@
 History
 -------
 
-0.6.0 (2014-07-XX)
+0.6.0 (2014-07-22)
 ++++++++++++++++++
 
 * The web service client API has been updated for the v2.1 release of the web
@@ -11,6 +11,11 @@ History
   ``geoip2.webservice.Client`` should be considered deprecated. The ``city``
   method now provides all of the data formerly provided by ``city_isp_org``,
   and the ``omni`` method has been replaced by the ``insights`` method.
+  **Note:** In v2.1 of the web service, ``accuracy_radius``,
+  ``autonomous_system_number``, and all of the ``confidence`` values were
+  changed from unicode to integers. This may affect how you use these values
+  from this API.
+* Support was added for the GeoIP2 Connection Type, Domain, and ISP databases.
 
 
 0.5.1 (2014-03-28)
