@@ -130,6 +130,10 @@ class Reader(object):
         return model_class(record)
 
     def metadata(self):
+        """The metadata for the open database
+
+        :returns: :py:class:`maxminddb.reader.Metadata` object
+        """
         return self._db_reader.metadata()
 
     def close(self):
