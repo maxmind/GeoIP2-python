@@ -108,21 +108,6 @@ class Client(object):
         """
         return self._response_for('city', geoip2.models.City, ip_address)
 
-    def city_isp_org(self, ip_address='me'):
-        """This method calls the GeoIP2 Precision: City endpoint.
-
-        :param ip_address: IPv4 or IPv6 address as a string. If no
-          address is provided, the address that the web service is called
-          from will be used.
-
-        :returns: :py:class:`geoip2.models.City` object
-
-        .. deprecated:: 0.6.0
-           Use :py:method:`city` instead.
-
-        """
-        return self.city(ip_address)
-
     def country(self, ip_address='me'):
         """This method calls the GeoIP2 Country endpoint.
 
@@ -151,21 +136,6 @@ class Client(object):
         """
         return self._response_for('insights', geoip2.models.Insights,
                                   ip_address)
-
-    def omni(self, ip_address='me'):
-        """This method calls the GeoIP2 Precision: Insights endpoint.
-
-        :param ip_address: IPv4 or IPv6 address as a string. If no address
-          is provided, the address that the web service is called from will
-          be used.
-
-        :returns: :py:class:`geoip2.models.Insights` object
-
-        .. deprecated:: 0.6.0
-           Use :py:method:`insights` instead.
-
-        """
-        return self.insights(ip_address)
 
     def _response_for(self, path, model_class, ip_address):
         if ip_address != 'me':
