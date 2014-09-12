@@ -55,9 +55,7 @@ class Reader(object):
 
         """
 
-        return self._model_for(geoip2.models.Country,
-                               ['GeoIP2-Country', 'GeoLite2-Country'],
-                               ip_address)
+        return self._model_for(geoip2.models.Country, 'Country', ip_address)
 
     def city(self, ip_address):
         """Get the City object for the IP address
@@ -67,9 +65,7 @@ class Reader(object):
         :returns: :py:class:`geoip2.models.City` object
 
         """
-        return self._model_for(geoip2.models.City,
-                               ['GeoIP2-City', 'GeoLite2-City'],
-                               ip_address)
+        return self._model_for(geoip2.models.City, 'City', ip_address)
 
     def connection_type(self, ip_address):
         """Get the ConnectionType object for the IP address
@@ -80,7 +76,7 @@ class Reader(object):
 
         """
         return self._flat_model_for(geoip2.models.ConnectionType,
-                                    ['GeoIP2-Connection-Type'],
+                                    'GeoIP2-Connection-Type',
                                     ip_address)
 
     def domain(self, ip_address):
@@ -92,7 +88,7 @@ class Reader(object):
 
         """
         return self._flat_model_for(geoip2.models.Domain,
-                                    ['GeoIP2-Domain'],
+                                    'GeoIP2-Domain',
                                     ip_address)
 
     def isp(self, ip_address):
@@ -104,11 +100,11 @@ class Reader(object):
 
         """
         return self._flat_model_for(geoip2.models.ISP,
-                                    ['GeoIP2-ISP'],
+                                    'GeoIP2-ISP',
                                     ip_address)
 
-    def _get(self, types, ip_address):
-        if not self.metadata().database_type in types:
+    def _get(self, database_type, ip_address):
+        if not database_type in self.metadata().database_type:
             caller = inspect.stack()[2][3]
             raise TypeError("The %s method cannot be used with the "
                             "%s database" %
