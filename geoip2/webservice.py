@@ -130,9 +130,6 @@ class Client(object):
 
         :returns: :py:class:`geoip2.models.Insights` object
 
-        .. deprecated:: 0.6.0
-           Use :py:method:`insights` instead.
-
         """
         return self._response_for('insights', geoip2.models.Insights,
                                   ip_address)

@@ -3,15 +3,16 @@
 History
 -------
 
-0.7.0 (2014-09-XX)
+0.7.0 (2014-09-15)
 ++++++++++++++++++
 
-* IMPORTANT: The deprecated ``city_isp_org()`` and ``omni()`` methods have
-  been removed.
-* The ``geoip2.database.Reader`` lookup methods (e.g., ``city()``, ``isp()``)
-  now raise a ``TypeError`` if they are used with a database that does not
-  match the method. In particular, doing a ``city()`` lookup on a GeoIP2
-  Country database will result in an error and vice versa.
+* BREAKING CHANGES:
+  - The deprecated ``city_isp_org()`` and ``omni()`` methods
+    have been removed.
+  - The ``geoip2.database.Reader`` lookup methods (e.g., ``city()``,
+    ``isp()``) now raise a ``TypeError`` if they are used with a database that
+    does not match the method. In particular, doing a ``city()`` lookup on a
+    GeoIP2 Country database will result in an error and vice versa.
 * A ``metadata()`` method has been added to the ``geoip2.database.Reader``
   class. This returns a ``maxminddb.reader.Metadata`` object with information
   about the database.
