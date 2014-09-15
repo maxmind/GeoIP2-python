@@ -4,6 +4,8 @@ GeoIP2 Database Reader
 ======================
 
 """
+import inspect
+
 import geoip2
 import geoip2.models
 import geoip2.errors
@@ -53,7 +55,7 @@ class Reader(object):
 
         """
 
-        return self._model_for(geoip2.models.Country, ip_address)
+        return self._model_for(geoip2.models.Country, 'Country', ip_address)
 
     def city(self, ip_address):
         """Get the City object for the IP address
@@ -63,33 +65,7 @@ class Reader(object):
         :returns: :py:class:`geoip2.models.City` object
 
         """
-        return self._model_for(geoip2.models.City, ip_address)
-
-    def city_isp_org(self, ip_address):
-        """Get the City object for the IP address
-
-        :param ip_address: IPv4 or IPv6 address as a string. If no address
-          is provided.
-
-        :returns: :py:class:`geoip2.models.City` object
-
-        .. deprecated:: 0.6.0
-           Use :py:method:`city` instead.
-        """
-
-        return self.city(ip_address)
-
-    def omni(self, ip_address):
-        """Get the Insights object for the IP address
-
-        :param ip_address: IPv4 or IPv6 address as a string.
-
-        :returns: :py:class:`geoip2.models.Insights` object
-
-        .. deprecated:: 0.6.0
-           Use :py:method:`city` instead.
-        """
-        return self._model_for(geoip2.models.Insights, ip_address)
+        return self._model_for(geoip2.models.City, 'City', ip_address)
 
     def connection_type(self, ip_address):
         """Get the ConnectionType object for the IP address
@@ -99,7 +75,9 @@ class Reader(object):
         :returns: :py:class:`geoip2.models.ConnectionType` object
 
         """
-        return self._flat_model_for(geoip2.models.ConnectionType, ip_address)
+        return self._flat_model_for(geoip2.models.ConnectionType,
+                                    'GeoIP2-Connection-Type',
+                                    ip_address)
 
     def domain(self, ip_address):
         """Get the Domain object for the IP address
@@ -109,7 +87,9 @@ class Reader(object):
         :returns: :py:class:`geoip2.models.Domain` object
 
         """
-        return self._flat_model_for(geoip2.models.Domain, ip_address)
+        return self._flat_model_for(geoip2.models.Domain,
+                                    'GeoIP2-Domain',
+                                    ip_address)
 
     def isp(self, ip_address):
         """Get the ISP object for the IP address
@@ -119,24 +99,38 @@ class Reader(object):
         :returns: :py:class:`geoip2.models.ISP` object
 
         """
-        return self._flat_model_for(geoip2.models.ISP, ip_address)
+        return self._flat_model_for(geoip2.models.ISP,
+                                    'GeoIP2-ISP',
+                                    ip_address)
 
-    def _get(self, ip_address):
+    def _get(self, database_type, ip_address):
+        if not database_type in self.metadata().database_type:
+            caller = inspect.stack()[2][3]
+            raise TypeError("The %s method cannot be used with the "
+                            "%s database" %
+                            (caller, self.metadata().database_type))
         record = self._db_reader.get(ip_address)
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
                 "The address %s is not in the database." % ip_address)
         return record
 
-    def _model_for(self, model_class, ip_address):
-        record = self._get(ip_address)
+    def _model_for(self, model_class, types, ip_address):
+        record = self._get(types, ip_address)
         record.setdefault('traits', {})['ip_address'] = ip_address
         return model_class(record, locales=self._locales)
 
-    def _flat_model_for(self, model_class, ip_address):
-        record = self._get(ip_address)
+    def _flat_model_for(self, model_class, types, ip_address):
+        record = self._get(types, ip_address)
         record['ip_address'] = ip_address
         return model_class(record)
+
+    def metadata(self):
+        """The metadata for the open database
+
+        :returns: :py:class:`maxminddb.reader.Metadata` object
+        """
+        return self._db_reader.metadata()
 
     def close(self):
         """Closes the GeoIP2 database"""

@@ -29,7 +29,7 @@ class TestReader(unittest.TestCase):
 
     def test_language_list(self):
         reader = geoip2.database.Reader(
-            'tests/data/test-data/GeoIP2-City-Test.mmdb',
+            'tests/data/test-data/GeoIP2-Country-Test.mmdb',
             ['xx', 'ru', 'pt-BR', 'es', 'en'])
         record = reader.country('81.2.69.160')
 
@@ -38,7 +38,7 @@ class TestReader(unittest.TestCase):
 
     def test_has_ip_address(self):
         reader = geoip2.database.Reader(
-            'tests/data/test-data/GeoIP2-City-Test.mmdb')
+            'tests/data/test-data/GeoIP2-Country-Test.mmdb')
         record = reader.country('81.2.69.160')
         self.assertEqual(record.traits.ip_address, '81.2.69.160')
         reader.close()
@@ -49,7 +49,16 @@ class TestReader(unittest.TestCase):
         with self.assertRaisesRegex(geoip2.errors.AddressNotFoundError,
                                     'The address 10.10.10.10 is not in the '
                                     'database.'):
-            reader.city_isp_org('10.10.10.10')
+            reader.city('10.10.10.10')
+        reader.close()
+
+    def test_wrong_database(self):
+        reader = geoip2.database.Reader(
+            'tests/data/test-data/GeoIP2-City-Test.mmdb')
+        with self.assertRaisesRegex(TypeError,
+                                    'The country method cannot be used with '
+                                    'the GeoIP2-City database'):
+            reader.country('1.1.1.1')
         reader.close()
 
     def test_invalid_address(self):
