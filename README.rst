@@ -2,14 +2,6 @@
 MaxMind GeoIP2 Python API
 =========================
 
-Beta Note
----------
-This is a beta release. The API may change before the first production
-release, which will be numbered 2.0.0.
-
-You may find information on the GeoIP2 beta release process on `our
-website <http://www.maxmind.com/en/geoip2_beta>`_.
-
 Description
 -----------
 
