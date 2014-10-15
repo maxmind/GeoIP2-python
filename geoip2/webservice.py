@@ -46,6 +46,7 @@ else:
 
 
 class Client(object):
+
     """Creates a new client object.
 
     It accepts the following required arguments:
@@ -90,6 +91,7 @@ class Client(object):
 
     def __init__(self, user_id, license_key, host='geoip.maxmind.com',
                  locales=None, timeout=None):
+        # pylint: disable=too-many-arguments
         if locales is None:
             locales = ['en']
         self._locales = locales
