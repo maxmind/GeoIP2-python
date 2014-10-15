@@ -25,6 +25,8 @@ Requests to the GeoIP2 Precision web service are always made with SSL.
 
 """
 
+import sys
+
 import geoip2
 import geoip2.models
 import requests
@@ -33,18 +35,17 @@ from .errors import (AddressNotFoundError, AuthenticationError,
                      GeoIP2Error, HTTPError, InvalidRequestError,
                      OutOfQueriesError)
 
-import sys
 
 if sys.version_info[0] == 2 or (sys.version_info[0] == 3
                                 and sys.version_info[1] < 3):
     import ipaddr as ipaddress  # pylint:disable=F0401
+
     ipaddress.ip_address = ipaddress.IPAddress
 else:
     import ipaddress  # pylint:disable=F0401
 
 
 class Client(object):
-
     """Creates a new client object.
 
     It accepts the following required arguments:
@@ -88,13 +89,14 @@ class Client(object):
     """
 
     def __init__(self, user_id, license_key, host='geoip.maxmind.com',
-                 locales=None):
+                 locales=None, timeout=None):
         if locales is None:
             locales = ['en']
         self._locales = locales
         self._user_id = user_id
         self._license_key = license_key
         self._base_uri = 'https://%s/geoip/v2.1' % host
+        self._timeout = timeout
 
     def city(self, ip_address='me'):
         """This method calls the GeoIP2 Precision City endpoint.
@@ -140,7 +142,8 @@ class Client(object):
         uri = '/'.join([self._base_uri, path, ip_address])
         response = requests.get(uri, auth=(self._user_id, self._license_key),
                                 headers={'Accept': 'application/json',
-                                         'User-Agent': self._user_agent()})
+                                         'User-Agent': self._user_agent()},
+                                timeout=self._timeout)
         if response.status_code == 200:
             body = self._handle_success(response, uri)
             return model_class(body, locales=self._locales)
@@ -214,6 +217,8 @@ class Client(object):
         raise HTTPError('Received a very surprising HTTP status '
                         '(%(status)i) for %(uri)s' % locals(), status,
                         uri)
+
+
 """
 
 :copyright: (c) 2014 by MaxMind, Inc.
