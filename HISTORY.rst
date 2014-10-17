@@ -3,6 +3,12 @@
 History
 -------
 
+2.0.1 (2014-10-17)
+++++++++++++++++++
+
+* The constructor for ``geoip2.webservice.Client`` now takes an optional
+  ``timeout`` parameter. (PR from arturro. GitHub #15)
+
 2.0.0 (2014-09-22)
 ++++++++++++++++++
 
