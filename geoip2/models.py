@@ -14,9 +14,10 @@ http://dev.maxmind.com/geoip/geoip2/web-services for more details.
 from abc import ABCMeta
 
 import geoip2.records
+from geoip2.mixins import SimpleEquality
 
 
-class Country(object):
+class Country(SimpleEquality):
 
     """Model for the GeoIP2 Precision: Country and the GeoIP2 Country database
 
@@ -89,9 +90,6 @@ class Country(object):
 
         self.traits = geoip2.records.Traits(**raw_response.get('traits', {}))
         self.raw = raw_response
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
 
     def __repr__(self):
         return '{module}.{class_name}({data}, {locales})'.format(
@@ -242,14 +240,11 @@ class Insights(City):
     """
 
 
-class SimpleModel(object):
+class SimpleModel(SimpleEquality):
 
     """Provides basic methods for non-location models"""
 
     __metaclass__ = ABCMeta
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
 
     def __repr__(self):
         # pylint: disable=no-member

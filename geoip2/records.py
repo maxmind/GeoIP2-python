@@ -7,8 +7,10 @@ Records
 # pylint:disable=R0903
 from abc import ABCMeta
 
+from geoip2.mixins import SimpleEquality
 
-class Record(object):
+
+class Record(SimpleEquality):
 
     """All records are subclasses of the abstract class ``Record``"""
     __metaclass__ = ABCMeta
@@ -21,9 +23,6 @@ class Record(object):
 
     def __setattr__(self, name, value):
         raise AttributeError("can't set attribute")
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
 
     def __repr__(self):
         args = ', '.join('%s=%r' % x for x in self.__dict__.items())
