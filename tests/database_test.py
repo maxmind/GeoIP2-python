@@ -15,6 +15,7 @@ else:
 
 if sys.version_info[0] == 2:
     unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
 
 
 class TestReader(unittest.TestCase):
@@ -78,6 +79,14 @@ class TestReader(unittest.TestCase):
         record = reader.connection_type(ip_address)
         self.assertEqual(record.connection_type, 'Cable/DSL')
         self.assertEqual(record.ip_address, ip_address)
+
+        self.assertRegex(
+            str(record), r'ConnectionType\(\{.*Cable/DSL.*\}\)',
+            'ConnectionType str representation is reasonable')
+
+        self.assertEqual(record, eval(repr(record)),
+                         "ConnectionType repr can be eval'd")
+
         reader.close()
 
     def test_domain(self):
@@ -88,6 +97,13 @@ class TestReader(unittest.TestCase):
         record = reader.domain(ip_address)
         self.assertEqual(record.domain, 'maxmind.com')
         self.assertEqual(record.ip_address, ip_address)
+
+        self.assertRegex(
+            str(record), r'Domain\(\{.*maxmind.com.*\}\)',
+            'Domain str representation is reasonable')
+
+        self.assertEqual(record, eval(repr(record)),
+                         "Domain repr can be eval'd")
 
         reader.close()
 
@@ -103,5 +119,12 @@ class TestReader(unittest.TestCase):
         self.assertEqual(record.isp, 'Telstra Internet')
         self.assertEqual(record.organization, 'Telstra Internet')
         self.assertEqual(record.ip_address, ip_address)
+
+        self.assertRegex(
+            str(record), r'ISP\(\{.*Telstra.*\}\)',
+            'ISP str representation is reasonable')
+
+        self.assertEqual(record, eval(repr(record)),
+                         "ISP repr can be eval'd")
 
         reader.close()

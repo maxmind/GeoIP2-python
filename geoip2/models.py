@@ -10,7 +10,9 @@ fields in each record may be populated. See
 http://dev.maxmind.com/geoip/geoip2/web-services for more details.
 
 """
-# pylint:disable=R0903
+# pylint: disable=too-many-instance-attributes,too-few-public-methods
+from abc import ABCMeta
+
 import geoip2.records
 
 
@@ -66,6 +68,7 @@ class Country(object):
     def __init__(self, raw_response, locales=None):
         if locales is None:
             locales = ['en']
+        self._locales = locales
         self.continent = \
             geoip2.records.Continent(locales,
                                      **raw_response.get('continent', {}))
@@ -76,17 +79,26 @@ class Country(object):
             geoip2.records.Country(locales,
                                    **raw_response.get('registered_country',
                                                       {}))
-        # pylint:disable=bad-continuation
         self.represented_country \
             = geoip2.records.RepresentedCountry(locales,
                                                 **raw_response.get(
-                                                'represented_country', {}))
+                                                    'represented_country', {}))
 
         self.maxmind = \
             geoip2.records.MaxMind(**raw_response.get('maxmind', {}))
 
         self.traits = geoip2.records.Traits(**raw_response.get('traits', {}))
         self.raw = raw_response
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def __repr__(self):
+        return '{module}.{class_name}({data}, {locales})'.format(
+            module=self.__module__,
+            class_name=self.__class__.__name__,
+            data=self.raw,
+            locales=self._locales)
 
 
 class City(Country):
@@ -230,7 +242,24 @@ class Insights(City):
     """
 
 
-class ConnectionType(object):
+class SimpleModel(object):
+
+    """Provides basic methods for non-location models"""
+
+    __metaclass__ = ABCMeta
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def __repr__(self):
+        # pylint: disable=no-member
+        return '{module}.{class_name}({data})'.format(
+            module=self.__module__,
+            class_name=self.__class__.__name__,
+            data=str(self.raw))
+
+
+class ConnectionType(SimpleModel):
 
     """Model class for the GeoIP2 Connection-Type
 
@@ -262,7 +291,7 @@ class ConnectionType(object):
         self.raw = raw
 
 
-class Domain(object):
+class Domain(SimpleModel):
 
     """Model class for the GeoIP2 Domain
 
@@ -288,7 +317,7 @@ class Domain(object):
         self.raw = raw
 
 
-class ISP(object):
+class ISP(SimpleModel):
 
     """Model class for the GeoIP2 ISP
 

@@ -22,6 +22,16 @@ class Record(object):
     def __setattr__(self, name, value):
         raise AttributeError("can't set attribute")
 
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+
+    def __repr__(self):
+        args = ', '.join('%s=%r' % x for x in self.__dict__.items())
+        return '{module}.{class_name}({data})'.format(
+            module=self.__module__,
+            class_name=self.__class__.__name__,
+            data=args)
+
 
 class PlaceRecord(Record):
 
