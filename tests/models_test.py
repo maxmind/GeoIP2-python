@@ -248,6 +248,9 @@ class TestModels(unittest.TestCase):
         self.assertRegex(
             str(model), r'^geoip2.models.City\(\{.*geoname_id.*\}, \[.*en.*\]\)')
 
+        self.assertFalse(
+            model == True, '__eq__ does not blow up on weird input')
+
     def test_unknown_keys(self):
         model = geoip2.models.City({'traits': {'ip_address': '1.2.3.4',
                                                'invalid': 'blah'},
