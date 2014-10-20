@@ -15,6 +15,7 @@ else:
 
 if sys.version_info[0] == 2:
     unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
 
 
 class TestModels(unittest.TestCase):
@@ -58,7 +59,7 @@ class TestModels(unittest.TestCase):
                     'geoname_id': 123,
                     'iso_code': 'HP',
                     'names': {'en': 'Hennepin'},
-                }
+            }
             ],
             'registered_country': {
                 'geoname_id': 2,
@@ -132,6 +133,21 @@ class TestModels(unittest.TestCase):
                          'correct longitude')
         self.assertEqual(model.location.metro_code, 765,
                          'correct metro_code')
+
+        self.assertRegex(
+            str(
+                model), r'^geoip2.models.Insights\(\{.*geoname_id.*\}, \[.*en.*\]\)',
+            'Insights str representation looks reasonable')
+
+        self.assertEqual(
+            model, eval(repr(model)), "Insights repr can be eval'd")
+
+        self.assertRegex(
+            str(model.location), r'^geoip2.records.Location\(.*longitude=.*\)',
+            'Location str representation is reasonable')
+
+        self.assertEqual(model.location, eval(repr(model.location)),
+                         "Location repr can be eval'd")
 
     def test_insights_min(self):
         model = geoip2.models.Insights({'traits': {'ip_address': '5.6.7.8'}})
@@ -228,6 +244,12 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.traits.is_satellite_provider, True,
                          'traits is_setellite_provider is True')
         self.assertEqual(model.raw, raw, 'raw method produces raw output')
+
+        self.assertRegex(
+            str(model), r'^geoip2.models.City\(\{.*geoname_id.*\}, \[.*en.*\]\)')
+
+        self.assertFalse(
+            model == True, '__eq__ does not blow up on weird input')
 
     def test_unknown_keys(self):
         model = geoip2.models.City({'traits': {'ip_address': '1.2.3.4',
