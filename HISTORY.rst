@@ -3,6 +3,15 @@
 History
 -------
 
+2.0.2 (2014-10-28)
+++++++++++++++++++
+
+* Added support for the GeoIP2 Anonymous IP database. The
+  ``geoip2.database.Reader`` class now has an ``anonymous_ip()`` method which
+  returns a ``geoip2.models.AnonymousIP`` object.
+* Added ``__repr__`` and ``__eq__`` methods to the model and record classes
+  to aid in debugging and using the library from a REPL.
+
 2.0.1 (2014-10-17)
 ++++++++++++++++++
 
