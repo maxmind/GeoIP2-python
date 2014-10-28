@@ -71,6 +71,20 @@ class TestReader(unittest.TestCase):
             reader.city('invalid')
         reader.close()
 
+    def test_anonymous_ip(self):
+        reader = geoip2.database.Reader(
+            'tests/data/test-data/GeoIP2-Anonymous-IP-Test.mmdb')
+        ip_address = '1.2.0.1'
+
+        record = reader.anonymous_ip(ip_address)
+        self.assertEqual(record.is_anonymous, True)
+        self.assertEqual(record.is_anonymous_vpn, True)
+        self.assertEqual(record.is_hosting_provider, False)
+        self.assertEqual(record.is_public_proxy, False)
+        self.assertEqual(record.is_tor_exit_node, False)
+        self.assertEqual(record.ip_address, ip_address)
+        reader.close()
+
     def test_connection_type(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-Connection-Type-Test.mmdb')

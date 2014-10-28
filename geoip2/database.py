@@ -67,6 +67,18 @@ class Reader(object):
         """
         return self._model_for(geoip2.models.City, 'City', ip_address)
 
+    def anonymous_ip(self, ip_address):
+        """Get the AnonymousIP object for the IP address
+
+        :param ip_address: IPv4 or IPv6 address as a string.
+
+        :returns: :py:class:`geoip2.models.AnonymousIP` object
+
+        """
+        return self._flat_model_for(geoip2.models.AnonymousIP,
+                                    'GeoIP2-Anonymous-IP',
+                                    ip_address)
+
     def connection_type(self, ip_address):
         """Get the ConnectionType object for the IP address
 
