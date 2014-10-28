@@ -254,6 +254,60 @@ class SimpleModel(SimpleEquality):
             data=str(self.raw))
 
 
+class AnonymousIP(SimpleModel):
+
+    """Model class for the GeoIP2 Anonymous IP
+
+    This class provides the following attribute:
+
+    .. attribute:: is_anonymous
+
+      This is true if the IP address belongs to any sort of anonymous network.
+
+      :type: bool
+
+    .. attribute:: is_anonymous_vpn
+
+      This is true if the IP address belongs to an anonymous VPN system.
+
+      :type: bool
+
+    .. attribute:: is_hosting_provider
+
+      This is true if the IP address belongs to a hosting provider.
+
+      :type: bool
+
+    .. attribute:: is_public_proxy
+
+      This is true if the IP address belongs to a public proxy.
+
+      :type: bool
+
+    .. attribute:: is_tor_exit_node
+
+      This is true if the IP address is a Tor exit node.
+
+      :type: bool
+
+    .. attribute:: ip_address
+
+      The IP address used in the lookup.
+
+      :type: unicode
+    """
+
+    def __init__(self, raw):
+        self.is_anonymous = raw.get('is_anonymous', False)
+        self.is_anonymous_vpn = raw.get('is_anonymous_vpn', False)
+        self.is_hosting_provider = raw.get('is_hosting_provider', False)
+        self.is_public_proxy = raw.get('is_public_proxy', False)
+        self.is_tor_exit_node = raw.get('is_tor_exit_node', False)
+
+        self.ip_address = raw.get('ip_address')
+        self.raw = raw
+
+
 class ConnectionType(SimpleModel):
 
     """Model class for the GeoIP2 Connection-Type

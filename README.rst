@@ -151,6 +151,33 @@ City Database
     -93.2323
     >>> reader.close()
 
+Anonymous IP Database
+^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: pycon
+
+    >>> import geoip2.database
+    >>>
+    >>> # This creates a Reader object. You should use the same object
+    >>> # across multiple requests as creation of it is expensive.
+    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-Anonymous-IP.mmdb')
+    >>>
+    >>> response = reader.anonymous_ip('85.25.43.84')
+    >>>
+    >>> response.is_anonymous
+    True
+    >>> response.is_anonymous_vpn
+    False
+    >>> response.is_hosting_provider
+    False
+    >>> response.is_public_proxy
+    False
+    >>> response.is_tor_exit_node
+    True
+    >>> response.ip_address
+    '128.101.101.101'
+    >>> reader.close()
+
 Connection-Type Database
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
