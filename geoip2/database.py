@@ -63,9 +63,9 @@ class Reader(object):
           Currently, the valid locale codes are:
 
           * de -- German
-          * en -- English names may still include accented characters if that is
-            the accepted spelling in English. In other words, English does not
-            mean ASCII.
+          * en -- English names may still include accented characters if that
+            is the accepted spelling in English. In other words, English does
+            not mean ASCII.
           * es -- Spanish
           * fr -- French
           * ja -- Japanese
@@ -77,7 +77,8 @@ class Reader(object):
           * MODE_MMAP - read from memory map. Pure Python.
           * MODE_FILE - read database as standard file. Pure Python.
           * MODE_MEMORY - load database into memory. Pure Python.
-          * MODE_AUTO - try MODE_MMAP_EXT, MODE_MMAP, MODE_FILE in that order. Default.
+          * MODE_AUTO - try MODE_MMAP_EXT, MODE_MMAP, MODE_FILE in that order.
+             Default.
 
         """
         if locales is None:
