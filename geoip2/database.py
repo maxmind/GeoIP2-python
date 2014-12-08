@@ -11,13 +11,14 @@ import geoip2.models
 import geoip2.errors
 import maxminddb
 
+# pylint: disable=unused-import
 from maxminddb import (MODE_AUTO, MODE_MMAP, MODE_MMAP_EXT, MODE_FILE,
                        MODE_MEMORY)
 
 
 class Reader(object):
 
-    """Creates a new GeoIP2 database Reader object.
+    """GeoIP2 database Reader object.
 
     Instances of this class provide a reader for the GeoIP2 database format.
     IP addresses can be looked up using the ``country`` and ``city`` methods.
@@ -44,6 +45,41 @@ class Reader(object):
 """
 
     def __init__(self, filename, locales=None, mode=MODE_AUTO):
+        """Create GeoIP2 Reader
+
+        :param filename: The path to the GeoIP2 database.
+        :param locales: This is list of locale codes. This argument will be
+          passed on to record classes to use when their name properties are
+          called. The default value is ['en'].
+
+          The order of the locales is significant. When a record class has
+          multiple names (country, city, etc.), its name property will return
+          the name in the first locale that has one.
+
+          Note that the only locale which is always present in the GeoIP2
+          data is "en". If you do not include this locale, the name property
+          may end up returning None even when the record has an English name.
+
+          Currently, the valid locale codes are:
+
+          * de -- German
+          * en -- English names may still include accented characters if that is
+            the accepted spelling in English. In other words, English does not
+            mean ASCII.
+          * es -- Spanish
+          * fr -- French
+          * ja -- Japanese
+          * pt-BR -- Brazilian Portuguese
+          * ru -- Russian
+          * zh-CN -- Simplified Chinese.
+        :param mode: The mode to open the database with. Valid mode are:
+          * MODE_MMAP_EXT - use the C extension with memory map.
+          * MODE_MMAP - read from memory map. Pure Python.
+          * MODE_FILE - read database as standard file. Pure Python.
+          * MODE_MEMORY - load database into memory. Pure Python.
+          * MODE_AUTO - try MODE_MMAP_EXT, MODE_MMAP, MODE_FILE in that order. Default.
+
+        """
         if locales is None:
             locales = ['en']
         self._db_reader = maxminddb.open_database(filename, mode)
