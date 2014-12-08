@@ -11,6 +11,9 @@ import geoip2.models
 import geoip2.errors
 import maxminddb
 
+from maxminddb import (MODE_AUTO, MODE_MMAP, MODE_MMAP_EXT, MODE_FILE,
+                       MODE_MEMORY)
+
 
 class Reader(object):
 
@@ -40,10 +43,10 @@ class Reader(object):
 
 """
 
-    def __init__(self, filename, locales=None):
+    def __init__(self, filename, locales=None, mode=MODE_AUTO):
         if locales is None:
             locales = ['en']
-        self._db_reader = maxminddb.Reader(filename)
+        self._db_reader = maxminddb.open_database(filename, mode)
         self._locales = locales
 
     def country(self, ip_address):

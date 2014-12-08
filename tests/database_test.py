@@ -7,6 +7,12 @@ import sys
 sys.path.append('..')
 
 import geoip2.database
+import maxminddb
+
+try:
+    import maxminddb.extension
+except ImportError:
+    maxminddb.extension = None
 
 if sys.version_info[:2] == (2, 6):
     import unittest2 as unittest
@@ -18,7 +24,7 @@ if sys.version_info[0] == 2:
     unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
 
 
-class TestReader(unittest.TestCase):
+class BaseTestReader(object):
 
     def test_default_locale(self):
         reader = geoip2.database.Reader(
@@ -142,3 +148,24 @@ class TestReader(unittest.TestCase):
                          "ISP repr can be eval'd")
 
         reader.close()
+
+
+@unittest.skipUnless(maxminddb.extension, 'No C extension module found. Skipping tests')
+class TestExtensionReader(BaseTestReader, unittest.TestCase):
+    mode = geoip2.database.MODE_MMAP_EXT
+
+
+class TestMMAPReader(BaseTestReader, unittest.TestCase):
+    mode = geoip2.database.MODE_MMAP
+
+
+class TestFileReader(BaseTestReader, unittest.TestCase):
+    mode = geoip2.database.MODE_FILE
+
+
+class TestMemoryReader(BaseTestReader, unittest.TestCase):
+    mode = geoip2.database.MODE_MEMORY
+
+
+class TestMemoryReader(BaseTestReader, unittest.TestCase):
+    mode = geoip2.database.MODE_AUTO
