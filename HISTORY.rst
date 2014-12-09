@@ -3,6 +3,16 @@
 History
 -------
 
+2.1.0 (2014-12-XX)
+++++++++++++++++++
+
+* The reader now supports pure Python file and memory modes. If you are not
+  using the C extension and your Python does not provide the ``mmap`` module,
+  the file mode will be used by default. You can explicitly set the mode using
+  the ``mode`` keyword argument with the ``MODE_AUTO``, ``MODE_MMAP``,
+  ``MODE_MMAP_EXT``, ``MODE_FILE``, and ``MODE_MEMORY`` constants exported  by
+  ``geoip2.database``.
+
 2.0.2 (2014-10-28)
 ++++++++++++++++++
 
