@@ -27,7 +27,7 @@ install:
 
 script:
   - coverage run --source=geoip2 setup.py test
-  - if [[ $TRAVIS_PYTHON_VERSION != '3.3' ]]; then pylint geoip2; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pylint geoip2; fi
 
 after_success:
   - coveralls
