@@ -1,4 +1,6 @@
 *~
+*.egg
+.idea
 build
 .coverage
 dist

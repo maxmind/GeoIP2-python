@@ -3,7 +3,7 @@
 History
 -------
 
-2.1.0 (2014-12-XX)
+2.1.0 (2014-12-09)
 ++++++++++++++++++
 
 * The reader now supports pure Python file and memory modes. If you are not
