@@ -409,7 +409,6 @@ class Subdivisions(tuple):
 
     This attribute is returned by ``city`` and ``insights``.
     """
-    # pylint:disable=W0142
     def __new__(cls, locales, *subdivisions):
         subdivisions = [Subdivision(locales, **x) for x in subdivisions]
         obj = super(cls, Subdivisions).__new__(cls, subdivisions)
