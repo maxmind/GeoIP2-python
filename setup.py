@@ -34,7 +34,7 @@ setup(
     install_requires=requirements,
     extras_require={
         ':python_version=="2.6" or python_version=="2.7"': ['ipaddr']},
-    tests_require=['httpretty>=0.6.1'],
+    tests_require=['requests_mock'],
     test_suite="tests",
     license=geoip2.__license__,
     classifiers=(
