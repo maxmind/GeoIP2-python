@@ -28,15 +28,14 @@ if sys.version_info[0] == 2:
 class TestClient(unittest.TestCase):
 
     def setUp(self):
-        self.client = Client(42, 'abcdef123456',)
+        self.client = Client(42, 'abcdef123456')
 
     base_uri = 'https://geoip.maxmind.com/geoip/v2.1/'
     country = {
-        'continent': {
-            'code': 'NA',
-            'geoname_id': 42,
-            'names': {'en': 'North America'}
-        },
+        'continent':
+        {'code': 'NA',
+         'geoname_id': 42,
+         'names': {'en': 'North America'}},
         'country': {
             'geoname_id': 1,
             'iso_code': 'US',
@@ -47,23 +46,21 @@ class TestClient(unittest.TestCase):
     }
 
     def _content_type(self, endpoint):
-        return ('application/vnd.maxmind.com-' +
-                endpoint + '+json; charset=UTF-8; version=1.0')
+        return ('application/vnd.maxmind.com-' + endpoint +
+                '+json; charset=UTF-8; version=1.0')
 
     @requests_mock.mock()
     def test_country_ok(self, mock):
         mock.get(self.base_uri + 'country/1.2.3.4',
                  json=self.country,
                  status_code=200,
-                 headers={'Content-Type':
-                          self._content_type('country')})
+                 headers={'Content-Type': self._content_type('country')})
         country = self.client.country('1.2.3.4')
         self.assertEqual(type(country), geoip2.models.Country,
                          'return value of client.country')
         self.assertEqual(country.continent.geoname_id, 42,
                          'continent geoname_id is 42')
-        self.assertEqual(country.continent.code, 'NA',
-                         'continent code is NA')
+        self.assertEqual(country.continent.code, 'NA', 'continent code is NA')
         self.assertEqual(country.continent.name, 'North America',
                          'continent name is North America')
         self.assertEqual(country.country.geoname_id, 1,
@@ -71,8 +68,7 @@ class TestClient(unittest.TestCase):
         self.assertEqual(country.country.iso_code, 'US',
                          'country iso_code is US')
         self.assertEqual(country.country.names,
-                         {'en': 'United States of America'},
-                         'country names')
+                         {'en': 'United States of America'}, 'country names')
         self.assertEqual(country.country.name, 'United States of America',
                          'country name is United States of America')
         self.assertEqual(country.maxmind.queries_remaining, 11,
@@ -84,8 +80,7 @@ class TestClient(unittest.TestCase):
         mock.get(self.base_uri + 'country/me',
                  json=self.country,
                  status_code=200,
-                 headers={'Content-Type':
-                          self._content_type('country')})
+                 headers={'Content-Type': self._content_type('country')})
         implicit_me = self.client.country()
         self.assertEqual(type(implicit_me), geoip2.models.Country,
                          'country() returns Country object')
@@ -114,8 +109,8 @@ class TestClient(unittest.TestCase):
                  text='',
                  status_code=400,
                  headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(HTTPError,
-                                    'Received a 400 error for .* with no body'):
+        with self.assertRaisesRegex(
+                HTTPError, 'Received a 400 error for .* with no body'):
             self.client.country('1.2.3.7')
 
     @requests_mock.mock()
@@ -135,15 +130,13 @@ class TestClient(unittest.TestCase):
                  text='bad body',
                  status_code=400,
                  headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(HTTPError,
-                                    'it did not include the expected JSON body'
-                                    ):
+        with self.assertRaisesRegex(
+                HTTPError, 'it did not include the expected JSON body'):
             self.client.country('1.2.3.9')
 
     @requests_mock.mock()
     def test_500_error(self, mock):
-        mock.get(self.base_uri + 'country/' + '1.2.3.10',
-                 status_code=500)
+        mock.get(self.base_uri + 'country/' + '1.2.3.10', status_code=500)
         with self.assertRaisesRegex(HTTPError,
                                     'Received a server error \(500\) for'):
             self.client.country('1.2.3.10')
@@ -166,8 +159,7 @@ class TestClient(unittest.TestCase):
                  json=body,
                  status_code=404,
                  headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(AddressNotFoundError,
-                                    'Not in DB'):
+        with self.assertRaisesRegex(AddressNotFoundError, 'Not in DB'):
             self.client.country('1.2.3.13')
 
     @requests_mock.mock()
@@ -217,7 +209,7 @@ class TestClient(unittest.TestCase):
                  json=body,
                  status_code=402,
                  headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(OutOfQueriesError, 'Out of Queries',):
+        with self.assertRaisesRegex(OutOfQueriesError, 'Out of Queries'):
             self.client.country('1.2.3.18')
 
     @requests_mock.mock()
@@ -229,7 +221,7 @@ class TestClient(unittest.TestCase):
                  json=body,
                  status_code=400,
                  headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(InvalidRequestError, msg,):
+        with self.assertRaisesRegex(InvalidRequestError, msg):
             self.client.country(ip)
 
     @requests_mock.mock()
@@ -241,15 +233,12 @@ class TestClient(unittest.TestCase):
         self.client.country('1.2.3.4')
         request = mock.request_history[-1]
 
-        self.assertEqual(request.path,
-                         '/geoip/v2.1/country/1.2.3.4',
+        self.assertEqual(request.path, '/geoip/v2.1/country/1.2.3.4',
                          'correct URI is used')
-        self.assertEqual(request.headers['Accept'],
-                         'application/json',
+        self.assertEqual(request.headers['Accept'], 'application/json',
                          'correct Accept header')
         self.assertRegex(request.headers['User-Agent'],
-                         '^GeoIP2 Python Client v',
-                         'Correct User-Agent')
+                         '^GeoIP2 Python Client v', 'Correct User-Agent')
         self.assertEqual(request.headers['Authorization'],
                          'Basic NDI6YWJjZGVmMTIzNDU2', 'correct auth')
 
@@ -273,15 +262,6 @@ class TestClient(unittest.TestCase):
         self.assertEqual(type(insights), geoip2.models.Insights,
                          'return value of client.insights')
 
-    @requests_mock.mock()
-    def test_insights_ok(self, mock):
-        mock.get(self.base_uri + 'insights/1.2.3.4',
-                 json=self.country,
-                 status_code=200,
-                 headers={'Content-Type': self._content_type('country')})
-        insights = self.client.insights('1.2.3.4')
-        self.assertEqual(type(insights), geoip2.models.Insights,
-                         'return value of client.insights')
 
 if __name__ == '__main__':
     unittest.main()
