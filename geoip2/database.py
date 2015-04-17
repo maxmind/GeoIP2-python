@@ -156,7 +156,7 @@ class Reader(object):
                                     ip_address)
 
     def _get(self, database_type, ip_address):
-        if not database_type in self.metadata().database_type:
+        if database_type not in self.metadata().database_type:
             caller = inspect.stack()[2][3]
             raise TypeError("The %s method cannot be used with the "
                             "%s database" %
