@@ -15,11 +15,6 @@ if sys.version_info[:2] == (2, 6):
 else:
     import unittest
 
-try:
-    from unittest.mock import MagicMock, patch
-except ImportError:
-    from mock import MagicMock, patch
-
 if sys.version_info[0] == 2:
     unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
     unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
