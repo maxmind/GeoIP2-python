@@ -3,6 +3,13 @@
 History
 -------
 
+2.2.0 (2015-06-29)
+++++++++++++++++++
+
+* The ``geoip2.records.Location` class has been updated to add attributes for
+  the ``average_income`` and ``population_density`` fields provided by the
+  Insights web service.
+
 2.1.0 (2014-12-09)
 ++++++++++++++++++
 
