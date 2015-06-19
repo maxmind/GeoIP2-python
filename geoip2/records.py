@@ -255,6 +255,13 @@ class Location(Record):
 
     Attributes:
 
+    .. attribute:: average_income
+
+      The average income in US dollars associated with the requested IP address
+      This attribute is only available from the Insights end point.
+
+      :type: int
+
     .. attribute:: accuracy_radius
 
       The radius in kilometers around the
@@ -268,7 +275,6 @@ class Location(Record):
       The latitude of the location as a floating point number.
 
       :type: float
-
 
     .. attribute:: longitude
 
@@ -286,6 +292,13 @@ class Location(Record):
 
       :type: int
 
+      .. attribute:: population_density
+
+      The estimated population per square kilometer associated with the IP
+      address. This attribute is only available from the Insights end point.
+
+      :type: int
+
     .. attribute:: time_zone
 
       The time zone associated with location, as
@@ -295,9 +308,9 @@ class Location(Record):
       :type: unicode
 
     """
-    _valid_attributes = set(['accuracy_radius', 'latitude', 'longitude',
-                             'metro_code', 'postal_code', 'postal_confidence',
-                             'time_zone'])
+    _valid_attributes = set(['average_income', 'accuracy_radius', 'latitude',
+                             'longitude', 'metro_code', 'population_density',
+                             'postal_code', 'postal_confidence', 'time_zone'])
 
 
 class MaxMind(Record):

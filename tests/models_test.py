@@ -39,10 +39,12 @@ class TestModels(unittest.TestCase):
                 'names': {'en': 'United States of America'},
             },
             'location': {
+                'average_income': 24626,
                 'accuracy_radius': 1500,
                 'latitude': 44.98,
                 'longitude': 93.2636,
                 'metro_code': 765,
+                'population_density': 1341,
                 'time_zone': 'America/Chicago',
             },
             'postal': {
@@ -127,12 +129,16 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.represented_country.type,
                          'military',
                          'represented_country type is correct')
+        self.assertEqual(model.location.average_income, 24626,
+                         'correct average_income')
         self.assertEqual(model.location.latitude, 44.98,
                          'correct latitude')
         self.assertEqual(model.location.longitude, 93.2636,
                          'correct longitude')
         self.assertEqual(model.location.metro_code, 765,
                          'correct metro_code')
+        self.assertEqual(model.location.population_density, 1341,
+                         'correct population_density')
 
         self.assertRegex(
             str(
