@@ -23,9 +23,6 @@ class Reader(object):
     Instances of this class provide a reader for the GeoIP2 database format.
     IP addresses can be looked up using the ``country`` and ``city`` methods.
 
-     Usage
-     -----
-
     The basic API for this class is the same for every database. First, you
     create a reader object, specifying a file name. You then call the method
     corresponding to the specific database, passing it the IP address you want

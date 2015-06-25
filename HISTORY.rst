@@ -9,6 +9,12 @@ History
 * The ``geoip2.records.Location` class has been updated to add attributes for
   the ``average_income`` and ``population_density`` fields provided by the
   Insights web service.
+* The ``is_anonymous_proxy`` and ``is_satellite_provider`` properties on
+  ``geoip2.records.Traits`` have been deprecated. Please use our `GeoIP2
+  Anonymous IP database
+  <https://www.maxmind.com/en/geoip2-anonymous-ip-database>`_
+  to determine whether an IP address is used by an anonymizing service.
+
 
 2.1.0 (2014-12-09)
 ++++++++++++++++++

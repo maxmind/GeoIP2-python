@@ -500,12 +500,22 @@ class Traits(Record):
 
       :type: bool
 
+      .. deprecated:: 2.2.0
+        Use our our `GeoIP2 Anonymous IP database
+        <https://www.maxmind.com/en/geoip2-anonymous-ip-database GeoIP2>`_
+        instead.
+
     .. attribute:: is_satellite_provider
 
       This is true if the IP address is from a satellite provider that
       provides service to multiple countries.
 
       :type: bool
+
+      .. deprecated:: 2.2.0
+        Use our our `GeoIP2 Anonymous IP database
+        <https://www.maxmind.com/en/geoip2-anonymous-ip-database GeoIP2>`_
+        instead.
 
     .. attribute:: isp
 
