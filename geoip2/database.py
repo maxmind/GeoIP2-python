@@ -83,6 +83,12 @@ class Reader(object):
         self._db_reader = maxminddb.open_database(filename, mode)
         self._locales = locales
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
+
     def country(self, ip_address):
         """Get the Country object for the IP address
 

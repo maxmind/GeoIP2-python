@@ -149,6 +149,12 @@ class BaseTestReader(object):
 
         reader.close()
 
+    def test_context_manager(self):
+        with geoip2.database.Reader(
+            'tests/data/test-data/GeoIP2-Country-Test.mmdb') as reader:
+            record = reader.country('81.2.69.160')
+            self.assertEqual(record.traits.ip_address, '81.2.69.160')
+
 
 @unittest.skipUnless(maxminddb.extension, 'No C extension module found. Skipping tests')
 class TestExtensionReader(BaseTestReader, unittest.TestCase):
