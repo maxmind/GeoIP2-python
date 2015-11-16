@@ -3,6 +3,12 @@
 History
 -------
 
+2.3.0 (201X-XX-XX)
+++++++++++++++++++
+
+* ``geoip2.database.Reader`` now supports being used in a ``with`` statement
+  (PEP 343). (PR from Nguyễn Hồng Quân. GitHub #29)
+
 2.2.0 (2015-06-29)
 ++++++++++++++++++
 
