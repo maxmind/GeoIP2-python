@@ -21,16 +21,14 @@ if sys.version_info[0] == 2:
 
 
 class TestClient(unittest.TestCase):
-
     def setUp(self):
         self.client = Client(42, 'abcdef123456')
 
     base_uri = 'https://geoip.maxmind.com/geoip/v2.1/'
     country = {
-        'continent':
-        {'code': 'NA',
-         'geoname_id': 42,
-         'names': {'en': 'North America'}},
+        'continent': {'code': 'NA',
+                      'geoname_id': 42,
+                      'names': {'en': 'North America'}},
         'country': {
             'geoname_id': 1,
             'iso_code': 'US',
@@ -51,8 +49,9 @@ class TestClient(unittest.TestCase):
                  status_code=200,
                  headers={'Content-Type': self._content_type('country')})
         country = self.client.country('1.2.3.4')
-        self.assertEqual(type(country), geoip2.models.Country,
-                         'return value of client.country')
+        self.assertEqual(
+            type(country), geoip2.models.Country,
+            'return value of client.country')
         self.assertEqual(country.continent.geoname_id, 42,
                          'continent geoname_id is 42')
         self.assertEqual(country.continent.code, 'NA', 'continent code is NA')
@@ -77,11 +76,13 @@ class TestClient(unittest.TestCase):
                  status_code=200,
                  headers={'Content-Type': self._content_type('country')})
         implicit_me = self.client.country()
-        self.assertEqual(type(implicit_me), geoip2.models.Country,
-                         'country() returns Country object')
+        self.assertEqual(
+            type(implicit_me), geoip2.models.Country,
+            'country() returns Country object')
         explicit_me = self.client.country()
-        self.assertEqual(type(explicit_me), geoip2.models.Country,
-                         'country(\'me\') returns Country object')
+        self.assertEqual(
+            type(explicit_me), geoip2.models.Country,
+            'country(\'me\') returns Country object')
 
     @requests_mock.mock()
     def test_200_error(self, mock):
@@ -244,8 +245,8 @@ class TestClient(unittest.TestCase):
                  status_code=200,
                  headers={'Content-Type': self._content_type('city')})
         city = self.client.city('1.2.3.4')
-        self.assertEqual(type(city), geoip2.models.City,
-                         'return value of client.city')
+        self.assertEqual(
+            type(city), geoip2.models.City, 'return value of client.city')
 
     @requests_mock.mock()
     def test_insights_ok(self, mock):
@@ -254,8 +255,9 @@ class TestClient(unittest.TestCase):
                  status_code=200,
                  headers={'Content-Type': self._content_type('country')})
         insights = self.client.insights('1.2.3.4')
-        self.assertEqual(type(insights), geoip2.models.Insights,
-                         'return value of client.insights')
+        self.assertEqual(
+            type(insights), geoip2.models.Insights,
+            'return value of client.insights')
 
 
 if __name__ == '__main__':

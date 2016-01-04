@@ -6,18 +6,17 @@ GeoIP2 Database Reader
 """
 import inspect
 
-import geoip2
-import geoip2.models
-import geoip2.errors
 import maxminddb
-
 # pylint: disable=unused-import
 from maxminddb import (MODE_AUTO, MODE_MMAP, MODE_MMAP_EXT, MODE_FILE,
                        MODE_MEMORY)
 
+import geoip2
+import geoip2.models
+import geoip2.errors
+
 
 class Reader(object):
-
     """GeoIP2 database Reader object.
 
     Instances of this class provide a reader for the GeoIP2 database format.
@@ -119,8 +118,7 @@ class Reader(object):
 
         """
         return self._flat_model_for(geoip2.models.AnonymousIP,
-                                    'GeoIP2-Anonymous-IP',
-                                    ip_address)
+                                    'GeoIP2-Anonymous-IP', ip_address)
 
     def connection_type(self, ip_address):
         """Get the ConnectionType object for the IP address
@@ -131,8 +129,7 @@ class Reader(object):
 
         """
         return self._flat_model_for(geoip2.models.ConnectionType,
-                                    'GeoIP2-Connection-Type',
-                                    ip_address)
+                                    'GeoIP2-Connection-Type', ip_address)
 
     def domain(self, ip_address):
         """Get the Domain object for the IP address
@@ -142,8 +139,7 @@ class Reader(object):
         :returns: :py:class:`geoip2.models.Domain` object
 
         """
-        return self._flat_model_for(geoip2.models.Domain,
-                                    'GeoIP2-Domain',
+        return self._flat_model_for(geoip2.models.Domain, 'GeoIP2-Domain',
                                     ip_address)
 
     def isp(self, ip_address):
@@ -154,8 +150,7 @@ class Reader(object):
         :returns: :py:class:`geoip2.models.ISP` object
 
         """
-        return self._flat_model_for(geoip2.models.ISP,
-                                    'GeoIP2-ISP',
+        return self._flat_model_for(geoip2.models.ISP, 'GeoIP2-ISP',
                                     ip_address)
 
     def _get(self, database_type, ip_address):

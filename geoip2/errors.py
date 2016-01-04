@@ -6,7 +6,6 @@ Errors
 
 
 class GeoIP2Error(RuntimeError):
-
     """There was a generic error in GeoIP2.
 
     This class represents a generic error. It extends :py:exc:`RuntimeError`
@@ -16,17 +15,14 @@ class GeoIP2Error(RuntimeError):
 
 
 class AddressNotFoundError(GeoIP2Error):
-
     """The address you were looking up was not found."""
 
 
 class AuthenticationError(GeoIP2Error):
-
     """There was a problem authenticating the request."""
 
 
 class HTTPError(GeoIP2Error):
-
     """There was an error when making your HTTP request.
 
     This class represents an HTTP transport error. It extends
@@ -44,10 +40,8 @@ class HTTPError(GeoIP2Error):
 
 
 class InvalidRequestError(GeoIP2Error):
-
     """The request was invalid."""
 
 
 class OutOfQueriesError(GeoIP2Error):
-
     """Your account is out of funds for the service queried."""

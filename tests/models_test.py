@@ -19,7 +19,6 @@ if sys.version_info[0] == 2:
 
 
 class TestModels(unittest.TestCase):
-
     def test_insights_full(self):
         raw = {
             'city': {
@@ -56,13 +55,11 @@ class TestModels(unittest.TestCase):
                 'geoname_id': 574635,
                 'iso_code': 'MN',
                 'names': {'en': 'Minnesota'},
-            },
-                {
-                    'geoname_id': 123,
-                    'iso_code': 'HP',
-                    'names': {'en': 'Hennepin'},
-            }
-            ],
+            }, {
+                'geoname_id': 123,
+                'iso_code': 'HP',
+                'names': {'en': 'Hennepin'},
+            }],
             'registered_country': {
                 'geoname_id': 2,
                 'iso_code': 'CA',
@@ -89,27 +86,33 @@ class TestModels(unittest.TestCase):
         }
 
         model = geoip2.models.Insights(raw)
-        self.assertEqual(type(model), geoip2.models.Insights,
-                         'geoip2.models.Insights object')
-        self.assertEqual(type(model.city), geoip2.records.City,
-                         'geoip2.records.City object')
-        self.assertEqual(type(model.continent), geoip2.records.Continent,
-                         'geoip2.records.Continent object')
-        self.assertEqual(type(model.country), geoip2.records.Country,
-                         'geoip2.records.Country object')
-        self.assertEqual(type(model.registered_country),
-                         geoip2.records.Country,
-                         'geoip2.records.Country object')
-        self.assertEqual(type(model.represented_country),
-                         geoip2.records.RepresentedCountry,
-                         'geoip2.records.RepresentedCountry object')
-        self.assertEqual(type(model.location), geoip2.records.Location,
-                         'geoip2.records.Location object')
-        self.assertEqual(type(model.subdivisions[0]),
-                         geoip2.records.Subdivision,
-                         'geoip2.records.Subdivision object')
-        self.assertEqual(type(model.traits), geoip2.records.Traits,
-                         'geoip2.records.Traits object')
+        self.assertEqual(
+            type(model), geoip2.models.Insights,
+            'geoip2.models.Insights object')
+        self.assertEqual(
+            type(model.city), geoip2.records.City,
+            'geoip2.records.City object')
+        self.assertEqual(
+            type(model.continent), geoip2.records.Continent,
+            'geoip2.records.Continent object')
+        self.assertEqual(
+            type(model.country), geoip2.records.Country,
+            'geoip2.records.Country object')
+        self.assertEqual(
+            type(model.registered_country), geoip2.records.Country,
+            'geoip2.records.Country object')
+        self.assertEqual(
+            type(model.represented_country), geoip2.records.RepresentedCountry,
+            'geoip2.records.RepresentedCountry object')
+        self.assertEqual(
+            type(model.location), geoip2.records.Location,
+            'geoip2.records.Location object')
+        self.assertEqual(
+            type(model.subdivisions[0]), geoip2.records.Subdivision,
+            'geoip2.records.Subdivision object')
+        self.assertEqual(
+            type(model.traits), geoip2.records.Traits,
+            'geoip2.records.Traits object')
         self.assertEqual(model.raw, raw, 'raw method returns raw input')
         self.assertEqual(model.subdivisions[0].iso_code, 'MN',
                          'div 1 has correct iso_code')
@@ -117,36 +120,32 @@ class TestModels(unittest.TestCase):
                          'div 1 has correct confidence')
         self.assertEqual(model.subdivisions[0].geoname_id, 574635,
                          'div 1 has correct geoname_id')
-        self.assertEqual(model.subdivisions[0].names,
-                         {'en': 'Minnesota'}, 'div 1 names are correct')
+        self.assertEqual(model.subdivisions[0].names, {'en': 'Minnesota'},
+                         'div 1 names are correct')
         self.assertEqual(model.subdivisions[1].name, 'Hennepin',
                          'div 2 has correct name')
         self.assertEqual(model.subdivisions.most_specific.iso_code, 'HP',
                          'subdivisions.most_specific returns HP')
-        self.assertEqual(model.represented_country.name,
-                         'United Kingdom',
+        self.assertEqual(model.represented_country.name, 'United Kingdom',
                          'represented_country name is correct')
-        self.assertEqual(model.represented_country.type,
-                         'military',
+        self.assertEqual(model.represented_country.type, 'military',
                          'represented_country type is correct')
         self.assertEqual(model.location.average_income, 24626,
                          'correct average_income')
-        self.assertEqual(model.location.latitude, 44.98,
-                         'correct latitude')
+        self.assertEqual(model.location.latitude, 44.98, 'correct latitude')
         self.assertEqual(model.location.longitude, 93.2636,
                          'correct longitude')
-        self.assertEqual(model.location.metro_code, 765,
-                         'correct metro_code')
+        self.assertEqual(model.location.metro_code, 765, 'correct metro_code')
         self.assertEqual(model.location.population_density, 1341,
                          'correct population_density')
 
         self.assertRegex(
-            str(
-                model), r'^geoip2.models.Insights\(\{.*geoname_id.*\}, \[.*en.*\]\)',
+            str(model),
+            r'^geoip2.models.Insights\(\{.*geoname_id.*\}, \[.*en.*\]\)',
             'Insights str representation looks reasonable')
 
-        self.assertEqual(
-            model, eval(repr(model)), "Insights repr can be eval'd")
+        self.assertEqual(model, eval(repr(model)),
+                         "Insights repr can be eval'd")
 
         self.assertRegex(
             str(model.location), r'^geoip2.records.Location\(.*longitude=.*\)',
@@ -157,25 +156,31 @@ class TestModels(unittest.TestCase):
 
     def test_insights_min(self):
         model = geoip2.models.Insights({'traits': {'ip_address': '5.6.7.8'}})
-        self.assertEqual(type(model), geoip2.models.Insights,
-                         'geoip2.models.Insights object')
-        self.assertEqual(type(model.city), geoip2.records.City,
-                         'geoip2.records.City object')
-        self.assertEqual(type(model.continent), geoip2.records.Continent,
-                         'geoip2.records.Continent object')
-        self.assertEqual(type(model.country), geoip2.records.Country,
-                         'geoip2.records.Country object')
-        self.assertEqual(type(model.registered_country),
-                         geoip2.records.Country,
-                         'geoip2.records.Country object')
-        self.assertEqual(type(model.location), geoip2.records.Location,
-                         'geoip2.records.Location object')
-        self.assertEqual(type(model.traits), geoip2.records.Traits,
-                         'geoip2.records.Traits object')
-        self.assertEqual(type(model.subdivisions.most_specific),
-                         geoip2.records.Subdivision,
-                         'geoip2.records.Subdivision object returned even'
-                         'when none are available.')
+        self.assertEqual(
+            type(model), geoip2.models.Insights,
+            'geoip2.models.Insights object')
+        self.assertEqual(
+            type(model.city), geoip2.records.City,
+            'geoip2.records.City object')
+        self.assertEqual(
+            type(model.continent), geoip2.records.Continent,
+            'geoip2.records.Continent object')
+        self.assertEqual(
+            type(model.country), geoip2.records.Country,
+            'geoip2.records.Country object')
+        self.assertEqual(
+            type(model.registered_country), geoip2.records.Country,
+            'geoip2.records.Country object')
+        self.assertEqual(
+            type(model.location), geoip2.records.Location,
+            'geoip2.records.Location object')
+        self.assertEqual(
+            type(model.traits), geoip2.records.Traits,
+            'geoip2.records.Traits object')
+        self.assertEqual(
+            type(model.subdivisions.most_specific), geoip2.records.Subdivision,
+            'geoip2.records.Subdivision object returned even'
+            'when none are available.')
         self.assertEqual(model.subdivisions.most_specific.names, {},
                          'Empty names hash returned')
 
@@ -202,26 +207,30 @@ class TestModels(unittest.TestCase):
             },
         }
         model = geoip2.models.City(raw)
-        self.assertEqual(type(model), geoip2.models.City,
-                         'geoip2.models.City object')
-        self.assertEqual(type(model.city), geoip2.records.City,
-                         'geoip2.records.City object')
-        self.assertEqual(type(model.continent), geoip2.records.Continent,
-                         'geoip2.records.Continent object')
-        self.assertEqual(type(model.country), geoip2.records.Country,
-                         'geoip2.records.Country object')
-        self.assertEqual(type(model.registered_country),
-                         geoip2.records.Country,
-                         'geoip2.records.Country object')
-        self.assertEqual(type(model.location), geoip2.records.Location,
-                         'geoip2.records.Location object')
-        self.assertEqual(type(model.traits), geoip2.records.Traits,
-                         'geoip2.records.Traits object')
+        self.assertEqual(
+            type(model), geoip2.models.City, 'geoip2.models.City object')
+        self.assertEqual(
+            type(model.city), geoip2.records.City,
+            'geoip2.records.City object')
+        self.assertEqual(
+            type(model.continent), geoip2.records.Continent,
+            'geoip2.records.Continent object')
+        self.assertEqual(
+            type(model.country), geoip2.records.Country,
+            'geoip2.records.Country object')
+        self.assertEqual(
+            type(model.registered_country), geoip2.records.Country,
+            'geoip2.records.Country object')
+        self.assertEqual(
+            type(model.location), geoip2.records.Location,
+            'geoip2.records.Location object')
+        self.assertEqual(
+            type(model.traits), geoip2.records.Traits,
+            'geoip2.records.Traits object')
         self.assertEqual(model.raw, raw, 'raw method returns raw input')
         self.assertEqual(model.continent.geoname_id, 42,
                          'continent geoname_id is 42')
-        self.assertEqual(model.continent.code, 'NA',
-                         'continent code is NA')
+        self.assertEqual(model.continent.code, 'NA', 'continent code is NA')
         self.assertEqual(model.continent.names, {'en': 'North America'},
                          'continent names is correct')
         self.assertEqual(model.continent.name, 'North America',
@@ -239,11 +248,9 @@ class TestModels(unittest.TestCase):
                          'country confidence is None')
         self.assertEqual(model.registered_country.iso_code, 'CA',
                          'registered_country iso_code is CA')
-        self.assertEqual(model.registered_country.names,
-                         {'en': 'Canada'},
+        self.assertEqual(model.registered_country.names, {'en': 'Canada'},
                          'registered_country names is correct')
-        self.assertEqual(model.registered_country.name,
-                         'Canada',
+        self.assertEqual(model.registered_country.name, 'Canada',
                          'registered_country name is correct')
         self.assertEqual(model.traits.is_anonymous_proxy, False,
                          'traits is_anonymous_proxy returns False by default')
@@ -252,10 +259,11 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.raw, raw, 'raw method produces raw output')
 
         self.assertRegex(
-            str(model), r'^geoip2.models.City\(\{.*geoname_id.*\}, \[.*en.*\]\)')
+            str(model),
+            r'^geoip2.models.City\(\{.*geoname_id.*\}, \[.*en.*\]\)')
 
-        self.assertFalse(
-            model == True, '__eq__ does not blow up on weird input')
+        self.assertFalse(model == True,
+                         '__eq__ does not blow up on weird input')
 
     def test_unknown_keys(self):
         model = geoip2.models.City({'traits': {'ip_address': '1.2.3.4',
@@ -300,16 +308,13 @@ class TestNamess(unittest.TestCase):
 
     def test_names(self):
         model = geoip2.models.Country(self.raw, locales=['sq', 'ar'])
-        self.assertEqual(model.continent.names,
-                         self.raw['continent']['names'],
+        self.assertEqual(model.continent.names, self.raw['continent']['names'],
                          'Correct names dict for continent')
-        self.assertEqual(model.country.names,
-                         self.raw['country']['names'],
+        self.assertEqual(model.country.names, self.raw['country']['names'],
                          'Correct names dict for country')
 
     def test_three_locales(self):
-        model = geoip2.models.Country(self.raw,
-                                      locales=['fr', 'zh-CN', 'en'])
+        model = geoip2.models.Country(self.raw, locales=['fr', 'zh-CN', 'en'])
         self.assertEqual(model.continent.name, '北美洲',
                          'continent name is in Chinese (no French available)')
         self.assertEqual(model.country.name, 'États-Unis',

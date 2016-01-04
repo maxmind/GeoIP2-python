@@ -25,7 +25,6 @@ if sys.version_info[0] == 2:
 
 
 class BaseTestReader(object):
-
     def test_default_locale(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-City-Test.mmdb')
@@ -144,19 +143,19 @@ class BaseTestReader(object):
             str(record), r'ISP\(\{.*Telstra.*\}\)',
             'ISP str representation is reasonable')
 
-        self.assertEqual(record, eval(repr(record)),
-                         "ISP repr can be eval'd")
+        self.assertEqual(record, eval(repr(record)), "ISP repr can be eval'd")
 
         reader.close()
 
     def test_context_manager(self):
         with geoip2.database.Reader(
-            'tests/data/test-data/GeoIP2-Country-Test.mmdb') as reader:
+                'tests/data/test-data/GeoIP2-Country-Test.mmdb') as reader:
             record = reader.country('81.2.69.160')
             self.assertEqual(record.traits.ip_address, '81.2.69.160')
 
 
-@unittest.skipUnless(maxminddb.extension, 'No C extension module found. Skipping tests')
+@unittest.skipUnless(maxminddb.extension,
+                     'No C extension module found. Skipping tests')
 class TestExtensionReader(BaseTestReader, unittest.TestCase):
     mode = geoip2.database.MODE_MMAP_EXT
 

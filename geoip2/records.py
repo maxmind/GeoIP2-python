@@ -11,11 +11,10 @@ from geoip2.mixins import SimpleEquality
 
 
 class Record(SimpleEquality):
-
     """All records are subclasses of the abstract class ``Record``"""
     __metaclass__ = ABCMeta
 
-    _valid_attributes = None
+    _valid_attributes = set()
 
     def __init__(self, **kwargs):
         valid_args = dict((k, kwargs.get(k)) for k in self._valid_attributes)
@@ -33,7 +32,6 @@ class Record(SimpleEquality):
 
 
 class PlaceRecord(Record):
-
     """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`"""
     __metaclass__ = ABCMeta
 
@@ -49,12 +47,12 @@ class PlaceRecord(Record):
     def name(self):
         """Dict with locale codes as keys and localized name as value"""
         # pylint:disable=E1101
-        return next((self.names.get(x) for x in self._locales if x in
-                     self.names), None)
+        return next(
+            (self.names.get(x) for x in self._locales
+             if x in self.names), None)
 
 
 class City(PlaceRecord):
-
     """Contains data for the city record associated with an IP address
 
     This class contains the city-level data associated with an IP address.
@@ -96,7 +94,6 @@ class City(PlaceRecord):
 
 
 class Continent(PlaceRecord):
-
     """Contains data for the continent record associated with an IP address
 
     This class contains the continent-level data associated with an IP
@@ -137,7 +134,6 @@ class Continent(PlaceRecord):
 
 
 class Country(PlaceRecord):
-
     """Contains data for the country record associated with an IP address
 
     This class contains the country-level data associated with an IP address.
@@ -186,7 +182,6 @@ class Country(PlaceRecord):
 
 
 class RepresentedCountry(Country):
-
     """Contains data for the represented country associated with an IP address
 
     This class contains the country-level data associated with an IP address
@@ -241,12 +236,11 @@ class RepresentedCountry(Country):
       :type: unicode
 
     """
-    _valid_attributes = set(['confidence', 'geoname_id', 'iso_code',
-                             'names', 'type'])
+    _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names',
+                             'type'])
 
 
 class Location(Record):
-
     """Contains data for the location record associated with an IP address
 
     This class contains the location data associated with an IP address.
@@ -314,7 +308,6 @@ class Location(Record):
 
 
 class MaxMind(Record):
-
     """Contains data related to your MaxMind account
 
     Attributes:
@@ -331,7 +324,6 @@ class MaxMind(Record):
 
 
 class Postal(Record):
-
     """Contains data for the postal record associated with an IP address
 
     This class contains the postal data associated with an IP address.
@@ -361,7 +353,6 @@ class Postal(Record):
 
 
 class Subdivision(PlaceRecord):
-
     """Contains data for the subdivisions associated with an IP address
 
     This class contains the subdivision data associated with an IP address.
@@ -411,7 +402,6 @@ class Subdivision(PlaceRecord):
 
 
 class Subdivisions(tuple):
-
     """A tuple-like collection of subdivisions associated with an IP address
 
     This class contains the subdivisions of the country associated with the
@@ -422,6 +412,7 @@ class Subdivisions(tuple):
 
     This attribute is returned by ``city`` and ``insights``.
     """
+
     def __new__(cls, locales, *subdivisions):
         subdivisions = [Subdivision(locales, **x) for x in subdivisions]
         obj = super(cls, Subdivisions).__new__(cls, subdivisions)
@@ -447,7 +438,6 @@ class Subdivisions(tuple):
 
 
 class Traits(Record):
-
     """ Contains data for the traits record associated with an IP address
 
     This class contains the traits data associated with an IP address.
@@ -558,15 +548,10 @@ class Traits(Record):
       :type: unicode
 
 """
-    _valid_attributes = set(['autonomous_system_number',
-                             'autonomous_system_organization',
-                             'domain',
-                             'is_anonymous_proxy',
-                             'is_satellite_provider',
-                             'isp',
-                             'ip_address',
-                             'organization',
-                             'user_type'])
+    _valid_attributes = set(
+        ['autonomous_system_number', 'autonomous_system_organization',
+         'domain', 'is_anonymous_proxy', 'is_satellite_provider', 'isp',
+         'ip_address', 'organization', 'user_type'])
 
     def __init__(self, **kwargs):
         for k in ['is_anonymous_proxy', 'is_satellite_provider']:
