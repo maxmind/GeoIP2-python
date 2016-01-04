@@ -35,6 +35,6 @@ after_success:
 notifications:
   email:
     recipients:
-      - dev@maxmind.com
+      - dev-ci@maxmind.com
     on_success: change
     on_failure: always
