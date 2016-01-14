@@ -1,12 +1,11 @@
+---
 language: python
-
 python:
-  - 2.6
-  - 2.7
-  - 3.3
-  - 3.4
+  - '2.6'
+  - '2.7'
+  - '3.3'
+  - '3.4'
   - pypy
-
 before_install:
   - git submodule update --init --recursive
   - git clone --recursive git://github.com/maxmind/libmaxminddb
@@ -18,23 +17,22 @@ before_install:
   - sudo ldconfig
   - cd ..
   - pip install -e git+https://github.com/maxmind/MaxMind-DB-Reader-python#egg=maxminddb
-
 install:
   - pip install -r requirements.txt
   - pip install requests_mock pylint coveralls
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2 ipaddr; fi
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install ipaddr; fi
-
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.6' ]]; then pip install unittest2 ipaddr; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install ipaddr; fi"
 script:
   - coverage run --source=geoip2 setup.py test
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pylint geoip2; fi
-
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pylint geoip2; fi"
 after_success:
   - coveralls
-
 notifications:
   email:
+    on_failure: always
+    on_success: change
     recipients:
       - dev-ci@maxmind.com
-    on_success: change
-    on_failure: always
+  slack:
+    rooms:
+      secure: "FZLn7HZnM6GOtIU7+W6tY6zd2y0K4C1ZgIOAiGscWvJydn+Xr63GCT21EPPe9QCulQHz88CWALMD7ZrDdsh6nV0gx0IeE+wq4w7NZYjLokvxs+UMYwuwl57MMrqd7e4byZDC4BLvTQTCvpOHOd8dCHwDXmuBcuyE8zB+Wkndn0I=\n"
