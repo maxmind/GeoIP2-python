@@ -262,8 +262,8 @@ always have every piece of data for any given IP address.
 Because of these factors, it is possible for any request to return a record
 where some or all of the attributes are unpopulated.
 
-The only piece of data which is always returned is the `ip_address` attribute
-in the ``geoip2.records.Traits`` record.
+The only piece of data which is always returned is the ``ip_address``
+attribute in the ``geoip2.records.Traits`` record.
 
 Integration with GeoNames
 -------------------------
