@@ -251,6 +251,20 @@ be thrown. If the file is invalid or there is a bug in the reader, a
 problem. If an IP address is not in the database, a ``AddressNotFoundError``
 exception will be thrown.
 
+Values to use for Database or Dictionary Keys
+---------------------------------------------
+
+**We strongly discourage your from using a value from any `names` accessor as
+a key in a database or dicts.**
+
+These names may change between releases. Instead we recommend using one of the
+following:
+
+* ``geoip2.records.City`` - ``city.geoname_id``
+* ``geoip2.records.Continent`` - ``continent.code`` or ``continent.geoname_id``
+* ``geoip2.records.Country`` and ``geoip2.records.RepresentedCountry`` - ``country.iso_code`` or ``country.geoname_id``
+* ``geoip2.records.subdivision`` - ``subdivision.iso_code`` or ``subdivision.geoname_id``
+
 What data is returned?
 ----------------------
 
