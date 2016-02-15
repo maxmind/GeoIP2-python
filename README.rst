@@ -254,8 +254,8 @@ exception will be thrown.
 Values to use for Database or Dictionary Keys
 ---------------------------------------------
 
-**We strongly discourage your from using a value from any `names` accessor as
-a key in a database or dicts.**
+**We strongly discourage you from using a value from any ``names`` property as
+a key in a database or dictionaries.**
 
 These names may change between releases. Instead we recommend using one of the
 following:
