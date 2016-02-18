@@ -25,6 +25,7 @@ if sys.version_info[0] == 2:
 
 
 class BaseTestReader(object):
+
     def test_default_locale(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-City-Test.mmdb')
@@ -125,6 +126,19 @@ class BaseTestReader(object):
                          "Domain repr can be eval'd")
 
         reader.close()
+
+    def test_enterprise(self):
+        with geoip2.database.Reader(
+                'tests/data/test-data/GeoIP2-Enterprise-Test.mmdb') as reader:
+            ip_address = '74.209.24.0'
+            record = reader.enterprise(ip_address)
+            self.assertEqual(record.city.confidence, 11)
+            self.assertEqual(record.country.confidence, 99)
+            self.assertEqual(record.country.geoname_id, 6252001)
+            self.assertEqual(record.location.accuracy_radius, 27)
+            self.assertEqual(record.traits.connection_type, 'Cable/DSL')
+            self.assertTrue(record.traits.is_legitimate_proxy)
+            self.assertEqual(record.traits.ip_address, ip_address)
 
     def test_isp(self):
         reader = geoip2.database.Reader(

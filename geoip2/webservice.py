@@ -219,11 +219,3 @@ class Client(object):
     def _handle_non_200_status(self, status, uri):
         raise HTTPError('Received a very surprising HTTP status '
                         '(%(status)i) for %(uri)s' % locals(), status, uri)
-
-
-"""
-
-:copyright: (c) 2014 by MaxMind, Inc.
-:license: Apache License, Version 2.0
-
-"""

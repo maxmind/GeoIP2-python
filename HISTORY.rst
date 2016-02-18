@@ -6,6 +6,7 @@ History
 2.3.0 (201X-XX-XX)
 ++++++++++++++++++
 
+* Added support for the GeoIP2 Enterprise database.
 * ``geoip2.database.Reader`` now supports being used in a ``with`` statement
   (PEP 343). (PR from Nguyễn Hồng Quân. GitHub #29)
 
@@ -20,7 +21,6 @@ History
   Anonymous IP database
   <https://www.maxmind.com/en/geoip2-anonymous-ip-database>`_
   to determine whether an IP address is used by an anonymizing service.
-
 
 2.1.0 (2014-12-09)
 ++++++++++++++++++
@@ -79,7 +79,6 @@ History
   changed from unicode to integers. This may affect how you use these values
   from this API.
 * Support was added for the GeoIP2 Connection Type, Domain, and ISP databases.
-
 
 0.5.1 (2014-03-28)
 ++++++++++++++++++
