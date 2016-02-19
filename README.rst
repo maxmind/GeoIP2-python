@@ -244,7 +244,7 @@ Enterprise Database
     'Minnesota'
     >>>     response.subdivisions.most_specific.iso_code
     'MN'
-    >>>     response.subdivisions.most_specificconfidence
+    >>>     response.subdivisions.most_specific.confidence
     77
     >>>
     >>>     response.city.name
