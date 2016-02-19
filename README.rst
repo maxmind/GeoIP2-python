@@ -217,6 +217,51 @@ Domain Database
     '128.101.101.101'
     >>> reader.close()
 
+Enterprise Database
+^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: pycon
+
+    >>> import geoip2.database
+    >>>
+    >>> # This creates a Reader object. You should use the same object
+    >>> # across multiple requests as creation of it is expensive.
+    >>> with geoip2.database.Reader('/path/to/GeoIP2-Enterprise.mmdb') as reader:
+    >>>
+    >>>     # Use the .enterprise method to do a lookup in the Enterprise database
+    >>>     response = reader.enterprise('128.101.101.101')
+    >>>
+    >>>     response.country.confidence
+    99
+    >>>     response.country.iso_code
+    'US'
+    >>>     response.country.name
+    'United States'
+    >>>     response.country.names['zh-CN']
+    u'美国'
+    >>>
+    >>>     response.subdivisions.most_specific.name
+    'Minnesota'
+    >>>     response.subdivisions.most_specific.iso_code
+    'MN'
+    >>>     response.subdivisions.most_specific.confidence
+    77
+    >>>
+    >>>     response.city.name
+    'Minneapolis'
+    >>>     response.country.confidence
+    11
+    >>>
+    >>>     response.postal.code
+    '55455'
+    >>>
+    >>>     response.location.accuracy_radius
+    50
+    >>>     response.location.latitude
+    44.9733
+    >>>     response.location.longitude
+    -93.2323
+
 ISP Database
 ^^^^^^^^^^^^
 

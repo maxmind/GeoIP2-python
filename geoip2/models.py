@@ -237,6 +237,70 @@ class Insights(City):
     """
 
 
+class Enterprise(City):
+    """Model for the GeoIP2 Enterprise database
+
+    .. attribute:: city
+
+      City object for the requested IP address.
+
+      :type: :py:class:`geoip2.records.City`
+
+    .. attribute:: continent
+
+      Continent object for the requested IP address.
+
+      :type: :py:class:`geoip2.records.Continent`
+
+    .. attribute:: country
+
+      Country object for the requested IP address. This record represents the
+      country where MaxMind believes the IP is located.
+
+      :type: :py:class:`geoip2.records.Country`
+
+    .. attribute:: location
+
+      Location object for the requested IP address.
+
+    .. attribute:: maxmind
+
+      Information related to your MaxMind account.
+
+      :type: :py:class:`geoip2.records.MaxMind`
+
+    .. attribute:: registered_country
+
+      The registered country object for the requested IP address. This record
+      represents the country where the ISP has registered a given IP block in
+      and may differ from the user's country.
+
+      :type: :py:class:`geoip2.records.Country`
+
+    .. attribute:: represented_country
+
+      Object for the country represented by the users of the IP address
+      when that country is different than the country in ``country``. For
+      instance, the country represented by an overseas military base.
+
+      :type: :py:class:`geoip2.records.RepresentedCountry`
+
+    .. attribute:: subdivisions
+
+      Object (tuple) representing the subdivisions of the country to which
+      the location of the requested IP address belongs.
+
+      :type: :py:class:`geoip2.records.Subdivisions`
+
+    .. attribute:: traits
+
+      Object with the traits of the requested IP address.
+
+      :type: :py:class:`geoip2.records.Traits`
+
+    """
+
+
 class SimpleModel(SimpleEquality):
     """Provides basic methods for non-location models"""
 

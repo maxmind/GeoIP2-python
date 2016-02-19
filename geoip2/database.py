@@ -142,6 +142,17 @@ class Reader(object):
         return self._flat_model_for(geoip2.models.Domain, 'GeoIP2-Domain',
                                     ip_address)
 
+    def enterprise(self, ip_address):
+        """Get the Enterprise object for the IP address
+
+        :param ip_address: IPv4 or IPv6 address as a string.
+
+        :returns: :py:class:`geoip2.models.Enterprise` object
+
+        """
+        return self._model_for(geoip2.models.Enterprise, 'Enterprise',
+                               ip_address)
+
     def isp(self, ip_address):
         """Get the ISP object for the IP address
 

@@ -57,7 +57,7 @@ class City(PlaceRecord):
 
     This class contains the city-level data associated with an IP address.
 
-    This record is returned by ``city`` and ``insights``.
+    This record is returned by ``city``, ``enterprise``, and ``insights``.
 
     Attributes:
 
@@ -65,7 +65,7 @@ class City(PlaceRecord):
 
       A value from 0-100 indicating MaxMind's
       confidence that the city is correct. This attribute is only available
-      from the Insights end point.
+      from the Insights end point and the GeoIP2 Enterprise database.
 
       :type: int
 
@@ -145,7 +145,7 @@ class Country(PlaceRecord):
 
       A value from 0-100 indicating MaxMind's confidence that
       the country is correct. This attribute is only available from the
-      Insights end point.
+      Insights end point and the GeoIP2 Enterprise database.
 
       :type: int
 
@@ -195,7 +195,7 @@ class RepresentedCountry(Country):
 
       A value from 0-100 indicating MaxMind's confidence that
       the country is correct. This attribute is only available from the
-      Insights end point.
+      Insights end point and the GeoIP2 Enterprise database.
 
       :type: int
 
@@ -245,7 +245,7 @@ class Location(Record):
 
     This class contains the location data associated with an IP address.
 
-    This record is returned by `city` and `insights`.
+    This record is returned by ``city``, ``enterprise``, and ``insights``.
 
     Attributes:
 
@@ -260,7 +260,8 @@ class Location(Record):
 
       The radius in kilometers around the
       specified location where the IP address is likely to be. This attribute
-      is only available from the Insights end point.
+      is only available from the Insights end point and the GeoIP2 Enterprise
+      database.
 
       :type: int
 
@@ -328,7 +329,7 @@ class Postal(Record):
 
     This class contains the postal data associated with an IP address.
 
-    This attribute is returned by ``city`` and ``insights``.
+    This attribute is returned by ``city``, ``enterprise``, and ``insights``.
 
     Attributes:
 
@@ -344,7 +345,8 @@ class Postal(Record):
 
       A value from 0-100 indicating
       MaxMind's confidence that the postal code is correct. This attribute is
-      only available from the Insights end point.
+      only available from the Insights end point and the GeoIP2 Enterprise
+      database.
 
       :type: int
 
@@ -357,7 +359,7 @@ class Subdivision(PlaceRecord):
 
     This class contains the subdivision data associated with an IP address.
 
-    This attribute is returned by ``city`` and ``insights``.
+    This attribute is returned by ``city``, ``enterprise``, and ``insights``.
 
     Attributes:
 
@@ -365,7 +367,8 @@ class Subdivision(PlaceRecord):
 
       This is a value from 0-100 indicating MaxMind's
       confidence that the subdivision is correct. This attribute is only
-      available from the Insights end point.
+      available from the Insights end point and the GeoIP2 Enterprise
+      database.
 
       :type: int
 
@@ -410,7 +413,7 @@ class Subdivisions(tuple):
     For instance, the response for Oxford in the United Kingdom would have
     England as the first element and Oxfordshire as the second element.
 
-    This attribute is returned by ``city`` and ``insights``.
+    This attribute is returned by ``city``, ``enterprise``, and ``insights``.
     """
 
     def __new__(cls, locales, *subdivisions):
@@ -450,7 +453,8 @@ class Traits(Record):
       The `autonomous system
       number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_
       associated with the IP address. This attribute is only available from
-      the City and Insights web service end points.
+      the City and Insights web service end points and the GeoIP2 Enterprise
+      database.
 
       :type: int
 
@@ -459,7 +463,22 @@ class Traits(Record):
       The organization associated with the registered `autonomous system
       number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for
       the IP address. This attribute is only available from the City and
-      Insights web service end points.
+      Insights web service end points and the GeoIP2 Enterprise database.
+
+      :type: unicode
+
+    .. attribute:: connection_type
+
+      The connection type may take the following values:
+
+      - Dialup
+      - Cable/DSL
+      - Corporate
+      - Cellular
+
+      Additional values may be added in the future.
+
+      This attribute is only available in the GeoIP2 Enterprise database.
 
       :type: unicode
 
@@ -468,7 +487,8 @@ class Traits(Record):
       The second level domain associated with the
       IP address. This will be something like "example.com" or
       "example.co.uk", not "foo.example.com". This attribute is only available
-      from the City and Insights web service end points.
+      from the City and Insights web service end points and the GeoIP2
+      Enterprise database.
 
       :type: unicode
 
@@ -495,6 +515,14 @@ class Traits(Record):
         <https://www.maxmind.com/en/geoip2-anonymous-ip-database GeoIP2>`_
         instead.
 
+    .. attribute:: is_legitimate_proxy
+
+      This attribute is true if MaxMind believes this IP address to be a
+      legitimate proxy, such as an internal VPN used by a corporation. This
+      attribute is only available in the GeoIP2 Enterprise database.
+
+      :type: bool
+
     .. attribute:: is_satellite_provider
 
       This is true if the IP address is from a satellite provider that
@@ -510,7 +538,8 @@ class Traits(Record):
     .. attribute:: isp
 
       The name of the ISP associated with the IP address. This attribute is
-      only available from the City and Insights web service end points.
+      only available from the City and Insights web service end points and the
+      GeoIP2 Enterprise database.
 
       :type: unicode
 
@@ -518,7 +547,7 @@ class Traits(Record):
 
       The name of the organization associated with the IP address. This
       attribute is only available from the City and Insights web service end
-      points.
+      points and the GeoIP2 Enterprise database.
 
       :type: unicode
 
@@ -543,17 +572,20 @@ class Traits(Record):
       * search_engine_spider
       * traveler
 
-      This attribute is only available from the Insights end point.
+      This attribute is only available from the Insights end point and the
+      GeoIP2 Enterprise database.
 
       :type: unicode
 
 """
     _valid_attributes = set(
         ['autonomous_system_number', 'autonomous_system_organization',
-         'domain', 'is_anonymous_proxy', 'is_satellite_provider', 'isp',
-         'ip_address', 'organization', 'user_type'])
+         'connection_type', 'domain', 'is_anonymous_proxy',
+         'is_legitimate_proxy', 'is_satellite_provider', 'isp', 'ip_address',
+         'organization', 'user_type'])
 
     def __init__(self, **kwargs):
-        for k in ['is_anonymous_proxy', 'is_satellite_provider']:
+        for k in ['is_anonymous_proxy', 'is_legitimate_proxy',
+                  'is_satellite_provider']:
             kwargs[k] = bool(kwargs.get(k, False))
         super(Traits, self).__init__(**kwargs)
