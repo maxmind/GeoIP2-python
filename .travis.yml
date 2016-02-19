@@ -5,7 +5,13 @@ python:
   - '2.7'
   - '3.3'
   - '3.4'
+  - '3.5'
+  - nightly
   - pypy
+matrix:
+  allow_failures:
+    - python: nightly
+
 before_install:
   - git submodule update --init --recursive
   - git clone --recursive git://github.com/maxmind/libmaxminddb
