@@ -35,6 +35,13 @@ install the `libmaxminddb C API <https://github.com/maxmind/libmaxminddb>`_.
 Please `see the instructions distributed with it
 <https://github.com/maxmind/libmaxminddb/blob/master/README.md>`_.
 
+IP Geolocation Usage
+--------------------
+
+IP geolocation is inherently imprecise. Locations are often near the center of
+the population. Any location provided by a GeoIP2 database or web service
+should not be used to identify a particular address or household.
+
 Usage
 -----
 
