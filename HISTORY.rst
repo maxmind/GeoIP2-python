@@ -3,7 +3,7 @@
 History
 -------
 
-2.3.0 (201X-XX-XX)
+2.3.0 (2016-04-15)
 ++++++++++++++++++
 
 * Added support for the GeoIP2 Enterprise database.
