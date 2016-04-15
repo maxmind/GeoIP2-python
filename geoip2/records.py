@@ -267,14 +267,19 @@ class Location(Record):
 
     .. attribute:: latitude
 
-      The latitude of the location as a floating point number.
+      The approximate latitude of the location associated with the IP
+      address. This value is not precise and should not be used to identify a
+      particular address or household. This attribute is returned by all end
+      points and location databases except Country.
 
       :type: float
 
     .. attribute:: longitude
 
-      The longitude of the location as a
-      floating point number.
+      The approximate longitude of the location associated with the IP
+      address. This value is not precise and should not be used to identify a
+      particular address or household. This attribute is returned by all end
+      points and location databases except Country.
 
       :type: float
 
