@@ -251,17 +251,15 @@ class Location(Record):
 
     .. attribute:: average_income
 
-      The average income in US dollars associated with the requested IP address
-      This attribute is only available from the Insights end point.
+      The average income in US dollars associated with the requested IP
+      address. This attribute is only available from the Insights end point.
 
       :type: int
 
     .. attribute:: accuracy_radius
 
-      The radius in kilometers around the
-      specified location where the IP address is likely to be. This attribute
-      is only available from the Insights end point and the GeoIP2 Enterprise
-      database.
+      The radius in kilometers around the specified location where the IP
+      address is likely to be.
 
       :type: int
 
@@ -269,8 +267,7 @@ class Location(Record):
 
       The approximate latitude of the location associated with the IP
       address. This value is not precise and should not be used to identify a
-      particular address or household. This attribute is returned by all end
-      points and location databases except Country.
+      particular address or household.
 
       :type: float
 
@@ -278,8 +275,7 @@ class Location(Record):
 
       The approximate longitude of the location associated with the IP
       address. This value is not precise and should not be used to identify a
-      particular address or household. This attribute is returned by all end
-      points and location databases except Country.
+      particular address or household.
 
       :type: float
 
@@ -301,9 +297,9 @@ class Location(Record):
 
     .. attribute:: time_zone
 
-      The time zone associated with location, as
-      specified by the `IANA Time Zone Database
-      <http://www.iana.org/time-zones>`_, e.g., "America/New_York".
+      The time zone associated with location, as specified by the `IANA Time
+      Zone Database <http://www.iana.org/time-zones>`_, e.g.,
+      "America/New_York".
 
       :type: unicode
 

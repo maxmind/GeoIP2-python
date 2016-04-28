@@ -3,6 +3,12 @@
 History
 -------
 
+2.3.1 (2016-XX-XX)
+++++++++++++++++++
+
+* Updated documentation to reflect that the accuracy radius is now included
+  in City.
+
 2.3.0 (2016-04-15)
 ++++++++++++++++++
 

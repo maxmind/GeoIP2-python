@@ -26,14 +26,6 @@ if sys.version_info[0] == 2:
 
 class BaseTestReader(object):
 
-    def test_default_locale(self):
-        reader = geoip2.database.Reader(
-            'tests/data/test-data/GeoIP2-City-Test.mmdb')
-        record = reader.city('81.2.69.160')
-
-        self.assertEqual(record.country.name, 'United Kingdom')
-        reader.close()
-
     def test_language_list(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-Country-Test.mmdb',
@@ -41,13 +33,6 @@ class BaseTestReader(object):
         record = reader.country('81.2.69.160')
 
         self.assertEqual(record.country.name, 'Великобритания')
-        reader.close()
-
-    def test_has_ip_address(self):
-        reader = geoip2.database.Reader(
-            'tests/data/test-data/GeoIP2-Country-Test.mmdb')
-        record = reader.country('81.2.69.160')
-        self.assertEqual(record.traits.ip_address, '81.2.69.160')
         reader.close()
 
     def test_unknown_address(self):
@@ -91,6 +76,18 @@ class BaseTestReader(object):
         self.assertEqual(record.ip_address, ip_address)
         reader.close()
 
+    def test_city(self):
+        reader = geoip2.database.Reader(
+            'tests/data/test-data/GeoIP2-City-Test.mmdb')
+        record = reader.city('81.2.69.160')
+
+        self.assertEqual(record.country.name, 'United Kingdom',
+                         'The default locale is en')
+
+        self.assertEqual(record.location.accuracy_radius, 100,
+                         'The accuracy_radius is populated')
+        reader.close()
+
     def test_connection_type(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-Connection-Type-Test.mmdb')
@@ -107,6 +104,14 @@ class BaseTestReader(object):
         self.assertEqual(record, eval(repr(record)),
                          "ConnectionType repr can be eval'd")
 
+        reader.close()
+
+    def test_country(self):
+        reader = geoip2.database.Reader(
+            'tests/data/test-data/GeoIP2-Country-Test.mmdb')
+        record = reader.country('81.2.69.160')
+        self.assertEqual(record.traits.ip_address, '81.2.69.160',
+                         'IP address is added to model')
         reader.close()
 
     def test_domain(self):
