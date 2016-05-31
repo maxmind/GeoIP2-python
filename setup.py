@@ -33,7 +33,7 @@ setup(
     include_package_data=True,
     install_requires=requirements,
     extras_require={
-        ':python_version=="2.6" or python_version=="2.7"': ['ipaddr']},
+        ':python_version=="2.6" or python_version=="2.7"': ['ipaddress']},
     tests_require=['requests_mock'],
     test_suite="tests",
     license=geoip2.__license__,

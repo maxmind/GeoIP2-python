@@ -25,26 +25,18 @@ Requests to the GeoIP2 Precision web service are always made with SSL.
 
 """
 
-import sys
-
 import requests
+
+from requests.utils import default_user_agent
 
 import geoip2
 import geoip2.models
 
-from requests.utils import default_user_agent
+from .compat import compat_ip_address
 
 from .errors import (AddressNotFoundError, AuthenticationError, GeoIP2Error,
                      HTTPError, InvalidRequestError, OutOfQueriesError,
                      PermissionRequiredError)
-
-if sys.version_info[0] == 2 or (sys.version_info[0] == 3 and
-                                sys.version_info[1] < 3):
-    import ipaddr as ipaddress  # pylint:disable=F0401
-
-    ipaddress.ip_address = ipaddress.IPAddress
-else:
-    import ipaddress  # pylint:disable=F0401
 
 
 class Client(object):
@@ -96,6 +88,7 @@ class Client(object):
                  host='geoip.maxmind.com',
                  locales=None,
                  timeout=None):
+        """Construct a Client."""
         # pylint: disable=too-many-arguments
         if locales is None:
             locales = ['en']
@@ -144,7 +137,7 @@ class Client(object):
 
     def _response_for(self, path, model_class, ip_address):
         if ip_address != 'me':
-            ip_address = str(ipaddress.ip_address(ip_address))
+            ip_address = str(compat_ip_address(ip_address))
         uri = '/'.join([self._base_uri, path, ip_address])
         response = requests.get(uri,
                                 auth=(self._user_id, self._license_key),
