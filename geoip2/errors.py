@@ -45,3 +45,7 @@ class InvalidRequestError(GeoIP2Error):
 
 class OutOfQueriesError(GeoIP2Error):
     """Your account is out of funds for the service queried."""
+
+
+class PermissionRequiredError(GeoIP2Error):
+    """Your account does not have permission to access this service."""

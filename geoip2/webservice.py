@@ -28,7 +28,15 @@ Requests to the GeoIP2 Precision web service are always made with SSL.
 import sys
 
 import requests
+
+import geoip2
+import geoip2.models
+
 from requests.utils import default_user_agent
+
+from .errors import (AddressNotFoundError, AuthenticationError, GeoIP2Error,
+                     HTTPError, InvalidRequestError, OutOfQueriesError,
+                     PermissionRequiredError)
 
 if sys.version_info[0] == 2 or (sys.version_info[0] == 3 and
                                 sys.version_info[1] < 3):
@@ -37,11 +45,6 @@ if sys.version_info[0] == 2 or (sys.version_info[0] == 3 and
     ipaddress.ip_address = ipaddress.IPAddress
 else:
     import ipaddress  # pylint:disable=F0401
-
-import geoip2
-import geoip2.models
-from .errors import (AddressNotFoundError, AuthenticationError, GeoIP2Error,
-                     HTTPError, InvalidRequestError, OutOfQueriesError)
 
 
 class Client(object):
@@ -103,7 +106,7 @@ class Client(object):
         self._timeout = timeout
 
     def city(self, ip_address='me'):
-        """This method calls the GeoIP2 Precision City endpoint.
+        """Call GeoIP2 Precision City endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no
            address is provided, the address that the web service is
@@ -115,7 +118,7 @@ class Client(object):
         return self._response_for('city', geoip2.models.City, ip_address)
 
     def country(self, ip_address='me'):
-        """This method calls the GeoIP2 Country endpoint.
+        """Call the GeoIP2 Country endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
           is provided, the address that the web service is called from will
@@ -127,7 +130,7 @@ class Client(object):
         return self._response_for('country', geoip2.models.Country, ip_address)
 
     def insights(self, ip_address='me'):
-        """This method calls the GeoIP2 Precision: Insights endpoint.
+        """Call the GeoIP2 Precision: Insights endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
           is provided, the address that the web service is called from will
@@ -205,10 +208,12 @@ class Client(object):
         if code in ('IP_ADDRESS_NOT_FOUND', 'IP_ADDRESS_RESERVED'):
             raise AddressNotFoundError(message)
         elif code in ('AUTHORIZATION_INVALID', 'LICENSE_KEY_REQUIRED',
-                      'USER_ID_REQUIRED'):
+                      'USER_ID_REQUIRED', 'USER_ID_UNKNOWN'):
             raise AuthenticationError(message)
-        elif code == 'OUT_OF_QUERIES':
+        elif code in ('INSUFFICIENT_FUNDS', 'OUT_OF_QUERIES'):
             raise OutOfQueriesError(message)
+        elif code == 'PERMISSION_REQUIRED':
+            raise PermissionRequiredError(message)
 
         raise InvalidRequestError(message, code, status, uri)
 

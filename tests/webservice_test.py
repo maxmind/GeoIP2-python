@@ -6,8 +6,9 @@ sys.path.append('..')
 
 import geoip2
 import requests_mock
-from geoip2.errors import AddressNotFoundError, AuthenticationError, \
-    GeoIP2Error, HTTPError, InvalidRequestError, OutOfQueriesError
+from geoip2.errors import (AddressNotFoundError, AuthenticationError,
+                           GeoIP2Error, HTTPError, InvalidRequestError, OutOfQueriesError,
+                           PermissionRequiredError)
 from geoip2.webservice import Client
 
 if sys.version_info[:2] == (2, 6):
@@ -21,6 +22,7 @@ if sys.version_info[0] == 2:
 
 
 class TestClient(unittest.TestCase):
+
     def setUp(self):
         self.client = Client(42, 'abcdef123456')
 
@@ -149,63 +151,54 @@ class TestClient(unittest.TestCase):
             self.client.country('1.2.3.11')
 
     @requests_mock.mock()
-    def test_address_not_found_error(self, mock):
-        body = {'error': 'Not in DB', 'code': 'IP_ADDRESS_NOT_FOUND'}
-        mock.get(self.base_uri + 'country/' + '1.2.3.13',
-                 json=body,
-                 status_code=404,
-                 headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(AddressNotFoundError, 'Not in DB'):
-            self.client.country('1.2.3.13')
+    def test_ip_address_required(self, mock):
+        self._test_error(mock, 400, 'IP_ADDRESS_REQUIRED', InvalidRequestError)
 
     @requests_mock.mock()
-    def test_private_address_error(self, mock):
-        body = {'error': 'Private', 'code': 'IP_ADDRESS_RESERVED'}
-        mock.get(self.base_uri + 'country/' + '1.2.3.14',
-                 json=body,
-                 status_code=401,
-                 headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(AddressNotFoundError, 'Private'):
-            self.client.country('1.2.3.14')
+    def test_ip_address_not_found(self, mock):
+        self._test_error(mock, 404, 'IP_ADDRESS_NOT_FOUND',
+                         AddressNotFoundError)
+
+    @requests_mock.mock()
+    def test_ip_address_reserved(self, mock):
+        self._test_error(mock, 400, 'IP_ADDRESS_RESERVED',
+                         AddressNotFoundError)
+
+    @requests_mock.mock()
+    def test_permission_required(self, mock):
+        self._test_error(mock, 403, 'PERMISSION_REQUIRED',
+                         PermissionRequiredError)
 
     @requests_mock.mock()
     def test_auth_invalid(self, mock):
-        body = {'error': 'Invalid auth', 'code': 'AUTHORIZATION_INVALID'}
-        mock.get(self.base_uri + 'country/' + '1.2.3.15',
-                 json=body,
-                 status_code=400,
-                 headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(AuthenticationError, 'Invalid auth'):
-            self.client.country('1.2.3.15')
+        self._test_error(mock, 400, 'AUTHORIZATION_INVALID',
+                         AuthenticationError)
 
     @requests_mock.mock()
-    def test_license_required(self, mock):
-        body = {'error': 'License required', 'code': 'LICENSE_KEY_REQUIRED'}
-        mock.get(self.base_uri + 'country/' + '1.2.3.16',
-                 json=body,
-                 status_code=401,
-                 headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(AuthenticationError, 'License required'):
-            self.client.country('1.2.3.16')
+    def test_license_key_required(self, mock):
+        self._test_error(mock, 401, 'LICENSE_KEY_REQUIRED',
+                         AuthenticationError)
 
     @requests_mock.mock()
     def test_user_id_required(self, mock):
-        body = {'error': 'User ID required', 'code': 'USER_ID_REQUIRED'}
-        mock.get(self.base_uri + 'country/' + '1.2.3.17',
-                 json=body,
-                 status_code=401,
-                 headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(AuthenticationError, 'User ID required'):
-            self.client.country('1.2.3.17')
+        self._test_error(mock, 401, 'USER_ID_REQUIRED', AuthenticationError)
+
+    @requests_mock.mock()
+    def test_user_id_unkown(self, mock):
+        self._test_error(mock, 401, 'USER_ID_UNKNOWN', AuthenticationError)
 
     @requests_mock.mock()
     def test_out_of_queries_error(self, mock):
-        body = {'error': 'Out of Queries', 'code': 'OUT_OF_QUERIES'}
-        mock.get(self.base_uri + 'country/' + '1.2.3.18',
+        self._test_error(mock, 402, 'OUT_OF_QUERIES', OutOfQueriesError)
+
+    def _test_error(self, mock, status, error_code, error_class):
+        msg = 'Some error message'
+        body = {'error': msg, 'code': error_code}
+        mock.get(self.base_uri + 'country/1.2.3.18',
                  json=body,
-                 status_code=402,
+                 status_code=status,
                  headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(OutOfQueriesError, 'Out of Queries'):
+        with self.assertRaisesRegex(error_class, msg):
             self.client.country('1.2.3.18')
 
     @requests_mock.mock()
