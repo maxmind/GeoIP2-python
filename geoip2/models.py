@@ -18,7 +18,7 @@ from geoip2.mixins import SimpleEquality
 
 
 class Country(SimpleEquality):
-    """Model for the GeoIP2 Precision: Country and the GeoIP2 Country database
+    """Model for the GeoIP2 Precision: Country and the GeoIP2 Country database.
 
     This class provides the following attributes:
 
@@ -99,7 +99,8 @@ class Country(SimpleEquality):
 
 
 class City(Country):
-    """Model for the GeoIP2 Precision: City and the GeoIP2 City database
+    """Model for the GeoIP2 Precision: City and the GeoIP2 City database.
+
     .. attribute:: city
 
       City object for the requested IP address.
@@ -174,7 +175,7 @@ class City(Country):
 
 
 class Insights(City):
-    """Model for the GeoIP2 Precision: Insights web service endpoint
+    """Model for the GeoIP2 Precision: Insights web service endpoint.
 
     .. attribute:: city
 
@@ -238,7 +239,7 @@ class Insights(City):
 
 
 class Enterprise(City):
-    """Model for the GeoIP2 Enterprise database
+    """Model for the GeoIP2 Enterprise database.
 
     .. attribute:: city
 
@@ -315,7 +316,7 @@ class SimpleModel(SimpleEquality):
 
 
 class AnonymousIP(SimpleModel):
-    """Model class for the GeoIP2 Anonymous IP
+    """Model class for the GeoIP2 Anonymous IP.
 
     This class provides the following attribute:
 
@@ -368,7 +369,7 @@ class AnonymousIP(SimpleModel):
 
 
 class ConnectionType(SimpleModel):
-    """Model class for the GeoIP2 Connection-Type
+    """Model class for the GeoIP2 Connection-Type.
 
     This class provides the following attribute:
 
@@ -399,7 +400,7 @@ class ConnectionType(SimpleModel):
 
 
 class Domain(SimpleModel):
-    """Model class for the GeoIP2 Domain
+    """Model class for the GeoIP2 Domain.
 
     This class provides the following attribute:
 
@@ -424,7 +425,7 @@ class Domain(SimpleModel):
 
 
 class ISP(SimpleModel):
-    """Model class for the GeoIP2 ISP
+    """Model class for the GeoIP2 ISP.
 
     This class provides the following attribute:
 

@@ -41,7 +41,7 @@ class Reader(object):
 """
 
     def __init__(self, filename, locales=None, mode=MODE_AUTO):
-        """Create GeoIP2 Reader
+        """Create GeoIP2 Reader.
 
         :param filename: The path to the GeoIP2 database.
         :param locales: This is list of locale codes. This argument will be
@@ -89,7 +89,7 @@ class Reader(object):
         self.close()
 
     def country(self, ip_address):
-        """Get the Country object for the IP address
+        """Get the Country object for the IP address.
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
@@ -100,7 +100,7 @@ class Reader(object):
         return self._model_for(geoip2.models.Country, 'Country', ip_address)
 
     def city(self, ip_address):
-        """Get the City object for the IP address
+        """Get the City object for the IP address.
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
@@ -110,7 +110,7 @@ class Reader(object):
         return self._model_for(geoip2.models.City, 'City', ip_address)
 
     def anonymous_ip(self, ip_address):
-        """Get the AnonymousIP object for the IP address
+        """Get the AnonymousIP object for the IP address.
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
@@ -121,7 +121,7 @@ class Reader(object):
                                     'GeoIP2-Anonymous-IP', ip_address)
 
     def connection_type(self, ip_address):
-        """Get the ConnectionType object for the IP address
+        """Get the ConnectionType object for the IP address.
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
@@ -132,7 +132,7 @@ class Reader(object):
                                     'GeoIP2-Connection-Type', ip_address)
 
     def domain(self, ip_address):
-        """Get the Domain object for the IP address
+        """Get the Domain object for the IP address.
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
@@ -143,7 +143,7 @@ class Reader(object):
                                     ip_address)
 
     def enterprise(self, ip_address):
-        """Get the Enterprise object for the IP address
+        """Get the Enterprise object for the IP address.
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
@@ -154,7 +154,7 @@ class Reader(object):
                                ip_address)
 
     def isp(self, ip_address):
-        """Get the ISP object for the IP address
+        """Get the ISP object for the IP address.
 
         :param ip_address: IPv4 or IPv6 address as a string.
 
@@ -187,13 +187,13 @@ class Reader(object):
         return model_class(record)
 
     def metadata(self):
-        """The metadata for the open database
+        """The metadata for the open database.
 
         :returns: :py:class:`maxminddb.reader.Metadata` object
         """
         return self._db_reader.metadata()
 
     def close(self):
-        """Closes the GeoIP2 database"""
+        """Closes the GeoIP2 database."""
 
         self._db_reader.close()
