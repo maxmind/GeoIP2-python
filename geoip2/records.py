@@ -4,6 +4,7 @@ Records
 =======
 
 """
+
 # pylint:disable=R0903
 from abc import ABCMeta
 
@@ -11,7 +12,8 @@ from geoip2.mixins import SimpleEquality
 
 
 class Record(SimpleEquality):
-    """All records are subclasses of the abstract class ``Record``"""
+    """All records are subclasses of the abstract class ``Record``."""
+
     __metaclass__ = ABCMeta
 
     _valid_attributes = set()
@@ -32,7 +34,8 @@ class Record(SimpleEquality):
 
 
 class PlaceRecord(Record):
-    """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`"""
+    """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`."""
+
     __metaclass__ = ABCMeta
 
     def __init__(self, locales=None, **kwargs):
@@ -45,7 +48,7 @@ class PlaceRecord(Record):
 
     @property
     def name(self):
-        """Dict with locale codes as keys and localized name as value"""
+        """Dict with locale codes as keys and localized name as value."""
         # pylint:disable=E1101
         return next(
             (self.names.get(x) for x in self._locales
@@ -53,7 +56,7 @@ class PlaceRecord(Record):
 
 
 class City(PlaceRecord):
-    """Contains data for the city record associated with an IP address
+    """Contains data for the city record associated with an IP address.
 
     This class contains the city-level data associated with an IP address.
 
@@ -90,11 +93,12 @@ class City(PlaceRecord):
       :type: dict
 
     """
+
     _valid_attributes = set(['confidence', 'geoname_id', 'names'])
 
 
 class Continent(PlaceRecord):
-    """Contains data for the continent record associated with an IP address
+    """Contains data for the continent record associated with an IP address.
 
     This class contains the continent-level data associated with an IP
     address.
@@ -130,11 +134,12 @@ class Continent(PlaceRecord):
       :type: dict
 
     """
+
     _valid_attributes = set(['code', 'geoname_id', 'names'])
 
 
 class Country(PlaceRecord):
-    """Contains data for the country record associated with an IP address
+    """Contains data for the country record associated with an IP address.
 
     This class contains the country-level data associated with an IP address.
 
@@ -178,11 +183,12 @@ class Country(PlaceRecord):
       :type: dict
 
     """
+
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names'])
 
 
 class RepresentedCountry(Country):
-    """Contains data for the represented country associated with an IP address
+    """Contains data for the represented country associated with an IP address.
 
     This class contains the country-level data associated with an IP address
     for the IP's represented country. The represented country is the country
@@ -236,12 +242,13 @@ class RepresentedCountry(Country):
       :type: unicode
 
     """
+
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names',
                              'type'])
 
 
 class Location(Record):
-    """Contains data for the location record associated with an IP address
+    """Contains data for the location record associated with an IP address.
 
     This class contains the location data associated with an IP address.
 
@@ -304,13 +311,14 @@ class Location(Record):
       :type: unicode
 
     """
+
     _valid_attributes = set(['average_income', 'accuracy_radius', 'latitude',
                              'longitude', 'metro_code', 'population_density',
                              'postal_code', 'postal_confidence', 'time_zone'])
 
 
 class MaxMind(Record):
-    """Contains data related to your MaxMind account
+    """Contains data related to your MaxMind account.
 
     Attributes:
 
@@ -322,11 +330,12 @@ class MaxMind(Record):
       :type: int
 
     """
+
     _valid_attributes = set(['queries_remaining'])
 
 
 class Postal(Record):
-    """Contains data for the postal record associated with an IP address
+    """Contains data for the postal record associated with an IP address.
 
     This class contains the postal data associated with an IP address.
 
@@ -352,11 +361,12 @@ class Postal(Record):
       :type: int
 
     """
+
     _valid_attributes = set(['code', 'confidence'])
 
 
 class Subdivision(PlaceRecord):
-    """Contains data for the subdivisions associated with an IP address
+    """Contains data for the subdivisions associated with an IP address.
 
     This class contains the subdivision data associated with an IP address.
 
@@ -402,11 +412,12 @@ class Subdivision(PlaceRecord):
       :type: dict
 
     """
+
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names'])
 
 
 class Subdivisions(tuple):
-    """A tuple-like collection of subdivisions associated with an IP address
+    """A tuple-like collection of subdivisions associated with an IP address.
 
     This class contains the subdivisions of the country associated with the
     IP address from largest to smallest.
@@ -430,10 +441,10 @@ class Subdivisions(tuple):
     def most_specific(self):
         """The most specific (smallest) subdivision available.
 
-          If there are no :py:class:`Subdivision` objects for the response,
-          this returns an empty :py:class:`Subdivision`.
+        If there are no :py:class:`Subdivision` objects for the response,
+        this returns an empty :py:class:`Subdivision`.
 
-          :type: :py:class:`Subdivision`
+        :type: :py:class:`Subdivision`
         """
         try:
             return self[-1]
@@ -442,7 +453,7 @@ class Subdivisions(tuple):
 
 
 class Traits(Record):
-    """ Contains data for the traits record associated with an IP address
+    """Contains data for the traits record associated with an IP address.
 
     This class contains the traits data associated with an IP address.
 
@@ -534,7 +545,8 @@ class Traits(Record):
       .. deprecated:: 2.2.0
         Due to the increased coverage by mobile carriers, very few
         satellite providers now serve multiple countries. As a result, the
-        output does not provide sufficiently relevant data for us to maintain it.
+        output does not provide sufficiently relevant data for us to maintain
+        it.
 
     .. attribute:: isp
 
@@ -578,7 +590,8 @@ class Traits(Record):
 
       :type: unicode
 
-"""
+    """
+
     _valid_attributes = set(
         ['autonomous_system_number', 'autonomous_system_organization',
          'connection_type', 'domain', 'is_anonymous_proxy',
