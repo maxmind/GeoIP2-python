@@ -3,9 +3,13 @@
 History
 -------
 
-2.3.1 (2016-XX-XX)
+2.4.0 (2016-XX-XX)
 ++++++++++++++++++
 
+* This module now uses ``ipaddress`` on Python 2 rather than ``ipaddr`` to
+  validate IP addresses before sending them to the web service.
+* Added handling of additional error codes that the web service may return.
+* PEP 257 documentation fixes.
 * Updated documentation to reflect that the accuracy radius is now included
   in City.
 
