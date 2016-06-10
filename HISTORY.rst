@@ -3,7 +3,7 @@
 History
 -------
 
-2.4.0 (2016-XX-XX)
+2.4.0 (2016-06-10)
 ++++++++++++++++++
 
 * This module now uses ``ipaddress`` on Python 2 rather than ``ipaddr`` to
@@ -12,6 +12,8 @@ History
 * PEP 257 documentation fixes.
 * Updated documentation to reflect that the accuracy radius is now included
   in City.
+* Previously, the source distribution was missing some tests and test
+  databases. This has been corrected. Reported by Lumir Balhar.
 
 2.3.0 (2016-04-15)
 ++++++++++++++++++

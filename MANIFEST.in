@@ -1,2 +1,2 @@
-include HISTORY.rst README.rst LICENSE requirements.txt tests/database_test.py tests/webservice_test.py tests/models_test.py
+include HISTORY.rst README.rst LICENSE requirements.txt tests/*.py tests/data/test-data/*.mmdb
 graft docs/html
