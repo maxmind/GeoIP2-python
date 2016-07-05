@@ -265,8 +265,10 @@ class Location(Record):
 
     .. attribute:: accuracy_radius
 
-      The radius in kilometers around the specified location where the IP
-      address is likely to be.
+      The approximate accuracy radius in kilometers around the latitude and
+      longitude for the IP address. This is the radius where we have a 67%
+      confidence that the device using the IP address resides within the
+      circle centered at the latitude and longitude with the provided radius.
 
       :type: int
 
