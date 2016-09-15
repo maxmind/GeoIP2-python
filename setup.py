@@ -6,14 +6,7 @@ import sys
 
 import geoip2
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
-
-if sys.argv[-1] == 'publish':
-    os.system('python setup.py sdist upload')
-    sys.exit()
+from setuptools import setup
 
 packages = ['geoip2']
 
@@ -37,7 +30,7 @@ setup(
     tests_require=['requests_mock'],
     test_suite="tests",
     license=geoip2.__license__,
-    classifiers=(
+    classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
@@ -51,5 +44,5 @@ setup(
         'Programming Language :: Python',
         'Topic :: Internet :: Proxy Servers',
         'Topic :: Internet',
-    ),
+    ],
 )
