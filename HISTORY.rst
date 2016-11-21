@@ -3,10 +3,11 @@
 History
 -------
 
-2.4.1 (2016-XX-XX)
+2.4.1 (2016-11-21)
 ++++++++++++++++++
 
 * Updated documentation to clarify what the accuracy radius refers to.
+* Fixed classifiers in ``setup.py``.
 
 2.4.0 (2016-06-10)
 ++++++++++++++++++
