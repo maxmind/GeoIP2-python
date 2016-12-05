@@ -28,7 +28,7 @@ setup(
     extras_require={
         ':python_version=="2.6" or python_version=="2.7"': ['ipaddress']
     },
-    tests_require=['requests_mock'],
+    tests_require=['requests_mock>=0.5'],
     test_suite="tests",
     license=geoip2.__license__,
     classifiers=[
