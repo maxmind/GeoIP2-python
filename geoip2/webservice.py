@@ -95,7 +95,7 @@ class Client(object):
         self._locales = locales
         # requests 2.12.2 requires that the username passed to auth be bytes
         # or a string, with the former being preferred.
-        self._user_id = str(user_id).encode()
+        self._user_id = str(user_id)
         self._license_key = license_key
         self._base_uri = 'https://%s/geoip/v2.1' % host
         self._timeout = timeout
