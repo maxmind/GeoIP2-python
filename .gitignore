@@ -1,5 +1,6 @@
 *~
 *.egg
+.eggs
 .idea
 build
 .coverage
