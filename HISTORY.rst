@@ -3,6 +3,15 @@
 History
 -------
 
+2.4.2 (2016-12-08)
+++++++++++++++++++
+
+* Recent releases of ``requests`` (2.12.2 and 2.12.3) require that the
+  username for basic authentication be a string or bytes. The documentation
+  for this module uses an integer for the ``user_id``, which will break with
+  these ``requests`` versions. The ``user_id`` is now converted to bytes
+  before being passed to ``requests``.
+
 2.4.1 (2016-11-21)
 ++++++++++++++++++
 
