@@ -93,7 +93,9 @@ class Client(object):
         if locales is None:
             locales = ['en']
         self._locales = locales
-        self._user_id = user_id
+        # requests 2.12.2 requires that the username passed to auth be bytes
+        # or a string, with the former being preferred.
+        self._user_id = str(user_id).encode()
         self._license_key = license_key
         self._base_uri = 'https://%s/geoip/v2.1' % host
         self._timeout = timeout
@@ -141,8 +143,10 @@ class Client(object):
         uri = '/'.join([self._base_uri, path, ip_address])
         response = requests.get(uri,
                                 auth=(self._user_id, self._license_key),
-                                headers={'Accept': 'application/json',
-                                         'User-Agent': self._user_agent()},
+                                headers={
+                                    'Accept': 'application/json',
+                                    'User-Agent': self._user_agent()
+                                },
                                 timeout=self._timeout)
         if response.status_code == 200:
             body = self._handle_success(response, uri)
