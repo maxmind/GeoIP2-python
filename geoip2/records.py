@@ -17,10 +17,13 @@ class Record(SimpleEquality):
     __metaclass__ = ABCMeta
 
     _valid_attributes = set()
+    _computed_attributes = set()
 
     def __init__(self, **kwargs):
         valid_args = dict((k, kwargs.get(k)) for k in self._valid_attributes)
         self.__dict__.update(valid_args)
+        computed_args = dict((k, getattr(self, k)(valid_args)) for k in self._computed_attributes)
+        self.__dict__.update(computed_args)
 
     def __setattr__(self, name, value):
         raise AttributeError("can't set attribute")
