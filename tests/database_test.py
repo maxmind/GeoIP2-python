@@ -76,6 +76,26 @@ class BaseTestReader(object):
         self.assertEqual(record.ip_address, ip_address)
         reader.close()
 
+    def test_asn(self):
+        reader = geoip2.database.Reader(
+            'tests/data/test-data/GeoLite2-ASN-Test.mmdb')
+
+        ip_address = '1.128.0.0'
+        record = reader.asn(ip_address)
+        self.assertEqual(record.autonomous_system_number, 1221)
+        self.assertEqual(record.autonomous_system_organization,
+                         'Telstra Pty Ltd')
+        self.assertEqual(record.ip_address, ip_address)
+
+        self.assertRegex(
+            str(record),
+            r'geoip2.models.ASN\(.*1\.128\.0\.0.*\)',
+            'str representation is correct')
+
+        self.assertEqual(record, eval(repr(record)), "ASN repr can be eval'd")
+
+        reader.close()
+
     def test_city(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-City-Test.mmdb')

@@ -368,6 +368,40 @@ class AnonymousIP(SimpleModel):
         self.raw = raw
 
 
+class ASN(SimpleModel):
+    """Model class for the GeoLite2 ASN.
+
+    This class provides the following attribute:
+
+    .. attribute:: autonomous_system_number
+
+      The autonomous system number associated with the IP address.
+
+      :type: int
+
+    .. attribute:: autonomous_system_organization
+
+      The organization associated with the registered autonomous system number
+      for the IP address.
+
+      :type: unicode
+
+    .. attribute:: ip_address
+
+      The IP address used in the lookup.
+
+      :type: unicode
+    """
+
+    # pylint:disable=too-many-arguments
+    def __init__(self, raw):
+        self.autonomous_system_number = raw.get('autonomous_system_number')
+        self.autonomous_system_organization = raw.get(
+            'autonomous_system_organization')
+        self.ip_address = raw.get('ip_address')
+        self.raw = raw
+
+
 class ConnectionType(SimpleModel):
     """Model class for the GeoIP2 Connection-Type.
 
@@ -424,7 +458,7 @@ class Domain(SimpleModel):
         self.raw = raw
 
 
-class ISP(SimpleModel):
+class ISP(ASN):
     """Model class for the GeoIP2 ISP.
 
     This class provides the following attribute:
@@ -463,10 +497,6 @@ class ISP(SimpleModel):
 
     # pylint:disable=too-many-arguments
     def __init__(self, raw):
-        self.autonomous_system_number = raw.get('autonomous_system_number')
-        self.autonomous_system_organization = raw.get(
-            'autonomous_system_organization')
+        super(ISP, self).__init__(raw)
         self.isp = raw.get('isp')
         self.organization = raw.get('organization')
-        self.ip_address = raw.get('ip_address')
-        self.raw = raw
