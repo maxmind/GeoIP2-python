@@ -25,7 +25,6 @@ if sys.version_info[0] == 2:
 
 
 class BaseTestReader(object):
-
     def test_language_list(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-Country-Test.mmdb',
@@ -121,7 +120,8 @@ class BaseTestReader(object):
             str(record), r'ConnectionType\(\{.*Cable/DSL.*\}\)',
             'ConnectionType str representation is reasonable')
 
-        self.assertEqual(record, eval(repr(record)),
+        self.assertEqual(record,
+                         eval(repr(record)),
                          "ConnectionType repr can be eval'd")
 
         reader.close()
@@ -147,8 +147,8 @@ class BaseTestReader(object):
             str(record), r'Domain\(\{.*maxmind.com.*\}\)',
             'Domain str representation is reasonable')
 
-        self.assertEqual(record, eval(repr(record)),
-                         "Domain repr can be eval'd")
+        self.assertEqual(record,
+                         eval(repr(record)), "Domain repr can be eval'd")
 
         reader.close()
 

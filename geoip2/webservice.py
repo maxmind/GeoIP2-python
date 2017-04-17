@@ -141,13 +141,14 @@ class Client(object):
         if ip_address != 'me':
             ip_address = str(compat_ip_address(ip_address))
         uri = '/'.join([self._base_uri, path, ip_address])
-        response = requests.get(uri,
-                                auth=(self._user_id, self._license_key),
-                                headers={
-                                    'Accept': 'application/json',
-                                    'User-Agent': self._user_agent()
-                                },
-                                timeout=self._timeout)
+        response = requests.get(
+            uri,
+            auth=(self._user_id, self._license_key),
+            headers={
+                'Accept': 'application/json',
+                'User-Agent': self._user_agent()
+            },
+            timeout=self._timeout)
         if response.status_code == 200:
             body = self._handle_success(response, uri)
             return model_class(body, locales=self._locales)
