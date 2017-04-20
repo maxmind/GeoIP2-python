@@ -185,6 +185,22 @@ Anonymous IP Database
     '128.101.101.101'
     >>> reader.close()
 
+ASN Database
+^^^^^^^^^^^^
+
+.. code-block:: pycon
+
+    >>> import geoip2.database
+    >>>
+    >>> # This creates a Reader object. You should use the same object
+    >>> # across multiple requests as creation of it is expensive.
+    >>> with geoip2.database.Reader('/path/to/GeoLite2-ASN.mmdb') as reader:
+    >>>     response = reader.asn('1.128.0.0')
+    >>>     response.autonomous_system_number
+    1221
+    >>>     response.autonomous_system_organization
+    'Telstra Pty Ltd'
+
 Connection-Type Database
 ^^^^^^^^^^^^^^^^^^^^^^^^
 

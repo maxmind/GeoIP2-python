@@ -24,18 +24,24 @@ class TestModels(unittest.TestCase):
             'city': {
                 'confidence': 76,
                 'geoname_id': 9876,
-                'names': {'en': 'Minneapolis'},
+                'names': {
+                    'en': 'Minneapolis'
+                },
             },
             'continent': {
                 'code': 'NA',
                 'geoname_id': 42,
-                'names': {'en': 'North America'},
+                'names': {
+                    'en': 'North America'
+                },
             },
             'country': {
                 'confidence': 99,
                 'geoname_id': 1,
                 'iso_code': 'US',
-                'names': {'en': 'United States of America'},
+                'names': {
+                    'en': 'United States of America'
+                },
             },
             'location': {
                 'average_income': 24626,
@@ -54,21 +60,29 @@ class TestModels(unittest.TestCase):
                 'confidence': 88,
                 'geoname_id': 574635,
                 'iso_code': 'MN',
-                'names': {'en': 'Minnesota'},
+                'names': {
+                    'en': 'Minnesota'
+                },
             }, {
                 'geoname_id': 123,
                 'iso_code': 'HP',
-                'names': {'en': 'Hennepin'},
+                'names': {
+                    'en': 'Hennepin'
+                },
             }],
             'registered_country': {
                 'geoname_id': 2,
                 'iso_code': 'CA',
-                'names': {'en': 'Canada'},
+                'names': {
+                    'en': 'Canada'
+                },
             },
             'represented_country': {
                 'geoname_id': 3,
                 'iso_code': 'GB',
-                'names': {'en': 'United Kingdom'},
+                'names': {
+                    'en': 'United Kingdom'
+                },
                 'type': 'military',
             },
             'traits': {
@@ -144,14 +158,15 @@ class TestModels(unittest.TestCase):
             r'^geoip2.models.Insights\(\{.*geoname_id.*\}, \[.*en.*\]\)',
             'Insights str representation looks reasonable')
 
-        self.assertEqual(model, eval(repr(model)),
-                         "Insights repr can be eval'd")
+        self.assertEqual(model,
+                         eval(repr(model)), "Insights repr can be eval'd")
 
         self.assertRegex(
             str(model.location), r'^geoip2.records.Location\(.*longitude=.*\)',
             'Location str representation is reasonable')
 
-        self.assertEqual(model.location, eval(repr(model.location)),
+        self.assertEqual(model.location,
+                         eval(repr(model.location)),
                          "Location repr can be eval'd")
 
     def test_insights_min(self):
@@ -189,17 +204,23 @@ class TestModels(unittest.TestCase):
             'continent': {
                 'code': 'NA',
                 'geoname_id': 42,
-                'names': {'en': 'North America'},
+                'names': {
+                    'en': 'North America'
+                },
             },
             'country': {
                 'geoname_id': 1,
                 'iso_code': 'US',
-                'names': {'en': 'United States of America'},
+                'names': {
+                    'en': 'United States of America'
+                },
             },
             'registered_country': {
                 'geoname_id': 2,
                 'iso_code': 'CA',
-                'names': {'en': 'Canada'},
+                'names': {
+                    'en': 'Canada'
+                },
             },
             'traits': {
                 'ip_address': '1.2.3.4',
@@ -266,9 +287,15 @@ class TestModels(unittest.TestCase):
                          '__eq__ does not blow up on weird input')
 
     def test_unknown_keys(self):
-        model = geoip2.models.City({'traits': {'ip_address': '1.2.3.4',
-                                               'invalid': 'blah'},
-                                    'unk_base': {'blah': 1}})
+        model = geoip2.models.City({
+            'traits': {
+                'ip_address': '1.2.3.4',
+                'invalid': 'blah'
+            },
+            'unk_base': {
+                'blah': 1
+            }
+        })
         with self.assertRaises(AttributeError):
             model.unk_base
         with self.assertRaises(AttributeError):

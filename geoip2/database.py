@@ -120,6 +120,17 @@ class Reader(object):
         return self._flat_model_for(geoip2.models.AnonymousIP,
                                     'GeoIP2-Anonymous-IP', ip_address)
 
+    def asn(self, ip_address):
+        """Get the ASN object for the IP address.
+
+        :param ip_address: IPv4 or IPv6 address as a string.
+
+        :returns: :py:class:`geoip2.models.ASN` object
+
+        """
+        return self._flat_model_for(geoip2.models.ASN, 'GeoLite2-ASN',
+                                    ip_address)
+
     def connection_type(self, ip_address):
         """Get the ConnectionType object for the IP address.
 
@@ -168,8 +179,8 @@ class Reader(object):
         if database_type not in self.metadata().database_type:
             caller = inspect.stack()[2][3]
             raise TypeError("The %s method cannot be used with the "
-                            "%s database" %
-                            (caller, self.metadata().database_type))
+                            "%s database" % (caller,
+                                             self.metadata().database_type))
         record = self._db_reader.get(ip_address)
         if record is None:
             raise geoip2.errors.AddressNotFoundError(

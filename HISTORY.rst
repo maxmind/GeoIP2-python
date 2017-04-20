@@ -3,6 +3,11 @@
 History
 -------
 
+2.5.0
+++++++++++++++++++
+
+* Added support for GeoLite2 ASN database.
+
 2.4.2 (2016-12-08)
 ++++++++++++++++++
 

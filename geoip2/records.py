@@ -50,9 +50,8 @@ class PlaceRecord(Record):
     def name(self):
         """Dict with locale codes as keys and localized name as value."""
         # pylint:disable=E1101
-        return next(
-            (self.names.get(x) for x in self._locales
-             if x in self.names), None)
+        return next((self.names.get(x) for x in self._locales
+                     if x in self.names), None)
 
 
 class City(PlaceRecord):
@@ -243,8 +242,8 @@ class RepresentedCountry(Country):
 
     """
 
-    _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names',
-                             'type'])
+    _valid_attributes = set(
+        ['confidence', 'geoname_id', 'iso_code', 'names', 'type'])
 
 
 class Location(Record):
@@ -314,9 +313,11 @@ class Location(Record):
 
     """
 
-    _valid_attributes = set(['average_income', 'accuracy_radius', 'latitude',
-                             'longitude', 'metro_code', 'population_density',
-                             'postal_code', 'postal_confidence', 'time_zone'])
+    _valid_attributes = set([
+        'average_income', 'accuracy_radius', 'latitude', 'longitude',
+        'metro_code', 'population_density', 'postal_code', 'postal_confidence',
+        'time_zone'
+    ])
 
 
 class MaxMind(Record):
@@ -594,14 +595,17 @@ class Traits(Record):
 
     """
 
-    _valid_attributes = set(
-        ['autonomous_system_number', 'autonomous_system_organization',
-         'connection_type', 'domain', 'is_anonymous_proxy',
-         'is_legitimate_proxy', 'is_satellite_provider', 'isp', 'ip_address',
-         'organization', 'user_type'])
+    _valid_attributes = set([
+        'autonomous_system_number', 'autonomous_system_organization',
+        'connection_type', 'domain', 'is_anonymous_proxy',
+        'is_legitimate_proxy', 'is_satellite_provider', 'isp', 'ip_address',
+        'organization', 'user_type'
+    ])
 
     def __init__(self, **kwargs):
-        for k in ['is_anonymous_proxy', 'is_legitimate_proxy',
-                  'is_satellite_provider']:
+        for k in [
+                'is_anonymous_proxy', 'is_legitimate_proxy',
+                'is_satellite_provider'
+        ]:
             kwargs[k] = bool(kwargs.get(k, False))
         super(Traits, self).__init__(**kwargs)
