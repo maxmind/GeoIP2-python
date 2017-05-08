@@ -7,6 +7,8 @@ History
 ++++++++++++++++++
 
 * Added support for GeoLite2 ASN database.
+* Correct documentation of errors raised when using the database reader.
+  Reported by Radek Holý. GitHub #42.
 
 2.4.2 (2016-12-08)
 ++++++++++++++++++
