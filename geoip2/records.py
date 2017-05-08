@@ -17,10 +17,13 @@ class Record(SimpleEquality):
     __metaclass__ = ABCMeta
 
     _valid_attributes = set()
+    _computed_attributes = set()
 
     def __init__(self, **kwargs):
         valid_args = dict((k, kwargs.get(k)) for k in self._valid_attributes)
         self.__dict__.update(valid_args)
+        computed_args = dict((k, getattr(self, k)(valid_args)) for k in self._computed_attributes)
+        self.__dict__.update(computed_args)
 
     def __setattr__(self, name, value):
         raise AttributeError("can't set attribute")
@@ -184,6 +187,36 @@ class Country(PlaceRecord):
     """
 
     _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names'])
+    _computed_attributes = set(['flag'])
+
+    @classmethod
+    def flag(cls, attrs):
+        """
+        Converts ISO3166 two-letter country code to a Unicode country flag
+
+        Referenced from the following:
+        github.com/SmileyChris/django-countries/blob/master/django_countries/fields.py#L127
+        """
+        # Don't really like magic numbers, but this is the code point for [A]
+        # (Regional Indicator A), minus the code point for ASCII A. By adding
+        # this to the uppercase characters making up the ISO 3166-1 alpha-2
+        # codes we can get the flag.
+        OFFSET = 127397
+
+        country = attrs['iso_code']
+        if country is None:
+            return None
+
+        points = [ord(x) + OFFSET for x in country.upper()]
+
+        try:
+            # Python 3 is simple: we can just chr() the unicode points.
+            return chr(points[0]) + chr(points[1])
+        except ValueError:
+            # Python 2 requires us to be a bit more creative. We could use
+            # unichr(), but that only works if the python has been compiled
+            # with wide unicode support. This method should always work.
+            return ('\\U%08x\\U%08x' % tuple(points)).decode('unicode-escape')
 
 
 class RepresentedCountry(Country):
