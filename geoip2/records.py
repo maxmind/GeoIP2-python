@@ -517,6 +517,13 @@ class Traits(Record):
 
       :type: unicode
 
+    .. attribute:: is_anonymous
+
+      This is true if the IP address belongs to any sort of anonymous network.
+      This attribute is only available from GeoIP2 Precision Insights.
+
+      :type: bool
+
     .. attribute:: is_anonymous_proxy
 
       This is true if the IP is an anonymous
@@ -530,11 +537,32 @@ class Traits(Record):
         <https://www.maxmind.com/en/geoip2-anonymous-ip-database GeoIP2>`_
         instead.
 
+    .. attribute:: is_anonymous_vpn
+
+      This is true if the IP address belongs to an anonymous VPN system.
+      This attribute is only available from GeoIP2 Precision Insights.
+
+      :type: bool
+
+    .. attribute:: is_hosting_provider
+
+      This is true if the IP address belongs to a hosting provider.
+      This attribute is only available from GeoIP2 Precision Insights.
+
+      :type: bool
+
     .. attribute:: is_legitimate_proxy
 
       This attribute is true if MaxMind believes this IP address to be a
       legitimate proxy, such as an internal VPN used by a corporation. This
       attribute is only available in the GeoIP2 Enterprise database.
+
+      :type: bool
+
+    .. attribute:: is_public_proxy
+
+      This is true if the IP address belongs to a public proxy. This attribute
+      is only available from GeoIP2 Precision Insights.
 
       :type: bool
 
@@ -550,6 +578,13 @@ class Traits(Record):
         satellite providers now serve multiple countries. As a result, the
         output does not provide sufficiently relevant data for us to maintain
         it.
+
+    .. attribute:: is_tor_exit_node
+
+      This is true if the IP address is a Tor exit node.  This attribute is
+      only available from GeoIP2 Precision Insights.
+
+      :type: bool
 
     .. attribute:: isp
 
@@ -597,15 +632,23 @@ class Traits(Record):
 
     _valid_attributes = set([
         'autonomous_system_number', 'autonomous_system_organization',
-        'connection_type', 'domain', 'is_anonymous_proxy',
-        'is_legitimate_proxy', 'is_satellite_provider', 'isp', 'ip_address',
-        'organization', 'user_type'
+        'connection_type', 'domain', 'is_anonymous', 'is_anonymous_proxy',
+        'is_anonymous_vpn', 'is_hosting_provider', 'is_legitimate_proxy',
+        'is_public_proxy', 'is_satellite_provider', 'is_tor_exit_node',
+        'is_satellite_provider', 'isp', 'ip_address', 'organization',
+        'user_type'
     ])
 
     def __init__(self, **kwargs):
         for k in [
-                'is_anonymous_proxy', 'is_legitimate_proxy',
-                'is_satellite_provider'
+                'is_anonymous',
+                'is_anonymous_proxy',
+                'is_anonymous_vpn',
+                'is_hosting_provider',
+                'is_legitimate_proxy',
+                'is_public_proxy',
+                'is_satellite_provider',
+                'is_tor_exit_node',
         ]:
             kwargs[k] = bool(kwargs.get(k, False))
         super(Traits, self).__init__(**kwargs)

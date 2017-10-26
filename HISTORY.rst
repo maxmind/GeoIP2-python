@@ -3,6 +3,14 @@
 History
 -------
 
+2.6.0 (2017-XX-XX)
+++++++++++++++++++
+
+* The following new anonymizer outputs were added to ``geoip2.record.Traits``
+  for use with GeoIP2 Precision Insights: ``is_anonymous``,
+  ``is_anonymous_vpn``, ``is_hosting_provider``, ``is_public_proxy``, and
+  ``is_tor_exit_node``.
+
 2.5.0 (2017-05-08)
 ++++++++++++++++++
 

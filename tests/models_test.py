@@ -90,8 +90,13 @@ class TestModels(unittest.TestCase):
                 'autonomous_system_organization': 'AS Organization',
                 'domain': 'example.com',
                 'ip_address': '1.2.3.4',
-                'is_anonymous_proxy': 0,
-                'is_us_military': 1,
+                'is_anonymous': True,
+                'is_anonymous_proxy': True,
+                'is_anonymous_vpn': True,
+                'is_hosting_provider': True,
+                'is_public_proxy': True,
+                'is_satellite_provider': True,
+                'is_tor_exit_node': True,
                 'isp': 'Comcast',
                 'network_speed': 'cable/DSL',
                 'organization': 'Blorg',
@@ -168,6 +173,14 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.location,
                          eval(repr(model.location)),
                          "Location repr can be eval'd")
+
+        self.assertTrue(model.traits.is_anonymous)
+        self.assertTrue(model.traits.is_anonymous_proxy)
+        self.assertTrue(model.traits.is_anonymous_vpn)
+        self.assertTrue(model.traits.is_hosting_provider)
+        self.assertTrue(model.traits.is_public_proxy)
+        self.assertTrue(model.traits.is_satellite_provider)
+        self.assertTrue(model.traits.is_tor_exit_node)
 
     def test_insights_min(self):
         model = geoip2.models.Insights({'traits': {'ip_address': '5.6.7.8'}})
