@@ -163,15 +163,14 @@ class TestModels(unittest.TestCase):
             r'^geoip2.models.Insights\(\{.*geoname_id.*\}, \[.*en.*\]\)',
             'Insights str representation looks reasonable')
 
-        self.assertEqual(model,
-                         eval(repr(model)), "Insights repr can be eval'd")
+        self.assertEqual(model, eval(repr(model)),
+                         "Insights repr can be eval'd")
 
         self.assertRegex(
             str(model.location), r'^geoip2.records.Location\(.*longitude=.*\)',
             'Location str representation is reasonable')
 
-        self.assertEqual(model.location,
-                         eval(repr(model.location)),
+        self.assertEqual(model.location, eval(repr(model.location)),
                          "Location repr can be eval'd")
 
         self.assertTrue(model.traits.is_anonymous)
