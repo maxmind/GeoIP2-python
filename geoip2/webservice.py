@@ -149,11 +149,10 @@ class Client(object):
                 'User-Agent': self._user_agent()
             },
             timeout=self._timeout)
-        if response.status_code == 200:
-            body = self._handle_success(response, uri)
-            return model_class(body, locales=self._locales)
-        else:
-            self._handle_error(response, uri)
+        if response.status_code != 200:
+            raise self._exception_for_error(response, uri)
+        body = self._handle_success(response, uri)
+        return model_class(body, locales=self._locales)
 
     def _user_agent(self):
         return 'GeoIP2 Python Client v%s (%s)' % (geoip2.__version__,
@@ -168,57 +167,54 @@ class Client(object):
                               'JSON: ' % locals() + ', '.join(ex.args), 200,
                               uri)
 
-    def _handle_error(self, response, uri):
+    def _exception_for_error(self, response, uri):
         status = response.status_code
 
         if 400 <= status < 500:
-            self._handle_4xx_status(response, status, uri)
+            return self._exception_for_4xx_status(response, status, uri)
         elif 500 <= status < 600:
-            self._handle_5xx_status(status, uri)
-        else:
-            self._handle_non_200_status(status, uri)
+            return self._exception_for_5xx_status(status, uri)
+        return self._exception_for_non_200_status(status, uri)
 
-    def _handle_4xx_status(self, response, status, uri):
+    def _exception_for_4xx_status(self, response, status, uri):
         if not response.content:
-            raise HTTPError('Received a %(status)i error for %(uri)s '
-                            'with no body.' % locals(), status, uri)
+            return HTTPError('Received a %(status)i error for %(uri)s '
+                             'with no body.' % locals(), status, uri)
         elif response.headers['Content-Type'].find('json') == -1:
-            raise HTTPError('Received a %i for %s with the following '
-                            'body: %s' % (status, uri, response.content),
-                            status, uri)
+            return HTTPError('Received a %i for %s with the following '
+                             'body: %s' % (status, uri, response.content),
+                             status, uri)
         try:
             body = response.json()
         except ValueError as ex:
-            raise HTTPError(
+            return HTTPError(
                 'Received a %(status)i error for %(uri)s but it did'
                 ' not include the expected JSON body: ' % locals() +
                 ', '.join(ex.args), status, uri)
         else:
             if 'code' in body and 'error' in body:
-                self._handle_web_service_error(
+                return self._exception_for_web_service_error(
                     body.get('error'), body.get('code'), status, uri)
-            else:
-                raise HTTPError(
-                    'Response contains JSON but it does not specify '
-                    'code or error keys', status, uri)
+            return HTTPError('Response contains JSON but it does not specify '
+                             'code or error keys', status, uri)
 
-    def _handle_web_service_error(self, message, code, status, uri):
+    def _exception_for_web_service_error(self, message, code, status, uri):
         if code in ('IP_ADDRESS_NOT_FOUND', 'IP_ADDRESS_RESERVED'):
-            raise AddressNotFoundError(message)
+            return AddressNotFoundError(message)
         elif code in ('AUTHORIZATION_INVALID', 'LICENSE_KEY_REQUIRED',
                       'USER_ID_REQUIRED', 'USER_ID_UNKNOWN'):
-            raise AuthenticationError(message)
+            return AuthenticationError(message)
         elif code in ('INSUFFICIENT_FUNDS', 'OUT_OF_QUERIES'):
-            raise OutOfQueriesError(message)
+            return OutOfQueriesError(message)
         elif code == 'PERMISSION_REQUIRED':
-            raise PermissionRequiredError(message)
+            return PermissionRequiredError(message)
 
-        raise InvalidRequestError(message, code, status, uri)
+        return InvalidRequestError(message, code, status, uri)
 
-    def _handle_5xx_status(self, status, uri):
-        raise HTTPError('Received a server error (%(status)i) for '
-                        '%(uri)s' % locals(), status, uri)
+    def _exception_for_5xx_status(self, status, uri):
+        return HTTPError('Received a server error (%(status)i) for '
+                         '%(uri)s' % locals(), status, uri)
 
-    def _handle_non_200_status(self, status, uri):
-        raise HTTPError('Received a very surprising HTTP status '
-                        '(%(status)i) for %(uri)s' % locals(), status, uri)
+    def _exception_for_non_200_status(self, status, uri):
+        return HTTPError('Received a very surprising HTTP status '
+                         '(%(status)i) for %(uri)s' % locals(), status, uri)
