@@ -87,8 +87,7 @@ class BaseTestReader(object):
         self.assertEqual(record.ip_address, ip_address)
 
         self.assertRegex(
-            str(record),
-            r'geoip2.models.ASN\(.*1\.128\.0\.0.*\)',
+            str(record), r'geoip2.models.ASN\(.*1\.128\.0\.0.*\)',
             'str representation is correct')
 
         self.assertEqual(record, eval(repr(record)), "ASN repr can be eval'd")
@@ -120,8 +119,7 @@ class BaseTestReader(object):
             str(record), r'ConnectionType\(\{.*Cable/DSL.*\}\)',
             'ConnectionType str representation is reasonable')
 
-        self.assertEqual(record,
-                         eval(repr(record)),
+        self.assertEqual(record, eval(repr(record)),
                          "ConnectionType repr can be eval'd")
 
         reader.close()
@@ -147,8 +145,8 @@ class BaseTestReader(object):
             str(record), r'Domain\(\{.*maxmind.com.*\}\)',
             'Domain str representation is reasonable')
 
-        self.assertEqual(record,
-                         eval(repr(record)), "Domain repr can be eval'd")
+        self.assertEqual(record, eval(repr(record)),
+                         "Domain repr can be eval'd")
 
         reader.close()
 
