@@ -79,6 +79,7 @@ class TestModels(unittest.TestCase):
             },
             'represented_country': {
                 'geoname_id': 3,
+                'is_in_european_union': True,
                 'iso_code': 'GB',
                 'names': {
                     'en': 'United Kingdom'
@@ -173,13 +174,17 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.location, eval(repr(model.location)),
                          "Location repr can be eval'd")
 
-        self.assertTrue(model.traits.is_anonymous)
-        self.assertTrue(model.traits.is_anonymous_proxy)
-        self.assertTrue(model.traits.is_anonymous_vpn)
-        self.assertTrue(model.traits.is_hosting_provider)
-        self.assertTrue(model.traits.is_public_proxy)
-        self.assertTrue(model.traits.is_satellite_provider)
-        self.assertTrue(model.traits.is_tor_exit_node)
+        self.assertIs(model.country.is_in_european_union, False)
+        self.assertIs(model.registered_country.is_in_european_union, False)
+        self.assertIs(model.represented_country.is_in_european_union, True)
+
+        self.assertIs(model.traits.is_anonymous, True)
+        self.assertIs(model.traits.is_anonymous_proxy, True)
+        self.assertIs(model.traits.is_anonymous_vpn, True)
+        self.assertIs(model.traits.is_hosting_provider, True)
+        self.assertIs(model.traits.is_public_proxy, True)
+        self.assertIs(model.traits.is_satellite_provider, True)
+        self.assertIs(model.traits.is_tor_exit_node, True)
 
     def test_insights_min(self):
         model = geoip2.models.Insights({'traits': {'ip_address': '5.6.7.8'}})

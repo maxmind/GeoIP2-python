@@ -159,6 +159,12 @@ class Country(PlaceRecord):
 
       :type: int
 
+    .. attribute:: is_in_european_union
+
+      This is true if the country is a member state of the European Union.
+
+      :type: bool
+
     .. attribute:: iso_code
 
       The two-character `ISO 3166-1
@@ -183,7 +189,14 @@ class Country(PlaceRecord):
 
     """
 
-    _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names'])
+    _valid_attributes = set([
+        'confidence', 'geoname_id', 'is_in_european_union', 'iso_code', 'names'
+    ])
+
+    def __init__(self, locales=None, **kwargs):
+        if 'is_in_european_union' not in kwargs:
+            kwargs['is_in_european_union'] = False
+        super(Country, self).__init__(locales, **kwargs)
 
 
 class RepresentedCountry(Country):
@@ -209,6 +222,12 @@ class RepresentedCountry(Country):
       The GeoName ID for the country.
 
       :type: int
+
+    .. attribute:: is_in_european_union
+
+      This is true if the country is a member state of the European Union.
+
+      :type: bool
 
     .. attribute:: iso_code
 
@@ -242,8 +261,10 @@ class RepresentedCountry(Country):
 
     """
 
-    _valid_attributes = set(
-        ['confidence', 'geoname_id', 'iso_code', 'names', 'type'])
+    _valid_attributes = set([
+        'confidence', 'geoname_id', 'is_in_european_union', 'iso_code',
+        'names', 'type'
+    ])
 
 
 class Location(Record):

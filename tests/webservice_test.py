@@ -44,6 +44,14 @@ class TestClient(unittest.TestCase):
         'maxmind': {
             'queries_remaining': 11
         },
+        'registered_country': {
+            'geoname_id': 2,
+            'is_in_european_union': True,
+            'iso_code': 'DE',
+            'names': {
+                'en': 'Germany'
+            }
+        },
         'traits': {
             'ip_address': '1.2.3.4'
         },
@@ -73,6 +81,8 @@ class TestClient(unittest.TestCase):
                          'continent name is North America')
         self.assertEqual(country.country.geoname_id, 1,
                          'country geoname_id is 1')
+        self.assertIs(country.country.is_in_european_union, False,
+                      'country is_in_european_union is False')
         self.assertEqual(country.country.iso_code, 'US',
                          'country iso_code is US')
         self.assertEqual(country.country.names,
@@ -81,6 +91,8 @@ class TestClient(unittest.TestCase):
                          'country name is United States of America')
         self.assertEqual(country.maxmind.queries_remaining, 11,
                          'queries_remaining is 11')
+        self.assertIs(country.registered_country.is_in_european_union, True,
+                      'registered_country is_in_european_union is True')
         self.assertEqual(country.raw, self.country, 'raw response is correct')
 
     @requests_mock.mock()
