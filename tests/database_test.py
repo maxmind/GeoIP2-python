@@ -101,9 +101,11 @@ class BaseTestReader(object):
 
         self.assertEqual(record.country.name, 'United Kingdom',
                          'The default locale is en')
-
+        self.assertEqual(record.country.is_in_european_union, True)
         self.assertEqual(record.location.accuracy_radius, 100,
                          'The accuracy_radius is populated')
+        self.assertEqual(record.registered_country.is_in_european_union, False)
+
         reader.close()
 
     def test_connection_type(self):
@@ -130,6 +132,8 @@ class BaseTestReader(object):
         record = reader.country('81.2.69.160')
         self.assertEqual(record.traits.ip_address, '81.2.69.160',
                          'IP address is added to model')
+        self.assertEqual(record.country.is_in_european_union, True)
+        self.assertEqual(record.registered_country.is_in_european_union, False)
         reader.close()
 
     def test_domain(self):
@@ -158,7 +162,10 @@ class BaseTestReader(object):
             self.assertEqual(record.city.confidence, 11)
             self.assertEqual(record.country.confidence, 99)
             self.assertEqual(record.country.geoname_id, 6252001)
+            self.assertEqual(record.country.is_in_european_union, False)
             self.assertEqual(record.location.accuracy_radius, 27)
+            self.assertEqual(record.registered_country.is_in_european_union,
+                             False)
             self.assertEqual(record.traits.connection_type, 'Cable/DSL')
             self.assertTrue(record.traits.is_legitimate_proxy)
             self.assertEqual(record.traits.ip_address, ip_address)

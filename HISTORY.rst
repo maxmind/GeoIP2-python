@@ -3,6 +3,15 @@
 History
 -------
 
+2.7.0
+++++++++++++++++++
+
+- The ``is_in_european_union`` attribute was added to
+  ``geoip2.record.Country`` and ``geoip2.record.RepresentedCountry``. This
+  attribute is ``True`` if the country is a member state of the European
+  Union.
+
+
 2.6.0 (2017-10-27)
 ++++++++++++++++++
 
@@ -55,7 +64,7 @@ History
 2.2.0 (2015-06-29)
 ++++++++++++++++++
 
-* The ``geoip2.records.Location` class has been updated to add attributes for
+* The ``geoip2.records.Location`` class has been updated to add attributes for
   the ``average_income`` and ``population_density`` fields provided by the
   Insights web service.
 * The ``is_anonymous_proxy`` and ``is_satellite_provider`` properties on
