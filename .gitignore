@@ -6,10 +6,12 @@ build
 .coverage
 dist
 docs/_build
+docs/doctrees/
 docs/html
 env/
 geoip2.egg-info/
 MANIFEST
+.mypy_cache/
 *.pyc
 pylint.txt
 *.swp
