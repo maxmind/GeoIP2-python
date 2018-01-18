@@ -45,7 +45,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'geoip2'
-copyright = '2013-2016, MaxMind, Inc.'
+copyright = '2013-2018, MaxMind, Inc.'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
