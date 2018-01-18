@@ -3,14 +3,13 @@
 History
 -------
 
-2.7.0
+2.7.0 (2018-01-18)
 ++++++++++++++++++
 
-- The ``is_in_european_union`` attribute was added to
+* The ``is_in_european_union`` attribute was added to
   ``geoip2.record.Country`` and ``geoip2.record.RepresentedCountry``. This
   attribute is ``True`` if the country is a member state of the European
   Union.
-
 
 2.6.0 (2017-10-27)
 ++++++++++++++++++
