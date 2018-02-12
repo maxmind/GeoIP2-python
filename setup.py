@@ -24,10 +24,9 @@ setup(
     package_data={'': ['LICENSE']},
     package_dir={'geoip2': 'geoip2'},
     include_package_data=True,
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*',
     install_requires=requirements,
-    extras_require={
-        ':python_version=="2.6" or python_version=="2.7"': ['ipaddress']
-    },
+    extras_require={':python_version=="2.7"': ['ipaddress']},
     tests_require=['requests_mock>=0.5'],
     test_suite="tests",
     license=geoip2.__license__,
@@ -37,7 +36,6 @@ setup(
         'Intended Audience :: Developers',
         'Intended Audience :: System Administrators',
         'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
