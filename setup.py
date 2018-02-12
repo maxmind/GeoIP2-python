@@ -47,4 +47,5 @@ setup(
         'Programming Language :: Python',
         'Topic :: Internet :: Proxy Servers',
         'Topic :: Internet',
-    ], )
+    ],
+)
