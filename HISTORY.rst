@@ -3,6 +3,12 @@
 History
 -------
 
+2.8.0
++++++++++++++++++
+
+* Renamed user ID to account ID in the code and added support for the new
+  ``ACCOUNT_ID_REQUIRED`` AND ``ACCOUNT_ID_UNKNOWN`` error codes.
+
 2.7.0 (2018-01-18)
 ++++++++++++++++++
 

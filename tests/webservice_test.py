@@ -222,8 +222,16 @@ class TestClient(unittest.TestCase):
                          AuthenticationError)
 
     @requests_mock.mock()
+    def test_account_id_required(self, mock):
+        self._test_error(mock, 401, 'ACCOUNT_ID_REQUIRED', AuthenticationError)
+
+    @requests_mock.mock()
     def test_user_id_required(self, mock):
         self._test_error(mock, 401, 'USER_ID_REQUIRED', AuthenticationError)
+
+    @requests_mock.mock()
+    def test_account_id_unkown(self, mock):
+        self._test_error(mock, 401, 'ACCOUNT_ID_UNKNOWN', AuthenticationError)
 
     @requests_mock.mock()
     def test_user_id_unkown(self, mock):
