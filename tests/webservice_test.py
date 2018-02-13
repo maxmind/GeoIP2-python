@@ -67,9 +67,7 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'country/1.2.3.4',
             json=self.country,
             status_code=200,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         country = self.client.country('1.2.3.4')
         self.assertEqual(
             type(country), geoip2.models.Country,
@@ -101,9 +99,7 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'country/me',
             json=self.country,
             status_code=200,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         implicit_me = self.client.country()
         self.assertEqual(
             type(implicit_me), geoip2.models.Country,
@@ -118,9 +114,7 @@ class TestClient(unittest.TestCase):
         mock.get(
             self.base_uri + 'country/1.1.1.1',
             status_code=200,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         with self.assertRaisesRegex(GeoIP2Error,
                                     'could not decode the response as JSON'):
             self.client.country('1.1.1.1')
@@ -137,9 +131,7 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'country/' + '1.2.3.7',
             text='',
             status_code=400,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         with self.assertRaisesRegex(
                 HTTPError, 'Received a 400 error for .* with no body'):
             self.client.country('1.2.3.7')
@@ -150,9 +142,7 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'country/' + '1.2.3.8',
             text='{"wierd": 42}',
             status_code=400,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         with self.assertRaisesRegex(HTTPError,
                                     'Response contains JSON but it does not '
                                     'specify code or error keys'):
@@ -164,9 +154,7 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'country/' + '1.2.3.9',
             text='bad body',
             status_code=400,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         with self.assertRaisesRegex(
                 HTTPError, 'it did not include the expected JSON body'):
             self.client.country('1.2.3.9')
@@ -183,9 +171,7 @@ class TestClient(unittest.TestCase):
         mock.get(
             self.base_uri + 'country/' + '1.2.3.11',
             status_code=300,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         with self.assertRaisesRegex(HTTPError,
                                     'Received a very surprising HTTP status '
                                     '\(300\) for'):
@@ -222,8 +208,16 @@ class TestClient(unittest.TestCase):
                          AuthenticationError)
 
     @requests_mock.mock()
+    def test_account_id_required(self, mock):
+        self._test_error(mock, 401, 'ACCOUNT_ID_REQUIRED', AuthenticationError)
+
+    @requests_mock.mock()
     def test_user_id_required(self, mock):
         self._test_error(mock, 401, 'USER_ID_REQUIRED', AuthenticationError)
+
+    @requests_mock.mock()
+    def test_account_id_unkown(self, mock):
+        self._test_error(mock, 401, 'ACCOUNT_ID_UNKNOWN', AuthenticationError)
 
     @requests_mock.mock()
     def test_user_id_unkown(self, mock):
@@ -240,9 +234,7 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'country/1.2.3.18',
             json=body,
             status_code=status,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         with self.assertRaisesRegex(error_class, msg):
             self.client.country('1.2.3.18')
 
@@ -255,9 +247,7 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'country/' + ip,
             json=body,
             status_code=400,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         with self.assertRaisesRegex(InvalidRequestError, msg):
             self.client.country(ip)
 
@@ -267,9 +257,7 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'country/' + '1.2.3.4',
             json=self.country,
             status_code=200,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         self.client.country('1.2.3.4')
         request = mock.request_history[-1]
 
@@ -288,9 +276,7 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'city/' + '1.2.3.4',
             json=self.country,
             status_code=200,
-            headers={
-                'Content-Type': self._content_type('city')
-            })
+            headers={'Content-Type': self._content_type('city')})
         city = self.client.city('1.2.3.4')
         self.assertEqual(
             type(city), geoip2.models.City, 'return value of client.city')
@@ -301,13 +287,26 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'insights/1.2.3.4',
             json=self.country,
             status_code=200,
-            headers={
-                'Content-Type': self._content_type('country')
-            })
+            headers={'Content-Type': self._content_type('country')})
         insights = self.client.insights('1.2.3.4')
         self.assertEqual(
             type(insights), geoip2.models.Insights,
             'return value of client.insights')
+
+    def test_named_constructor_args(self):
+        id = '47'
+        key = '1234567890ab'
+        for client in (Client(account_id=id, license_key=key),
+                       Client(user_id=id, license_key=key)):
+            self.assertEqual(client._account_id, id)
+            self.assertEqual(client._license_key, key)
+
+    def test_missing_constructor_args(self):
+        with self.assertRaises(TypeError):
+            Client(license_key='1234567890ab')
+
+        with self.assertRaises(TypeError):
+            Client('47')
 
 
 if __name__ == '__main__':

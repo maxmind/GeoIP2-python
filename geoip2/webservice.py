@@ -44,11 +44,11 @@ class Client(object):
 
     It accepts the following required arguments:
 
-    :param user_id: Your MaxMind User ID.
+    :param account_id: Your MaxMind account ID.
     :param license_key: Your MaxMind license key.
 
     Go to https://www.maxmind.com/en/my_license_key to see your MaxMind
-    User ID and license key.
+    account ID and license key.
 
     The following keyword arguments are also accepted:
 
@@ -82,20 +82,34 @@ class Client(object):
 
     """
 
-    def __init__(self,
-                 user_id,
-                 license_key,
-                 host='geoip.maxmind.com',
-                 locales=None,
-                 timeout=None):
+    def __init__(
+            self,
+            account_id=None,
+            license_key=None,
+            host='geoip.maxmind.com',
+            locales=None,
+            timeout=None,
+
+            # This is deprecated and not documented for that reason.
+            # It can be removed if we do a major release in the future.
+            user_id=None):
         """Construct a Client."""
         # pylint: disable=too-many-arguments
         if locales is None:
             locales = ['en']
+        if account_id is None:
+            account_id = user_id
+
+        if account_id is None:
+            raise TypeError('The account_id is a required parameter')
+        if license_key is None:
+            raise TypeError('The license_key is a required parameter')
+
         self._locales = locales
         # requests 2.12.2 requires that the username passed to auth be bytes
         # or a string, with the former being preferred.
-        self._user_id = user_id if isinstance(user_id, bytes) else str(user_id)
+        self._account_id = account_id if isinstance(account_id,
+                                                    bytes) else str(account_id)
         self._license_key = license_key
         self._base_uri = 'https://%s/geoip/v2.1' % host
         self._timeout = timeout
@@ -143,7 +157,7 @@ class Client(object):
         uri = '/'.join([self._base_uri, path, ip_address])
         response = requests.get(
             uri,
-            auth=(self._user_id, self._license_key),
+            auth=(self._account_id, self._license_key),
             headers={
                 'Accept': 'application/json',
                 'User-Agent': self._user_agent()
@@ -201,7 +215,8 @@ class Client(object):
     def _exception_for_web_service_error(self, message, code, status, uri):
         if code in ('IP_ADDRESS_NOT_FOUND', 'IP_ADDRESS_RESERVED'):
             return AddressNotFoundError(message)
-        elif code in ('AUTHORIZATION_INVALID', 'LICENSE_KEY_REQUIRED',
+        elif code in ('ACCOUNT_ID_REQUIRED', 'ACCOUNT_ID_UNKNOWN',
+                      'AUTHORIZATION_INVALID', 'LICENSE_KEY_REQUIRED',
                       'USER_ID_REQUIRED', 'USER_ID_UNKNOWN'):
             return AuthenticationError(message)
         elif code in ('INSUFFICIENT_FUNDS', 'OUT_OF_QUERIES'):

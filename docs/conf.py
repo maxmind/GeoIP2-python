@@ -28,8 +28,10 @@ import geoip2
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest',
-              'sphinx.ext.intersphinx', 'sphinx.ext.coverage']
+extensions = [
+    'sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.intersphinx',
+    'sphinx.ext.coverage'
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -89,7 +91,6 @@ pygments_style = 'sphinx'
 
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
-
 
 # -- Options for HTML output ---------------------------------------------
 
@@ -170,7 +171,6 @@ html_static_path = ['_static']
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'geoip2doc'
 
-
 # -- Options for LaTeX output --------------------------------------------
 
 latex_elements = {
@@ -187,8 +187,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-    ('index', 'geoip2.tex', 'geoip2 Documentation',
-     'Gregory Oschwald', 'manual'),
+    ('index', 'geoip2.tex', 'geoip2 Documentation', 'Gregory Oschwald',
+     'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -211,19 +211,15 @@ latex_documents = [
 # If false, no module index is generated.
 #latex_domain_indices = True
 
-
 # -- Options for manual page output --------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [
-    ('index', 'geoip2', 'geoip2 Documentation',
-     ['Gregory Oschwald'], 1)
-]
+man_pages = [('index', 'geoip2', 'geoip2 Documentation', ['Gregory Oschwald'],
+              1)]
 
 # If true, show URL addresses after external links.
 #man_show_urls = False
-
 
 # -- Options for Texinfo output ------------------------------------------
 
@@ -231,9 +227,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'geoip2', 'geoip2 Documentation',
-     'Gregory Oschwald', 'geoip2', 'One line description of project.',
-     'Miscellaneous'),
+    ('index', 'geoip2', 'geoip2 Documentation', 'Gregory Oschwald', 'geoip2',
+     'One line description of project.', 'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.
@@ -244,7 +239,6 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
-
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'http://docs.python.org/': None}

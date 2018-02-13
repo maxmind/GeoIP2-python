@@ -46,7 +46,7 @@ Usage
 -----
 
 To use this API, you first create either a web service object with your
-MaxMind ``user_id`` and ``license_key`` or a database reader object with the
+MaxMind ``account_id`` and ``license_key`` or a database reader object with the
 path to your database file. After doing this, you may call the method
 corresponding to request type (e.g., ``city`` or ``country``), passing it the
 IP address you want to look up.
@@ -65,7 +65,7 @@ Web Service Example
     >>> import geoip2.webservice
     >>>
     >>> # This creates a Client object that can be reused across requests.
-    >>> # Replace "42" with your user ID and "license_key" with your license
+    >>> # Replace "42" with your account ID and "license_key" with your license
     >>> # key.
     >>> client = geoip2.webservice.Client(42, 'license_key')
     >>>
@@ -385,7 +385,7 @@ correction, please `contact MaxMind support
 Requirements
 ------------
 
-This code requires Python 2.6+ or 3.3+. Older versions are not supported.
+This code requires Python 2.7+ or 3.3+. Older versions are not supported.
 This library has been tested with CPython and PyPy.
 
 The Requests HTTP library is also required. See
