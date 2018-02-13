@@ -293,6 +293,21 @@ class TestClient(unittest.TestCase):
             type(insights), geoip2.models.Insights,
             'return value of client.insights')
 
+    def test_named_constructor_args(self):
+        id = '47'
+        key = '1234567890ab'
+        for client in (Client(account_id=id, license_key=key),
+                       Client(user_id=id, license_key=key)):
+            self.assertEqual(client._account_id, id)
+            self.assertEqual(client._license_key, key)
+
+    def test_missing_constructor_args(self):
+        with self.assertRaises(TypeError):
+            Client(license_key='1234567890ab')
+
+        with self.assertRaises(TypeError):
+            Client('47')
+
 
 if __name__ == '__main__':
     unittest.main()
