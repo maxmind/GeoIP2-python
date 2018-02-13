@@ -48,7 +48,7 @@ class Client(object):
     :param license_key: Your MaxMind license key.
 
     Go to https://www.maxmind.com/en/my_license_key to see your MaxMind
-    User ID and license key.
+    account ID and license key.
 
     The following keyword arguments are also accepted:
 
