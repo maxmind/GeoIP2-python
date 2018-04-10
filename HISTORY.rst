@@ -3,8 +3,8 @@
 History
 -------
 
-2.8.0
-+++++++++++++++++
+2.8.0 (2018-04-10)
+++++++++++++++++++
 
 * Python 2.6 support has been dropped. Python 2.7+ or 3.3+ is now required.
 * Renamed user ID to account ID in the code and added support for the new
