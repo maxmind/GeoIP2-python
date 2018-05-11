@@ -25,6 +25,7 @@ if sys.version_info[0] == 2:
 
 
 class BaseTestReader(object):
+
     def test_language_list(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-Country-Test.mmdb',
@@ -214,6 +215,10 @@ class TestFileReader(BaseTestReader, unittest.TestCase):
 
 class TestMemoryReader(BaseTestReader, unittest.TestCase):
     mode = geoip2.database.MODE_MEMORY
+
+
+class TestFDReader(unittest.TestCase):
+    mode = geoip2.database.MODE_FD
 
 
 class TestAutoReader(BaseTestReader, unittest.TestCase):
