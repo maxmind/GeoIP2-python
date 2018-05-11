@@ -25,7 +25,6 @@ if sys.version_info[0] == 2:
 
 
 class BaseTestReader(object):
-
     def test_language_list(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-Country-Test.mmdb',
