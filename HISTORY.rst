@@ -3,6 +3,14 @@
 History
 -------
 
+2.9.0
+++++++++++++++++++
+
+* You may now pass in the database via a file descriptor rather than a file
+  name when creating a new ``geoip2.database.Reader`` object using ``MODE_FD``.
+  This will read the database from the file descriptor into memory. Pull
+  request by nkinkade. GitHub #53.
+
 2.8.0 (2018-04-10)
 ++++++++++++++++++
 
