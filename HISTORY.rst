@@ -3,7 +3,7 @@
 History
 -------
 
-2.9.0
+2.9.0 (2018-05-25)
 ++++++++++++++++++
 
 * You may now pass in the database via a file descriptor rather than a file
