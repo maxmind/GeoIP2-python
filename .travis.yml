@@ -34,7 +34,7 @@ before_install:
   - pip install -e git+https://github.com/maxmind/MaxMind-DB-Reader-python#egg=maxminddb
 install:
   - pip install -r requirements.txt
-  - pip install requests_mock pylint coveralls
+  - pip install requests_mock pylint coveralls yapf
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install ipaddr; fi"
 script:
   - coverage run --source=geoip2 setup.py test
