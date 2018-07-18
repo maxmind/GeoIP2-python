@@ -120,9 +120,9 @@ class TestClient(unittest.TestCase):
             self.client.country('1.1.1.1')
 
     def test_bad_ip_address(self):
-        with self.assertRaisesRegex(ValueError,
-                                    "'1.2.3' does not appear to be an IPv4 "
-                                    "or IPv6 address"):
+        with self.assertRaisesRegex(
+                ValueError, "'1.2.3' does not appear to be an IPv4 "
+                "or IPv6 address"):
             self.client.country('1.2.3')
 
     @requests_mock.mock()
@@ -143,9 +143,9 @@ class TestClient(unittest.TestCase):
             text='{"wierd": 42}',
             status_code=400,
             headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(HTTPError,
-                                    'Response contains JSON but it does not '
-                                    'specify code or error keys'):
+        with self.assertRaisesRegex(
+                HTTPError, 'Response contains JSON but it does not '
+                'specify code or error keys'):
             self.client.country('1.2.3.8')
 
     @requests_mock.mock()
@@ -172,9 +172,9 @@ class TestClient(unittest.TestCase):
             self.base_uri + 'country/' + '1.2.3.11',
             status_code=300,
             headers={'Content-Type': self._content_type('country')})
-        with self.assertRaisesRegex(HTTPError,
-                                    'Received a very surprising HTTP status '
-                                    '\(300\) for'):
+        with self.assertRaisesRegex(
+                HTTPError, 'Received a very surprising HTTP status '
+                '\(300\) for'):
 
             self.client.country('1.2.3.11')
 

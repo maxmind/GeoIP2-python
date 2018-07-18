@@ -37,27 +37,28 @@ class BaseTestReader(object):
     def test_unknown_address(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-City-Test.mmdb')
-        with self.assertRaisesRegex(geoip2.errors.AddressNotFoundError,
-                                    'The address 10.10.10.10 is not in the '
-                                    'database.'):
+        with self.assertRaisesRegex(
+                geoip2.errors.AddressNotFoundError,
+                'The address 10.10.10.10 is not in the '
+                'database.'):
             reader.city('10.10.10.10')
         reader.close()
 
     def test_wrong_database(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-City-Test.mmdb')
-        with self.assertRaisesRegex(TypeError,
-                                    'The country method cannot be used with '
-                                    'the GeoIP2-City database'):
+        with self.assertRaisesRegex(
+                TypeError, 'The country method cannot be used with '
+                'the GeoIP2-City database'):
             reader.country('1.1.1.1')
         reader.close()
 
     def test_invalid_address(self):
         reader = geoip2.database.Reader(
             'tests/data/test-data/GeoIP2-City-Test.mmdb')
-        with self.assertRaisesRegex(ValueError,
-                                    "u?'invalid' does not appear to be an "
-                                    "IPv4 or IPv6 address"):
+        with self.assertRaisesRegex(
+                ValueError, "u?'invalid' does not appear to be an "
+                "IPv4 or IPv6 address"):
             reader.city('invalid')
         reader.close()
 

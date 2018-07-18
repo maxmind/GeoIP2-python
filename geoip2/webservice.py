@@ -176,10 +176,10 @@ class Client(object):
         try:
             return response.json()
         except ValueError as ex:
-            raise GeoIP2Error('Received a 200 response for %(uri)s'
-                              ' but could not decode the response as '
-                              'JSON: ' % locals() + ', '.join(ex.args), 200,
-                              uri)
+            raise GeoIP2Error(
+                'Received a 200 response for %(uri)s'
+                ' but could not decode the response as '
+                'JSON: ' % locals() + ', '.join(ex.args), 200, uri)
 
     def _exception_for_error(self, response, uri):
         status = response.status_code
@@ -192,25 +192,27 @@ class Client(object):
 
     def _exception_for_4xx_status(self, response, status, uri):
         if not response.content:
-            return HTTPError('Received a %(status)i error for %(uri)s '
-                             'with no body.' % locals(), status, uri)
+            return HTTPError(
+                'Received a %(status)i error for %(uri)s '
+                'with no body.' % locals(), status, uri)
         elif response.headers['Content-Type'].find('json') == -1:
-            return HTTPError('Received a %i for %s with the following '
-                             'body: %s' % (status, uri, response.content),
-                             status, uri)
+            return HTTPError(
+                'Received a %i for %s with the following '
+                'body: %s' % (status, uri, response.content), status, uri)
         try:
             body = response.json()
         except ValueError as ex:
             return HTTPError(
                 'Received a %(status)i error for %(uri)s but it did'
-                ' not include the expected JSON body: ' % locals() +
-                ', '.join(ex.args), status, uri)
+                ' not include the expected JSON body: ' % locals() + ', '.join(
+                    ex.args), status, uri)
         else:
             if 'code' in body and 'error' in body:
                 return self._exception_for_web_service_error(
                     body.get('error'), body.get('code'), status, uri)
-            return HTTPError('Response contains JSON but it does not specify '
-                             'code or error keys', status, uri)
+            return HTTPError(
+                'Response contains JSON but it does not specify '
+                'code or error keys', status, uri)
 
     def _exception_for_web_service_error(self, message, code, status, uri):
         if code in ('IP_ADDRESS_NOT_FOUND', 'IP_ADDRESS_RESERVED'):
@@ -227,9 +229,11 @@ class Client(object):
         return InvalidRequestError(message, code, status, uri)
 
     def _exception_for_5xx_status(self, status, uri):
-        return HTTPError('Received a server error (%(status)i) for '
-                         '%(uri)s' % locals(), status, uri)
+        return HTTPError(
+            'Received a server error (%(status)i) for '
+            '%(uri)s' % locals(), status, uri)
 
     def _exception_for_non_200_status(self, status, uri):
-        return HTTPError('Received a very surprising HTTP status '
-                         '(%(status)i) for %(uri)s' % locals(), status, uri)
+        return HTTPError(
+            'Received a very surprising HTTP status '
+            '(%(status)i) for %(uri)s' % locals(), status, uri)
