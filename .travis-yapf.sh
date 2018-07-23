@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eux
+
 diff=$(yapf -rd geoip2 tests)
 
 if [[ $? != 0 ]]; then

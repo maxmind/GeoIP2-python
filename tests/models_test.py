@@ -366,9 +366,10 @@ class TestNamess(unittest.TestCase):
 
     def test_two_locales(self):
         model = geoip2.models.Country(self.raw, locales=['ak', 'fr'])
-        self.assertEqual(model.continent.name, None,
-                         'continent name is undef (no Akan or French '
-                         'available)')
+        self.assertEqual(
+            model.continent.name, None,
+            'continent name is undef (no Akan or French '
+            'available)')
         self.assertEqual(model.country.name, 'États-Unis',
                          'country name is in French')
 

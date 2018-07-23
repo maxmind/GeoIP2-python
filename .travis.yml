@@ -1,14 +1,23 @@
 ---
 language: python
-python:
-  - '2.7'
-  - '3.3'
-  - '3.4'
-  - '3.5'
-  - '3.6'
-  - nightly
-  - pypy
 matrix:
+  include:
+    - python: 2.7
+      dist: trusty
+    - python: 3.3
+      dist: trusty
+    - python: 3.4
+      dist: trusty
+    - python: 3.5
+      dist: trusty
+    - python: 3.6
+      dist: trusty
+    - python: 3.7
+      dist: xenial
+    - python: nightly
+      dist: xenial
+    - python: pypy
+      dist: trusty
   allow_failures:
     - python: nightly
 
@@ -25,12 +34,12 @@ before_install:
   - pip install -e git+https://github.com/maxmind/MaxMind-DB-Reader-python#egg=maxminddb
 install:
   - pip install -r requirements.txt
-  - pip install requests_mock pylint coveralls
+  - pip install requests_mock pylint coveralls yapf
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install ipaddr; fi"
 script:
   - coverage run --source=geoip2 setup.py test
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then ./.travis-pylint.sh; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.6' ]]; then ./.travis-yapf.sh; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then ./.travis-pylint.sh; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then ./.travis-yapf.sh; fi"
 after_success:
   - coveralls
 notifications:
