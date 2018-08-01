@@ -3,7 +3,7 @@
 from abc import ABCMeta
 
 
-class SimpleEquality:
+class SimpleEquality(object):
     """Naive __dict__ equality mixin"""
 
     __metaclass__ = ABCMeta

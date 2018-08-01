@@ -39,7 +39,7 @@ from .errors import (AddressNotFoundError, AuthenticationError, GeoIP2Error,
                      PermissionRequiredError)
 
 
-class Client:
+class Client(object):
     """Creates a new client object.
 
     It accepts the following required arguments:

@@ -16,7 +16,7 @@ import geoip2.models
 import geoip2.errors
 
 
-class Reader:
+class Reader(object):
     """GeoIP2 database Reader object.
 
     Instances of this class provide a reader for the GeoIP2 database format.
