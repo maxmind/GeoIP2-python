@@ -50,8 +50,8 @@ class PlaceRecord(Record):
     def name(self):
         """Dict with locale codes as keys and localized name as value."""
         # pylint:disable=E1101
-        return next((self.names.get(x) for x in self._locales
-                     if x in self.names), None)
+        return next((self.names.get(x)
+                     for x in self._locales if x in self.names), None)
 
 
 class City(PlaceRecord):

@@ -56,20 +56,23 @@ class TestModels(unittest.TestCase):
                 'code': '55401',
                 'confidence': 33,
             },
-            'subdivisions': [{
-                'confidence': 88,
-                'geoname_id': 574635,
-                'iso_code': 'MN',
-                'names': {
-                    'en': 'Minnesota'
+            'subdivisions': [
+                {
+                    'confidence': 88,
+                    'geoname_id': 574635,
+                    'iso_code': 'MN',
+                    'names': {
+                        'en': 'Minnesota'
+                    },
                 },
-            }, {
-                'geoname_id': 123,
-                'iso_code': 'HP',
-                'names': {
-                    'en': 'Hennepin'
+                {
+                    'geoname_id': 123,
+                    'iso_code': 'HP',
+                    'names': {
+                        'en': 'Hennepin'
+                    },
                 },
-            }],
+            ],
             'registered_country': {
                 'geoname_id': 2,
                 'iso_code': 'CA',

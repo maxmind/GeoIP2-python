@@ -32,16 +32,18 @@ before_install:
   - sudo ldconfig
   - cd ..
   - pip install -e git+https://github.com/maxmind/MaxMind-DB-Reader-python#egg=maxminddb
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then sudo apt-get install -y nodejs; npm install -g snyk; fi"
 install:
   - pip install -r requirements.txt
   - pip install requests_mock pylint coveralls yapf
-  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install ipaddr; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then snyk test --org=maxmind; fi"
 script:
   - coverage run --source=geoip2 setup.py test
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then ./.travis-pylint.sh; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then ./.travis-yapf.sh; fi"
 after_success:
   - coveralls
+  - "if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_PYTHON_VERSION == '3.7' ]]; then snyk monitor --org=maxmind --project=maxmind/GeoIP2-python; fi"
 notifications:
   email:
     on_failure: always
@@ -51,3 +53,7 @@ notifications:
   slack:
     rooms:
       secure: "FZLn7HZnM6GOtIU7+W6tY6zd2y0K4C1ZgIOAiGscWvJydn+Xr63GCT21EPPe9QCulQHz88CWALMD7ZrDdsh6nV0gx0IeE+wq4w7NZYjLokvxs+UMYwuwl57MMrqd7e4byZDC4BLvTQTCvpOHOd8dCHwDXmuBcuyE8zB+Wkndn0I=\n"
+
+env:
+  global:
+    secure: "YUqALSGB89cWyKNiBKIZDxdWPl3xjYjkWx2OP1i53W5qcaKgOWco2jv+2iXTPAk3c5x3Py3J7B1SdiNcRWmjfKqrnE47fZYkiP8rk0c/pVMRw0zURpmtRzSReDF0Sh/1ZTODi2rsU52Ei1f++BTEB5m409RMnTEvQtH7XT2sVDk="
