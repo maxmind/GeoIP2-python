@@ -43,7 +43,7 @@ script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then ./.travis-yapf.sh; fi"
 after_success:
   - coveralls
-  - "if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_PYTHON_VERSION == '3.7' ]]; then snyk monitor --org=maxmind --project=maxmind/GeoIP2-python; fi"
+  - "if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_PYTHON_VERSION == '3.7' ]]; then snyk monitor --org=maxmind --project-name=maxmind/GeoIP2-python; fi"
 notifications:
   email:
     on_failure: always
