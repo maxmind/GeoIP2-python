@@ -35,18 +35,18 @@ before_install:
   - sudo ldconfig
   - cd ..
   - pip install -e git+https://github.com/maxmind/MaxMind-DB-Reader-python#egg=maxminddb
-  - "if [[ $RUN_SNYK ]]; then sudo apt-get install -y nodejs; npm install -g snyk; fi"
+  - "if [[ $RUN_SNYK && $SNYK_TOKEN ]]; then sudo apt-get install -y nodejs; npm install -g snyk; fi"
 install:
   - pip install -r requirements.txt
   - pip install requests_mock pylint coveralls yapf
-  - "if [[ $RUN_SNYK ]]; then snyk test --org=maxmind; fi"
+  - "if [[ $RUN_SNYK && $SNYK_TOKEN ]]; then snyk test --org=maxmind; fi"
 script:
   - coverage run --source=geoip2 setup.py test
   - "if [[ $RUN_LINTER ]]; then ./.travis-pylint.sh; fi"
   - "if [[ $RUN_LINTER ]]; then ./.travis-yapf.sh; fi"
 after_success:
   - coveralls
-  - "if [[ $RUN_SNYK && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then snyk monitor --org=maxmind --project-name=maxmind/GeoIP2-python; fi"
+  - "if [[ $RUN_SNYK && $SNYK_TOKEN && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then snyk monitor --org=maxmind --project-name=maxmind/GeoIP2-python; fi"
 notifications:
   email:
     on_failure: always
