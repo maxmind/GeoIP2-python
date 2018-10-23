@@ -1,2 +1,2 @@
-requests>=2.9
+requests>=2.20.0
 maxminddb>=1.4.0
