@@ -560,14 +560,21 @@ class Traits(Record):
 
     .. attribute:: is_anonymous_vpn
 
-      This is true if the IP address belongs to an anonymous VPN system.
+      This is true if the IP address is registered to an anonymous VPN
+      provider.
+
+      If a VPN provider does not register subnets under names associated with
+      them, we will likely only flag their IP ranges using the
+      is_hosting_provider attribute.
+
       This attribute is only available from GeoIP2 Precision Insights.
 
       :type: bool
 
     .. attribute:: is_hosting_provider
 
-      This is true if the IP address belongs to a hosting provider.
+      This is true if the IP address belongs to a hosting or VPN provider
+      (see description of is_anonymous_vpn attribute).
       This attribute is only available from GeoIP2 Precision Insights.
 
       :type: bool
