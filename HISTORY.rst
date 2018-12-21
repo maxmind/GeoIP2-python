@@ -3,6 +3,12 @@
 History
 -------
 
+2.9.1
+++++++++++++++++++
+
+* Updated documentation of anonymizer attributes - ``is_anonymous_vpn`` and
+  ``is_hosting_provider`` - to be more descriptive.
+
 2.9.0 (2018-05-25)
 ++++++++++++++++++
 
