@@ -87,9 +87,8 @@ class BaseTestReader(object):
                          'Telstra Pty Ltd')
         self.assertEqual(record.ip_address, ip_address)
 
-        self.assertRegex(
-            str(record), r'geoip2.models.ASN\(.*1\.128\.0\.0.*\)',
-            'str representation is correct')
+        self.assertRegex(str(record), r'geoip2.models.ASN\(.*1\.128\.0\.0.*\)',
+                         'str representation is correct')
 
         self.assertEqual(record, eval(repr(record)), "ASN repr can be eval'd")
 
@@ -118,9 +117,8 @@ class BaseTestReader(object):
         self.assertEqual(record.connection_type, 'Cable/DSL')
         self.assertEqual(record.ip_address, ip_address)
 
-        self.assertRegex(
-            str(record), r'ConnectionType\(\{.*Cable/DSL.*\}\)',
-            'ConnectionType str representation is reasonable')
+        self.assertRegex(str(record), r'ConnectionType\(\{.*Cable/DSL.*\}\)',
+                         'ConnectionType str representation is reasonable')
 
         self.assertEqual(record, eval(repr(record)),
                          "ConnectionType repr can be eval'd")
@@ -146,9 +144,8 @@ class BaseTestReader(object):
         self.assertEqual(record.domain, 'maxmind.com')
         self.assertEqual(record.ip_address, ip_address)
 
-        self.assertRegex(
-            str(record), r'Domain\(\{.*maxmind.com.*\}\)',
-            'Domain str representation is reasonable')
+        self.assertRegex(str(record), r'Domain\(\{.*maxmind.com.*\}\)',
+                         'Domain str representation is reasonable')
 
         self.assertEqual(record, eval(repr(record)),
                          "Domain repr can be eval'd")
@@ -184,9 +181,8 @@ class BaseTestReader(object):
         self.assertEqual(record.organization, 'Telstra Internet')
         self.assertEqual(record.ip_address, ip_address)
 
-        self.assertRegex(
-            str(record), r'ISP\(\{.*Telstra.*\}\)',
-            'ISP str representation is reasonable')
+        self.assertRegex(str(record), r'ISP\(\{.*Telstra.*\}\)',
+                         'ISP str representation is reasonable')
 
         self.assertEqual(record, eval(repr(record)), "ISP repr can be eval'd")
 

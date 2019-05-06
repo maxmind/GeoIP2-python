@@ -155,14 +155,13 @@ class Client(object):
         if ip_address != 'me':
             ip_address = str(compat_ip_address(ip_address))
         uri = '/'.join([self._base_uri, path, ip_address])
-        response = requests.get(
-            uri,
-            auth=(self._account_id, self._license_key),
-            headers={
-                'Accept': 'application/json',
-                'User-Agent': self._user_agent()
-            },
-            timeout=self._timeout)
+        response = requests.get(uri,
+                                auth=(self._account_id, self._license_key),
+                                headers={
+                                    'Accept': 'application/json',
+                                    'User-Agent': self._user_agent()
+                                },
+                                timeout=self._timeout)
         if response.status_code != 200:
             raise self._exception_for_error(response, uri)
         body = self._handle_success(response, uri)
@@ -204,8 +203,8 @@ class Client(object):
         except ValueError as ex:
             return HTTPError(
                 'Received a %(status)i error for %(uri)s but it did'
-                ' not include the expected JSON body: ' % locals() + ', '.join(
-                    ex.args), status, uri)
+                ' not include the expected JSON body: ' % locals() +
+                ', '.join(ex.args), status, uri)
         else:
             if 'code' in body and 'error' in body:
                 return self._exception_for_web_service_error(
