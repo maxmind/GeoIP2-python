@@ -3,9 +3,10 @@
 History
 -------
 
-2.9.1
+2.10.0
 ++++++++++++++++++
 
+* Python 3.3 and 3.4 are no longer supported.
 * Updated documentation of anonymizer attributes - ``is_anonymous_vpn`` and
   ``is_hosting_provider`` - to be more descriptive.
 

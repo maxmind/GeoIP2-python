@@ -385,7 +385,7 @@ correction, please `contact MaxMind support
 Requirements
 ------------
 
-This code requires Python 2.7+ or 3.3+. Older versions are not supported.
+This code requires Python 2.7+ or 3.5+. Older versions are not supported.
 This library has been tested with CPython and PyPy.
 
 The Requests HTTP library is also required. See
