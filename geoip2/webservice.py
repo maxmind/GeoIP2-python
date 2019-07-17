@@ -81,7 +81,6 @@ class Client(object):
       * zh-CN -- Simplified Chinese.
 
     """
-
     def __init__(
             self,
             account_id=None,

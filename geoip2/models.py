@@ -64,7 +64,6 @@ class Country(SimpleEquality):
       :type: :py:class:`geoip2.records.Traits`
 
     """
-
     def __init__(self, raw_response, locales=None):
         if locales is None:
             locales = ['en']
@@ -160,7 +159,6 @@ class City(Country):
       :type: :py:class:`geoip2.records.Traits`
 
     """
-
     def __init__(self, raw_response, locales=None):
         super(City, self).__init__(raw_response, locales)
         self.city = \
@@ -362,7 +360,6 @@ class AnonymousIP(SimpleModel):
 
       :type: unicode
     """
-
     def __init__(self, raw):
         self.is_anonymous = raw.get('is_anonymous', False)
         self.is_anonymous_vpn = raw.get('is_anonymous_vpn', False)
@@ -432,7 +429,6 @@ class ConnectionType(SimpleModel):
 
       :type: unicode
     """
-
     def __init__(self, raw):
         self.connection_type = raw.get('connection_type')
         self.ip_address = raw.get('ip_address')
@@ -457,7 +453,6 @@ class Domain(SimpleModel):
       :type: unicode
 
     """
-
     def __init__(self, raw):
         self.domain = raw.get('domain')
         self.ip_address = raw.get('ip_address')

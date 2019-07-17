@@ -39,7 +39,6 @@ class Reader(object):
     be thrown.
 
 """
-
     def __init__(self, fileish, locales=None, mode=MODE_AUTO):
         """Create GeoIP2 Reader.
 
