@@ -688,6 +688,14 @@ class Traits(Record):
 
       :type: unicode
 
+    .. attribute:: user_count
+
+      The estimated number of users sharing the IP/network during the past 24
+      hours. For IPv4, the count is for the individual IP. For IPv6, the count
+      is for the /64 network.
+
+      :type: int
+
     .. attribute:: user_type
 
       The user type associated with the IP
@@ -733,6 +741,7 @@ class Traits(Record):
                  network=None,
                  organization=None,
                  prefix_len=None,
+                 user_count=None,
                  user_type=None,
                  **_):
         self.autonomous_system_number = autonomous_system_number
@@ -750,6 +759,7 @@ class Traits(Record):
         self.isp = isp
         self.organization = organization
         self.user_type = user_type
+        self.user_count = user_count
         self.ip_address = ip_address
         self._network = network
         self._prefix_len = prefix_len
