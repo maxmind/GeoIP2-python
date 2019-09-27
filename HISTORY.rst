@@ -6,6 +6,12 @@ History
 2.10.0
 ++++++++++++++++++
 
+* The ``network`` attribute was added to ``geoip2.record.Traits``,
+  ``geoip2.model.AnonymousIP``, ``geoip2.model.ASN``,
+  ``geoip2.model.ConnectionType``, ``geoip2.model.Domain``,
+  and ``geoip2.model.ISP``. This is an ``ipaddress.IPv4Network`` or an
+  ``ipaddress.IPv6Network``. This is the largest network where all of the
+  fields besides ``ip_address`` have the same value. GitHub #79.
 * Python 3.3 and 3.4 are no longer supported.
 * Updated documentation of anonymizer attributes - ``is_anonymous_vpn`` and
   ``is_hosting_provider`` - to be more descriptive.

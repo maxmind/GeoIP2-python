@@ -5,9 +5,12 @@ Records
 
 """
 
+import ipaddress
+
 # pylint:disable=R0903
 from abc import ABCMeta
 
+from geoip2.compat import compat_ip_network
 from geoip2.mixins import SimpleEquality
 
 
@@ -621,6 +624,14 @@ class Traits(Record):
 
       :type: unicode
 
+    .. attribute:: network
+
+      The network associated with the record. In particular, this is the
+      largest network where all of the fields besides ip_address have the same
+      value.
+
+      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
+
     .. attribute:: organization
 
       The name of the organization associated with the IP address. This
@@ -662,8 +673,8 @@ class Traits(Record):
         'connection_type', 'domain', 'is_anonymous', 'is_anonymous_proxy',
         'is_anonymous_vpn', 'is_hosting_provider', 'is_legitimate_proxy',
         'is_public_proxy', 'is_satellite_provider', 'is_tor_exit_node',
-        'is_satellite_provider', 'isp', 'ip_address', 'organization',
-        'user_type'
+        'is_satellite_provider', 'isp', 'ip_address', 'network',
+        'organization', 'user_type'
     ])
 
     def __init__(self, **kwargs):
@@ -678,4 +689,13 @@ class Traits(Record):
                 'is_tor_exit_node',
         ]:
             kwargs[k] = bool(kwargs.get(k, False))
+
+        try:
+            network = kwargs['network']
+            if not isinstance(network,
+                              (ipaddress.IPv4Network, ipaddress.IPv6Network)):
+                kwargs['network'] = compat_ip_network(network)
+        except KeyError:
+            pass
+
         super(Traits, self).__init__(**kwargs)

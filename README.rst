@@ -95,6 +95,9 @@ Web Service Example
     44.9733
     >>> response.location.longitude
     -93.2323
+    >>>
+    >>> response.traits.network
+    IPv4Network('128.101.101.101/32')
 
 Web Service Client Exceptions
 -----------------------------
@@ -156,6 +159,10 @@ City Database
     44.9733
     >>> response.location.longitude
     -93.2323
+    >>>
+    >>> response.traits.network
+    IPv4Network('128.101.101.0/24')
+    >>>
     >>> reader.close()
 
 Anonymous IP Database
@@ -182,7 +189,9 @@ Anonymous IP Database
     >>> response.is_tor_exit_node
     True
     >>> response.ip_address
-    '128.101.101.101'
+    '85.25.43.84'
+    >>> response.network
+    IPv4Network('85.25.43.0/24')
     >>> reader.close()
 
 ASN Database
@@ -218,6 +227,8 @@ Connection-Type Database
     'Corporate'
     >>> response.ip_address
     '128.101.101.101'
+    >>> response.network
+    IPv4Network('128.101.101.101/24')
     >>> reader.close()
 
 
@@ -284,6 +295,10 @@ Enterprise Database
     44.9733
     >>>     response.location.longitude
     -93.2323
+    >>>
+    >>>     response.traits.network
+    IPv4Network('128.101.101.0/24')
+
 
 ISP Database
 ^^^^^^^^^^^^
@@ -307,7 +322,9 @@ ISP Database
     >>> response.organization
     'Telstra Internet'
     >>> response.ip_address
-    '128.101.101.101'
+    '1.128.0.0'
+    >>> response.network
+    IPv4Network('1.128.0.0/16')
     >>> reader.close()
 
 Database Reader Exceptions

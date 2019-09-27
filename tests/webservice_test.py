@@ -10,6 +10,7 @@ from geoip2.errors import (AddressNotFoundError, AuthenticationError,
                            GeoIP2Error, HTTPError, InvalidRequestError,
                            OutOfQueriesError, PermissionRequiredError)
 from geoip2.webservice import Client
+from geoip2.compat import compat_ip_network
 
 if sys.version_info[:2] == (2, 6):
     import unittest2 as unittest
@@ -53,7 +54,8 @@ class TestClient(unittest.TestCase):
             }
         },
         'traits': {
-            'ip_address': '1.2.3.4'
+            'ip_address': '1.2.3.4',
+            'network': '1.2.3.0/24'
         },
     }
 
@@ -89,6 +91,8 @@ class TestClient(unittest.TestCase):
                          'queries_remaining is 11')
         self.assertIs(country.registered_country.is_in_european_union, True,
                       'registered_country is_in_european_union is True')
+        self.assertEqual(country.traits.network,
+                         compat_ip_network('1.2.3.0/24'), 'network')
         self.assertEqual(country.raw, self.country, 'raw response is correct')
 
     @requests_mock.mock()
@@ -154,7 +158,7 @@ class TestClient(unittest.TestCase):
     def test_500_error(self, mock):
         mock.get(self.base_uri + 'country/' + '1.2.3.10', status_code=500)
         with self.assertRaisesRegex(HTTPError,
-                                    'Received a server error \(500\) for'):
+                                    r'Received a server error \(500\) for'):
             self.client.country('1.2.3.10')
 
     @requests_mock.mock()
@@ -163,8 +167,8 @@ class TestClient(unittest.TestCase):
                  status_code=300,
                  headers={'Content-Type': self._content_type('country')})
         with self.assertRaisesRegex(
-                HTTPError, 'Received a very surprising HTTP status '
-                '\(300\) for'):
+                HTTPError,
+                r'Received a very surprising HTTP status \(300\) for'):
 
             self.client.country('1.2.3.11')
 
@@ -266,6 +270,8 @@ class TestClient(unittest.TestCase):
         city = self.client.city('1.2.3.4')
         self.assertEqual(type(city), geoip2.models.City,
                          'return value of client.city')
+        self.assertEqual(city.traits.network, compat_ip_network('1.2.3.0/24'),
+                         'network')
 
     @requests_mock.mock()
     def test_insights_ok(self, mock):
@@ -276,6 +282,8 @@ class TestClient(unittest.TestCase):
         insights = self.client.insights('1.2.3.4')
         self.assertEqual(type(insights), geoip2.models.Insights,
                          'return value of client.insights')
+        self.assertEqual(insights.traits.network,
+                         compat_ip_network('1.2.3.0/24'), 'network')
 
     def test_named_constructor_args(self):
         id = '47'

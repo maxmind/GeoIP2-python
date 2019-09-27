@@ -305,6 +305,11 @@ class SimpleModel(SimpleEquality):
 
     __metaclass__ = ABCMeta
 
+    def __init__(self, raw):
+        self.ip_address = raw.get('ip_address')
+        self.network = raw.get('network')
+        self.raw = raw
+
     def __repr__(self):
         # pylint: disable=no-member
         return '{module}.{class_name}({data})'.format(
@@ -359,16 +364,22 @@ class AnonymousIP(SimpleModel):
       The IP address used in the lookup.
 
       :type: unicode
+
+    .. attribute:: network
+
+      The network associated with the record. In particular, this is the
+      largest network where all of the fields besides ip_address have the same
+      value.
+
+      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
     def __init__(self, raw):
+        super(AnonymousIP, self).__init__(raw)
         self.is_anonymous = raw.get('is_anonymous', False)
         self.is_anonymous_vpn = raw.get('is_anonymous_vpn', False)
         self.is_hosting_provider = raw.get('is_hosting_provider', False)
         self.is_public_proxy = raw.get('is_public_proxy', False)
         self.is_tor_exit_node = raw.get('is_tor_exit_node', False)
-
-        self.ip_address = raw.get('ip_address')
-        self.raw = raw
 
 
 class ASN(SimpleModel):
@@ -394,15 +405,22 @@ class ASN(SimpleModel):
       The IP address used in the lookup.
 
       :type: unicode
+
+    .. attribute:: network
+
+      The network associated with the record. In particular, this is the
+      largest network where all of the fields besides ip_address have the same
+      value.
+
+      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
 
     # pylint:disable=too-many-arguments
     def __init__(self, raw):
+        super(ASN, self).__init__(raw)
         self.autonomous_system_number = raw.get('autonomous_system_number')
         self.autonomous_system_organization = raw.get(
             'autonomous_system_organization')
-        self.ip_address = raw.get('ip_address')
-        self.raw = raw
 
 
 class ConnectionType(SimpleModel):
@@ -428,11 +446,18 @@ class ConnectionType(SimpleModel):
       The IP address used in the lookup.
 
       :type: unicode
+
+    .. attribute:: network
+
+      The network associated with the record. In particular, this is the
+      largest network where all of the fields besides ip_address have the same
+      value.
+
+      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
     def __init__(self, raw):
+        super(ConnectionType, self).__init__(raw)
         self.connection_type = raw.get('connection_type')
-        self.ip_address = raw.get('ip_address')
-        self.raw = raw
 
 
 class Domain(SimpleModel):
@@ -452,11 +477,18 @@ class Domain(SimpleModel):
 
       :type: unicode
 
+    .. attribute:: network
+
+      The network associated with the record. In particular, this is the
+      largest network where all of the fields besides ip_address have the same
+      value.
+
+      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
+
     """
     def __init__(self, raw):
+        super(Domain, self).__init__(raw)
         self.domain = raw.get('domain')
-        self.ip_address = raw.get('ip_address')
-        self.raw = raw
 
 
 class ISP(ASN):
@@ -494,6 +526,14 @@ class ISP(ASN):
       The IP address used in the lookup.
 
       :type: unicode
+
+    .. attribute:: network
+
+      The network associated with the record. In particular, this is the
+      largest network where all of the fields besides ip_address have the same
+      value.
+
+      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
 
     # pylint:disable=too-many-arguments
