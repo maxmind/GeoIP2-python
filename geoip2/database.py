@@ -84,6 +84,7 @@ class Reader(object):
         if locales is None:
             locales = ['en']
         self._db_reader = maxminddb.open_database(fileish, mode)
+        self._db_type = self._db_reader.metadata().database_type
         self._locales = locales
 
     def __enter__(self):
@@ -180,11 +181,10 @@ class Reader(object):
                                     ip_address)
 
     def _get(self, database_type, ip_address):
-        if database_type not in self.metadata().database_type:
+        if database_type not in self._db_type:
             caller = inspect.stack()[2][3]
             raise TypeError("The %s method cannot be used with the "
-                            "%s database" %
-                            (caller, self.metadata().database_type))
+                            "%s database" % (caller, self._db_type))
         (record, prefix_len) = self._db_reader.get_with_prefix_len(ip_address)
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
