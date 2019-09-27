@@ -22,8 +22,8 @@ class Record(SimpleEquality):
     _valid_attributes = set()
 
     def __init__(self, **kwargs):
-        valid_args = dict((k, kwargs.get(k)) for k in self._valid_attributes)
-        self.__dict__.update(valid_args)
+        for k in self._valid_attributes:
+            self.__dict__[k] = kwargs.get(k)
 
     def __setattr__(self, name, value):
         raise AttributeError("can't set attribute")
