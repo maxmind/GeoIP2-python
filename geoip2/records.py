@@ -4,6 +4,7 @@ Records
 =======
 
 """
+# pylint:disable=too-many-arguments,too-many-instance-attributes,too-many-locals
 
 import ipaddress
 
@@ -19,15 +20,6 @@ class Record(SimpleEquality):
 
     __metaclass__ = ABCMeta
 
-    _valid_attributes = set()
-
-    def __init__(self, **kwargs):
-        for k in self._valid_attributes:
-            self.__dict__[k] = kwargs.get(k)
-
-    def __setattr__(self, name, value):
-        raise AttributeError("can't set attribute")
-
     def __repr__(self):
         args = ', '.join('%s=%r' % x for x in self.__dict__.items())
         return '{module}.{class_name}({data})'.format(
@@ -41,13 +33,13 @@ class PlaceRecord(Record):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self, locales=None, **kwargs):
+    def __init__(self, locales=None, names=None):
         if locales is None:
             locales = ['en']
-        if kwargs.get('names') is None:
-            kwargs['names'] = {}
-        object.__setattr__(self, '_locales', locales)
-        super(PlaceRecord, self).__init__(**kwargs)
+        self._locales = locales
+        if names is None:
+            names = {}
+        self.names = names
 
     @property
     def name(self):
@@ -95,8 +87,15 @@ class City(PlaceRecord):
       :type: dict
 
     """
-
-    _valid_attributes = set(['confidence', 'geoname_id', 'names'])
+    def __init__(self,
+                 locales=None,
+                 confidence=None,
+                 geoname_id=None,
+                 names=None,
+                 **_):
+        self.confidence = confidence
+        self.geoname_id = geoname_id
+        super(City, self).__init__(locales, names)
 
 
 class Continent(PlaceRecord):
@@ -136,8 +135,15 @@ class Continent(PlaceRecord):
       :type: dict
 
     """
-
-    _valid_attributes = set(['code', 'geoname_id', 'names'])
+    def __init__(self,
+                 locales=None,
+                 code=None,
+                 geoname_id=None,
+                 names=None,
+                 **_):
+        self.code = code
+        self.geoname_id = geoname_id
+        super(Continent, self).__init__(locales, names)
 
 
 class Country(PlaceRecord):
@@ -191,15 +197,19 @@ class Country(PlaceRecord):
       :type: dict
 
     """
-
-    _valid_attributes = set([
-        'confidence', 'geoname_id', 'is_in_european_union', 'iso_code', 'names'
-    ])
-
-    def __init__(self, locales=None, **kwargs):
-        if 'is_in_european_union' not in kwargs:
-            kwargs['is_in_european_union'] = False
-        super(Country, self).__init__(locales, **kwargs)
+    def __init__(self,
+                 locales=None,
+                 confidence=None,
+                 geoname_id=None,
+                 is_in_european_union=False,
+                 iso_code=None,
+                 names=None,
+                 **_):
+        self.confidence = confidence
+        self.geoname_id = geoname_id
+        self.is_in_european_union = is_in_european_union
+        self.iso_code = iso_code
+        super(Country, self).__init__(locales, names)
 
 
 class RepresentedCountry(Country):
@@ -263,11 +273,21 @@ class RepresentedCountry(Country):
       :type: unicode
 
     """
-
-    _valid_attributes = set([
-        'confidence', 'geoname_id', 'is_in_european_union', 'iso_code',
-        'names', 'type'
-    ])
+    def __init__(
+            self,
+            locales=None,
+            confidence=None,
+            geoname_id=None,
+            is_in_european_union=False,
+            iso_code=None,
+            names=None,
+            # pylint:disable=redefined-builtin
+            type=None,
+            **_):
+        self.type = type
+        super(RepresentedCountry,
+              self).__init__(locales, confidence, geoname_id,
+                             is_in_european_union, iso_code, names)
 
 
 class Location(Record):
@@ -336,12 +356,27 @@ class Location(Record):
       :type: unicode
 
     """
-
-    _valid_attributes = set([
-        'average_income', 'accuracy_radius', 'latitude', 'longitude',
-        'metro_code', 'population_density', 'postal_code', 'postal_confidence',
-        'time_zone'
-    ])
+    def __init__(
+            self,
+            average_income=None,
+            accuracy_radius=None,
+            latitude=None,
+            longitude=None,
+            metro_code=None,
+            population_density=None,
+            postal_code=None,
+            postal_confidence=None,
+            time_zone=None,
+    ):
+        self.average_income = average_income
+        self.accuracy_radius = accuracy_radius
+        self.latitude = latitude
+        self.longitude = longitude
+        self.metro_code = metro_code
+        self.population_density = population_density
+        self.postal_code = postal_code
+        self.postal_confidence = postal_confidence
+        self.time_zone = time_zone
 
 
 class MaxMind(Record):
@@ -357,8 +392,11 @@ class MaxMind(Record):
       :type: int
 
     """
-
-    _valid_attributes = set(['queries_remaining'])
+    def __init__(
+            self,
+            queries_remaining=None,
+    ):
+        self.queries_remaining = queries_remaining
 
 
 class Postal(Record):
@@ -388,8 +426,9 @@ class Postal(Record):
       :type: int
 
     """
-
-    _valid_attributes = set(['code', 'confidence'])
+    def __init__(self, code=None, confidence=None):
+        self.code = code
+        self.confidence = confidence
 
 
 class Subdivision(PlaceRecord):
@@ -439,8 +478,17 @@ class Subdivision(PlaceRecord):
       :type: dict
 
     """
-
-    _valid_attributes = set(['confidence', 'geoname_id', 'iso_code', 'names'])
+    def __init__(self,
+                 locales=None,
+                 confidence=None,
+                 geoname_id=None,
+                 iso_code=None,
+                 names=None,
+                 **_):
+        self.confidence = confidence
+        self.geoname_id = geoname_id
+        self.iso_code = iso_code
+        super(Subdivision, self).__init__(locales, names)
 
 
 class Subdivisions(tuple):
@@ -667,35 +715,43 @@ class Traits(Record):
       :type: unicode
 
     """
+    def __init__(self,
+                 autonomous_system_number=None,
+                 autonomous_system_organization=None,
+                 connection_type=None,
+                 domain=None,
+                 is_anonymous=False,
+                 is_anonymous_proxy=False,
+                 is_anonymous_vpn=False,
+                 is_hosting_provider=False,
+                 is_legitimate_proxy=False,
+                 is_public_proxy=False,
+                 is_satellite_provider=False,
+                 is_tor_exit_node=False,
+                 isp=None,
+                 ip_address=None,
+                 network=None,
+                 organization=None,
+                 user_type=None,
+                 **_):
 
-    _valid_attributes = set([
-        'autonomous_system_number', 'autonomous_system_organization',
-        'connection_type', 'domain', 'is_anonymous', 'is_anonymous_proxy',
-        'is_anonymous_vpn', 'is_hosting_provider', 'is_legitimate_proxy',
-        'is_public_proxy', 'is_satellite_provider', 'is_tor_exit_node',
-        'is_satellite_provider', 'isp', 'ip_address', 'network',
-        'organization', 'user_type'
-    ])
-
-    def __init__(self, **kwargs):
-        for k in [
-                'is_anonymous',
-                'is_anonymous_proxy',
-                'is_anonymous_vpn',
-                'is_hosting_provider',
-                'is_legitimate_proxy',
-                'is_public_proxy',
-                'is_satellite_provider',
-                'is_tor_exit_node',
-        ]:
-            kwargs[k] = bool(kwargs.get(k, False))
-
-        try:
-            network = kwargs['network']
-            if not isinstance(network,
-                              (ipaddress.IPv4Network, ipaddress.IPv6Network)):
-                kwargs['network'] = compat_ip_network(network)
-        except KeyError:
-            pass
-
-        super(Traits, self).__init__(**kwargs)
+        if network is not None and not isinstance(
+                network, (ipaddress.IPv4Network, ipaddress.IPv6Network)):
+            network = compat_ip_network(network)
+        self.autonomous_system_number = autonomous_system_number
+        self.autonomous_system_organization = autonomous_system_organization
+        self.connection_type = connection_type
+        self.domain = domain
+        self.is_anonymous = is_anonymous
+        self.is_anonymous_proxy = is_anonymous_proxy
+        self.is_anonymous_vpn = is_anonymous_vpn
+        self.is_hosting_provider = is_hosting_provider
+        self.is_legitimate_proxy = is_legitimate_proxy
+        self.is_public_proxy = is_public_proxy
+        self.is_satellite_provider = is_satellite_provider
+        self.is_tor_exit_node = is_tor_exit_node
+        self.isp = isp
+        self.ip_address = ip_address
+        self.network = network
+        self.organization = organization
+        self.user_type = user_type
