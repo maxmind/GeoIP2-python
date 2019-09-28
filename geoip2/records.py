@@ -732,12 +732,9 @@ class Traits(Record):
                  ip_address=None,
                  network=None,
                  organization=None,
+                 prefix_len=None,
                  user_type=None,
                  **_):
-
-        if network is not None and not isinstance(
-                network, (ipaddress.IPv4Network, ipaddress.IPv6Network)):
-            network = compat_ip_network(network)
         self.autonomous_system_number = autonomous_system_number
         self.autonomous_system_organization = autonomous_system_organization
         self.connection_type = connection_type
@@ -751,7 +748,27 @@ class Traits(Record):
         self.is_satellite_provider = is_satellite_provider
         self.is_tor_exit_node = is_tor_exit_node
         self.isp = isp
-        self.ip_address = ip_address
-        self.network = network
         self.organization = organization
         self.user_type = user_type
+        self.ip_address = ip_address
+        self._network = network
+        self._prefix_len = prefix_len
+
+    # This code is duplicated for performance reasons
+    # pylint: disable=duplicate-code
+    @property
+    def network(self):
+        """The network for the record"""
+        network = self._network
+        if isinstance(network, (ipaddress.IPv4Network, ipaddress.IPv6Network)):
+            return network
+
+        if network is None:
+            ip_address = self.ip_address
+            prefix_len = self._prefix_len
+            if ip_address is None or prefix_len is None:
+                return None
+            network = "{}/{}".format(ip_address, prefix_len)
+        network = compat_ip_network(network, False)
+        self._network = network
+        return network

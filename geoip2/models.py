@@ -11,9 +11,11 @@ http://dev.maxmind.com/geoip/geoip2/web-services for more details.
 
 """
 # pylint: disable=too-many-instance-attributes,too-few-public-methods
+import ipaddress
 from abc import ABCMeta
 
 import geoip2.records
+from geoip2.compat import compat_ip_network
 from geoip2.mixins import SimpleEquality
 
 
@@ -306,9 +308,10 @@ class SimpleModel(SimpleEquality):
     __metaclass__ = ABCMeta
 
     def __init__(self, raw):
-        self.ip_address = raw.get('ip_address')
-        self.network = raw.get('network')
         self.raw = raw
+        self._network = None
+        self._prefix_len = raw.get('prefix_len')
+        self.ip_address = raw.get('ip_address')
 
     def __repr__(self):
         # pylint: disable=no-member
@@ -316,6 +319,24 @@ class SimpleModel(SimpleEquality):
             module=self.__module__,
             class_name=self.__class__.__name__,
             data=str(self.raw))
+
+    @property
+    def network(self):
+        """The network for the record"""
+        # This code is duplicated for performance reasons
+        # pylint: disable=duplicate-code
+        network = self._network
+        if isinstance(network, (ipaddress.IPv4Network, ipaddress.IPv6Network)):
+            return network
+
+        ip_address = self.ip_address
+        prefix_len = self._prefix_len
+        if ip_address is None or prefix_len is None:
+            return None
+        network = compat_ip_network("{}/{}".format(ip_address, prefix_len),
+                                    False)
+        self._network = network
+        return network
 
 
 class AnonymousIP(SimpleModel):

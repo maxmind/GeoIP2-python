@@ -86,6 +86,9 @@ class BaseTestReader(object):
 
         ip_address = '1.128.0.0'
         record = reader.asn(ip_address)
+
+        self.assertEqual(record, eval(repr(record)), "ASN repr can be eval'd")
+
         self.assertEqual(record.autonomous_system_number, 1221)
         self.assertEqual(record.autonomous_system_organization,
                          'Telstra Pty Ltd')
@@ -94,8 +97,6 @@ class BaseTestReader(object):
 
         self.assertRegex(str(record), r'geoip2.models.ASN\(.*1\.128\.0\.0.*\)',
                          'str representation is correct')
-
-        self.assertEqual(record, eval(repr(record)), "ASN repr can be eval'd")
 
         reader.close()
 
@@ -119,15 +120,16 @@ class BaseTestReader(object):
         ip_address = '1.0.1.0'
 
         record = reader.connection_type(ip_address)
+
+        self.assertEqual(record, eval(repr(record)),
+                         "ConnectionType repr can be eval'd")
+
         self.assertEqual(record.connection_type, 'Cable/DSL')
         self.assertEqual(record.ip_address, ip_address)
         self.assertEqual(record.network, ipaddress.ip_network('1.0.1.0/24'))
 
         self.assertRegex(str(record), r'ConnectionType\(\{.*Cable/DSL.*\}\)',
                          'ConnectionType str representation is reasonable')
-
-        self.assertEqual(record, eval(repr(record)),
-                         "ConnectionType repr can be eval'd")
 
         reader.close()
 
@@ -149,15 +151,16 @@ class BaseTestReader(object):
 
         ip_address = '1.2.0.0'
         record = reader.domain(ip_address)
+
+        self.assertEqual(record, eval(repr(record)),
+                         "Domain repr can be eval'd")
+
         self.assertEqual(record.domain, 'maxmind.com')
         self.assertEqual(record.ip_address, ip_address)
         self.assertEqual(record.network, ipaddress.ip_network('1.2.0.0/16'))
 
         self.assertRegex(str(record), r'Domain\(\{.*maxmind.com.*\}\)',
                          'Domain str representation is reasonable')
-
-        self.assertEqual(record, eval(repr(record)),
-                         "Domain repr can be eval'd")
 
         reader.close()
 
@@ -185,6 +188,8 @@ class BaseTestReader(object):
 
         ip_address = '1.128.0.0'
         record = reader.isp(ip_address)
+        self.assertEqual(record, eval(repr(record)), "ISP repr can be eval'd")
+
         self.assertEqual(record.autonomous_system_number, 1221)
         self.assertEqual(record.autonomous_system_organization,
                          'Telstra Pty Ltd')
@@ -195,8 +200,6 @@ class BaseTestReader(object):
 
         self.assertRegex(str(record), r'ISP\(\{.*Telstra.*\}\)',
                          'ISP str representation is reasonable')
-
-        self.assertEqual(record, eval(repr(record)), "ISP repr can be eval'd")
 
         reader.close()
 

@@ -14,7 +14,6 @@ from maxminddb import (MODE_AUTO, MODE_MMAP, MODE_MMAP_EXT, MODE_FILE,
 import geoip2
 import geoip2.models
 import geoip2.errors
-from geoip2.compat import compat_ip_network
 
 
 class Reader(object):
@@ -189,22 +188,19 @@ class Reader(object):
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
                 "The address %s is not in the database." % ip_address)
-
-        network = compat_ip_network('{}/{}'.format(ip_address, prefix_len),
-                                    False)
-        return (record, network)
+        return (record, prefix_len)
 
     def _model_for(self, model_class, types, ip_address):
-        (record, network) = self._get(types, ip_address)
+        (record, prefix_len) = self._get(types, ip_address)
         traits = record.setdefault('traits', {})
         traits['ip_address'] = ip_address
-        traits['network'] = network
+        traits['prefix_len'] = prefix_len
         return model_class(record, locales=self._locales)
 
     def _flat_model_for(self, model_class, types, ip_address):
-        (record, network) = self._get(types, ip_address)
+        (record, prefix_len) = self._get(types, ip_address)
         record['ip_address'] = ip_address
-        record['network'] = network
+        record['prefix_len'] = prefix_len
         return model_class(record)
 
     def metadata(self):
