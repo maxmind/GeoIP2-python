@@ -306,7 +306,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.traits.ip_address, '1.2.3.4', 'correct ip')
 
 
-class TestNamess(unittest.TestCase):
+class TestNames(unittest.TestCase):
 
     raw = {
         'continent': {

@@ -12,8 +12,18 @@ if sys.version_info[0] == 2:
         if isinstance(address, bytes):
             address = address.decode()
         return ipaddress.ip_address(address)
+
+    def compat_ip_network(network, strict=True):
+        """Intended for internal use only."""
+        if isinstance(network, bytes):
+            network = network.decode()
+        return ipaddress.ip_network(network, strict)
 else:
 
     def compat_ip_address(address):
         """Intended for internal use only."""
         return ipaddress.ip_address(address)
+
+    def compat_ip_network(network, strict=True):
+        """Intended for internal use only."""
+        return ipaddress.ip_network(network, strict)

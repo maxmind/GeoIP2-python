@@ -83,6 +83,7 @@ class Reader(object):
         if locales is None:
             locales = ['en']
         self._db_reader = maxminddb.open_database(fileish, mode)
+        self._db_type = self._db_reader.metadata().database_type
         self._locales = locales
 
     def __enter__(self):
@@ -179,25 +180,27 @@ class Reader(object):
                                     ip_address)
 
     def _get(self, database_type, ip_address):
-        if database_type not in self.metadata().database_type:
+        if database_type not in self._db_type:
             caller = inspect.stack()[2][3]
             raise TypeError("The %s method cannot be used with the "
-                            "%s database" %
-                            (caller, self.metadata().database_type))
-        record = self._db_reader.get(ip_address)
+                            "%s database" % (caller, self._db_type))
+        (record, prefix_len) = self._db_reader.get_with_prefix_len(ip_address)
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
                 "The address %s is not in the database." % ip_address)
-        return record
+        return (record, prefix_len)
 
     def _model_for(self, model_class, types, ip_address):
-        record = self._get(types, ip_address)
-        record.setdefault('traits', {})['ip_address'] = ip_address
+        (record, prefix_len) = self._get(types, ip_address)
+        traits = record.setdefault('traits', {})
+        traits['ip_address'] = ip_address
+        traits['prefix_len'] = prefix_len
         return model_class(record, locales=self._locales)
 
     def _flat_model_for(self, model_class, types, ip_address):
-        record = self._get(types, ip_address)
+        (record, prefix_len) = self._get(types, ip_address)
         record['ip_address'] = ip_address
+        record['prefix_len'] = prefix_len
         return model_class(record)
 
     def metadata(self):
