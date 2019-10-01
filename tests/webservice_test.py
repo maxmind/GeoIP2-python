@@ -4,6 +4,7 @@
 import sys
 sys.path.append('..')
 
+import copy
 import geoip2
 import requests_mock
 from geoip2.errors import (AddressNotFoundError, AuthenticationError,
@@ -58,6 +59,11 @@ class TestClient(unittest.TestCase):
             'network': '1.2.3.0/24'
         },
     }
+
+    # this is not a comprehensive representation of the
+    # JSON from the server
+    insights = copy.deepcopy(country)
+    insights['traits']['user_count'] = 2
 
     def _content_type(self, endpoint):
         return ('application/vnd.maxmind.com-' + endpoint +
@@ -276,7 +282,7 @@ class TestClient(unittest.TestCase):
     @requests_mock.mock()
     def test_insights_ok(self, mock):
         mock.get(self.base_uri + 'insights/1.2.3.4',
-                 json=self.country,
+                 json=self.insights,
                  status_code=200,
                  headers={'Content-Type': self._content_type('country')})
         insights = self.client.insights('1.2.3.4')
@@ -284,6 +290,7 @@ class TestClient(unittest.TestCase):
                          'return value of client.insights')
         self.assertEqual(insights.traits.network,
                          compat_ip_network('1.2.3.0/24'), 'network')
+        self.assertEqual(insights.traits.user_count, 2, 'user_count is 2')
 
     def test_named_constructor_args(self):
         id = '47'

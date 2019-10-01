@@ -15,6 +15,7 @@ History
 * Python 3.3 and 3.4 are no longer supported.
 * Updated documentation of anonymizer attributes - ``is_anonymous_vpn`` and
   ``is_hosting_provider`` - to be more descriptive.
+* Added support for ``user_count`` trait for the GeoIP2 Precision webservice.
 
 2.9.0 (2018-05-25)
 ++++++++++++++++++
