@@ -294,6 +294,47 @@ class TestModels(unittest.TestCase):
 
     def test_unknown_keys(self):
         model = geoip2.models.City({
+            'city': {
+                'invalid': 0
+            },
+            'continent': {
+                'invalid': 0,
+                'names': {
+                    'invalid': 0
+                },
+            },
+            'country': {
+                'invalid': 0,
+                'names': {
+                    'invalid': 0
+                },
+            },
+            'location': {
+                'invalid': 0
+            },
+            'postal': {
+                'invalid': 0
+            },
+            'subdivisions': [
+                {
+                    'invalid': 0,
+                    'names': {
+                        'invalid': 0,
+                    },
+                },
+            ],
+            'registered_country': {
+                'invalid': 0,
+                'names': {
+                    'invalid': 0,
+                },
+            },
+            'represented_country': {
+                'invalid': 0,
+                'names': {
+                    'invalid': 0,
+                },
+            },
             'traits': {
                 'ip_address': '1.2.3.4',
                 'invalid': 'blah'
