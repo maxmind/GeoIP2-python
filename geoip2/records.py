@@ -356,18 +356,17 @@ class Location(Record):
       :type: unicode
 
     """
-    def __init__(
-            self,
-            average_income=None,
-            accuracy_radius=None,
-            latitude=None,
-            longitude=None,
-            metro_code=None,
-            population_density=None,
-            postal_code=None,
-            postal_confidence=None,
-            time_zone=None,
-    ):
+    def __init__(self,
+                 average_income=None,
+                 accuracy_radius=None,
+                 latitude=None,
+                 longitude=None,
+                 metro_code=None,
+                 population_density=None,
+                 postal_code=None,
+                 postal_confidence=None,
+                 time_zone=None,
+                 **_):
         self.average_income = average_income
         self.accuracy_radius = accuracy_radius
         self.latitude = latitude
@@ -392,10 +391,7 @@ class MaxMind(Record):
       :type: int
 
     """
-    def __init__(
-            self,
-            queries_remaining=None,
-    ):
+    def __init__(self, queries_remaining=None, **_):
         self.queries_remaining = queries_remaining
 
 
@@ -426,7 +422,7 @@ class Postal(Record):
       :type: int
 
     """
-    def __init__(self, code=None, confidence=None):
+    def __init__(self, code=None, confidence=None, **_):
         self.code = code
         self.confidence = confidence
 
