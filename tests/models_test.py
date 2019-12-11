@@ -104,6 +104,7 @@ class TestModels(unittest.TestCase):
                 'isp': 'Comcast',
                 'network_speed': 'cable/DSL',
                 'organization': 'Blorg',
+                'static_ip_score': 1.3,
                 'user_count': 2,
                 'user_type': 'college',
             },
@@ -183,8 +184,8 @@ class TestModels(unittest.TestCase):
         self.assertIs(model.traits.is_public_proxy, True)
         self.assertIs(model.traits.is_satellite_provider, True)
         self.assertIs(model.traits.is_tor_exit_node, True)
-
         self.assertEqual(model.traits.user_count, 2)
+        self.assertEqual(model.traits.static_ip_score, 1.3)
 
     def test_insights_min(self):
         model = geoip2.models.Insights({'traits': {'ip_address': '5.6.7.8'}})

@@ -684,6 +684,19 @@ class Traits(Record):
 
       :type: unicode
 
+    .. attribute:: static_ip_score
+
+      An indicator of how static or dynamic an IP address is. The value ranges
+      from 0 to 99.99 with higher values meaning a greater static association. 
+      For example, many IP addresses with a user_type of cellular have a 
+      lifetime under one. Static Cable/DSL IPs typically have a lifetime above
+      thirty. 
+
+      This indicator can be useful for deciding whether an IP address represents
+      the same user over time.
+
+      :type: decimal 
+
     .. attribute:: user_count
 
       The estimated number of users sharing the IP/network during the past 24
@@ -738,6 +751,7 @@ class Traits(Record):
                  network=None,
                  organization=None,
                  prefix_len=None,
+                 static_ip_score=None,
                  user_count=None,
                  user_type=None,
                  **_):
@@ -755,6 +769,7 @@ class Traits(Record):
         self.is_tor_exit_node = is_tor_exit_node
         self.isp = isp
         self.organization = organization
+        self.static_ip_score = static_ip_score
         self.user_type = user_type
         self.user_count = user_count
         self.ip_address = ip_address

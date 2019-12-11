@@ -16,6 +16,7 @@ History
 * Updated documentation of anonymizer attributes - ``is_anonymous_vpn`` and
   ``is_hosting_provider`` - to be more descriptive.
 * Added support for ``user_count`` trait for the GeoIP2 Precision webservice.
+* Added ``static_ip_score`` property to ``geoip2.record.Traits`` for GeoIP2 Precision Insights.
 
 2.9.0 (2018-05-25)
 ++++++++++++++++++
