@@ -687,15 +687,15 @@ class Traits(Record):
     .. attribute:: static_ip_score
 
       An indicator of how static or dynamic an IP address is. The value ranges
-      from 0 to 99.99 with higher values meaning a greater static association. 
-      For example, many IP addresses with a user_type of cellular have a 
+      from 0 to 99.99 with higher values meaning a greater static association.
+      For example, many IP addresses with a user_type of cellular have a
       lifetime under one. Static Cable/DSL IPs typically have a lifetime above
-      thirty. 
+      thirty.
 
       This indicator can be useful for deciding whether an IP address represents
       the same user over time.
 
-      :type: decimal 
+      :type: decimal
 
     .. attribute:: user_count
 
