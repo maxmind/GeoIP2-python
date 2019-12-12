@@ -34,7 +34,9 @@ before_install:
   - "if [[ $RUN_SNYK && $SNYK_TOKEN ]]; then sudo apt-get install -y nodejs; npm install -g snyk; fi"
 install:
   - pip install -r requirements.txt
-  - pip install requests_mock pylint coveralls yapf
+  # We require yapf 0.28.0 to work around https://github.com/google/yapf/issues/781
+  # If that issue is resolved, we should remove the version constraint.
+  - pip install requests_mock pylint coveralls yapf==0.28.0
   - "if [[ $RUN_SNYK && $SNYK_TOKEN ]]; then snyk test --org=maxmind; fi"
 script:
   - coverage run --source=geoip2 setup.py test
