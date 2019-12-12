@@ -693,7 +693,8 @@ class Traits(Record):
       thirty.
 
       This indicator can be useful for deciding whether an IP address represents
-      the same user over time.
+      the same user over time. This attribute is only available from GeoIP2
+      Precision Insights.
 
       :type: decimal
 
