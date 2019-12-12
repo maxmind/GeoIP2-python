@@ -10,6 +10,8 @@ matrix:
       dist: trusty
     - python: 3.7
       dist: xenial
+    - python: 3.8
+      dist: xenial
       env:
         - RUN_SNYK=1
         - RUN_LINTER=1
