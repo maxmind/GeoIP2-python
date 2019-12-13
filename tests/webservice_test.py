@@ -64,6 +64,7 @@ class TestClient(unittest.TestCase):
     # JSON from the server
     insights = copy.deepcopy(country)
     insights['traits']['user_count'] = 2
+    insights['traits']['static_ip_score'] = 1.3
 
     def _content_type(self, endpoint):
         return ('application/vnd.maxmind.com-' + endpoint +
@@ -290,6 +291,8 @@ class TestClient(unittest.TestCase):
                          'return value of client.insights')
         self.assertEqual(insights.traits.network,
                          compat_ip_network('1.2.3.0/24'), 'network')
+        self.assertEqual(insights.traits.static_ip_score, 1.3,
+                         'static_ip_score is 1.3')
         self.assertEqual(insights.traits.user_count, 2, 'user_count is 2')
 
     def test_named_constructor_args(self):
