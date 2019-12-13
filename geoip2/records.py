@@ -696,7 +696,7 @@ class Traits(Record):
       the same user over time. This attribute is only available from GeoIP2
       Precision Insights.
 
-      :type: decimal
+      :type: float
 
     .. attribute:: user_count
 
