@@ -3,9 +3,12 @@
 History
 -------
 
-2.10.0
+3.0.0 (2019-12-20)
 ++++++++++++++++++
 
+* BREAKING CHANGE: The ``geoip2.record.*`` classes have been refactored to
+  improve performance. This refactoring may break classes that inherit from
+  them. The public API should otherwise be compatible.
 * The ``network`` attribute was added to ``geoip2.record.Traits``,
   ``geoip2.model.AnonymousIP``, ``geoip2.model.ASN``,
   ``geoip2.model.ConnectionType``, ``geoip2.model.Domain``,
