@@ -36,14 +36,16 @@ before_install:
   - "if [[ $RUN_SNYK && $SNYK_TOKEN ]]; then sudo apt-get install -y nodejs; npm install -g snyk; fi"
 install:
   - pip install -r requirements.txt
-  # We require yapf 0.28.0 to work around https://github.com/google/yapf/issues/781
-  # If that issue is resolved, we should remove the version constraint.
-  - pip install requests_mock pylint coveralls yapf==0.28.0
+  - pip install requests_mock coveralls
+  - |
+    if [[ $RUN_LINTER ]]; then
+      pip install --upgrade pylint black
+    fi
   - "if [[ $RUN_SNYK && $SNYK_TOKEN ]]; then snyk test --org=maxmind; fi"
 script:
   - coverage run --source=geoip2 setup.py test
   - "if [[ $RUN_LINTER ]]; then ./.travis-pylint.sh; fi"
-  - "if [[ $RUN_LINTER ]]; then ./.travis-yapf.sh; fi"
+  - "if [[ $RUN_LINTER ]]; then ./.travis-black.sh; fi"
 after_success:
   - coveralls
   - "if [[ $RUN_SNYK && $SNYK_TOKEN && $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then snyk monitor --org=maxmind --project-name=maxmind/GeoIP2-python; fi"
