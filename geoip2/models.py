@@ -66,37 +66,36 @@ class Country(SimpleEquality):
       :type: :py:class:`geoip2.records.Traits`
 
     """
+
     def __init__(self, raw_response, locales=None):
         if locales is None:
-            locales = ['en']
+            locales = ["en"]
         self._locales = locales
-        self.continent = \
-            geoip2.records.Continent(locales,
-                                     **raw_response.get('continent', {}))
-        self.country = \
-            geoip2.records.Country(locales,
-                                   **raw_response.get('country', {}))
-        self.registered_country = \
-            geoip2.records.Country(locales,
-                                   **raw_response.get('registered_country',
-                                                      {}))
-        self.represented_country \
-            = geoip2.records.RepresentedCountry(locales,
-                                                **raw_response.get(
-                                                    'represented_country', {}))
+        self.continent = geoip2.records.Continent(
+            locales, **raw_response.get("continent", {})
+        )
+        self.country = geoip2.records.Country(
+            locales, **raw_response.get("country", {})
+        )
+        self.registered_country = geoip2.records.Country(
+            locales, **raw_response.get("registered_country", {})
+        )
+        self.represented_country = geoip2.records.RepresentedCountry(
+            locales, **raw_response.get("represented_country", {})
+        )
 
-        self.maxmind = \
-            geoip2.records.MaxMind(**raw_response.get('maxmind', {}))
+        self.maxmind = geoip2.records.MaxMind(**raw_response.get("maxmind", {}))
 
-        self.traits = geoip2.records.Traits(**raw_response.get('traits', {}))
+        self.traits = geoip2.records.Traits(**raw_response.get("traits", {}))
         self.raw = raw_response
 
     def __repr__(self):
-        return '{module}.{class_name}({data}, {locales})'.format(
+        return "{module}.{class_name}({data}, {locales})".format(
             module=self.__module__,
             class_name=self.__class__.__name__,
             data=self.raw,
-            locales=self._locales)
+            locales=self._locales,
+        )
 
 
 class City(Country):
@@ -161,17 +160,15 @@ class City(Country):
       :type: :py:class:`geoip2.records.Traits`
 
     """
+
     def __init__(self, raw_response, locales=None):
         super(City, self).__init__(raw_response, locales)
-        self.city = \
-            geoip2.records.City(locales, **raw_response.get('city', {}))
-        self.location = \
-            geoip2.records.Location(**raw_response.get('location', {}))
-        self.postal = \
-            geoip2.records.Postal(**raw_response.get('postal', {}))
-        self.subdivisions = \
-            geoip2.records.Subdivisions(locales,
-                                        *raw_response.get('subdivisions', []))
+        self.city = geoip2.records.City(locales, **raw_response.get("city", {}))
+        self.location = geoip2.records.Location(**raw_response.get("location", {}))
+        self.postal = geoip2.records.Postal(**raw_response.get("postal", {}))
+        self.subdivisions = geoip2.records.Subdivisions(
+            locales, *raw_response.get("subdivisions", [])
+        )
 
 
 class Insights(City):
@@ -310,15 +307,16 @@ class SimpleModel(SimpleEquality):
     def __init__(self, raw):
         self.raw = raw
         self._network = None
-        self._prefix_len = raw.get('prefix_len')
-        self.ip_address = raw.get('ip_address')
+        self._prefix_len = raw.get("prefix_len")
+        self.ip_address = raw.get("ip_address")
 
     def __repr__(self):
         # pylint: disable=no-member
-        return '{module}.{class_name}({data})'.format(
+        return "{module}.{class_name}({data})".format(
             module=self.__module__,
             class_name=self.__class__.__name__,
-            data=str(self.raw))
+            data=str(self.raw),
+        )
 
     @property
     def network(self):
@@ -333,8 +331,7 @@ class SimpleModel(SimpleEquality):
         prefix_len = self._prefix_len
         if ip_address is None or prefix_len is None:
             return None
-        network = compat_ip_network("{}/{}".format(ip_address, prefix_len),
-                                    False)
+        network = compat_ip_network("{}/{}".format(ip_address, prefix_len), False)
         self._network = network
         return network
 
@@ -394,13 +391,14 @@ class AnonymousIP(SimpleModel):
 
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
+
     def __init__(self, raw):
         super(AnonymousIP, self).__init__(raw)
-        self.is_anonymous = raw.get('is_anonymous', False)
-        self.is_anonymous_vpn = raw.get('is_anonymous_vpn', False)
-        self.is_hosting_provider = raw.get('is_hosting_provider', False)
-        self.is_public_proxy = raw.get('is_public_proxy', False)
-        self.is_tor_exit_node = raw.get('is_tor_exit_node', False)
+        self.is_anonymous = raw.get("is_anonymous", False)
+        self.is_anonymous_vpn = raw.get("is_anonymous_vpn", False)
+        self.is_hosting_provider = raw.get("is_hosting_provider", False)
+        self.is_public_proxy = raw.get("is_public_proxy", False)
+        self.is_tor_exit_node = raw.get("is_tor_exit_node", False)
 
 
 class ASN(SimpleModel):
@@ -439,9 +437,8 @@ class ASN(SimpleModel):
     # pylint:disable=too-many-arguments
     def __init__(self, raw):
         super(ASN, self).__init__(raw)
-        self.autonomous_system_number = raw.get('autonomous_system_number')
-        self.autonomous_system_organization = raw.get(
-            'autonomous_system_organization')
+        self.autonomous_system_number = raw.get("autonomous_system_number")
+        self.autonomous_system_organization = raw.get("autonomous_system_organization")
 
 
 class ConnectionType(SimpleModel):
@@ -476,9 +473,10 @@ class ConnectionType(SimpleModel):
 
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
+
     def __init__(self, raw):
         super(ConnectionType, self).__init__(raw)
-        self.connection_type = raw.get('connection_type')
+        self.connection_type = raw.get("connection_type")
 
 
 class Domain(SimpleModel):
@@ -507,9 +505,10 @@ class Domain(SimpleModel):
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
 
     """
+
     def __init__(self, raw):
         super(Domain, self).__init__(raw)
-        self.domain = raw.get('domain')
+        self.domain = raw.get("domain")
 
 
 class ISP(ASN):
@@ -560,5 +559,5 @@ class ISP(ASN):
     # pylint:disable=too-many-arguments
     def __init__(self, raw):
         super(ISP, self).__init__(raw)
-        self.isp = raw.get('isp')
-        self.organization = raw.get('organization')
+        self.isp = raw.get("isp")
+        self.organization = raw.get("organization")
