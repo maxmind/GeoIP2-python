@@ -18,6 +18,8 @@ if sys.version_info[0] == 2:
         if isinstance(network, bytes):
             network = network.decode()
         return ipaddress.ip_network(network, strict)
+
+
 else:
 
     def compat_ip_address(address):

@@ -21,11 +21,10 @@ class Record(SimpleEquality):
     __metaclass__ = ABCMeta
 
     def __repr__(self):
-        args = ', '.join('%s=%r' % x for x in self.__dict__.items())
-        return '{module}.{class_name}({data})'.format(
-            module=self.__module__,
-            class_name=self.__class__.__name__,
-            data=args)
+        args = ", ".join("%s=%r" % x for x in self.__dict__.items())
+        return "{module}.{class_name}({data})".format(
+            module=self.__module__, class_name=self.__class__.__name__, data=args
+        )
 
 
 class PlaceRecord(Record):
@@ -35,7 +34,7 @@ class PlaceRecord(Record):
 
     def __init__(self, locales=None, names=None):
         if locales is None:
-            locales = ['en']
+            locales = ["en"]
         self._locales = locales
         if names is None:
             names = {}
@@ -45,8 +44,7 @@ class PlaceRecord(Record):
     def name(self):
         """Dict with locale codes as keys and localized name as value."""
         # pylint:disable=E1101
-        return next((self.names.get(x)
-                     for x in self._locales if x in self.names), None)
+        return next((self.names.get(x) for x in self._locales if x in self.names), None)
 
 
 class City(PlaceRecord):
@@ -87,12 +85,8 @@ class City(PlaceRecord):
       :type: dict
 
     """
-    def __init__(self,
-                 locales=None,
-                 confidence=None,
-                 geoname_id=None,
-                 names=None,
-                 **_):
+
+    def __init__(self, locales=None, confidence=None, geoname_id=None, names=None, **_):
         self.confidence = confidence
         self.geoname_id = geoname_id
         super(City, self).__init__(locales, names)
@@ -135,12 +129,8 @@ class Continent(PlaceRecord):
       :type: dict
 
     """
-    def __init__(self,
-                 locales=None,
-                 code=None,
-                 geoname_id=None,
-                 names=None,
-                 **_):
+
+    def __init__(self, locales=None, code=None, geoname_id=None, names=None, **_):
         self.code = code
         self.geoname_id = geoname_id
         super(Continent, self).__init__(locales, names)
@@ -197,14 +187,17 @@ class Country(PlaceRecord):
       :type: dict
 
     """
-    def __init__(self,
-                 locales=None,
-                 confidence=None,
-                 geoname_id=None,
-                 is_in_european_union=False,
-                 iso_code=None,
-                 names=None,
-                 **_):
+
+    def __init__(
+        self,
+        locales=None,
+        confidence=None,
+        geoname_id=None,
+        is_in_european_union=False,
+        iso_code=None,
+        names=None,
+        **_
+    ):
         self.confidence = confidence
         self.geoname_id = geoname_id
         self.is_in_european_union = is_in_european_union
@@ -273,21 +266,23 @@ class RepresentedCountry(Country):
       :type: unicode
 
     """
+
     def __init__(
-            self,
-            locales=None,
-            confidence=None,
-            geoname_id=None,
-            is_in_european_union=False,
-            iso_code=None,
-            names=None,
-            # pylint:disable=redefined-builtin
-            type=None,
-            **_):
+        self,
+        locales=None,
+        confidence=None,
+        geoname_id=None,
+        is_in_european_union=False,
+        iso_code=None,
+        names=None,
+        # pylint:disable=redefined-builtin
+        type=None,
+        **_
+    ):
         self.type = type
-        super(RepresentedCountry,
-              self).__init__(locales, confidence, geoname_id,
-                             is_in_european_union, iso_code, names)
+        super(RepresentedCountry, self).__init__(
+            locales, confidence, geoname_id, is_in_european_union, iso_code, names
+        )
 
 
 class Location(Record):
@@ -356,17 +351,20 @@ class Location(Record):
       :type: unicode
 
     """
-    def __init__(self,
-                 average_income=None,
-                 accuracy_radius=None,
-                 latitude=None,
-                 longitude=None,
-                 metro_code=None,
-                 population_density=None,
-                 postal_code=None,
-                 postal_confidence=None,
-                 time_zone=None,
-                 **_):
+
+    def __init__(
+        self,
+        average_income=None,
+        accuracy_radius=None,
+        latitude=None,
+        longitude=None,
+        metro_code=None,
+        population_density=None,
+        postal_code=None,
+        postal_confidence=None,
+        time_zone=None,
+        **_
+    ):
         self.average_income = average_income
         self.accuracy_radius = accuracy_radius
         self.latitude = latitude
@@ -391,6 +389,7 @@ class MaxMind(Record):
       :type: int
 
     """
+
     def __init__(self, queries_remaining=None, **_):
         self.queries_remaining = queries_remaining
 
@@ -422,6 +421,7 @@ class Postal(Record):
       :type: int
 
     """
+
     def __init__(self, code=None, confidence=None, **_):
         self.code = code
         self.confidence = confidence
@@ -474,13 +474,16 @@ class Subdivision(PlaceRecord):
       :type: dict
 
     """
-    def __init__(self,
-                 locales=None,
-                 confidence=None,
-                 geoname_id=None,
-                 iso_code=None,
-                 names=None,
-                 **_):
+
+    def __init__(
+        self,
+        locales=None,
+        confidence=None,
+        geoname_id=None,
+        iso_code=None,
+        names=None,
+        **_
+    ):
         self.confidence = confidence
         self.geoname_id = geoname_id
         self.iso_code = iso_code
@@ -498,6 +501,7 @@ class Subdivisions(tuple):
 
     This attribute is returned by ``city``, ``enterprise``, and ``insights``.
     """
+
     def __new__(cls, locales, *subdivisions):
         subdivisions = [Subdivision(locales, **x) for x in subdivisions]
         obj = super(cls, Subdivisions).__new__(cls, subdivisions)
@@ -734,28 +738,31 @@ class Traits(Record):
       :type: unicode
 
     """
-    def __init__(self,
-                 autonomous_system_number=None,
-                 autonomous_system_organization=None,
-                 connection_type=None,
-                 domain=None,
-                 is_anonymous=False,
-                 is_anonymous_proxy=False,
-                 is_anonymous_vpn=False,
-                 is_hosting_provider=False,
-                 is_legitimate_proxy=False,
-                 is_public_proxy=False,
-                 is_satellite_provider=False,
-                 is_tor_exit_node=False,
-                 isp=None,
-                 ip_address=None,
-                 network=None,
-                 organization=None,
-                 prefix_len=None,
-                 static_ip_score=None,
-                 user_count=None,
-                 user_type=None,
-                 **_):
+
+    def __init__(
+        self,
+        autonomous_system_number=None,
+        autonomous_system_organization=None,
+        connection_type=None,
+        domain=None,
+        is_anonymous=False,
+        is_anonymous_proxy=False,
+        is_anonymous_vpn=False,
+        is_hosting_provider=False,
+        is_legitimate_proxy=False,
+        is_public_proxy=False,
+        is_satellite_provider=False,
+        is_tor_exit_node=False,
+        isp=None,
+        ip_address=None,
+        network=None,
+        organization=None,
+        prefix_len=None,
+        static_ip_score=None,
+        user_count=None,
+        user_type=None,
+        **_
+    ):
         self.autonomous_system_number = autonomous_system_number
         self.autonomous_system_organization = autonomous_system_organization
         self.connection_type = connection_type
