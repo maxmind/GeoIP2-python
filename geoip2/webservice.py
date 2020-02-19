@@ -195,7 +195,7 @@ class Client(object):
 
         if 400 <= status < 500:
             return self._exception_for_4xx_status(response, status, uri)
-        elif 500 <= status < 600:
+        if 500 <= status < 600:
             return self._exception_for_5xx_status(status, uri)
         return self._exception_for_non_200_status(status, uri)
 
@@ -206,7 +206,7 @@ class Client(object):
                 status,
                 uri,
             )
-        elif response.headers["Content-Type"].find("json") == -1:
+        if response.headers["Content-Type"].find("json") == -1:
             return HTTPError(
                 "Received a %i for %s with the following "
                 "body: %s" % (status, uri, response.content),
@@ -236,7 +236,7 @@ class Client(object):
     def _exception_for_web_service_error(self, message, code, status, uri):
         if code in ("IP_ADDRESS_NOT_FOUND", "IP_ADDRESS_RESERVED"):
             return AddressNotFoundError(message)
-        elif code in (
+        if code in (
             "ACCOUNT_ID_REQUIRED",
             "ACCOUNT_ID_UNKNOWN",
             "AUTHORIZATION_INVALID",
@@ -245,9 +245,9 @@ class Client(object):
             "USER_ID_UNKNOWN",
         ):
             return AuthenticationError(message)
-        elif code in ("INSUFFICIENT_FUNDS", "OUT_OF_QUERIES"):
+        if code in ("INSUFFICIENT_FUNDS", "OUT_OF_QUERIES"):
             return OutOfQueriesError(message)
-        elif code == "PERMISSION_REQUIRED":
+        if code == "PERMISSION_REQUIRED":
             return PermissionRequiredError(message)
 
         return InvalidRequestError(message, code, status, uri)
