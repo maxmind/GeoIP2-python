@@ -36,7 +36,7 @@ fi
 # Make sure Sphinx and wheel are installed with the current python
 pip install sphinx wheel
 
-perl -pi -e "s/(?<=__version__ = ').+?(?=')/$version/gsm" geoip2/__init__.py
+perl -pi -e "s/(?<=__version__ = \").+?(?=\")/$version/gsm" geoip2/__init__.py
 
 echo $"Test results:"
 python setup.py test
