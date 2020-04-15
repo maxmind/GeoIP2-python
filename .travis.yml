@@ -3,22 +3,15 @@ language: python
 matrix:
   include:
     - python: 2.7
-      dist: trusty
     - python: 3.5
-      dist: trusty
     - python: 3.6
-      dist: trusty
     - python: 3.7
-      dist: xenial
     - python: 3.8
-      dist: xenial
       env:
         - RUN_SNYK=1
         - RUN_LINTER=1
     - python: nightly
-      dist: xenial
     - python: pypy
-      dist: trusty
   allow_failures:
     - python: nightly
 
