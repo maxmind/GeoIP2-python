@@ -11,7 +11,6 @@ import ipaddress
 # pylint:disable=R0903
 from abc import ABCMeta
 
-from geoip2.compat import compat_ip_network
 from geoip2.mixins import SimpleEquality
 
 
@@ -799,6 +798,6 @@ class Traits(Record):
             if ip_address is None or prefix_len is None:
                 return None
             network = "{}/{}".format(ip_address, prefix_len)
-        network = compat_ip_network(network, False)
+        network = ipaddress.ip_network(network, False)
         self._network = network
         return network

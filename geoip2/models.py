@@ -15,7 +15,6 @@ import ipaddress
 from abc import ABCMeta
 
 import geoip2.records
-from geoip2.compat import compat_ip_network
 from geoip2.mixins import SimpleEquality
 
 
@@ -331,7 +330,7 @@ class SimpleModel(SimpleEquality):
         prefix_len = self._prefix_len
         if ip_address is None or prefix_len is None:
             return None
-        network = compat_ip_network("{}/{}".format(ip_address, prefix_len), False)
+        network = ipaddress.ip_network("{}/{}".format(ip_address, prefix_len), False)
         self._network = network
         return network
 

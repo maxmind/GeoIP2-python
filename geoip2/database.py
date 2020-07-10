@@ -197,7 +197,7 @@ class Reader(object):
             raise geoip2.errors.AddressNotFoundError(
                 "The address %s is not in the database." % ip_address
             )
-        return (record, prefix_len)
+        return record, prefix_len
 
     def _model_for(self, model_class, types, ip_address):
         (record, prefix_len) = self._get(types, ip_address)

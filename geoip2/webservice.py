@@ -25,14 +25,12 @@ Requests to the GeoIP2 Precision web service are always made with SSL.
 
 """
 
+import ipaddress
 import requests
-
 from requests.utils import default_user_agent
 
 import geoip2
 import geoip2.models
-
-from .compat import compat_ip_address
 
 from .errors import (
     AddressNotFoundError,
@@ -159,7 +157,7 @@ class Client(object):
 
     def _response_for(self, path, model_class, ip_address):
         if ip_address != "me":
-            ip_address = str(compat_ip_address(ip_address))
+            ip_address = str(ipaddress.ip_address(ip_address))
         uri = "/".join([self._base_uri, path, ip_address])
         response = requests.get(
             uri,

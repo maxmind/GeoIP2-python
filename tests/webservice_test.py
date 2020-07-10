@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import copy
+import ipaddress
 import sys
 
 sys.path.append("..")
 
-import copy
 import geoip2
 import requests_mock
 from geoip2.errors import (
@@ -18,7 +19,6 @@ from geoip2.errors import (
     PermissionRequiredError,
 )
 from geoip2.webservice import Client
-from geoip2.compat import compat_ip_network
 
 if sys.version_info[:2] == (2, 6):
     import unittest2 as unittest
@@ -106,7 +106,7 @@ class TestClient(unittest.TestCase):
             "registered_country is_in_european_union is True",
         )
         self.assertEqual(
-            country.traits.network, compat_ip_network("1.2.3.0/24"), "network"
+            country.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
         )
         self.assertEqual(country.raw, self.country, "raw response is correct")
 
@@ -315,7 +315,7 @@ class TestClient(unittest.TestCase):
         city = self.client.city("1.2.3.4")
         self.assertEqual(type(city), geoip2.models.City, "return value of client.city")
         self.assertEqual(
-            city.traits.network, compat_ip_network("1.2.3.0/24"), "network"
+            city.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
         )
 
     @requests_mock.mock()
@@ -331,7 +331,7 @@ class TestClient(unittest.TestCase):
             type(insights), geoip2.models.Insights, "return value of client.insights"
         )
         self.assertEqual(
-            insights.traits.network, compat_ip_network("1.2.3.0/24"), "network"
+            insights.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
         )
         self.assertEqual(insights.traits.static_ip_score, 1.3, "static_ip_score is 1.3")
         self.assertEqual(insights.traits.user_count, 2, "user_count is 2")
