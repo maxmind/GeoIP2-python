@@ -186,7 +186,7 @@ class City(Country):
     def __init__(
         self, raw_response: Dict[str, Any], locales: Optional[List[str]] = None
     ) -> None:
-        super(City, self).__init__(raw_response, locales)
+        super().__init__(raw_response, locales)
         self.city = geoip2.records.City(locales, **raw_response.get("city", {}))
         self.location = geoip2.records.Location(**raw_response.get("location", {}))
         self.postal = geoip2.records.Postal(**raw_response.get("postal", {}))
@@ -426,7 +426,7 @@ class AnonymousIP(SimpleModel):
     is_tor_exit_node: bool
 
     def __init__(self, raw: Dict[str, bool]) -> None:
-        super(AnonymousIP, self).__init__(raw)  # type: ignore
+        super().__init__(raw)  # type: ignore
         self.is_anonymous = raw.get("is_anonymous", False)
         self.is_anonymous_vpn = raw.get("is_anonymous_vpn", False)
         self.is_hosting_provider = raw.get("is_hosting_provider", False)
@@ -472,7 +472,7 @@ class ASN(SimpleModel):
 
     # pylint:disable=too-many-arguments
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
-        super(ASN, self).__init__(raw)
+        super().__init__(raw)
         self.autonomous_system_number = cast(
             Optional[int], raw.get("autonomous_system_number")
         )
@@ -517,7 +517,7 @@ class ConnectionType(SimpleModel):
     connection_type: Optional[str]
 
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
-        super(ConnectionType, self).__init__(raw)
+        super().__init__(raw)
         self.connection_type = cast(Optional[str], raw.get("connection_type"))
 
 
@@ -551,7 +551,7 @@ class Domain(SimpleModel):
     domain: Optional[str]
 
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
-        super(Domain, self).__init__(raw)
+        super().__init__(raw)
         self.domain = cast(Optional[str], raw.get("domain"))
 
 
@@ -605,6 +605,6 @@ class ISP(ASN):
 
     # pylint:disable=too-many-arguments
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
-        super(ISP, self).__init__(raw)
+        super().__init__(raw)
         self.isp = cast(Optional[str], raw.get("isp"))
         self.organization = cast(Optional[str], raw.get("organization"))

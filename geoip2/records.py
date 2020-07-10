@@ -105,7 +105,7 @@ class City(PlaceRecord):
     ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
-        super(City, self).__init__(locales, names)
+        super().__init__(locales, names)
 
 
 class Continent(PlaceRecord):
@@ -159,7 +159,7 @@ class Continent(PlaceRecord):
     ) -> None:
         self.code = code
         self.geoname_id = geoname_id
-        super(Continent, self).__init__(locales, names)
+        super().__init__(locales, names)
 
 
 class Country(PlaceRecord):
@@ -233,7 +233,7 @@ class Country(PlaceRecord):
         self.geoname_id = geoname_id
         self.is_in_european_union = is_in_european_union
         self.iso_code = iso_code
-        super(Country, self).__init__(locales, names)
+        super().__init__(locales, names)
 
 
 class RepresentedCountry(Country):
@@ -313,7 +313,7 @@ class RepresentedCountry(Country):
         **_
     ) -> None:
         self.type = type
-        super(RepresentedCountry, self).__init__(
+        super().__init__(
             locales, confidence, geoname_id, is_in_european_union, iso_code, names
         )
 
@@ -535,7 +535,7 @@ class Subdivision(PlaceRecord):
         self.confidence = confidence
         self.geoname_id = geoname_id
         self.iso_code = iso_code
-        super(Subdivision, self).__init__(locales, names)
+        super().__init__(locales, names)
 
 
 class Subdivisions(tuple):
@@ -554,14 +554,14 @@ class Subdivisions(tuple):
         cls: Type["Subdivisions"], locales: Optional[List[str]], *subdivisions
     ) -> "Subdivisions":
         subobjs = tuple(Subdivision(locales, **x) for x in subdivisions)
-        obj = super(cls, Subdivisions).__new__(cls, subobjs)  # type: ignore
+        obj = super().__new__(cls, subobjs)  # type: ignore
         return obj
 
     def __init__(
         self, locales: Optional[List[str]], *subdivisions  # pylint:disable=W0613
     ) -> None:
         self._locales = locales
-        super(Subdivisions, self).__init__()
+        super().__init__()
 
     @property
     def most_specific(self) -> Subdivision:
