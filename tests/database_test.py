@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import ipaddress
 import sys
+import unittest
 
 sys.path.append("..")
 
@@ -14,16 +15,7 @@ import maxminddb
 try:
     import maxminddb.extension
 except ImportError:
-    maxminddb.extension = None
-
-if sys.version_info[:2] == (2, 6):
-    import unittest2 as unittest
-else:
-    import unittest
-
-if sys.version_info[0] == 2:
-    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
-    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
+    maxminddb.extension = None  # type: ignore
 
 
 class BaseTestReader(unittest.TestCase):

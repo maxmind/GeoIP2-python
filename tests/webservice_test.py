@@ -5,6 +5,7 @@ import copy
 import ipaddress
 import sys
 from typing import cast, Dict
+import unittest
 
 sys.path.append("..")
 
@@ -20,15 +21,6 @@ from geoip2.errors import (
     PermissionRequiredError,
 )
 from geoip2.webservice import Client
-
-if sys.version_info[:2] == (2, 6):
-    import unittest2 as unittest
-else:
-    import unittest
-
-if sys.version_info[0] == 2:
-    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
-    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
 
 
 class TestClient(unittest.TestCase):

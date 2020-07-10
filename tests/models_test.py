@@ -5,19 +5,11 @@ from __future__ import unicode_literals
 
 import sys
 from typing import Dict
+import unittest
 
 sys.path.append("..")
 
 import geoip2.models
-
-if sys.version_info[:2] == (2, 6):
-    import unittest2 as unittest
-else:
-    import unittest
-
-if sys.version_info[0] == 2:
-    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
-    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
 
 
 class TestModels(unittest.TestCase):
