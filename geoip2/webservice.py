@@ -93,21 +93,11 @@ class Client(object):
         host="geoip.maxmind.com",
         locales=None,
         timeout=None,
-        # This is deprecated and not documented for that reason.
-        # It can be removed if we do a major release in the future.
-        user_id=None,
     ):
         """Construct a Client."""
         # pylint: disable=too-many-arguments
         if locales is None:
             locales = ["en"]
-        if account_id is None:
-            account_id = user_id
-
-        if account_id is None:
-            raise TypeError("The account_id is a required parameter")
-        if license_key is None:
-            raise TypeError("The license_key is a required parameter")
 
         self._locales = locales
         # requests 2.12.2 requires that the username passed to auth be bytes
