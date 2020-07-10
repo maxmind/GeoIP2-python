@@ -26,7 +26,7 @@ if sys.version_info[0] == 2:
     unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
 
 
-class BaseTestReader(object):
+class BaseTestReader(unittest.TestCase):
     def test_language_list(self) -> None:
         reader = geoip2.database.Reader(
             "tests/data/test-data/GeoIP2-Country-Test.mmdb",
@@ -220,19 +220,19 @@ class BaseTestReader(object):
 
 
 @unittest.skipUnless(maxminddb.extension, "No C extension module found. Skipping tests")
-class TestExtensionReader(BaseTestReader, unittest.TestCase):
+class TestExtensionReader(BaseTestReader):
     mode = geoip2.database.MODE_MMAP_EXT
 
 
-class TestMMAPReader(BaseTestReader, unittest.TestCase):
+class TestMMAPReader(BaseTestReader):
     mode = geoip2.database.MODE_MMAP
 
 
-class TestFileReader(BaseTestReader, unittest.TestCase):
+class TestFileReader(BaseTestReader):
     mode = geoip2.database.MODE_FILE
 
 
-class TestMemoryReader(BaseTestReader, unittest.TestCase):
+class TestMemoryReader(BaseTestReader):
     mode = geoip2.database.MODE_MEMORY
 
 
@@ -240,5 +240,5 @@ class TestFDReader(unittest.TestCase):
     mode = geoip2.database.MODE_FD
 
 
-class TestAutoReader(BaseTestReader, unittest.TestCase):
+class TestAutoReader(BaseTestReader):
     mode = geoip2.database.MODE_AUTO
