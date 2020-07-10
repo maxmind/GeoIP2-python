@@ -379,8 +379,6 @@ class Location(Record):
         longitude: Optional[float] = None,
         metro_code: Optional[int] = None,
         population_density: Optional[int] = None,
-        postal_code: None = None,
-        postal_confidence: None = None,
         time_zone: Optional[str] = None,
         **_
     ) -> None:
@@ -390,8 +388,6 @@ class Location(Record):
         self.longitude = longitude
         self.metro_code = metro_code
         self.population_density = population_density
-        self.postal_code = postal_code
-        self.postal_confidence = postal_confidence
         self.time_zone = time_zone
 
 
