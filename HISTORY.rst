@@ -8,6 +8,12 @@ History
 
 * IMPORTANT: Python 2.7 and 3.5 support has been dropped. Python 3.6 or greater
   is required.
+* Type hints have been added.
+* The attributes ``postal_code`` and ``postal_confidence`` have been removed
+  from ``geoip2.record.Location``. These would previously always be ``None``.
+* ``user_id`` is no longer supported as a named argument for the constructor
+  on ``geoip2.webservice.Client``. Use ``account_id`` or a positional
+  parameter instead.
 
 3.0.0 (2019-12-20)
 ++++++++++++++++++
