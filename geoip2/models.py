@@ -13,7 +13,7 @@ http://dev.maxmind.com/geoip/geoip2/web-services for more details.
 # pylint: disable=too-many-instance-attributes,too-few-public-methods
 import ipaddress
 from abc import ABCMeta
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, cast, Dict, List, Optional, Union
 
 import geoip2.records
 from geoip2.mixins import SimpleEquality
@@ -66,6 +66,13 @@ class Country(SimpleEquality):
       :type: :py:class:`geoip2.records.Traits`
 
     """
+
+    continent: geoip2.records.Continent
+    country: geoip2.records.Country
+    maxmind: geoip2.records.MaxMind
+    registered_country: geoip2.records.Country
+    represented_country: geoip2.records.RepresentedCountry
+    traits: geoip2.records.Traits
 
     def __init__(
         self, raw_response: Dict[str, Any], locales: Optional[List[str]] = None
@@ -170,6 +177,11 @@ class City(Country):
       :type: :py:class:`geoip2.records.Traits`
 
     """
+
+    city: geoip2.records.City
+    location: geoip2.records.Location
+    postal: geoip2.records.Postal
+    subdivisions: geoip2.records.Subdivisions
 
     def __init__(
         self, raw_response: Dict[str, Any], locales: Optional[List[str]] = None
@@ -316,11 +328,14 @@ class SimpleModel(SimpleEquality):
 
     __metaclass__ = ABCMeta
 
+    raw: Dict[str, Union[bool, str, int]]
+    ip_address: str
+
     def __init__(self, raw: Dict[str, Union[bool, str, int]]) -> None:
         self.raw = raw
         self._network = None
         self._prefix_len = raw.get("prefix_len")
-        self.ip_address = raw.get("ip_address")
+        self.ip_address = cast(str, raw.get("ip_address"))
 
     def __repr__(self) -> str:
         # pylint: disable=no-member
@@ -404,8 +419,14 @@ class AnonymousIP(SimpleModel):
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
 
-    def __init__(self, raw: Dict[str, Union[bool, str, int]]) -> None:
-        super(AnonymousIP, self).__init__(raw)
+    is_anonymous: bool
+    is_anonymous_vpn: bool
+    is_hosting_provider: bool
+    is_public_proxy: bool
+    is_tor_exit_node: bool
+
+    def __init__(self, raw: Dict[str, bool]) -> None:
+        super(AnonymousIP, self).__init__(raw)  # type: ignore
         self.is_anonymous = raw.get("is_anonymous", False)
         self.is_anonymous_vpn = raw.get("is_anonymous_vpn", False)
         self.is_hosting_provider = raw.get("is_hosting_provider", False)
@@ -446,11 +467,18 @@ class ASN(SimpleModel):
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
 
+    autonomous_system_number: Optional[int]
+    autonomous_system_organization: Optional[str]
+
     # pylint:disable=too-many-arguments
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
         super(ASN, self).__init__(raw)
-        self.autonomous_system_number = raw.get("autonomous_system_number")
-        self.autonomous_system_organization = raw.get("autonomous_system_organization")
+        self.autonomous_system_number = cast(
+            Optional[int], raw.get("autonomous_system_number")
+        )
+        self.autonomous_system_organization = cast(
+            Optional[str], raw.get("autonomous_system_organization")
+        )
 
 
 class ConnectionType(SimpleModel):
@@ -486,9 +514,11 @@ class ConnectionType(SimpleModel):
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
 
+    connection_type: Optional[str]
+
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
         super(ConnectionType, self).__init__(raw)
-        self.connection_type = raw.get("connection_type")
+        self.connection_type = cast(Optional[str], raw.get("connection_type"))
 
 
 class Domain(SimpleModel):
@@ -518,9 +548,11 @@ class Domain(SimpleModel):
 
     """
 
+    domain: Optional[str]
+
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
         super(Domain, self).__init__(raw)
-        self.domain = raw.get("domain")
+        self.domain = cast(Optional[str], raw.get("domain"))
 
 
 class ISP(ASN):
@@ -568,8 +600,11 @@ class ISP(ASN):
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
 
+    isp: Optional[str]
+    organization: Optional[str]
+
     # pylint:disable=too-many-arguments
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
         super(ISP, self).__init__(raw)
-        self.isp = raw.get("isp")
-        self.organization = raw.get("organization")
+        self.isp = cast(Optional[str], raw.get("isp"))
+        self.organization = cast(Optional[str], raw.get("organization"))

@@ -32,6 +32,7 @@ class PlaceRecord(Record):
 
     __metaclass__ = ABCMeta
     names: Dict[str, str]
+    _locales: List[str]
 
     def __init__(
         self,
@@ -91,6 +92,9 @@ class City(PlaceRecord):
 
     """
 
+    confidence: Optional[int]
+    geoname_id: Optional[int]
+
     def __init__(
         self,
         locales: Optional[List[str]] = None,
@@ -141,6 +145,9 @@ class Continent(PlaceRecord):
       :type: dict
 
     """
+
+    code: Optional[str]
+    geoname_id: Optional[int]
 
     def __init__(
         self,
@@ -206,6 +213,11 @@ class Country(PlaceRecord):
       :type: dict
 
     """
+
+    confidence: Optional[int]
+    geoname_id: Optional[int]
+    is_in_european_union: bool
+    iso_code: Optional[str]
 
     def __init__(
         self,
@@ -285,6 +297,8 @@ class RepresentedCountry(Country):
       :type: unicode
 
     """
+
+    type: Optional[str]
 
     def __init__(
         self,
@@ -371,6 +385,14 @@ class Location(Record):
 
     """
 
+    average_income: Optional[int]
+    accuracy_radius: Optional[int]
+    latitude: Optional[float]
+    longitude: Optional[float]
+    metro_code: Optional[int]
+    population_density: Optional[int]
+    time_zone: Optional[str]
+
     def __init__(
         self,
         average_income: Optional[int] = None,
@@ -405,6 +427,8 @@ class MaxMind(Record):
 
     """
 
+    queries_remaining: Optional[int]
+
     def __init__(self, queries_remaining: Optional[int] = None, **_) -> None:
         self.queries_remaining = queries_remaining
 
@@ -436,6 +460,9 @@ class Postal(Record):
       :type: int
 
     """
+
+    code: Optional[str]
+    confidence: Optional[int]
 
     def __init__(
         self, code: Optional[str] = None, confidence: Optional[int] = None, **_
@@ -491,6 +518,10 @@ class Subdivision(PlaceRecord):
       :type: dict
 
     """
+
+    confidence: Optional[int]
+    geoname_id: Optional[int]
+    iso_code: Optional[str]
 
     def __init__(
         self,
@@ -759,6 +790,27 @@ class Traits(Record):
       :type: unicode
 
     """
+
+    autonomous_system_number: Optional[int]
+    autonomous_system_organization: Optional[str]
+    connection_type: Optional[str]
+    domain: Optional[str]
+    is_anonymous: bool
+    is_anonymous_proxy: bool
+    is_anonymous_vpn: bool
+    is_hosting_provider: bool
+    is_legitimate_proxy: bool
+    is_public_proxy: bool
+    is_satellite_provider: bool
+    is_tor_exit_node: bool
+    isp: Optional[str]
+    ip_address: Optional[str]
+    organization: Optional[str]
+    static_ip_score: Optional[float]
+    user_count: Optional[int]
+    user_type: Optional[str]
+    _network: Optional[str]
+    _prefix_len: Optional[int]
 
     def __init__(
         self,
