@@ -126,11 +126,19 @@ class City(Country):
 
       Location object for the requested IP address.
 
+      :type: :py:class:`geoip2.records.Location`
+
     .. attribute:: maxmind
 
       Information related to your MaxMind account.
 
       :type: :py:class:`geoip2.records.MaxMind`
+
+    .. attribute:: postal
+
+      Postal object for the requested IP address.
+
+      :type: :py:class:`geoip2.records.Postal`
 
     .. attribute:: registered_country
 
