@@ -29,11 +29,12 @@ install:
   - pip install requests_mock coveralls
   - |
     if [[ $RUN_LINTER ]]; then
-      pip install --upgrade pylint black
+      pip install --upgrade pylint black mypy
     fi
   - "if [[ $RUN_SNYK && $SNYK_TOKEN ]]; then snyk test --org=maxmind; fi"
 script:
   - coverage run --source=geoip2 setup.py test
+  - "if [[ $RUN_LINTER ]]; then mypy geoip2 tests; fi"
   - "if [[ $RUN_LINTER ]]; then ./.travis-pylint.sh; fi"
   - "if [[ $RUN_LINTER ]]; then ./.travis-black.sh; fi"
 after_success:
