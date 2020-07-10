@@ -1,6 +1,7 @@
 """This package contains utility mixins"""
 # pylint: disable=too-few-public-methods
 from abc import ABCMeta
+from typing import Any
 
 
 class SimpleEquality(object):
@@ -8,7 +9,7 @@ class SimpleEquality(object):
 
     __metaclass__ = ABCMeta
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
 
     def __ne__(self, other):

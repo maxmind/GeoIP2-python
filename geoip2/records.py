@@ -10,6 +10,7 @@ import ipaddress
 
 # pylint:disable=R0903
 from abc import ABCMeta
+from typing import Dict, List, Optional, Type, Union
 
 from geoip2.mixins import SimpleEquality
 
@@ -19,7 +20,7 @@ class Record(SimpleEquality):
 
     __metaclass__ = ABCMeta
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         args = ", ".join("%s=%r" % x for x in self.__dict__.items())
         return "{module}.{class_name}({data})".format(
             module=self.__module__, class_name=self.__class__.__name__, data=args
@@ -30,8 +31,13 @@ class PlaceRecord(Record):
     """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`."""
 
     __metaclass__ = ABCMeta
+    names: Dict[str, str]
 
-    def __init__(self, locales=None, names=None):
+    def __init__(
+        self,
+        locales: Optional[List[str]] = None,
+        names: Optional[Dict[str, str]] = None,
+    ) -> None:
         if locales is None:
             locales = ["en"]
         self._locales = locales
@@ -40,7 +46,7 @@ class PlaceRecord(Record):
         self.names = names
 
     @property
-    def name(self):
+    def name(self) -> Optional[str]:
         """Dict with locale codes as keys and localized name as value."""
         # pylint:disable=E1101
         return next((self.names.get(x) for x in self._locales if x in self.names), None)
@@ -85,7 +91,14 @@ class City(PlaceRecord):
 
     """
 
-    def __init__(self, locales=None, confidence=None, geoname_id=None, names=None, **_):
+    def __init__(
+        self,
+        locales: Optional[List[str]] = None,
+        confidence: Optional[int] = None,
+        geoname_id: Optional[int] = None,
+        names: Optional[Dict[str, str]] = None,
+        **_
+    ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
         super(City, self).__init__(locales, names)
@@ -129,7 +142,14 @@ class Continent(PlaceRecord):
 
     """
 
-    def __init__(self, locales=None, code=None, geoname_id=None, names=None, **_):
+    def __init__(
+        self,
+        locales: Optional[List[str]] = None,
+        code: Optional[str] = None,
+        geoname_id: Optional[int] = None,
+        names: Optional[Dict[str, str]] = None,
+        **_
+    ) -> None:
         self.code = code
         self.geoname_id = geoname_id
         super(Continent, self).__init__(locales, names)
@@ -189,14 +209,14 @@ class Country(PlaceRecord):
 
     def __init__(
         self,
-        locales=None,
-        confidence=None,
-        geoname_id=None,
-        is_in_european_union=False,
-        iso_code=None,
-        names=None,
+        locales: Optional[List[str]] = None,
+        confidence: Optional[int] = None,
+        geoname_id: Optional[int] = None,
+        is_in_european_union: bool = False,
+        iso_code: Optional[str] = None,
+        names: Optional[Dict[str, str]] = None,
         **_
-    ):
+    ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
         self.is_in_european_union = is_in_european_union
@@ -268,16 +288,16 @@ class RepresentedCountry(Country):
 
     def __init__(
         self,
-        locales=None,
-        confidence=None,
-        geoname_id=None,
-        is_in_european_union=False,
-        iso_code=None,
-        names=None,
+        locales: Optional[List[str]] = None,
+        confidence: Optional[int] = None,
+        geoname_id: Optional[int] = None,
+        is_in_european_union: bool = False,
+        iso_code: Optional[str] = None,
+        names: Optional[Dict[str, str]] = None,
         # pylint:disable=redefined-builtin
-        type=None,
+        type: Optional[str] = None,
         **_
-    ):
+    ) -> None:
         self.type = type
         super(RepresentedCountry, self).__init__(
             locales, confidence, geoname_id, is_in_european_union, iso_code, names
@@ -353,17 +373,17 @@ class Location(Record):
 
     def __init__(
         self,
-        average_income=None,
-        accuracy_radius=None,
-        latitude=None,
-        longitude=None,
-        metro_code=None,
-        population_density=None,
-        postal_code=None,
-        postal_confidence=None,
-        time_zone=None,
+        average_income: Optional[int] = None,
+        accuracy_radius: Optional[int] = None,
+        latitude: Optional[float] = None,
+        longitude: Optional[float] = None,
+        metro_code: Optional[int] = None,
+        population_density: Optional[int] = None,
+        postal_code: None = None,
+        postal_confidence: None = None,
+        time_zone: Optional[str] = None,
         **_
-    ):
+    ) -> None:
         self.average_income = average_income
         self.accuracy_radius = accuracy_radius
         self.latitude = latitude
@@ -389,7 +409,7 @@ class MaxMind(Record):
 
     """
 
-    def __init__(self, queries_remaining=None, **_):
+    def __init__(self, queries_remaining: Optional[int] = None, **_) -> None:
         self.queries_remaining = queries_remaining
 
 
@@ -421,7 +441,9 @@ class Postal(Record):
 
     """
 
-    def __init__(self, code=None, confidence=None, **_):
+    def __init__(
+        self, code: Optional[str] = None, confidence: Optional[int] = None, **_
+    ) -> None:
         self.code = code
         self.confidence = confidence
 
@@ -476,13 +498,13 @@ class Subdivision(PlaceRecord):
 
     def __init__(
         self,
-        locales=None,
-        confidence=None,
-        geoname_id=None,
-        iso_code=None,
-        names=None,
+        locales: Optional[List[str]] = None,
+        confidence: Optional[int] = None,
+        geoname_id: Optional[int] = None,
+        iso_code: Optional[str] = None,
+        names: Optional[Dict[str, str]] = None,
         **_
-    ):
+    ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
         self.iso_code = iso_code
@@ -501,17 +523,21 @@ class Subdivisions(tuple):
     This attribute is returned by ``city``, ``enterprise``, and ``insights``.
     """
 
-    def __new__(cls, locales, *subdivisions):
-        subdivisions = [Subdivision(locales, **x) for x in subdivisions]
-        obj = super(cls, Subdivisions).__new__(cls, subdivisions)
+    def __new__(
+        cls: Type["Subdivisions"], locales: Optional[List[str]], *subdivisions
+    ) -> "Subdivisions":
+        subobjs = tuple(Subdivision(locales, **x) for x in subdivisions)
+        obj = super(cls, Subdivisions).__new__(cls, subobjs)  # type: ignore
         return obj
 
-    def __init__(self, locales, *subdivisions):  # pylint:disable=W0613
+    def __init__(
+        self, locales: Optional[List[str]], *subdivisions  # pylint:disable=W0613
+    ) -> None:
         self._locales = locales
         super(Subdivisions, self).__init__()
 
     @property
-    def most_specific(self):
+    def most_specific(self) -> Subdivision:
         """The most specific (smallest) subdivision available.
 
         If there are no :py:class:`Subdivision` objects for the response,
@@ -740,28 +766,28 @@ class Traits(Record):
 
     def __init__(
         self,
-        autonomous_system_number=None,
-        autonomous_system_organization=None,
-        connection_type=None,
-        domain=None,
-        is_anonymous=False,
-        is_anonymous_proxy=False,
-        is_anonymous_vpn=False,
-        is_hosting_provider=False,
-        is_legitimate_proxy=False,
-        is_public_proxy=False,
-        is_satellite_provider=False,
-        is_tor_exit_node=False,
-        isp=None,
-        ip_address=None,
-        network=None,
-        organization=None,
-        prefix_len=None,
-        static_ip_score=None,
-        user_count=None,
-        user_type=None,
+        autonomous_system_number: Optional[int] = None,
+        autonomous_system_organization: Optional[str] = None,
+        connection_type: Optional[str] = None,
+        domain: Optional[str] = None,
+        is_anonymous: bool = False,
+        is_anonymous_proxy: bool = False,
+        is_anonymous_vpn: bool = False,
+        is_hosting_provider: bool = False,
+        is_legitimate_proxy: bool = False,
+        is_public_proxy: bool = False,
+        is_satellite_provider: bool = False,
+        is_tor_exit_node: bool = False,
+        isp: Optional[str] = None,
+        ip_address: Optional[str] = None,
+        network: Optional[str] = None,
+        organization: Optional[str] = None,
+        prefix_len: Optional[int] = None,
+        static_ip_score: Optional[float] = None,
+        user_count: Optional[int] = None,
+        user_type: Optional[str] = None,
         **_
-    ):
+    ) -> None:
         self.autonomous_system_number = autonomous_system_number
         self.autonomous_system_organization = autonomous_system_organization
         self.connection_type = connection_type
@@ -786,7 +812,7 @@ class Traits(Record):
     # This code is duplicated for performance reasons
     # pylint: disable=duplicate-code
     @property
-    def network(self):
+    def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
         """The network for the record"""
         network = self._network
         if isinstance(network, (ipaddress.IPv4Network, ipaddress.IPv6Network)):
@@ -800,4 +826,4 @@ class Traits(Record):
             network = "{}/{}".format(ip_address, prefix_len)
         network = ipaddress.ip_network(network, False)
         self._network = network
-        return network
+        return network  # type: ignore

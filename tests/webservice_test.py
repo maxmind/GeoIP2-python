@@ -4,11 +4,12 @@
 import copy
 import ipaddress
 import sys
+from typing import cast, Dict
 
 sys.path.append("..")
 
 import geoip2
-import requests_mock
+import requests_mock  # type: ignore
 from geoip2.errors import (
     AddressNotFoundError,
     AuthenticationError,
@@ -54,7 +55,7 @@ class TestClient(unittest.TestCase):
 
     # this is not a comprehensive representation of the
     # JSON from the server
-    insights = copy.deepcopy(country)
+    insights = cast(Dict, copy.deepcopy(country))
     insights["traits"]["user_count"] = 2
     insights["traits"]["static_ip_score"] = 1.3
 
@@ -337,10 +338,10 @@ class TestClient(unittest.TestCase):
         self.assertEqual(insights.traits.user_count, 2, "user_count is 2")
 
     def test_named_constructor_args(self):
-        id = "47"
+        id = 47
         key = "1234567890ab"
         client = Client(account_id=id, license_key=key)
-        self.assertEqual(client._account_id, id)
+        self.assertEqual(client._account_id, str(id))
         self.assertEqual(client._license_key, key)
 
     def test_missing_constructor_args(self):
