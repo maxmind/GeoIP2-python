@@ -26,7 +26,7 @@ Requests to the GeoIP2 Precision web service are always made with SSL.
 """
 
 import ipaddress
-from typing import cast, Dict, List, Optional, Type, Union
+from typing import Any, cast, List, Optional, Type, Union
 
 import requests
 from requests.models import Response
@@ -173,24 +173,15 @@ class Client:
         body = self._handle_success(response, uri)
         return model_class(body, locales=self._locales)
 
-    def _user_agent(self) -> str:
+    @staticmethod
+    def _user_agent() -> str:
         return "GeoIP2 Python Client v%s (%s)" % (
             geoip2.__version__,
             default_user_agent(),
         )
 
-    def _handle_success(
-        self, response: Response, uri: str
-    ) -> Dict[
-        str,
-        Union[
-            Dict[str, Union[str, int, Dict[str, str]]],
-            Dict[str, int],
-            Dict[str, Union[int, bool, str, Dict[str, str]]],
-            Dict[str, Union[int, float, str]],
-            Dict[str, str],
-        ],
-    ]:
+    @staticmethod
+    def _handle_success(response: Response, uri: str) -> Any:
         try:
             return response.json()
         except ValueError as ex:
@@ -247,8 +238,9 @@ class Client:
                 uri,
             )
 
+    @staticmethod
     def _exception_for_web_service_error(
-        self, message: str, code: str, status: int, uri: str
+        message: str, code: str, status: int, uri: str
     ) -> Union[
         AuthenticationError,
         AddressNotFoundError,
@@ -274,14 +266,16 @@ class Client:
 
         return InvalidRequestError(message, code, status, uri)
 
-    def _exception_for_5xx_status(self, status: int, uri: str) -> HTTPError:
+    @staticmethod
+    def _exception_for_5xx_status(status: int, uri: str) -> HTTPError:
         return HTTPError(
             "Received a server error (%(status)i) for " "%(uri)s" % locals(),
             status,
             uri,
         )
 
-    def _exception_for_non_200_status(self, status: int, uri: str) -> HTTPError:
+    @staticmethod
+    def _exception_for_non_200_status(status: int, uri: str) -> HTTPError:
         return HTTPError(
             "Received a very surprising HTTP status "
             "(%(status)i) for %(uri)s" % locals(),
