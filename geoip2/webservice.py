@@ -47,7 +47,7 @@ from geoip2.models import City, Country, Insights
 from geoip2.types import IPAddress
 
 
-class Client(object):
+class Client:
     """Creates a new client object.
 
     It accepts the following required arguments:
