@@ -4,10 +4,8 @@ from abc import ABCMeta
 from typing import Any
 
 
-class SimpleEquality(object):
+class SimpleEquality(metaclass=ABCMeta):
     """Naive __dict__ equality mixin"""
-
-    __metaclass__ = ABCMeta
 
     def __eq__(self, other: Any) -> bool:
         return isinstance(other, self.__class__) and self.__dict__ == other.__dict__

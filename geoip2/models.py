@@ -323,10 +323,8 @@ class Enterprise(City):
     """
 
 
-class SimpleModel(SimpleEquality):
+class SimpleModel(SimpleEquality, metaclass=ABCMeta):
     """Provides basic methods for non-location models"""
-
-    __metaclass__ = ABCMeta
 
     raw: Dict[str, Union[bool, str, int]]
     ip_address: str

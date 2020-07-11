@@ -15,10 +15,8 @@ from typing import Dict, List, Optional, Type, Union
 from geoip2.mixins import SimpleEquality
 
 
-class Record(SimpleEquality):
+class Record(SimpleEquality, metaclass=ABCMeta):
     """All records are subclasses of the abstract class ``Record``."""
-
-    __metaclass__ = ABCMeta
 
     def __repr__(self) -> str:
         args = ", ".join("%s=%r" % x for x in self.__dict__.items())
@@ -27,10 +25,9 @@ class Record(SimpleEquality):
         )
 
 
-class PlaceRecord(Record):
+class PlaceRecord(Record, metaclass=ABCMeta):
     """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`."""
 
-    __metaclass__ = ABCMeta
     names: Dict[str, str]
     _locales: List[str]
 
