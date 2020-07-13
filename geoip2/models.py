@@ -13,9 +13,9 @@ http://dev.maxmind.com/geoip/geoip2/web-services for more details.
 # pylint: disable=too-many-instance-attributes,too-few-public-methods
 import ipaddress
 from abc import ABCMeta
+from typing import Any, cast, Dict, List, Optional, Union
 
 import geoip2.records
-from geoip2.compat import compat_ip_network
 from geoip2.mixins import SimpleEquality
 
 
@@ -67,7 +67,16 @@ class Country(SimpleEquality):
 
     """
 
-    def __init__(self, raw_response, locales=None):
+    continent: geoip2.records.Continent
+    country: geoip2.records.Country
+    maxmind: geoip2.records.MaxMind
+    registered_country: geoip2.records.Country
+    represented_country: geoip2.records.RepresentedCountry
+    traits: geoip2.records.Traits
+
+    def __init__(
+        self, raw_response: Dict[str, Any], locales: Optional[List[str]] = None
+    ) -> None:
         if locales is None:
             locales = ["en"]
         self._locales = locales
@@ -89,7 +98,7 @@ class Country(SimpleEquality):
         self.traits = geoip2.records.Traits(**raw_response.get("traits", {}))
         self.raw = raw_response
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "{module}.{class_name}({data}, {locales})".format(
             module=self.__module__,
             class_name=self.__class__.__name__,
@@ -124,11 +133,19 @@ class City(Country):
 
       Location object for the requested IP address.
 
+      :type: :py:class:`geoip2.records.Location`
+
     .. attribute:: maxmind
 
       Information related to your MaxMind account.
 
       :type: :py:class:`geoip2.records.MaxMind`
+
+    .. attribute:: postal
+
+      Postal object for the requested IP address.
+
+      :type: :py:class:`geoip2.records.Postal`
 
     .. attribute:: registered_country
 
@@ -161,8 +178,15 @@ class City(Country):
 
     """
 
-    def __init__(self, raw_response, locales=None):
-        super(City, self).__init__(raw_response, locales)
+    city: geoip2.records.City
+    location: geoip2.records.Location
+    postal: geoip2.records.Postal
+    subdivisions: geoip2.records.Subdivisions
+
+    def __init__(
+        self, raw_response: Dict[str, Any], locales: Optional[List[str]] = None
+    ) -> None:
+        super().__init__(raw_response, locales)
         self.city = geoip2.records.City(locales, **raw_response.get("city", {}))
         self.location = geoip2.records.Location(**raw_response.get("location", {}))
         self.postal = geoip2.records.Postal(**raw_response.get("postal", {}))
@@ -299,18 +323,19 @@ class Enterprise(City):
     """
 
 
-class SimpleModel(SimpleEquality):
+class SimpleModel(SimpleEquality, metaclass=ABCMeta):
     """Provides basic methods for non-location models"""
 
-    __metaclass__ = ABCMeta
+    raw: Dict[str, Union[bool, str, int]]
+    ip_address: str
 
-    def __init__(self, raw):
+    def __init__(self, raw: Dict[str, Union[bool, str, int]]) -> None:
         self.raw = raw
         self._network = None
         self._prefix_len = raw.get("prefix_len")
-        self.ip_address = raw.get("ip_address")
+        self.ip_address = cast(str, raw.get("ip_address"))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         # pylint: disable=no-member
         return "{module}.{class_name}({data})".format(
             module=self.__module__,
@@ -319,7 +344,7 @@ class SimpleModel(SimpleEquality):
         )
 
     @property
-    def network(self):
+    def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
         """The network for the record"""
         # This code is duplicated for performance reasons
         # pylint: disable=duplicate-code
@@ -331,7 +356,7 @@ class SimpleModel(SimpleEquality):
         prefix_len = self._prefix_len
         if ip_address is None or prefix_len is None:
             return None
-        network = compat_ip_network("{}/{}".format(ip_address, prefix_len), False)
+        network = ipaddress.ip_network("{}/{}".format(ip_address, prefix_len), False)
         self._network = network
         return network
 
@@ -392,8 +417,14 @@ class AnonymousIP(SimpleModel):
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
 
-    def __init__(self, raw):
-        super(AnonymousIP, self).__init__(raw)
+    is_anonymous: bool
+    is_anonymous_vpn: bool
+    is_hosting_provider: bool
+    is_public_proxy: bool
+    is_tor_exit_node: bool
+
+    def __init__(self, raw: Dict[str, bool]) -> None:
+        super().__init__(raw)  # type: ignore
         self.is_anonymous = raw.get("is_anonymous", False)
         self.is_anonymous_vpn = raw.get("is_anonymous_vpn", False)
         self.is_hosting_provider = raw.get("is_hosting_provider", False)
@@ -434,11 +465,18 @@ class ASN(SimpleModel):
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
 
+    autonomous_system_number: Optional[int]
+    autonomous_system_organization: Optional[str]
+
     # pylint:disable=too-many-arguments
-    def __init__(self, raw):
-        super(ASN, self).__init__(raw)
-        self.autonomous_system_number = raw.get("autonomous_system_number")
-        self.autonomous_system_organization = raw.get("autonomous_system_organization")
+    def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
+        super().__init__(raw)
+        self.autonomous_system_number = cast(
+            Optional[int], raw.get("autonomous_system_number")
+        )
+        self.autonomous_system_organization = cast(
+            Optional[str], raw.get("autonomous_system_organization")
+        )
 
 
 class ConnectionType(SimpleModel):
@@ -474,9 +512,11 @@ class ConnectionType(SimpleModel):
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
 
-    def __init__(self, raw):
-        super(ConnectionType, self).__init__(raw)
-        self.connection_type = raw.get("connection_type")
+    connection_type: Optional[str]
+
+    def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
+        super().__init__(raw)
+        self.connection_type = cast(Optional[str], raw.get("connection_type"))
 
 
 class Domain(SimpleModel):
@@ -506,9 +546,11 @@ class Domain(SimpleModel):
 
     """
 
-    def __init__(self, raw):
-        super(Domain, self).__init__(raw)
-        self.domain = raw.get("domain")
+    domain: Optional[str]
+
+    def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
+        super().__init__(raw)
+        self.domain = cast(Optional[str], raw.get("domain"))
 
 
 class ISP(ASN):
@@ -556,8 +598,11 @@ class ISP(ASN):
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
     """
 
+    isp: Optional[str]
+    organization: Optional[str]
+
     # pylint:disable=too-many-arguments
-    def __init__(self, raw):
-        super(ISP, self).__init__(raw)
-        self.isp = raw.get("isp")
-        self.organization = raw.get("organization")
+    def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
+        super().__init__(raw)
+        self.isp = cast(Optional[str], raw.get("isp"))
+        self.organization = cast(Optional[str], raw.get("organization"))

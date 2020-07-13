@@ -4,23 +4,16 @@
 from __future__ import unicode_literals
 
 import sys
+from typing import Dict
+import unittest
 
 sys.path.append("..")
 
 import geoip2.models
 
-if sys.version_info[:2] == (2, 6):
-    import unittest2 as unittest
-else:
-    import unittest
-
-if sys.version_info[0] == 2:
-    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
-    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
-
 
 class TestModels(unittest.TestCase):
-    def test_insights_full(self):
+    def test_insights_full(self) -> None:
         raw = {
             "city": {
                 "confidence": 76,
@@ -199,7 +192,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.traits.user_count, 2)
         self.assertEqual(model.traits.static_ip_score, 1.3)
 
-    def test_insights_min(self):
+    def test_insights_min(self) -> None:
         model = geoip2.models.Insights({"traits": {"ip_address": "5.6.7.8"}})
         self.assertEqual(
             type(model), geoip2.models.Insights, "geoip2.models.Insights object"
@@ -238,7 +231,7 @@ class TestModels(unittest.TestCase):
             model.subdivisions.most_specific.names, {}, "Empty names hash returned"
         )
 
-    def test_city_full(self):
+    def test_city_full(self) -> None:
         raw = {
             "continent": {
                 "code": "NA",
@@ -334,7 +327,7 @@ class TestModels(unittest.TestCase):
 
         self.assertFalse(model == True, "__eq__ does not blow up on weird input")
 
-    def test_unknown_keys(self):
+    def test_unknown_keys(self) -> None:
         model = geoip2.models.City(
             {
                 "city": {"invalid": 0},
@@ -350,15 +343,15 @@ class TestModels(unittest.TestCase):
             }
         )
         with self.assertRaises(AttributeError):
-            model.unk_base
+            model.unk_base  # type: ignore
         with self.assertRaises(AttributeError):
-            model.traits.invalid
+            model.traits.invalid  # type: ignore
         self.assertEqual(model.traits.ip_address, "1.2.3.4", "correct ip")
 
 
 class TestNames(unittest.TestCase):
 
-    raw = {
+    raw: Dict = {
         "continent": {
             "code": "NA",
             "geoname_id": 42,
@@ -384,7 +377,7 @@ class TestNames(unittest.TestCase):
         "traits": {"ip_address": "1.2.3.4",},
     }
 
-    def test_names(self):
+    def test_names(self) -> None:
         model = geoip2.models.Country(self.raw, locales=["sq", "ar"])
         self.assertEqual(
             model.continent.names,
@@ -397,7 +390,7 @@ class TestNames(unittest.TestCase):
             "Correct names dict for country",
         )
 
-    def test_three_locales(self):
+    def test_three_locales(self) -> None:
         model = geoip2.models.Country(self.raw, locales=["fr", "zh-CN", "en"])
         self.assertEqual(
             model.continent.name,
@@ -406,7 +399,7 @@ class TestNames(unittest.TestCase):
         )
         self.assertEqual(model.country.name, "États-Unis", "country name is in French")
 
-    def test_two_locales(self):
+    def test_two_locales(self) -> None:
         model = geoip2.models.Country(self.raw, locales=["ak", "fr"])
         self.assertEqual(
             model.continent.name,
@@ -415,7 +408,7 @@ class TestNames(unittest.TestCase):
         )
         self.assertEqual(model.country.name, "États-Unis", "country name is in French")
 
-    def test_unknown_locale(self):
+    def test_unknown_locale(self) -> None:
         model = geoip2.models.Country(self.raw, locales=["aa"])
         self.assertEqual(
             model.continent.name, None, "continent name is undef (no Afar available)"
@@ -424,7 +417,7 @@ class TestNames(unittest.TestCase):
             model.country.name, None, "country name is in None (no Afar available)"
         )
 
-    def test_german(self):
+    def test_german(self) -> None:
         model = geoip2.models.Country(self.raw, locales=["de"])
         self.assertEqual(
             model.continent.name, "Nordamerika", "Correct german name for continent"

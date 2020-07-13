@@ -25,16 +25,16 @@ Requests to the GeoIP2 Precision web service are always made with SSL.
 
 """
 
-import requests
+import ipaddress
+from typing import Any, cast, List, Optional, Type, Union
 
+import requests
+from requests.models import Response
 from requests.utils import default_user_agent
 
 import geoip2
 import geoip2.models
-
-from .compat import compat_ip_address
-
-from .errors import (
+from geoip2.errors import (
     AddressNotFoundError,
     AuthenticationError,
     GeoIP2Error,
@@ -43,9 +43,11 @@ from .errors import (
     OutOfQueriesError,
     PermissionRequiredError,
 )
+from geoip2.models import City, Country, Insights
+from geoip2.types import IPAddress
 
 
-class Client(object):
+class Client:
     """Creates a new client object.
 
     It accepts the following required arguments:
@@ -85,31 +87,23 @@ class Client(object):
       * pt-BR -- Brazilian Portuguese
       * ru -- Russian
       * zh-CN -- Simplified Chinese.
+    :param timeout: The timeout to use when waiting on the request. This sets
+      both the connect timeout and the read timeout.
 
     """
 
     def __init__(
         self,
-        account_id=None,
-        license_key=None,
-        host="geoip.maxmind.com",
-        locales=None,
-        timeout=None,
-        # This is deprecated and not documented for that reason.
-        # It can be removed if we do a major release in the future.
-        user_id=None,
-    ):
+        account_id: int,
+        license_key: str,
+        host: str = "geoip.maxmind.com",
+        locales: Optional[List[str]] = None,
+        timeout: Optional[float] = None,
+    ) -> None:
         """Construct a Client."""
         # pylint: disable=too-many-arguments
         if locales is None:
             locales = ["en"]
-        if account_id is None:
-            account_id = user_id
-
-        if account_id is None:
-            raise TypeError("The account_id is a required parameter")
-        if license_key is None:
-            raise TypeError("The license_key is a required parameter")
 
         self._locales = locales
         # requests 2.12.2 requires that the username passed to auth be bytes
@@ -121,7 +115,7 @@ class Client(object):
         self._base_uri = "https://%s/geoip/v2.1" % host
         self._timeout = timeout
 
-    def city(self, ip_address="me"):
+    def city(self, ip_address: IPAddress = "me") -> City:
         """Call GeoIP2 Precision City endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no
@@ -131,9 +125,9 @@ class Client(object):
         :returns: :py:class:`geoip2.models.City` object
 
         """
-        return self._response_for("city", geoip2.models.City, ip_address)
+        return cast(City, self._response_for("city", geoip2.models.City, ip_address))
 
-    def country(self, ip_address="me"):
+    def country(self, ip_address: IPAddress = "me") -> Country:
         """Call the GeoIP2 Country endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
@@ -143,9 +137,11 @@ class Client(object):
         :returns: :py:class:`geoip2.models.Country` object
 
         """
-        return self._response_for("country", geoip2.models.Country, ip_address)
+        return cast(
+            Country, self._response_for("country", geoip2.models.Country, ip_address)
+        )
 
-    def insights(self, ip_address="me"):
+    def insights(self, ip_address: IPAddress = "me") -> Insights:
         """Call the GeoIP2 Precision: Insights endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
@@ -155,12 +151,19 @@ class Client(object):
         :returns: :py:class:`geoip2.models.Insights` object
 
         """
-        return self._response_for("insights", geoip2.models.Insights, ip_address)
+        return cast(
+            Insights, self._response_for("insights", geoip2.models.Insights, ip_address)
+        )
 
-    def _response_for(self, path, model_class, ip_address):
+    def _response_for(
+        self,
+        path: str,
+        model_class: Union[Type[Insights], Type[City], Type[Country]],
+        ip_address: IPAddress,
+    ) -> Union[Country, City, Insights]:
         if ip_address != "me":
-            ip_address = str(compat_ip_address(ip_address))
-        uri = "/".join([self._base_uri, path, ip_address])
+            ip_address = ipaddress.ip_address(ip_address)
+        uri = "/".join([self._base_uri, path, str(ip_address)])
         response = requests.get(
             uri,
             auth=(self._account_id, self._license_key),
@@ -172,13 +175,15 @@ class Client(object):
         body = self._handle_success(response, uri)
         return model_class(body, locales=self._locales)
 
-    def _user_agent(self):
+    @staticmethod
+    def _user_agent() -> str:
         return "GeoIP2 Python Client v%s (%s)" % (
             geoip2.__version__,
             default_user_agent(),
         )
 
-    def _handle_success(self, response, uri):
+    @staticmethod
+    def _handle_success(response: Response, uri: str) -> Any:
         try:
             return response.json()
         except ValueError as ex:
@@ -190,7 +195,7 @@ class Client(object):
                 uri,
             )
 
-    def _exception_for_error(self, response, uri):
+    def _exception_for_error(self, response: Response, uri: str) -> GeoIP2Error:
         status = response.status_code
 
         if 400 <= status < 500:
@@ -199,7 +204,9 @@ class Client(object):
             return self._exception_for_5xx_status(status, uri)
         return self._exception_for_non_200_status(status, uri)
 
-    def _exception_for_4xx_status(self, response, status, uri):
+    def _exception_for_4xx_status(
+        self, response: Response, status: int, uri: str
+    ) -> GeoIP2Error:
         if not response.content:
             return HTTPError(
                 "Received a %(status)i error for %(uri)s " "with no body." % locals(),
@@ -209,7 +216,7 @@ class Client(object):
         if response.headers["Content-Type"].find("json") == -1:
             return HTTPError(
                 "Received a %i for %s with the following "
-                "body: %s" % (status, uri, response.content),
+                "body: %s" % (status, uri, str(response.content)),
                 status,
                 uri,
             )
@@ -233,7 +240,16 @@ class Client(object):
                 uri,
             )
 
-    def _exception_for_web_service_error(self, message, code, status, uri):
+    @staticmethod
+    def _exception_for_web_service_error(
+        message: str, code: str, status: int, uri: str
+    ) -> Union[
+        AuthenticationError,
+        AddressNotFoundError,
+        PermissionRequiredError,
+        OutOfQueriesError,
+        InvalidRequestError,
+    ]:
         if code in ("IP_ADDRESS_NOT_FOUND", "IP_ADDRESS_RESERVED"):
             return AddressNotFoundError(message)
         if code in (
@@ -252,14 +268,16 @@ class Client(object):
 
         return InvalidRequestError(message, code, status, uri)
 
-    def _exception_for_5xx_status(self, status, uri):
+    @staticmethod
+    def _exception_for_5xx_status(status: int, uri: str) -> HTTPError:
         return HTTPError(
             "Received a server error (%(status)i) for " "%(uri)s" % locals(),
             status,
             uri,
         )
 
-    def _exception_for_non_200_status(self, status, uri):
+    @staticmethod
+    def _exception_for_non_200_status(status: int, uri: str) -> HTTPError:
         return HTTPError(
             "Received a very surprising HTTP status "
             "(%(status)i) for %(uri)s" % locals(),

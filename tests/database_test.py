@@ -3,33 +3,23 @@
 
 from __future__ import unicode_literals
 
+import ipaddress
 import sys
+import unittest
 
 sys.path.append("..")
 
 import geoip2.database
 import maxminddb
-import ipaddress
-
-from ipaddress import IPv4Network, IPv6Network
 
 try:
     import maxminddb.extension
 except ImportError:
-    maxminddb.extension = None
-
-if sys.version_info[:2] == (2, 6):
-    import unittest2 as unittest
-else:
-    import unittest
-
-if sys.version_info[0] == 2:
-    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
-    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
+    maxminddb.extension = None  # type: ignore
 
 
-class BaseTestReader(object):
-    def test_language_list(self):
+class BaseTestReader(unittest.TestCase):
+    def test_language_list(self) -> None:
         reader = geoip2.database.Reader(
             "tests/data/test-data/GeoIP2-Country-Test.mmdb",
             ["xx", "ru", "pt-BR", "es", "en"],
@@ -39,7 +29,7 @@ class BaseTestReader(object):
         self.assertEqual(record.country.name, "Великобритания")
         reader.close()
 
-    def test_unknown_address(self):
+    def test_unknown_address(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
         with self.assertRaisesRegex(
             geoip2.errors.AddressNotFoundError,
@@ -48,7 +38,7 @@ class BaseTestReader(object):
             reader.city("10.10.10.10")
         reader.close()
 
-    def test_wrong_database(self):
+    def test_wrong_database(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
         with self.assertRaisesRegex(
             TypeError,
@@ -57,7 +47,7 @@ class BaseTestReader(object):
             reader.country("1.1.1.1")
         reader.close()
 
-    def test_invalid_address(self):
+    def test_invalid_address(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
         with self.assertRaisesRegex(
             ValueError, "u?'invalid' does not appear to be an " "IPv4 or IPv6 address"
@@ -65,7 +55,7 @@ class BaseTestReader(object):
             reader.city("invalid")
         reader.close()
 
-    def test_anonymous_ip(self):
+    def test_anonymous_ip(self) -> None:
         reader = geoip2.database.Reader(
             "tests/data/test-data/GeoIP2-Anonymous-IP-Test.mmdb"
         )
@@ -81,7 +71,7 @@ class BaseTestReader(object):
         self.assertEqual(record.network, ipaddress.ip_network("1.2.0.0/16"))
         reader.close()
 
-    def test_asn(self):
+    def test_asn(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoLite2-ASN-Test.mmdb")
 
         ip_address = "1.128.0.0"
@@ -102,7 +92,7 @@ class BaseTestReader(object):
 
         reader.close()
 
-    def test_city(self):
+    def test_city(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
         record = reader.city("81.2.69.160")
 
@@ -117,7 +107,7 @@ class BaseTestReader(object):
 
         reader.close()
 
-    def test_connection_type(self):
+    def test_connection_type(self) -> None:
         reader = geoip2.database.Reader(
             "tests/data/test-data/GeoIP2-Connection-Type-Test.mmdb"
         )
@@ -141,7 +131,7 @@ class BaseTestReader(object):
 
         reader.close()
 
-    def test_country(self):
+    def test_country(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-Country-Test.mmdb")
         record = reader.country("81.2.69.160")
         self.assertEqual(
@@ -152,7 +142,7 @@ class BaseTestReader(object):
         self.assertEqual(record.registered_country.is_in_european_union, False)
         reader.close()
 
-    def test_domain(self):
+    def test_domain(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-Domain-Test.mmdb")
 
         ip_address = "1.2.0.0"
@@ -172,7 +162,7 @@ class BaseTestReader(object):
 
         reader.close()
 
-    def test_enterprise(self):
+    def test_enterprise(self) -> None:
         with geoip2.database.Reader(
             "tests/data/test-data/GeoIP2-Enterprise-Test.mmdb"
         ) as reader:
@@ -191,7 +181,7 @@ class BaseTestReader(object):
                 record.traits.network, ipaddress.ip_network("74.209.16.0/20")
             )
 
-    def test_isp(self):
+    def test_isp(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-ISP-Test.mmdb")
 
         ip_address = "1.128.0.0"
@@ -213,7 +203,7 @@ class BaseTestReader(object):
 
         reader.close()
 
-    def test_context_manager(self):
+    def test_context_manager(self) -> None:
         with geoip2.database.Reader(
             "tests/data/test-data/GeoIP2-Country-Test.mmdb"
         ) as reader:
@@ -222,19 +212,19 @@ class BaseTestReader(object):
 
 
 @unittest.skipUnless(maxminddb.extension, "No C extension module found. Skipping tests")
-class TestExtensionReader(BaseTestReader, unittest.TestCase):
+class TestExtensionReader(BaseTestReader):
     mode = geoip2.database.MODE_MMAP_EXT
 
 
-class TestMMAPReader(BaseTestReader, unittest.TestCase):
+class TestMMAPReader(BaseTestReader):
     mode = geoip2.database.MODE_MMAP
 
 
-class TestFileReader(BaseTestReader, unittest.TestCase):
+class TestFileReader(BaseTestReader):
     mode = geoip2.database.MODE_FILE
 
 
-class TestMemoryReader(BaseTestReader, unittest.TestCase):
+class TestMemoryReader(BaseTestReader):
     mode = geoip2.database.MODE_MEMORY
 
 
@@ -242,5 +232,5 @@ class TestFDReader(unittest.TestCase):
     mode = geoip2.database.MODE_FD
 
 
-class TestAutoReader(BaseTestReader, unittest.TestCase):
+class TestAutoReader(BaseTestReader):
     mode = geoip2.database.MODE_AUTO

@@ -4,6 +4,8 @@ Errors
 
 """
 
+from typing import Optional
+
 
 class GeoIP2Error(RuntimeError):
     """There was a generic error in GeoIP2.
@@ -33,8 +35,10 @@ class HTTPError(GeoIP2Error):
 
     """
 
-    def __init__(self, message, http_status=None, uri=None):
-        super(HTTPError, self).__init__(message)
+    def __init__(
+        self, message: str, http_status: Optional[int] = None, uri: Optional[str] = None
+    ) -> None:
+        super().__init__(message)
         self.http_status = http_status
         self.uri = uri
 

@@ -2,8 +2,6 @@
 language: python
 matrix:
   include:
-    - python: 2.7
-    - python: 3.5
     - python: 3.6
     - python: 3.7
     - python: 3.8
@@ -11,7 +9,6 @@ matrix:
         - RUN_SNYK=1
         - RUN_LINTER=1
     - python: nightly
-    - python: pypy
   allow_failures:
     - python: nightly
 
@@ -32,11 +29,12 @@ install:
   - pip install requests_mock coveralls
   - |
     if [[ $RUN_LINTER ]]; then
-      pip install --upgrade pylint black
+      pip install --upgrade pylint black mypy
     fi
   - "if [[ $RUN_SNYK && $SNYK_TOKEN ]]; then snyk test --org=maxmind; fi"
 script:
   - coverage run --source=geoip2 setup.py test
+  - "if [[ $RUN_LINTER ]]; then mypy geoip2 tests; fi"
   - "if [[ $RUN_LINTER ]]; then ./.travis-pylint.sh; fi"
   - "if [[ $RUN_LINTER ]]; then ./.travis-black.sh; fi"
 after_success:

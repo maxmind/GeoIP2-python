@@ -331,12 +331,11 @@ Database Reader Exceptions
 --------------------------
 
 If the database file does not exist or is not readable, the constructor will
-raise a ``FileNotFoundError`` on Python 3 or an ``IOError`` on Python 2.
-If the IP address passed to a method is invalid, a ``ValueError`` will be
-raised. If the file is invalid or there is a bug in the reader, a
-``maxminddb.InvalidDatabaseError`` will be raised with a description of the
-problem. If an IP address is not in the database, a ``AddressNotFoundError``
-will be raised.
+raise a ``FileNotFoundError``.  If the IP address passed to a method is
+invalid, a ``ValueError`` will be raised. If the file is invalid or there is a
+bug in the reader, a ``maxminddb.InvalidDatabaseError`` will be raised with a
+description of the problem. If an IP address is not in the database, a
+``AddressNotFoundError`` will be raised.
 
 Values to use for Database or Dictionary Keys
 ---------------------------------------------
@@ -402,8 +401,7 @@ correction, please `contact MaxMind support
 Requirements
 ------------
 
-This code requires Python 2.7+ or 3.5+. Older versions are not supported.
-This library has been tested with CPython and PyPy.
+Python 3.6 or greater is required. Older versions are not supported.
 
 The Requests HTTP library is also required. See
 <http://python-requests.org> for details.
