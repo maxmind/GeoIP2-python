@@ -87,6 +87,8 @@ class Client:
       * pt-BR -- Brazilian Portuguese
       * ru -- Russian
       * zh-CN -- Simplified Chinese.
+    :param timeout: The timeout to use when waiting on the request. This sets
+      both the connect timeout and the read timeout.
 
     """
 
