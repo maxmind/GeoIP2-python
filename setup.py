@@ -26,7 +26,7 @@ setup(
     include_package_data=True,
     python_requires=">=3.6",
     install_requires=requirements,
-    tests_require=["requests_mock>=0.5"],
+    tests_require=["httpretty>=1.0.0"],
     test_suite="tests",
     license=geoip2.__license__,
     classifiers=[
