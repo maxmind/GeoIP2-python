@@ -288,7 +288,7 @@ class TestClient(unittest.TestCase):
         )
         self.assertRegex(
             request.headers["User-Agent"],
-            "^GeoIP2 Python Client v",
+            "^GeoIP2-Python-Client/",
             "Correct User-Agent",
         )
         self.assertEqual(

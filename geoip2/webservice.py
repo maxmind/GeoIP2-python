@@ -47,58 +47,22 @@ from geoip2.models import City, Country, Insights
 from geoip2.types import IPAddress
 
 
-class Client:
-    """Creates a new client object.
-
-    It accepts the following required arguments:
-
-    :param account_id: Your MaxMind account ID.
-    :param license_key: Your MaxMind license key.
-
-    Go to https://www.maxmind.com/en/my_license_key to see your MaxMind
-    account ID and license key.
-
-    The following keyword arguments are also accepted:
-
-    :param host: The hostname to make a request against. This defaults to
-      "geoip.maxmind.com". In most cases, you should not need to set this
-      explicitly.
-    :param locales: This is list of locale codes. This argument will be
-      passed on to record classes to use when their name properties are
-      called. The default value is ['en'].
-
-      The order of the locales is significant. When a record class has
-      multiple names (country, city, etc.), its name property will return
-      the name in the first locale that has one.
-
-      Note that the only locale which is always present in the GeoIP2
-      data is "en". If you do not include this locale, the name property
-      may end up returning None even when the record has an English name.
-
-      Currently, the valid locale codes are:
-
-      * de -- German
-      * en -- English names may still include accented characters if that is
-        the accepted spelling in English. In other words, English does not
-        mean ASCII.
-      * es -- Spanish
-      * fr -- French
-      * ja -- Japanese
-      * pt-BR -- Brazilian Portuguese
-      * ru -- Russian
-      * zh-CN -- Simplified Chinese.
-    :param timeout: The timeout to use when waiting on the request. This sets
-      both the connect timeout and the read timeout.
-
-    """
+class BaseClient:  # pylint: disable=missing-class-docstring
+    _account_id: str
+    _host: str
+    _license_key: str
+    _locales: List[str]
+    _timeout: Optional[float]
+    _user_agent: str
 
     def __init__(
         self,
         account_id: int,
         license_key: str,
-        host: str = "geoip.maxmind.com",
-        locales: Optional[List[str]] = None,
-        timeout: Optional[float] = None,
+        host: str,
+        locales: Optional[List[str]],
+        timeout: Optional[float],
+        http_user_agent: str,
     ) -> None:
         """Construct a Client."""
         # pylint: disable=too-many-arguments
@@ -114,6 +78,10 @@ class Client:
         self._license_key = license_key
         self._base_uri = "https://%s/geoip/v2.1" % host
         self._timeout = timeout
+        self._user_agent = "GeoIP2-Python-Client/%s %s" % (
+            geoip2.__version__,
+            http_user_agent,
+        )
 
     def city(self, ip_address: IPAddress = "me") -> City:
         """Call GeoIP2 Precision City endpoint with the specified IP.
@@ -167,20 +135,13 @@ class Client:
         response = requests.get(
             uri,
             auth=(self._account_id, self._license_key),
-            headers={"Accept": "application/json", "User-Agent": self._user_agent()},
+            headers={"Accept": "application/json", "User-Agent": self._user_agent},
             timeout=self._timeout,
         )
         if response.status_code != 200:
             raise self._exception_for_error(response, uri)
         body = self._handle_success(response, uri)
         return model_class(body, locales=self._locales)
-
-    @staticmethod
-    def _user_agent() -> str:
-        return "GeoIP2 Python Client v%s (%s)" % (
-            geoip2.__version__,
-            default_user_agent(),
-        )
 
     @staticmethod
     def _handle_success(response: Response, uri: str) -> Any:
@@ -284,3 +245,81 @@ class Client:
             status,
             uri,
         )
+
+
+class Client(BaseClient):
+    """A synchronous GeoIP2 client.
+
+    It accepts the following required arguments:
+
+    :param account_id: Your MaxMind account ID.
+    :param license_key: Your MaxMind license key.
+
+    Go to https://www.maxmind.com/en/my_license_key to see your MaxMind
+    account ID and license key.
+
+    The following keyword arguments are also accepted:
+
+    :param host: The hostname to make a request against. This defaults to
+      "geoip.maxmind.com". In most cases, you should not need to set this
+      explicitly.
+    :param locales: This is list of locale codes. This argument will be
+      passed on to record classes to use when their name properties are
+      called. The default value is ['en'].
+
+      The order of the locales is significant. When a record class has
+      multiple names (country, city, etc.), its name property will return
+      the name in the first locale that has one.
+
+      Note that the only locale which is always present in the GeoIP2
+      data is "en". If you do not include this locale, the name property
+      may end up returning None even when the record has an English name.
+
+      Currently, the valid locale codes are:
+
+      * de -- German
+      * en -- English names may still include accented characters if that is
+        the accepted spelling in English. In other words, English does not
+        mean ASCII.
+      * es -- Spanish
+      * fr -- French
+      * ja -- Japanese
+      * pt-BR -- Brazilian Portuguese
+      * ru -- Russian
+      * zh-CN -- Simplified Chinese.
+    :param timeout: The timeout to use when waiting on the request. This sets
+      both the connect timeout and the read timeout.
+
+    """
+
+    def __init__(  # pylint: disable=too-many-arguments
+        self,
+        account_id: int,
+        license_key: str,
+        host: str = "geoip.maxmind.com",
+        locales: Optional[List[str]] = None,
+        timeout: Optional[float] = None,
+    ) -> None:
+        super().__init__(
+            account_id, license_key, host, locales, timeout, default_user_agent()
+        )
+
+    def _response_for(
+        self,
+        path: str,
+        model_class: Union[Type[Insights], Type[City], Type[Country]],
+        ip_address: IPAddress,
+    ) -> Union[Country, City, Insights]:
+        if ip_address != "me":
+            ip_address = ipaddress.ip_address(ip_address)
+        uri = "/".join([self._base_uri, path, str(ip_address)])
+        response = requests.get(
+            uri,
+            auth=(self._account_id, self._license_key),
+            headers={"Accept": "application/json", "User-Agent": self._user_agent},
+            timeout=self._timeout,
+        )
+        if response.status_code != 200:
+            raise self._exception_for_error(response, uri)
+        body = self._handle_success(response, uri)
+        return model_class(body, locales=self._locales)
