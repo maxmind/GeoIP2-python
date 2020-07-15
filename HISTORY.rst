@@ -8,6 +8,10 @@ History
 
 * IMPORTANT: Python 2.7 and 3.5 support has been dropped. Python 3.6 or greater
   is required.
+* Asyncio support has been added for web service requests. To make async
+  requests, use ``geoip.webservice.AsyncClient``.
+* ``geoip.webservice.Client`` now provides a ``close()`` method and associated
+  context managers to be used in ``with`` statements.
 * Type hints have been added.
 * The attributes ``postal_code`` and ``postal_confidence`` have been removed
   from ``geoip2.record.Location``. These would previously always be ``None``.
