@@ -18,6 +18,8 @@ History
 * ``user_id`` is no longer supported as a named argument for the constructor
   on ``geoip2.webservice.Client``. Use ``account_id`` or a positional
   parameter instead.
+* For both ``Client`` and ``AsyncClient`` requests, the default timeout is
+  now 60 seconds.
 
 3.0.0 (2019-12-20)
 ++++++++++++++++++

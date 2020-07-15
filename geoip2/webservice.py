@@ -53,7 +53,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
     _host: str
     _license_key: str
     _locales: List[str]
-    _timeout: Optional[float]
+    _timeout: float
     _user_agent: str
 
     def __init__(
@@ -62,7 +62,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         license_key: str,
         host: str,
         locales: Optional[List[str]],
-        timeout: Optional[float],
+        timeout: float,
         http_user_agent: str,
     ) -> None:
         """Construct a Client."""
@@ -233,8 +233,9 @@ class AsyncClient(BaseClient):
       * pt-BR -- Brazilian Portuguese
       * ru -- Russian
       * zh-CN -- Simplified Chinese.
-    :param timeout: The timeout to use when waiting on the request. This sets
-      both the connect timeout and the read timeout.
+    :param timeout: The timeout in seconts to use when waiting on the request.
+      This sets both the connect timeout and the read timeout. The default is
+      60.
 
     """
 
@@ -246,7 +247,7 @@ class AsyncClient(BaseClient):
         license_key: str,
         host: str = "geoip.maxmind.com",
         locales: Optional[List[str]] = None,
-        timeout: Optional[float] = None,
+        timeout: float = 60,
     ) -> None:
         super().__init__(
             account_id, license_key, host, locales, timeout, default_user_agent()
@@ -298,7 +299,12 @@ class AsyncClient(BaseClient):
 
     async def _session(self) -> aiohttp.ClientSession:
         if not hasattr(self, "_existing_session"):
-            self._existing_session = aiohttp.ClientSession()
+            self._existing_session = aiohttp.ClientSession(
+                auth=aiohttp.BasicAuth(self._account_id, self._license_key),
+                headers={"Accept": "application/json", "User-Agent": self._user_agent},
+                timeout=aiohttp.ClientTimeout(total=self._timeout),
+            )
+
         return self._existing_session
 
     async def _response_for(
@@ -309,12 +315,7 @@ class AsyncClient(BaseClient):
     ) -> Union[Country, City, Insights]:
         uri = self._uri(path, ip_address)
         session = await self._session()
-        async with await session.get(
-            uri,
-            auth=aiohttp.BasicAuth(self._account_id, self._license_key),
-            headers={"Accept": "application/json", "User-Agent": self._user_agent},
-            timeout=self._timeout,
-        ) as response:
+        async with await session.get(uri) as response:
             status = response.status
             content_type = response.content_type
             body = await response.text()
@@ -378,8 +379,9 @@ class Client(BaseClient):
       * pt-BR -- Brazilian Portuguese
       * ru -- Russian
       * zh-CN -- Simplified Chinese.
-    :param timeout: The timeout to use when waiting on the request. This sets
-      both the connect timeout and the read timeout.
+    :param timeout: The timeout in seconts to use when waiting on the request.
+      This sets both the connect timeout and the read timeout. The default is
+      60.
 
     """
 
@@ -391,12 +393,15 @@ class Client(BaseClient):
         license_key: str,
         host: str = "geoip.maxmind.com",
         locales: Optional[List[str]] = None,
-        timeout: Optional[float] = None,
+        timeout: float = 60,
     ) -> None:
         super().__init__(
             account_id, license_key, host, locales, timeout, default_user_agent()
         )
         self._session = requests.Session()
+        self._session.auth = (self._account_id, self._license_key)
+        self._session.headers["Accept"] = "application/json"
+        self._session.headers["User-Agent"] = self._user_agent
 
     def city(self, ip_address: IPAddress = "me") -> City:
         """Call GeoIP2 Precision City endpoint with the specified IP.
@@ -445,12 +450,7 @@ class Client(BaseClient):
         ip_address: IPAddress,
     ) -> Union[Country, City, Insights]:
         uri = self._uri(path, ip_address)
-        response = self._session.get(
-            uri,
-            auth=(self._account_id, self._license_key),
-            headers={"Accept": "application/json", "User-Agent": self._user_agent},
-            timeout=self._timeout,
-        )
+        response = self._session.get(uri, timeout=self._timeout)
         status = response.status_code
         content_type = response.headers["Content-Type"]
         body = response.text
