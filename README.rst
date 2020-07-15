@@ -57,8 +57,8 @@ each of which represents part of the data returned by the web service.
 
 If the request fails, the client class throws an exception.
 
-Web Service Example
--------------------
+Sync Web Service Example
+------------------------
 
 .. code-block:: pycon
 
@@ -67,36 +67,81 @@ Web Service Example
     >>> # This creates a Client object that can be reused across requests.
     >>> # Replace "42" with your account ID and "license_key" with your license
     >>> # key.
-    >>> client = geoip2.webservice.Client(42, 'license_key')
+    >>> with geoip2.webservice.Client(42, 'license_key') as client:
     >>>
-    >>> # Replace "insights" with the method corresponding to the web service
-    >>> # that you are using, e.g., "country", "city".
-    >>> response = client.insights('128.101.101.101')
+    >>>     # Replace "insights" with the method corresponding to the web service
+    >>>     # that you are using, e.g., "country", "city".
+    >>>     response = client.insights('128.101.101.101')
     >>>
-    >>> response.country.iso_code
+    >>>     response.country.iso_code
     'US'
-    >>> response.country.name
+    >>>     response.country.name
     'United States'
-    >>> response.country.names['zh-CN']
+    >>>     response.country.names['zh-CN']
     u'美国'
     >>>
-    >>> response.subdivisions.most_specific.name
+    >>>     response.subdivisions.most_specific.name
     'Minnesota'
-    >>> response.subdivisions.most_specific.iso_code
+    >>>     response.subdivisions.most_specific.iso_code
     'MN'
     >>>
-    >>> response.city.name
+    >>>     response.city.name
     'Minneapolis'
     >>>
-    >>> response.postal.code
+    >>>     response.postal.code
     '55455'
     >>>
-    >>> response.location.latitude
+    >>>     response.location.latitude
     44.9733
-    >>> response.location.longitude
+    >>>     response.location.longitude
     -93.2323
     >>>
-    >>> response.traits.network
+    >>>     response.traits.network
+    IPv4Network('128.101.101.101/32')
+
+Async Web Service Example
+------------------------
+
+.. code-block:: pycon
+
+    >>> import geoip2.webservice
+    >>>
+    >>> # This creates an AsyncClient object that can be reused across
+    >>> # requests on the running event loop. If you are using multiple event
+    >>> # loops, you must ensure the object is not used on another loop.
+    >>> #
+    >>> # Replace "42" with your account ID and "license_key" with your license
+    >>> # key.
+    >>> async with geoip2.webservice.AsyncClient(42, 'license_key') as client:
+    >>>
+    >>>     # Replace "insights" with the method corresponding to the web service
+    >>>     # that you are using, e.g., "country", "city".
+    >>>     response = await client.insights('128.101.101.101')
+    >>>
+    >>>     response.country.iso_code
+    'US'
+    >>>     response.country.name
+    'United States'
+    >>>     response.country.names['zh-CN']
+    u'美国'
+    >>>
+    >>>     response.subdivisions.most_specific.name
+    'Minnesota'
+    >>>     response.subdivisions.most_specific.iso_code
+    'MN'
+    >>>
+    >>>     response.city.name
+    'Minneapolis'
+    >>>
+    >>>     response.postal.code
+    '55455'
+    >>>
+    >>>     response.location.latitude
+    44.9733
+    >>>     response.location.longitude
+    -93.2323
+    >>>
+    >>>     response.traits.network
     IPv4Network('128.101.101.101/32')
 
 Web Service Client Exceptions
