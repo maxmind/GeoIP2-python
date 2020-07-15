@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import asyncio
 import copy
 import ipaddress
 import json
@@ -10,7 +11,10 @@ import unittest
 
 sys.path.append("..")
 
-import httpretty  # type: ignore
+# httpretty currently doesn't work, but mocket with the compat interface
+# does.
+from mocket import Mocket  # type: ignore
+from mocket.plugins.httpretty import HTTPretty as httpretty, httprettified  # type: ignore
 import geoip2
 from geoip2.errors import (
     AddressNotFoundError,
@@ -21,14 +25,10 @@ from geoip2.errors import (
     OutOfQueriesError,
     PermissionRequiredError,
 )
-from geoip2.webservice import Client
+from geoip2.webservice import AsyncClient, Client
 
 
-@httpretty.activate
-class TestClient(unittest.TestCase):
-    def setUp(self):
-        self.client = Client(42, "abcdef123456")
-
+class TestBaseClient(unittest.TestCase):
     base_uri = "https://geoip.maxmind.com/geoip/v2.1/"
     country = {
         "continent": {"code": "NA", "geoname_id": 42, "names": {"en": "North America"}},
@@ -60,6 +60,7 @@ class TestClient(unittest.TestCase):
             + "+json; charset=UTF-8; version=1.0"
         )
 
+    @httprettified
     def test_country_ok(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -68,7 +69,7 @@ class TestClient(unittest.TestCase):
             status=200,
             content_type=self._content_type("country"),
         )
-        country = self.client.country("1.2.3.4")
+        country = self.run_client(self.client.country("1.2.3.4"))
         self.assertEqual(
             type(country), geoip2.models.Country, "return value of client.country"
         )
@@ -105,6 +106,7 @@ class TestClient(unittest.TestCase):
         )
         self.assertEqual(country.raw, self.country, "raw response is correct")
 
+    @httprettified
     def test_me(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -113,17 +115,18 @@ class TestClient(unittest.TestCase):
             status=200,
             content_type=self._content_type("country"),
         )
-        implicit_me = self.client.country()
+        implicit_me = self.run_client(self.client.country())
         self.assertEqual(
             type(implicit_me), geoip2.models.Country, "country() returns Country object"
         )
-        explicit_me = self.client.country()
+        explicit_me = self.run_client(self.client.country())
         self.assertEqual(
             type(explicit_me),
             geoip2.models.Country,
             "country('me') returns Country object",
         )
 
+    @httprettified
     def test_200_error(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -135,14 +138,16 @@ class TestClient(unittest.TestCase):
         with self.assertRaisesRegex(
             GeoIP2Error, "could not decode the response as JSON"
         ):
-            self.client.country("1.1.1.1")
+            self.run_client(self.client.country("1.1.1.1"))
 
+    @httprettified
     def test_bad_ip_address(self):
         with self.assertRaisesRegex(
             ValueError, "'1.2.3' does not appear to be an IPv4 " "or IPv6 address"
         ):
-            self.client.country("1.2.3")
+            self.run_client(self.client.country("1.2.3"))
 
+    @httprettified
     def test_no_body_error(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -154,8 +159,9 @@ class TestClient(unittest.TestCase):
         with self.assertRaisesRegex(
             HTTPError, "Received a 400 error for .* with no body"
         ):
-            self.client.country("1.2.3.7")
+            self.run_client(self.client.country("1.2.3.7"))
 
+    @httprettified
     def test_weird_body_error(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -168,8 +174,9 @@ class TestClient(unittest.TestCase):
             HTTPError,
             "Response contains JSON but it does not " "specify code or error keys",
         ):
-            self.client.country("1.2.3.8")
+            self.run_client(self.client.country("1.2.3.8"))
 
+    @httprettified
     def test_bad_body_error(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -181,15 +188,17 @@ class TestClient(unittest.TestCase):
         with self.assertRaisesRegex(
             HTTPError, "it did not include the expected JSON body"
         ):
-            self.client.country("1.2.3.9")
+            self.run_client(self.client.country("1.2.3.9"))
 
+    @httprettified
     def test_500_error(self):
         httpretty.register_uri(
             httpretty.GET, self.base_uri + "country/" + "1.2.3.10", status=500
         )
         with self.assertRaisesRegex(HTTPError, r"Received a server error \(500\) for"):
-            self.client.country("1.2.3.10")
+            self.run_client(self.client.country("1.2.3.10"))
 
+    @httprettified
     def test_300_error(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -201,38 +210,49 @@ class TestClient(unittest.TestCase):
             HTTPError, r"Received a very surprising HTTP status \(300\) for"
         ):
 
-            self.client.country("1.2.3.11")
+            self.run_client(self.client.country("1.2.3.11"))
 
+    @httprettified
     def test_ip_address_required(self):
         self._test_error(400, "IP_ADDRESS_REQUIRED", InvalidRequestError)
 
+    @httprettified
     def test_ip_address_not_found(self):
         self._test_error(404, "IP_ADDRESS_NOT_FOUND", AddressNotFoundError)
 
+    @httprettified
     def test_ip_address_reserved(self):
         self._test_error(400, "IP_ADDRESS_RESERVED", AddressNotFoundError)
 
+    @httprettified
     def test_permission_required(self):
         self._test_error(403, "PERMISSION_REQUIRED", PermissionRequiredError)
 
+    @httprettified
     def test_auth_invalid(self):
         self._test_error(400, "AUTHORIZATION_INVALID", AuthenticationError)
 
+    @httprettified
     def test_license_key_required(self):
         self._test_error(401, "LICENSE_KEY_REQUIRED", AuthenticationError)
 
+    @httprettified
     def test_account_id_required(self):
         self._test_error(401, "ACCOUNT_ID_REQUIRED", AuthenticationError)
 
+    @httprettified
     def test_user_id_required(self):
         self._test_error(401, "USER_ID_REQUIRED", AuthenticationError)
 
+    @httprettified
     def test_account_id_unkown(self):
         self._test_error(401, "ACCOUNT_ID_UNKNOWN", AuthenticationError)
 
+    @httprettified
     def test_user_id_unkown(self):
         self._test_error(401, "USER_ID_UNKNOWN", AuthenticationError)
 
+    @httprettified
     def test_out_of_queries_error(self):
         self._test_error(402, "OUT_OF_QUERIES", OutOfQueriesError)
 
@@ -247,8 +267,9 @@ class TestClient(unittest.TestCase):
             content_type=self._content_type("country"),
         )
         with self.assertRaisesRegex(error_class, msg):
-            self.client.country("1.2.3.18")
+            self.run_client(self.client.country("1.2.3.18"))
 
+    @httprettified
     def test_unknown_error(self):
         msg = "Unknown error type"
         ip = "1.2.3.19"
@@ -261,8 +282,9 @@ class TestClient(unittest.TestCase):
             content_type=self._content_type("country"),
         )
         with self.assertRaisesRegex(InvalidRequestError, msg):
-            self.client.country(ip)
+            self.run_client(self.client.country(ip))
 
+    @httprettified
     def test_request(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -271,8 +293,8 @@ class TestClient(unittest.TestCase):
             status=200,
             content_type=self._content_type("country"),
         )
-        self.client.country("1.2.3.4")
-        request = httpretty.latest_requests()[-1]
+        self.run_client(self.client.country("1.2.3.4"))
+        request = httpretty.last_request
 
         self.assertEqual(
             request.path, "/geoip/v2.1/country/1.2.3.4", "correct URI is used"
@@ -291,6 +313,7 @@ class TestClient(unittest.TestCase):
             "correct auth",
         )
 
+    @httprettified
     def test_city_ok(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -299,12 +322,13 @@ class TestClient(unittest.TestCase):
             status=200,
             content_type=self._content_type("city"),
         )
-        city = self.client.city("1.2.3.4")
+        city = self.run_client(self.client.city("1.2.3.4"))
         self.assertEqual(type(city), geoip2.models.City, "return value of client.city")
         self.assertEqual(
             city.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
         )
 
+    @httprettified
     def test_insights_ok(self):
         httpretty.register_uri(
             httpretty.GET,
@@ -313,7 +337,7 @@ class TestClient(unittest.TestCase):
             status=200,
             content_type=self._content_type("country"),
         )
-        insights = self.client.insights("1.2.3.4")
+        insights = self.run_client(self.client.insights("1.2.3.4"))
         self.assertEqual(
             type(insights), geoip2.models.Insights, "return value of client.insights"
         )
@@ -326,16 +350,42 @@ class TestClient(unittest.TestCase):
     def test_named_constructor_args(self):
         id = 47
         key = "1234567890ab"
-        client = Client(account_id=id, license_key=key)
+        client = self.client_class(account_id=id, license_key=key)
         self.assertEqual(client._account_id, str(id))
         self.assertEqual(client._license_key, key)
 
     def test_missing_constructor_args(self):
         with self.assertRaises(TypeError):
-            Client(license_key="1234567890ab")
+            self.client_class(license_key="1234567890ab")
 
         with self.assertRaises(TypeError):
-            Client("47")
+            self.client_class("47")
+
+
+class TestClient(TestBaseClient):
+    def setUp(self):
+        self.client_class = Client
+        self.client = Client(42, "abcdef123456")
+
+    def run_client(self, v):
+        return v
+
+
+class TestAsyncClient(TestBaseClient):
+    def setUp(self):
+        self._loop = asyncio.new_event_loop()
+        self.client_class = AsyncClient
+        self.client = AsyncClient(42, "abcdef123456")
+
+    def tearDown(self):
+        self._loop.run_until_complete(self.client.close())
+        self._loop.close()
+
+    def run_client(self, v):
+        return self._loop.run_until_complete(v)
+
+
+del TestBaseClient
 
 
 if __name__ == "__main__":

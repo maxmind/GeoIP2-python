@@ -238,7 +238,7 @@ class AsyncClient(BaseClient):
 
     """
 
-    _session: aiohttp.ClientSession
+    _existing_session: aiohttp.ClientSession
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
@@ -251,7 +251,6 @@ class AsyncClient(BaseClient):
         super().__init__(
             account_id, license_key, host, locales, timeout, default_user_agent()
         )
-        self._session = aiohttp.ClientSession()
 
     async def city(self, ip_address: IPAddress = "me") -> City:
         """Call GeoIP2 Precision City endpoint with the specified IP.
@@ -297,6 +296,11 @@ class AsyncClient(BaseClient):
             await self._response_for("insights", geoip2.models.Insights, ip_address),
         )
 
+    async def _session(self) -> aiohttp.ClientSession:
+        if not hasattr(self, "_existing_session"):
+            self._existing_session = aiohttp.ClientSession()
+        return self._existing_session
+
     async def _response_for(
         self,
         path: str,
@@ -304,7 +308,8 @@ class AsyncClient(BaseClient):
         ip_address: IPAddress,
     ) -> Union[Country, City, Insights]:
         uri = self._uri(path, ip_address)
-        async with await self._session.get(
+        session = await self._session()
+        async with await session.get(
             uri,
             auth=aiohttp.BasicAuth(self._account_id, self._license_key),
             headers={"Accept": "application/json", "User-Agent": self._user_agent},
@@ -323,7 +328,8 @@ class AsyncClient(BaseClient):
 
         This will close the session and any associated connections.
         """
-        await self._session.close()
+        if hasattr(self, "_existing_session"):
+            await self._existing_session.close()
 
     async def __aenter__(self) -> "AsyncClient":
         return self
