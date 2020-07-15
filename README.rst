@@ -176,39 +176,37 @@ City Database
     >>>
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
-    >>> reader = geoip2.database.Reader('/path/to/GeoLite2-City.mmdb')
+    >>> with geoip2.database.Reader('/path/to/GeoLite2-City.mmdb') as reader:
     >>>
-    >>> # Replace "city" with the method corresponding to the database
-    >>> # that you are using, e.g., "country".
-    >>> response = reader.city('128.101.101.101')
+    >>>     # Replace "city" with the method corresponding to the database
+    >>>     # that you are using, e.g., "country".
+    >>>     response = reader.city('128.101.101.101')
     >>>
-    >>> response.country.iso_code
+    >>>     response.country.iso_code
     'US'
-    >>> response.country.name
+    >>>     response.country.name
     'United States'
-    >>> response.country.names['zh-CN']
+    >>>     response.country.names['zh-CN']
     u'美国'
     >>>
-    >>> response.subdivisions.most_specific.name
+    >>>     response.subdivisions.most_specific.name
     'Minnesota'
-    >>> response.subdivisions.most_specific.iso_code
+    >>>     response.subdivisions.most_specific.iso_code
     'MN'
     >>>
-    >>> response.city.name
+    >>>     response.city.name
     'Minneapolis'
     >>>
-    >>> response.postal.code
+    >>>     response.postal.code
     '55455'
     >>>
-    >>> response.location.latitude
+    >>>     response.location.latitude
     44.9733
-    >>> response.location.longitude
+    >>>     response.location.longitude
     -93.2323
     >>>
-    >>> response.traits.network
+    >>>     response.traits.network
     IPv4Network('128.101.101.0/24')
-    >>>
-    >>> reader.close()
 
 Anonymous IP Database
 ^^^^^^^^^^^^^^^^^^^^^
@@ -219,25 +217,24 @@ Anonymous IP Database
     >>>
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
-    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-Anonymous-IP.mmdb')
+    >>> with geoip2.database.Reader('/path/to/GeoIP2-Anonymous-IP.mmdb') as reader:
     >>>
-    >>> response = reader.anonymous_ip('85.25.43.84')
+    >>>     response = reader.anonymous_ip('85.25.43.84')
     >>>
-    >>> response.is_anonymous
+    >>>     response.is_anonymous
     True
-    >>> response.is_anonymous_vpn
+    >>>     response.is_anonymous_vpn
     False
-    >>> response.is_hosting_provider
+    >>>     response.is_hosting_provider
     False
-    >>> response.is_public_proxy
+    >>>     response.is_public_proxy
     False
-    >>> response.is_tor_exit_node
+    >>>     response.is_tor_exit_node
     True
-    >>> response.ip_address
+    >>>     response.ip_address
     '85.25.43.84'
-    >>> response.network
+    >>>     response.network
     IPv4Network('85.25.43.0/24')
-    >>> reader.close()
 
 ASN Database
 ^^^^^^^^^^^^
@@ -264,17 +261,14 @@ Connection-Type Database
     >>>
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
-    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-Connection-Type.mmdb')
-    >>>
-    >>> response = reader.connection_type('128.101.101.101')
-    >>>
-    >>> response.connection_type
+    >>> with geoip2.database.Reader('/path/to/GeoIP2-Connection-Type.mmdb') as reader:
+    >>>     response = reader.connection_type('128.101.101.101')
+    >>>     response.connection_type
     'Corporate'
-    >>> response.ip_address
+    >>>     response.ip_address
     '128.101.101.101'
-    >>> response.network
+    >>>     response.network
     IPv4Network('128.101.101.101/24')
-    >>> reader.close()
 
 
 Domain Database
@@ -286,15 +280,12 @@ Domain Database
     >>>
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
-    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-Domain.mmdb')
-    >>>
-    >>> response = reader.domain('128.101.101.101')
-    >>>
-    >>> response.domain
+    >>> with geoip2.database.Reader('/path/to/GeoIP2-Domain.mmdb') as reader:
+    >>>     response = reader.domain('128.101.101.101')
+    >>>     response.domain
     'umn.edu'
-    >>> response.ip_address
+    >>>     response.ip_address
     '128.101.101.101'
-    >>> reader.close()
 
 Enterprise Database
 ^^^^^^^^^^^^^^^^^^^
@@ -354,23 +345,20 @@ ISP Database
     >>>
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
-    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-ISP.mmdb')
-    >>>
-    >>> response = reader.isp('1.128.0.0')
-    >>>
-    >>> response.autonomous_system_number
+    >>> with geoip2.database.Reader('/path/to/GeoIP2-ISP.mmdb') as reader:
+    >>>     response = reader.isp('1.128.0.0')
+    >>>     response.autonomous_system_number
     1221
-    >>> response.autonomous_system_organization
+    >>>     response.autonomous_system_organization
     'Telstra Pty Ltd'
-    >>> response.isp
+    >>>     response.isp
     'Telstra Internet'
-    >>> response.organization
+    >>>     response.organization
     'Telstra Internet'
-    >>> response.ip_address
+    >>>     response.ip_address
     '1.128.0.0'
-    >>> response.network
+    >>>     response.network
     IPv4Network('1.128.0.0/16')
-    >>> reader.close()
 
 Database Reader Exceptions
 --------------------------
