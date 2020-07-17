@@ -30,8 +30,9 @@ import json
 from typing import Any, cast, List, Optional, Type, Union
 
 import aiohttp
+import aiohttp.http
 import requests
-from requests.utils import default_user_agent
+import requests.utils
 
 import geoip2
 import geoip2.models
@@ -47,6 +48,15 @@ from geoip2.errors import (
 from geoip2.models import City, Country, Insights
 from geoip2.types import IPAddress
 
+_AIOHTTP_UA = "GeoIP2-Python-Client/%s %s" % (
+    geoip2.__version__,
+    aiohttp.http.SERVER_SOFTWARE,
+)
+_REQUEST_UA = "GeoIP2-Python-Client/%s %s" % (
+    geoip2.__version__,
+    requests.utils.default_user_agent(),
+)
+
 
 class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-methods
     _account_id: str
@@ -54,7 +64,6 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
     _license_key: str
     _locales: List[str]
     _timeout: float
-    _user_agent: str
 
     def __init__(
         self,
@@ -63,7 +72,6 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         host: str,
         locales: Optional[List[str]],
         timeout: float,
-        http_user_agent: str,
     ) -> None:
         """Construct a Client."""
         # pylint: disable=too-many-arguments
@@ -79,10 +87,6 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         self._license_key = license_key
         self._base_uri = "https://%s/geoip/v2.1" % host
         self._timeout = timeout
-        self._user_agent = "GeoIP2-Python-Client/%s %s" % (
-            geoip2.__version__,
-            http_user_agent,
-        )
 
     def _uri(self, path: str, ip_address: IPAddress) -> str:
         if ip_address != "me":
@@ -250,7 +254,7 @@ class AsyncClient(BaseClient):
         timeout: float = 60,
     ) -> None:
         super().__init__(
-            account_id, license_key, host, locales, timeout, default_user_agent()
+            account_id, license_key, host, locales, timeout,
         )
 
     async def city(self, ip_address: IPAddress = "me") -> City:
@@ -301,7 +305,7 @@ class AsyncClient(BaseClient):
         if not hasattr(self, "_existing_session"):
             self._existing_session = aiohttp.ClientSession(
                 auth=aiohttp.BasicAuth(self._account_id, self._license_key),
-                headers={"Accept": "application/json", "User-Agent": self._user_agent},
+                headers={"Accept": "application/json", "User-Agent": _AIOHTTP_UA},
                 timeout=aiohttp.ClientTimeout(total=self._timeout),
             )
 
@@ -395,13 +399,11 @@ class Client(BaseClient):
         locales: Optional[List[str]] = None,
         timeout: float = 60,
     ) -> None:
-        super().__init__(
-            account_id, license_key, host, locales, timeout, default_user_agent()
-        )
+        super().__init__(account_id, license_key, host, locales, timeout)
         self._session = requests.Session()
         self._session.auth = (self._account_id, self._license_key)
         self._session.headers["Accept"] = "application/json"
-        self._session.headers["User-Agent"] = self._user_agent
+        self._session.headers["User-Agent"] = _REQUEST_UA
 
     def city(self, ip_address: IPAddress = "me") -> City:
         """Call GeoIP2 Precision City endpoint with the specified IP.
