@@ -57,8 +57,8 @@ each of which represents part of the data returned by the web service.
 
 If the request fails, the client class throws an exception.
 
-Web Service Example
--------------------
+Sync Web Service Example
+------------------------
 
 .. code-block:: pycon
 
@@ -67,37 +67,82 @@ Web Service Example
     >>> # This creates a Client object that can be reused across requests.
     >>> # Replace "42" with your account ID and "license_key" with your license
     >>> # key.
-    >>> client = geoip2.webservice.Client(42, 'license_key')
+    >>> with geoip2.webservice.Client(42, 'license_key') as client:
     >>>
-    >>> # Replace "insights" with the method corresponding to the web service
-    >>> # that you are using, e.g., "country", "city".
-    >>> response = client.insights('128.101.101.101')
+    >>>     # Replace "insights" with the method corresponding to the web service
+    >>>     # that you are using, e.g., "country", "city".
+    >>>     response = client.insights('203.0.113.0')
     >>>
-    >>> response.country.iso_code
+    >>>     response.country.iso_code
     'US'
-    >>> response.country.name
+    >>>     response.country.name
     'United States'
-    >>> response.country.names['zh-CN']
+    >>>     response.country.names['zh-CN']
     u'美国'
     >>>
-    >>> response.subdivisions.most_specific.name
+    >>>     response.subdivisions.most_specific.name
     'Minnesota'
-    >>> response.subdivisions.most_specific.iso_code
+    >>>     response.subdivisions.most_specific.iso_code
     'MN'
     >>>
-    >>> response.city.name
+    >>>     response.city.name
     'Minneapolis'
     >>>
-    >>> response.postal.code
+    >>>     response.postal.code
     '55455'
     >>>
-    >>> response.location.latitude
+    >>>     response.location.latitude
     44.9733
-    >>> response.location.longitude
+    >>>     response.location.longitude
     -93.2323
     >>>
-    >>> response.traits.network
-    IPv4Network('128.101.101.101/32')
+    >>>     response.traits.network
+    IPv4Network('203.0.113.0/32')
+
+Async Web Service Example
+------------------------
+
+.. code-block:: pycon
+
+    >>> import geoip2.webservice
+    >>>
+    >>> # This creates an AsyncClient object that can be reused across
+    >>> # requests on the running event loop. If you are using multiple event
+    >>> # loops, you must ensure the object is not used on another loop.
+    >>> #
+    >>> # Replace "42" with your account ID and "license_key" with your license
+    >>> # key.
+    >>> async with geoip2.webservice.AsyncClient(42, 'license_key') as client:
+    >>>
+    >>>     # Replace "insights" with the method corresponding to the web service
+    >>>     # that you are using, e.g., "country", "city".
+    >>>     response = await client.insights('203.0.113.0')
+    >>>
+    >>>     response.country.iso_code
+    'US'
+    >>>     response.country.name
+    'United States'
+    >>>     response.country.names['zh-CN']
+    u'美国'
+    >>>
+    >>>     response.subdivisions.most_specific.name
+    'Minnesota'
+    >>>     response.subdivisions.most_specific.iso_code
+    'MN'
+    >>>
+    >>>     response.city.name
+    'Minneapolis'
+    >>>
+    >>>     response.postal.code
+    '55455'
+    >>>
+    >>>     response.location.latitude
+    44.9733
+    >>>     response.location.longitude
+    -93.2323
+    >>>
+    >>>     response.traits.network
+    IPv4Network('203.0.113.0/32')
 
 Web Service Client Exceptions
 -----------------------------
@@ -131,39 +176,37 @@ City Database
     >>>
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
-    >>> reader = geoip2.database.Reader('/path/to/GeoLite2-City.mmdb')
+    >>> with geoip2.database.Reader('/path/to/GeoLite2-City.mmdb') as reader:
     >>>
-    >>> # Replace "city" with the method corresponding to the database
-    >>> # that you are using, e.g., "country".
-    >>> response = reader.city('128.101.101.101')
+    >>>     # Replace "city" with the method corresponding to the database
+    >>>     # that you are using, e.g., "country".
+    >>>     response = reader.city('203.0.113.0')
     >>>
-    >>> response.country.iso_code
+    >>>     response.country.iso_code
     'US'
-    >>> response.country.name
+    >>>     response.country.name
     'United States'
-    >>> response.country.names['zh-CN']
+    >>>     response.country.names['zh-CN']
     u'美国'
     >>>
-    >>> response.subdivisions.most_specific.name
+    >>>     response.subdivisions.most_specific.name
     'Minnesota'
-    >>> response.subdivisions.most_specific.iso_code
+    >>>     response.subdivisions.most_specific.iso_code
     'MN'
     >>>
-    >>> response.city.name
+    >>>     response.city.name
     'Minneapolis'
     >>>
-    >>> response.postal.code
+    >>>     response.postal.code
     '55455'
     >>>
-    >>> response.location.latitude
+    >>>     response.location.latitude
     44.9733
-    >>> response.location.longitude
+    >>>     response.location.longitude
     -93.2323
     >>>
-    >>> response.traits.network
-    IPv4Network('128.101.101.0/24')
-    >>>
-    >>> reader.close()
+    >>>     response.traits.network
+    IPv4Network('203.0.113.0/24')
 
 Anonymous IP Database
 ^^^^^^^^^^^^^^^^^^^^^
@@ -174,25 +217,24 @@ Anonymous IP Database
     >>>
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
-    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-Anonymous-IP.mmdb')
+    >>> with geoip2.database.Reader('/path/to/GeoIP2-Anonymous-IP.mmdb') as reader:
     >>>
-    >>> response = reader.anonymous_ip('85.25.43.84')
+    >>>     response = reader.anonymous_ip('203.0.113.0')
     >>>
-    >>> response.is_anonymous
+    >>>     response.is_anonymous
     True
-    >>> response.is_anonymous_vpn
+    >>>     response.is_anonymous_vpn
     False
-    >>> response.is_hosting_provider
+    >>>     response.is_hosting_provider
     False
-    >>> response.is_public_proxy
+    >>>     response.is_public_proxy
     False
-    >>> response.is_tor_exit_node
+    >>>     response.is_tor_exit_node
     True
-    >>> response.ip_address
-    '85.25.43.84'
-    >>> response.network
-    IPv4Network('85.25.43.0/24')
-    >>> reader.close()
+    >>>     response.ip_address
+    '203.0.113.0'
+    >>>     response.network
+    IPv4Network('203.0.113.0/24')
 
 ASN Database
 ^^^^^^^^^^^^
@@ -204,11 +246,15 @@ ASN Database
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
     >>> with geoip2.database.Reader('/path/to/GeoLite2-ASN.mmdb') as reader:
-    >>>     response = reader.asn('1.128.0.0')
+    >>>     response = reader.asn('203.0.113.0')
     >>>     response.autonomous_system_number
     1221
     >>>     response.autonomous_system_organization
     'Telstra Pty Ltd'
+    >>>     response.ip_address
+    '203.0.113.0'
+    >>>     response.network
+    IPv4Network('203.0.113.0/24')
 
 Connection-Type Database
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -219,17 +265,14 @@ Connection-Type Database
     >>>
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
-    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-Connection-Type.mmdb')
-    >>>
-    >>> response = reader.connection_type('128.101.101.101')
-    >>>
-    >>> response.connection_type
+    >>> with geoip2.database.Reader('/path/to/GeoIP2-Connection-Type.mmdb') as reader:
+    >>>     response = reader.connection_type('203.0.113.0')
+    >>>     response.connection_type
     'Corporate'
-    >>> response.ip_address
-    '128.101.101.101'
-    >>> response.network
-    IPv4Network('128.101.101.101/24')
-    >>> reader.close()
+    >>>     response.ip_address
+    '203.0.113.0'
+    >>>     response.network
+    IPv4Network('203.0.113.0/24')
 
 
 Domain Database
@@ -241,15 +284,12 @@ Domain Database
     >>>
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
-    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-Domain.mmdb')
-    >>>
-    >>> response = reader.domain('128.101.101.101')
-    >>>
-    >>> response.domain
+    >>> with geoip2.database.Reader('/path/to/GeoIP2-Domain.mmdb') as reader:
+    >>>     response = reader.domain('203.0.113.0')
+    >>>     response.domain
     'umn.edu'
-    >>> response.ip_address
-    '128.101.101.101'
-    >>> reader.close()
+    >>>     response.ip_address
+    '203.0.113.0'
 
 Enterprise Database
 ^^^^^^^^^^^^^^^^^^^
@@ -263,7 +303,7 @@ Enterprise Database
     >>> with geoip2.database.Reader('/path/to/GeoIP2-Enterprise.mmdb') as reader:
     >>>
     >>>     # Use the .enterprise method to do a lookup in the Enterprise database
-    >>>     response = reader.enterprise('128.101.101.101')
+    >>>     response = reader.enterprise('203.0.113.0')
     >>>
     >>>     response.country.confidence
     99
@@ -297,7 +337,7 @@ Enterprise Database
     -93.2323
     >>>
     >>>     response.traits.network
-    IPv4Network('128.101.101.0/24')
+    IPv4Network('203.0.113.0/24')
 
 
 ISP Database
@@ -309,23 +349,20 @@ ISP Database
     >>>
     >>> # This creates a Reader object. You should use the same object
     >>> # across multiple requests as creation of it is expensive.
-    >>> reader = geoip2.database.Reader('/path/to/GeoIP2-ISP.mmdb')
-    >>>
-    >>> response = reader.isp('1.128.0.0')
-    >>>
-    >>> response.autonomous_system_number
+    >>> with geoip2.database.Reader('/path/to/GeoIP2-ISP.mmdb') as reader:
+    >>>     response = reader.isp('203.0.113.0')
+    >>>     response.autonomous_system_number
     1221
-    >>> response.autonomous_system_organization
+    >>>     response.autonomous_system_organization
     'Telstra Pty Ltd'
-    >>> response.isp
+    >>>     response.isp
     'Telstra Internet'
-    >>> response.organization
+    >>>     response.organization
     'Telstra Internet'
-    >>> response.ip_address
-    '1.128.0.0'
-    >>> response.network
-    IPv4Network('1.128.0.0/16')
-    >>> reader.close()
+    >>>     response.ip_address
+    '203.0.113.0'
+    >>>     response.network
+    IPv4Network('203.0.113.0/24')
 
 Database Reader Exceptions
 --------------------------
