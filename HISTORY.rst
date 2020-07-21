@@ -3,7 +3,7 @@
 History
 -------
 
-4.0.0
+4.0.0 (2020-07-21)
 ++++++++++++++++++
 
 * IMPORTANT: Python 2.7 and 3.5 support has been dropped. Python 3.6 or greater
