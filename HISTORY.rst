@@ -3,6 +3,12 @@
 History
 -------
 
+4.0.1 (2020-07-21)
+++++++++++++++++++
+
+* Re-release to fix bad reStructuredText in ``README.md``. No substantive
+  changes.
+
 4.0.0 (2020-07-21)
 ++++++++++++++++++
 
