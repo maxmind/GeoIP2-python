@@ -14,5 +14,7 @@ MANIFEST
 .mypy_cache/
 *.pyc
 pylint.txt
+.pyre
+.pytype
 *.swp
 violations.pyflakes.txt
