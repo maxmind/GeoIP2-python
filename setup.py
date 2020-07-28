@@ -21,7 +21,7 @@ setup(
     author_email="goschwald@maxmind.com",
     url="http://www.maxmind.com/",
     packages=["geoip2"],
-    package_data={"": ["LICENSE"]},
+    package_data={"": ["LICENSE"], "geoip2": ["py.typed"]},
     package_dir={"geoip2": "geoip2"},
     include_package_data=True,
     python_requires=">=3.6",
