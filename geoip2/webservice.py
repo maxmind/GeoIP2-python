@@ -104,7 +104,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
                 "JSON: " % locals() + ", ".join(ex.args),
                 200,
                 uri,
-            )
+            ) from ex
 
     def _exception_for_error(
         self, status: int, content_type: str, body: str, uri: str
