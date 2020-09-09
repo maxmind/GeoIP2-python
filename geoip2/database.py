@@ -56,8 +56,7 @@ class Reader:
     ``geoip2.errors.AddressNotFoundError`` exception will be thrown. If the
     database is corrupt or invalid, a ``maxminddb.InvalidDatabaseError`` will
     be thrown.
-
-"""
+    """
 
     def __init__(
         self, fileish: str, locales: Optional[List[str]] = None, mode: int = MODE_AUTO

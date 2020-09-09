@@ -254,7 +254,11 @@ class AsyncClient(BaseClient):
         timeout: float = 60,
     ) -> None:
         super().__init__(
-            account_id, license_key, host, locales, timeout,
+            account_id,
+            license_key,
+            host,
+            locales,
+            timeout,
         )
 
     async def city(self, ip_address: IPAddress = "me") -> City:

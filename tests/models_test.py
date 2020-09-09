@@ -40,7 +40,10 @@ class TestModels(unittest.TestCase):
                 "population_density": 1341,
                 "time_zone": "America/Chicago",
             },
-            "postal": {"code": "55401", "confidence": 33,},
+            "postal": {
+                "code": "55401",
+                "confidence": 33,
+            },
             "subdivisions": [
                 {
                     "confidence": 88,
@@ -48,7 +51,11 @@ class TestModels(unittest.TestCase):
                     "iso_code": "MN",
                     "names": {"en": "Minnesota"},
                 },
-                {"geoname_id": 123, "iso_code": "HP", "names": {"en": "Hennepin"},},
+                {
+                    "geoname_id": 123,
+                    "iso_code": "HP",
+                    "names": {"en": "Hennepin"},
+                },
             ],
             "registered_country": {
                 "geoname_id": 2,
@@ -248,7 +255,10 @@ class TestModels(unittest.TestCase):
                 "iso_code": "CA",
                 "names": {"en": "Canada"},
             },
-            "traits": {"ip_address": "1.2.3.4", "is_satellite_provider": True,},
+            "traits": {
+                "ip_address": "1.2.3.4",
+                "is_satellite_provider": True,
+            },
         }
         model = geoip2.models.City(raw)
         self.assertEqual(type(model), geoip2.models.City, "geoip2.models.City object")
@@ -331,13 +341,36 @@ class TestModels(unittest.TestCase):
         model = geoip2.models.City(
             {
                 "city": {"invalid": 0},
-                "continent": {"invalid": 0, "names": {"invalid": 0},},
-                "country": {"invalid": 0, "names": {"invalid": 0},},
+                "continent": {
+                    "invalid": 0,
+                    "names": {"invalid": 0},
+                },
+                "country": {
+                    "invalid": 0,
+                    "names": {"invalid": 0},
+                },
                 "location": {"invalid": 0},
                 "postal": {"invalid": 0},
-                "subdivisions": [{"invalid": 0, "names": {"invalid": 0,},},],
-                "registered_country": {"invalid": 0, "names": {"invalid": 0,},},
-                "represented_country": {"invalid": 0, "names": {"invalid": 0,},},
+                "subdivisions": [
+                    {
+                        "invalid": 0,
+                        "names": {
+                            "invalid": 0,
+                        },
+                    },
+                ],
+                "registered_country": {
+                    "invalid": 0,
+                    "names": {
+                        "invalid": 0,
+                    },
+                },
+                "represented_country": {
+                    "invalid": 0,
+                    "names": {
+                        "invalid": 0,
+                    },
+                },
                 "traits": {"ip_address": "1.2.3.4", "invalid": "blah"},
                 "unk_base": {"blah": 1},
             }
@@ -374,7 +407,9 @@ class TestNames(unittest.TestCase):
                 "zh-CN": "美国",
             },
         },
-        "traits": {"ip_address": "1.2.3.4",},
+        "traits": {
+            "ip_address": "1.2.3.4",
+        },
     }
 
     def test_names(self) -> None:
