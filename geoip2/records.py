@@ -696,7 +696,8 @@ class Traits(Record):
     .. attribute:: is_residential_proxy
 
       This is true if the IP address is on a suspected anonymizing network
-      and belongs to a residential ISP.
+      and belongs to a residential ISP. This attribute is only available from
+      GeoIP2 Precision Insights.
 
       :type: bool
 
