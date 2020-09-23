@@ -396,6 +396,13 @@ class AnonymousIP(SimpleModel):
 
       :type: bool
 
+    .. attribute:: is_residential_proxy
+
+      This is true if the IP address is on a suspected anonymizing network
+      and belongs to a residential ISP.
+
+      :type: bool
+
     .. attribute:: is_tor_exit_node
 
       This is true if the IP address is a Tor exit node.
@@ -421,6 +428,7 @@ class AnonymousIP(SimpleModel):
     is_anonymous_vpn: bool
     is_hosting_provider: bool
     is_public_proxy: bool
+    is_residential_proxy: bool
     is_tor_exit_node: bool
 
     def __init__(self, raw: Dict[str, bool]) -> None:
@@ -429,6 +437,7 @@ class AnonymousIP(SimpleModel):
         self.is_anonymous_vpn = raw.get("is_anonymous_vpn", False)
         self.is_hosting_provider = raw.get("is_hosting_provider", False)
         self.is_public_proxy = raw.get("is_public_proxy", False)
+        self.is_residential_proxy = raw.get("is_residential_proxy", False)
         self.is_tor_exit_node = raw.get("is_tor_exit_node", False)
 
 
