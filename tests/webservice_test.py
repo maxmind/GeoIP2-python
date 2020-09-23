@@ -14,7 +14,7 @@ sys.path.append("..")
 # httpretty currently doesn't work, but mocket with the compat interface
 # does.
 from mocket import Mocket  # type: ignore
-from mocket.plugins.httpretty import HTTPretty as httpretty, httprettified  # type: ignore
+from mocket.plugins.httpretty import httpretty, httprettified  # type: ignore
 import geoip2
 from geoip2.errors import (
     AddressNotFoundError,

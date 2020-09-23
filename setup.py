@@ -26,7 +26,7 @@ setup(
     include_package_data=True,
     python_requires=">=3.6",
     install_requires=requirements,
-    tests_require=["mocket>=3.8.6"],
+    tests_require=["mocket>=3.8.9"],
     test_suite="tests",
     license=geoip2.__license__,
     classifiers=[
