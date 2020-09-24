@@ -229,6 +229,8 @@ Anonymous IP Database
     False
     >>>     response.is_public_proxy
     False
+    >>>     response.is_residential_proxy
+    False
     >>>     response.is_tor_exit_node
     True
     >>>     response.ip_address

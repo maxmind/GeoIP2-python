@@ -3,6 +3,12 @@
 History
 -------
 
+4.1.0
+++++++++++++++++++
+
+* Added the ``is_residential_proxy`` attribute to ``geoip2.model.AnonymousIP``
+  and ``geoip2.record.Traits``.
+
 4.0.2 (2020-07-28)
 ++++++++++++++++++
 

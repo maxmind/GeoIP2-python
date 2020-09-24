@@ -66,9 +66,27 @@ class BaseTestReader(unittest.TestCase):
         self.assertEqual(record.is_anonymous_vpn, True)
         self.assertEqual(record.is_hosting_provider, False)
         self.assertEqual(record.is_public_proxy, False)
+        self.assertEqual(record.is_residential_proxy, False)
         self.assertEqual(record.is_tor_exit_node, False)
         self.assertEqual(record.ip_address, ip_address)
         self.assertEqual(record.network, ipaddress.ip_network("1.2.0.0/16"))
+        reader.close()
+
+    def test_anonymous_ip_all_set(self) -> None:
+        reader = geoip2.database.Reader(
+            "tests/data/test-data/GeoIP2-Anonymous-IP-Test.mmdb"
+        )
+        ip_address = "81.2.69.1"
+
+        record = reader.anonymous_ip(ip_address)
+        self.assertEqual(record.is_anonymous, True)
+        self.assertEqual(record.is_anonymous_vpn, True)
+        self.assertEqual(record.is_hosting_provider, True)
+        self.assertEqual(record.is_public_proxy, True)
+        self.assertEqual(record.is_residential_proxy, True)
+        self.assertEqual(record.is_tor_exit_node, True)
+        self.assertEqual(record.ip_address, ip_address)
+        self.assertEqual(record.network, ipaddress.ip_network("81.2.69.0/24"))
         reader.close()
 
     def test_asn(self) -> None:

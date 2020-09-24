@@ -79,6 +79,7 @@ class TestModels(unittest.TestCase):
                 "is_anonymous_vpn": True,
                 "is_hosting_provider": True,
                 "is_public_proxy": True,
+                "is_residential_proxy": True,
                 "is_satellite_provider": True,
                 "is_tor_exit_node": True,
                 "isp": "Comcast",
@@ -194,6 +195,7 @@ class TestModels(unittest.TestCase):
         self.assertIs(model.traits.is_anonymous_vpn, True)
         self.assertIs(model.traits.is_hosting_provider, True)
         self.assertIs(model.traits.is_public_proxy, True)
+        self.assertIs(model.traits.is_residential_proxy, True)
         self.assertIs(model.traits.is_satellite_provider, True)
         self.assertIs(model.traits.is_tor_exit_node, True)
         self.assertEqual(model.traits.user_count, 2)

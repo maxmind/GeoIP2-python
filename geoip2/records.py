@@ -693,6 +693,15 @@ class Traits(Record):
 
       :type: bool
 
+    .. attribute:: is_residential_proxy
+
+      This is true if the IP address is on a suspected anonymizing network
+      and belongs to a residential ISP. This attribute is only available from
+      GeoIP2 Precision Insights.
+
+      :type: bool
+
+
     .. attribute:: is_satellite_provider
 
       This is true if the IP address is from a satellite provider that
@@ -798,6 +807,7 @@ class Traits(Record):
     is_hosting_provider: bool
     is_legitimate_proxy: bool
     is_public_proxy: bool
+    is_residential_proxy: bool
     is_satellite_provider: bool
     is_tor_exit_node: bool
     isp: Optional[str]
@@ -821,6 +831,7 @@ class Traits(Record):
         is_hosting_provider: bool = False,
         is_legitimate_proxy: bool = False,
         is_public_proxy: bool = False,
+        is_residential_proxy: bool = False,
         is_satellite_provider: bool = False,
         is_tor_exit_node: bool = False,
         isp: Optional[str] = None,
@@ -843,6 +854,7 @@ class Traits(Record):
         self.is_hosting_provider = is_hosting_provider
         self.is_legitimate_proxy = is_legitimate_proxy
         self.is_public_proxy = is_public_proxy
+        self.is_residential_proxy = is_residential_proxy
         self.is_satellite_provider = is_satellite_provider
         self.is_tor_exit_node = is_tor_exit_node
         self.isp = isp
