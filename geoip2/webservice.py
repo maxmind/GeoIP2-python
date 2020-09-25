@@ -141,7 +141,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
                 uri,
             )
         else:
-            if "code" in body and "error" in body:
+            if "code" in decoded_body and "error" in decoded_body:
                 return self._exception_for_web_service_error(
                     decoded_body.get("error"), decoded_body.get("code"), status, uri
                 )
