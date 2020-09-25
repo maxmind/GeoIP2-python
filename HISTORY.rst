@@ -3,7 +3,7 @@
 History
 -------
 
-4.1.0
+4.1.0 (2020-09-25)
 ++++++++++++++++++
 
 * Added the ``is_residential_proxy`` attribute to ``geoip2.model.AnonymousIP``
