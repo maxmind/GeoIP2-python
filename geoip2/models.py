@@ -99,11 +99,8 @@ class Country(SimpleEquality):
         self.raw = raw_response
 
     def __repr__(self) -> str:
-        return "{module}.{class_name}({data}, {locales})".format(
-            module=self.__module__,
-            class_name=self.__class__.__name__,
-            data=self.raw,
-            locales=self._locales,
+        return (
+            f"{self.__module__}.{self.__class__.__name__}({self.raw}, {self._locales})"
         )
 
 
@@ -336,12 +333,7 @@ class SimpleModel(SimpleEquality, metaclass=ABCMeta):
         self.ip_address = cast(str, raw.get("ip_address"))
 
     def __repr__(self) -> str:
-        # pylint: disable=no-member
-        return "{module}.{class_name}({data})".format(
-            module=self.__module__,
-            class_name=self.__class__.__name__,
-            data=str(self.raw),
-        )
+        return f"{self.__module__}.{self.__class__.__name__}({self.raw})"
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
@@ -356,7 +348,7 @@ class SimpleModel(SimpleEquality, metaclass=ABCMeta):
         prefix_len = self._prefix_len
         if ip_address is None or prefix_len is None:
             return None
-        network = ipaddress.ip_network("{}/{}".format(ip_address, prefix_len), False)
+        network = ipaddress.ip_network(f"{ip_address}/{prefix_len}", False)
         self._network = network
         return network
 

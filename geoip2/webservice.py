@@ -48,13 +48,12 @@ from geoip2.errors import (
 from geoip2.models import City, Country, Insights
 from geoip2.types import IPAddress
 
-_AIOHTTP_UA = "GeoIP2-Python-Client/%s %s" % (
-    geoip2.__version__,
-    aiohttp.http.SERVER_SOFTWARE,
+_AIOHTTP_UA = (
+    f"GeoIP2-Python-Client/{geoip2.__version__} {aiohttp.http.SERVER_SOFTWARE}"
 )
-_REQUEST_UA = "GeoIP2-Python-Client/%s %s" % (
-    geoip2.__version__,
-    requests.utils.default_user_agent(),
+
+_REQUEST_UA = (
+    f"GeoIP2-Python-Client/{geoip2.__version__} {requests.utils.default_user_agent()}"
 )
 
 
@@ -85,7 +84,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
             account_id if isinstance(account_id, bytes) else str(account_id)
         )
         self._license_key = license_key
-        self._base_uri = "https://%s/geoip/v2.1" % host
+        self._base_uri = f"https://{host}/geoip/v2.1"
         self._timeout = timeout
 
     def _uri(self, path: str, ip_address: IPAddress) -> str:
@@ -99,9 +98,9 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
             return json.loads(body)
         except ValueError as ex:
             raise GeoIP2Error(
-                "Received a 200 response for %(uri)s"
+                f"Received a 200 response for {uri}"
                 " but could not decode the response as "
-                "JSON: " % locals() + ", ".join(ex.args),
+                "JSON: " + ", ".join(ex.args),
                 200,
                 uri,
             ) from ex
@@ -120,15 +119,14 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
     ) -> GeoIP2Error:
         if not body:
             return HTTPError(
-                "Received a %(status)i error for %(uri)s " "with no body." % locals(),
+                f"Received a {status} error for {uri} with no body.",
                 status,
                 uri,
                 body,
             )
         if content_type.find("json") == -1:
             return HTTPError(
-                "Received a %i for %s with the following "
-                "body: %s" % (status, uri, str(content_type)),
+                f"Received a {status} for {uri} with the following body: {body}",
                 status,
                 uri,
                 body,
@@ -137,8 +135,9 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
             decoded_body = json.loads(body)
         except ValueError as ex:
             return HTTPError(
-                "Received a %(status)i error for %(uri)s but it did"
-                " not include the expected JSON body: " % locals() + ", ".join(ex.args),
+                f"Received a {status} error for {uri} but it did not include "
+                + "the expected JSON body: "
+                + ", ".join(ex.args),
                 status,
                 uri,
                 body,
@@ -149,7 +148,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
                     decoded_body.get("error"), decoded_body.get("code"), status, uri
                 )
             return HTTPError(
-                "Response contains JSON but it does not specify " "code or error keys",
+                "Response contains JSON but it does not specify code or error keys",
                 status,
                 uri,
                 body,
@@ -188,7 +187,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         status: int, uri: str, body: Optional[str]
     ) -> HTTPError:
         return HTTPError(
-            "Received a server error (%(status)i) for " "%(uri)s" % locals(),
+            f"Received a server error ({status}) for {uri}",
             status,
             uri,
             body,
@@ -199,8 +198,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         status: int, uri: str, body: Optional[str]
     ) -> HTTPError:
         return HTTPError(
-            "Received a very surprising HTTP status "
-            "(%(status)i) for %(uri)s" % locals(),
+            f"Received a very surprising HTTP status ({status}) for {uri}",
             status,
             uri,
             body,

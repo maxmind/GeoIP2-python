@@ -20,9 +20,7 @@ class Record(SimpleEquality, metaclass=ABCMeta):
 
     def __repr__(self) -> str:
         args = ", ".join("%s=%r" % x for x in self.__dict__.items())
-        return "{module}.{class_name}({data})".format(
-            module=self.__module__, class_name=self.__class__.__name__, data=args
-        )
+        return f"{self.__module__}.{self.__class__.__name__}({args})"
 
 
 class PlaceRecord(Record, metaclass=ABCMeta):
@@ -880,7 +878,7 @@ class Traits(Record):
             prefix_len = self._prefix_len
             if ip_address is None or prefix_len is None:
                 return None
-            network = "{}/{}".format(ip_address, prefix_len)
+            network = f"{ip_address}/{prefix_len}"
         network = ipaddress.ip_network(network, False)
         self._network = network
         return network  # type: ignore
