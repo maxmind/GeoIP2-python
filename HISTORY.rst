@@ -8,6 +8,8 @@ History
 
 * Added the ``is_residential_proxy`` attribute to ``geoip2.model.AnonymousIP``
   and ``geoip2.record.Traits``.
+* ``HTTPError`` now provides the decoded response content in the
+  ``decoded_content`` attribute. Requested by Oleg Serbokryl. GitHub #95.
 
 4.0.2 (2020-07-28)
 ++++++++++++++++++

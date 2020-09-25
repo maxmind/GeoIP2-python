@@ -112,8 +112,8 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         if 400 <= status < 500:
             return self._exception_for_4xx_status(status, content_type, body, uri)
         if 500 <= status < 600:
-            return self._exception_for_5xx_status(status, uri)
-        return self._exception_for_non_200_status(status, uri)
+            return self._exception_for_5xx_status(status, uri, body)
+        return self._exception_for_non_200_status(status, uri, body)
 
     def _exception_for_4xx_status(
         self, status: int, content_type: str, body: str, uri: str
@@ -123,6 +123,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
                 "Received a %(status)i error for %(uri)s " "with no body." % locals(),
                 status,
                 uri,
+                body,
             )
         if content_type.find("json") == -1:
             return HTTPError(
@@ -130,6 +131,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
                 "body: %s" % (status, uri, str(content_type)),
                 status,
                 uri,
+                body,
             )
         try:
             decoded_body = json.loads(body)
@@ -139,6 +141,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
                 " not include the expected JSON body: " % locals() + ", ".join(ex.args),
                 status,
                 uri,
+                body,
             )
         else:
             if "code" in decoded_body and "error" in decoded_body:
@@ -149,6 +152,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
                 "Response contains JSON but it does not specify " "code or error keys",
                 status,
                 uri,
+                body,
             )
 
     @staticmethod
@@ -180,20 +184,26 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         return InvalidRequestError(message, code, status, uri)
 
     @staticmethod
-    def _exception_for_5xx_status(status: int, uri: str) -> HTTPError:
+    def _exception_for_5xx_status(
+        status: int, uri: str, body: Optional[str]
+    ) -> HTTPError:
         return HTTPError(
             "Received a server error (%(status)i) for " "%(uri)s" % locals(),
             status,
             uri,
+            body,
         )
 
     @staticmethod
-    def _exception_for_non_200_status(status: int, uri: str) -> HTTPError:
+    def _exception_for_non_200_status(
+        status: int, uri: str, body: Optional[str]
+    ) -> HTTPError:
         return HTTPError(
             "Received a very surprising HTTP status "
             "(%(status)i) for %(uri)s" % locals(),
             status,
             uri,
+            body,
         )
 
 
