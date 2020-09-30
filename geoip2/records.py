@@ -20,9 +20,7 @@ class Record(SimpleEquality, metaclass=ABCMeta):
 
     def __repr__(self) -> str:
         args = ", ".join("%s=%r" % x for x in self.__dict__.items())
-        return "{module}.{class_name}({data})".format(
-            module=self.__module__, class_name=self.__class__.__name__, data=args
-        )
+        return f"{self.__module__}.{self.__class__.__name__}({args})"
 
 
 class PlaceRecord(Record, metaclass=ABCMeta):
@@ -98,7 +96,7 @@ class City(PlaceRecord):
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         names: Optional[Dict[str, str]] = None,
-        **_
+        **_,
     ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
@@ -152,7 +150,7 @@ class Continent(PlaceRecord):
         code: Optional[str] = None,
         geoname_id: Optional[int] = None,
         names: Optional[Dict[str, str]] = None,
-        **_
+        **_,
     ) -> None:
         self.code = code
         self.geoname_id = geoname_id
@@ -224,7 +222,7 @@ class Country(PlaceRecord):
         is_in_european_union: bool = False,
         iso_code: Optional[str] = None,
         names: Optional[Dict[str, str]] = None,
-        **_
+        **_,
     ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
@@ -307,7 +305,7 @@ class RepresentedCountry(Country):
         names: Optional[Dict[str, str]] = None,
         # pylint:disable=redefined-builtin
         type: Optional[str] = None,
-        **_
+        **_,
     ) -> None:
         self.type = type
         super().__init__(
@@ -399,7 +397,7 @@ class Location(Record):
         metro_code: Optional[int] = None,
         population_density: Optional[int] = None,
         time_zone: Optional[str] = None,
-        **_
+        **_,
     ) -> None:
         self.average_income = average_income
         self.accuracy_radius = accuracy_radius
@@ -527,7 +525,7 @@ class Subdivision(PlaceRecord):
         geoname_id: Optional[int] = None,
         iso_code: Optional[str] = None,
         names: Optional[Dict[str, str]] = None,
-        **_
+        **_,
     ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
@@ -842,7 +840,7 @@ class Traits(Record):
         static_ip_score: Optional[float] = None,
         user_count: Optional[int] = None,
         user_type: Optional[str] = None,
-        **_
+        **_,
     ) -> None:
         self.autonomous_system_number = autonomous_system_number
         self.autonomous_system_organization = autonomous_system_organization
@@ -880,7 +878,7 @@ class Traits(Record):
             prefix_len = self._prefix_len
             if ip_address is None or prefix_len is None:
                 return None
-            network = "{}/{}".format(ip_address, prefix_len)
+            network = f"{ip_address}/{prefix_len}"
         network = ipaddress.ip_network(network, False)
         self._network = network
         return network  # type: ignore

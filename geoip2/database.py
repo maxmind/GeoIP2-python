@@ -220,13 +220,12 @@ class Reader:
         if database_type not in self._db_type:
             caller = inspect.stack()[2][3]
             raise TypeError(
-                "The %s method cannot be used with the "
-                "%s database" % (caller, self._db_type)
+                f"The {caller} method cannot be used with the {self._db_type} database",
             )
         (record, prefix_len) = self._db_reader.get_with_prefix_len(ip_address)
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
-                "The address %s is not in the database." % ip_address
+                f"The address {ip_address} is not in the database.",
             )
         return record, prefix_len
 
