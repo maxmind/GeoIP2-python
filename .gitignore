@@ -17,4 +17,5 @@ pylint.txt
 .pyre
 .pytype
 *.swp
+.tox
 violations.pyflakes.txt
