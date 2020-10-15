@@ -3,6 +3,12 @@
 History
 -------
 
+4.2.0
+++++++++++++++++++
+
+* You may now set a proxy to use when making web service request by passing
+  the ``proxy`` parameter to the ``AsyncClient`` or ``Client`` constructor.
+
 4.1.0 (2020-09-25)
 ++++++++++++++++++
 

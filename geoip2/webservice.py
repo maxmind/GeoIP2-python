@@ -27,7 +27,7 @@ Requests to the GeoIP2 Precision web service are always made with SSL.
 
 import ipaddress
 import json
-from typing import Any, cast, List, Optional, Type, Union
+from typing import Any, Dict, cast, List, Optional, Type, Union
 
 import aiohttp
 import aiohttp.http
@@ -248,10 +248,14 @@ class AsyncClient(BaseClient):
     :param timeout: The timeout in seconts to use when waiting on the request.
       This sets both the connect timeout and the read timeout. The default is
       60.
+    :param proxy: The URL of an HTTP proxy to use. It may optionally include
+      a basic auth username and password, e.g.,
+      ``http://username:password@host:port``.
 
     """
 
     _existing_session: aiohttp.ClientSession
+    _proxy: Optional[str]
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
@@ -260,6 +264,7 @@ class AsyncClient(BaseClient):
         host: str = "geoip.maxmind.com",
         locales: Optional[List[str]] = None,
         timeout: float = 60,
+        proxy: Optional[str] = None,
     ) -> None:
         super().__init__(
             account_id,
@@ -268,6 +273,7 @@ class AsyncClient(BaseClient):
             locales,
             timeout,
         )
+        self._proxy = proxy
 
     async def city(self, ip_address: IPAddress = "me") -> City:
         """Call GeoIP2 Precision City endpoint with the specified IP.
@@ -331,7 +337,7 @@ class AsyncClient(BaseClient):
     ) -> Union[Country, City, Insights]:
         uri = self._uri(path, ip_address)
         session = await self._session()
-        async with await session.get(uri) as response:
+        async with await session.get(uri, proxy=self._proxy) as response:
             status = response.status
             content_type = response.content_type
             body = await response.text()
@@ -398,10 +404,15 @@ class Client(BaseClient):
     :param timeout: The timeout in seconts to use when waiting on the request.
       This sets both the connect timeout and the read timeout. The default is
       60.
+    :param proxy: The URL of an HTTP proxy to use. It may optionally include
+      a basic auth username and password, e.g.,
+      ``http://username:password@host:port``.
+
 
     """
 
     _session: requests.Session
+    _proxies: Optional[Dict[str, str]]
 
     def __init__(  # pylint: disable=too-many-arguments
         self,
@@ -410,12 +421,17 @@ class Client(BaseClient):
         host: str = "geoip.maxmind.com",
         locales: Optional[List[str]] = None,
         timeout: float = 60,
+        proxy: Optional[str] = None,
     ) -> None:
         super().__init__(account_id, license_key, host, locales, timeout)
         self._session = requests.Session()
         self._session.auth = (self._account_id, self._license_key)
         self._session.headers["Accept"] = "application/json"
         self._session.headers["User-Agent"] = _REQUEST_UA
+        if proxy is None:
+            self._proxies = None
+        else:
+            self._proxies = {"https": proxy}
 
     def city(self, ip_address: IPAddress = "me") -> City:
         """Call GeoIP2 Precision City endpoint with the specified IP.
@@ -464,7 +480,7 @@ class Client(BaseClient):
         ip_address: IPAddress,
     ) -> Union[Country, City, Insights]:
         uri = self._uri(path, ip_address)
-        response = self._session.get(uri, timeout=self._timeout)
+        response = self._session.get(uri, proxies=self._proxies, timeout=self._timeout)
         status = response.status_code
         content_type = response.headers["Content-Type"]
         body = response.text
