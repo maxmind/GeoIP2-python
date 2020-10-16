@@ -245,7 +245,7 @@ class AsyncClient(BaseClient):
       * pt-BR -- Brazilian Portuguese
       * ru -- Russian
       * zh-CN -- Simplified Chinese.
-    :param timeout: The timeout in seconts to use when waiting on the request.
+    :param timeout: The timeout in seconds to use when waiting on the request.
       This sets both the connect timeout and the read timeout. The default is
       60.
     :param proxy: The URL of an HTTP proxy to use. It may optionally include
@@ -401,7 +401,7 @@ class Client(BaseClient):
       * pt-BR -- Brazilian Portuguese
       * ru -- Russian
       * zh-CN -- Simplified Chinese.
-    :param timeout: The timeout in seconts to use when waiting on the request.
+    :param timeout: The timeout in seconds to use when waiting on the request.
       This sets both the connect timeout and the read timeout. The default is
       60.
     :param proxy: The URL of an HTTP proxy to use. It may optionally include
