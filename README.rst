@@ -19,6 +19,9 @@ To install the ``geoip2`` module, type:
 .. code-block:: bash
 
     $ pip install geoip2
+    $ pip install geoip2[aiohttp]
+    $ pip install geoip2[requests] 
+    $ pip install geoip2[all] # Install both requests and aiohttp support
 
 If you are not able to use pip, you may also use easy_install from the
 source directory:

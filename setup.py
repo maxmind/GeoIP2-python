@@ -26,6 +26,11 @@ setup(
     include_package_data=True,
     python_requires=">=3.6",
     install_requires=requirements,
+    extras_require={
+        "all": ["requests>=2.14.0,<3.0.0", "aiohttp>=3.6.2,<4.0.0"],
+        "requests": "requests>=2.14.0,<3.0.0",
+        "aiohttp": "aiohttp>=3.6.2,<4.0.0",
+    },
     tests_require=["mocket>=3.8.9"],
     test_suite="tests",
     license=geoip2.__license__,

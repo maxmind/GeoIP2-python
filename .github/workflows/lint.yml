@@ -27,7 +27,7 @@ jobs:
               pip install --upgrade pylint black mypy voluptuous-stubs
 
       - name: Install
-        run: python setup.py install
+        run: pip install -e .[all]
 
       - name: Run mypy
         run: mypy geoip2 tests
