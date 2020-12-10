@@ -21,7 +21,7 @@ case all of the attributes for that record class will be empty.
 SSL
 ---
 
-Requests to the GeoIP2 Precision web service are always made with SSL.
+Requests to the web service are always made with SSL.
 
 """
 
@@ -219,8 +219,8 @@ class AsyncClient(BaseClient):
     The following keyword arguments are also accepted:
 
     :param host: The hostname to make a request against. This defaults to
-      "geoip.maxmind.com". In most cases, you should not need to set this
-      explicitly.
+      "geoip.maxmind.com". To use the GeoLite2 web service instead of GeoIP2
+      Precision, set this to "geolite.info".
     :param locales: This is list of locale codes. This argument will be
       passed on to record classes to use when their name properties are
       called. The default value is ['en'].
@@ -276,7 +276,7 @@ class AsyncClient(BaseClient):
         self._proxy = proxy
 
     async def city(self, ip_address: IPAddress = "me") -> City:
-        """Call GeoIP2 Precision City endpoint with the specified IP.
+        """Call City endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no
            address is provided, the address that the web service is
@@ -305,7 +305,10 @@ class AsyncClient(BaseClient):
         )
 
     async def insights(self, ip_address: IPAddress = "me") -> Insights:
-        """Call the GeoIP2 Precision: Insights endpoint with the specified IP.
+        """Call the Insights endpoint with the specified IP.
+
+        Insights is only supported by GeoIP2 Precision. The GeoLite2 web
+        service does not support it.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
           is provided, the address that the web service is called from will
@@ -375,8 +378,8 @@ class Client(BaseClient):
     The following keyword arguments are also accepted:
 
     :param host: The hostname to make a request against. This defaults to
-      "geoip.maxmind.com". In most cases, you should not need to set this
-      explicitly.
+      "geoip.maxmind.com". To use the GeoLite2 web service instead of GeoIP2
+      Precision, set this to "geolite.info".
     :param locales: This is list of locale codes. This argument will be
       passed on to record classes to use when their name properties are
       called. The default value is ['en'].
@@ -434,7 +437,7 @@ class Client(BaseClient):
             self._proxies = {"https": proxy}
 
     def city(self, ip_address: IPAddress = "me") -> City:
-        """Call GeoIP2 Precision City endpoint with the specified IP.
+        """Call City endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no
            address is provided, the address that the web service is
@@ -460,7 +463,10 @@ class Client(BaseClient):
         )
 
     def insights(self, ip_address: IPAddress = "me") -> Insights:
-        """Call the GeoIP2 Precision: Insights endpoint with the specified IP.
+        """Call the Insights endpoint with the specified IP.
+
+        Insights is only supported by GeoIP2 Precision. The GeoLite2 web
+        service does not support it.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
           is provided, the address that the web service is called from will

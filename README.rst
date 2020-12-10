@@ -45,11 +45,14 @@ should not be used to identify a particular address or household.
 Web Service Usage
 -----------------
 
-To use this API, you first create either a web service object with your
-MaxMind ``account_id`` and ``license_key`` or a database reader object with the
-path to your database file. After doing this, you may call the method
-corresponding to request type (e.g., ``city`` or ``country``), passing it the
-IP address you want to look up.
+To use this API, you first construct either a ``geoip2.webservice.Client`` or
+``geoip2.webservice.AsyncClient``, passing your MaxMind ``account_id`` and
+``license_key`` to the constructor. To use the GeoLite2 web service instead of
+GeoIP2 Precision, set the optional ``host`` keyword argument to
+``geolite.info``.
+
+After doing this, you may call the method corresponding to request type
+(e.g., ``city`` or ``country``), passing it the IP address you want to look up.
 
 If the request succeeds, the method call will return a model class for the
 end point you called. This model in turn contains multiple record classes,
@@ -66,12 +69,14 @@ Sync Web Service Example
     >>>
     >>> # This creates a Client object that can be reused across requests.
     >>> # Replace "42" with your account ID and "license_key" with your license
-    >>> # key.
+    >>> # key. Set the "host" keyword argument to "geolite.info" to use the
+    >>> # GeoLite2 web service instead of GeoIP2 Precision.
     >>> with geoip2.webservice.Client(42, 'license_key') as client:
     >>>
-    >>>     # Replace "insights" with the method corresponding to the web service
-    >>>     # that you are using, e.g., "country", "city".
-    >>>     response = client.insights('203.0.113.0')
+    >>>     # Replace "city" with the method corresponding to the web service
+    >>>     # that you are using, i.e., "country", "city", or "insights". Please
+    >>>     # note that Insights is not supported by the GeoLite2 web service.
+    >>>     response = client.city('203.0.113.0')
     >>>
     >>>     response.country.iso_code
     'US'
@@ -114,12 +119,14 @@ Async Web Service Example
     >>>     # loops, you must ensure the object is not used on another loop.
     >>>     #
     >>>     # Replace "42" with your account ID and "license_key" with your license
-    >>>     # key.
+    >>>     # key. Set the "host" keyword argument to "geolite.info" to use the
+    >>>     # GeoLite2 web service instead of GeoIP2 Precision.
     >>>     async with geoip2.webservice.AsyncClient(42, 'license_key') as client:
     >>>
-    >>>         # Replace "insights" with the method corresponding to the web service
-    >>>         # that you are using, e.g., "country", "city".
-    >>>         response = await client.insights('203.0.113.0')
+    >>>         # Replace "city" with the method corresponding to the web service
+    >>>         # that you are using, i.e., "country", "city", or "insights". Please
+    >>>         # note that Insights is not supported by the GeoLite2 web service.
+    >>>         response = await client.city('203.0.113.0')
     >>>
     >>>         response.country.iso_code
     'US'
