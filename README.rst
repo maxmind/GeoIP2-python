@@ -55,7 +55,7 @@ After doing this, you may call the method corresponding to request type
 (e.g., ``city`` or ``country``), passing it the IP address you want to look up.
 
 If the request succeeds, the method call will return a model class for the
-end point you called. This model in turn contains multiple record classes,
+endpoint you called. This model in turn contains multiple record classes,
 each of which represents part of the data returned by the web service.
 
 If the request fails, the client class throws an exception.
@@ -181,11 +181,11 @@ Database Usage
 
 To use the database API, you first construct a ``geoip2.database.Reader`` using
 the path to the file as the first argument. After doing this, you may call the
-method corresponding to request type (e.g., ``city`` or ``country``), passing it
+method corresponding to database type (e.g., ``city`` or ``country``), passing it
 the IP address you want to look up.
 
-If the request succeeds, the method call will return a model class for the
-end point you called. This model in turn contains multiple record classes,
+If the lookup succeeds, the method call will return a model class for the
+database method you called. This model in turn contains multiple record classes,
 each of which represents part of the data for the record.
 
 If the request fails, the reader class throws an exception.
@@ -420,7 +420,7 @@ What data is returned?
 ----------------------
 
 While many of the models contain the same basic records, the attributes which
-can be populated vary between web service end points or databases. In
+can be populated vary between web service endpoints or databases. In
 addition, while a model may offer a particular piece of data, MaxMind does not
 always have every piece of data for any given IP address.
 
