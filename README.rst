@@ -42,8 +42,8 @@ IP geolocation is inherently imprecise. Locations are often near the center of
 the population. Any location provided by a GeoIP2 database or web service
 should not be used to identify a particular address or household.
 
-Usage
------
+Web Service Usage
+-----------------
 
 To use this API, you first create either a web service object with your
 MaxMind ``account_id`` and ``license_key`` or a database reader object with the
@@ -169,8 +169,22 @@ returns any status code besides 200, 4xx, or 5xx, this also becomes an
 Finally, if the web service returns a 200 but the body is invalid, the client
 throws a ``GeoIP2Error``.
 
+Database Usage
+--------------
+
+To use the database API, you first construct a ``geoip2.database.Reader`` using
+the path to the file as the first argument. After doing this, you may call the
+method corresponding to request type (e.g., ``city`` or ``country``), passing it
+the IP address you want to look up.
+
+If the request succeeds, the method call will return a model class for the
+end point you called. This model in turn contains multiple record classes,
+each of which represents part of the data for the record.
+
+If the request fails, the reader class throws an exception.
+
 Database Example
--------------------
+----------------
 
 City Database
 ^^^^^^^^^^^^^
