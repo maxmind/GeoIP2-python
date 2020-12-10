@@ -42,17 +42,20 @@ IP geolocation is inherently imprecise. Locations are often near the center of
 the population. Any location provided by a GeoIP2 database or web service
 should not be used to identify a particular address or household.
 
-Usage
------
+Web Service Usage
+-----------------
 
-To use this API, you first create either a web service object with your
-MaxMind ``account_id`` and ``license_key`` or a database reader object with the
-path to your database file. After doing this, you may call the method
-corresponding to request type (e.g., ``city`` or ``country``), passing it the
-IP address you want to look up.
+To use this API, you first construct either a ``geoip2.webservice.Client`` or
+``geoip2.webservice.AsyncClient``, passing your MaxMind ``account_id`` and
+``license_key`` to the constructor. To use the GeoLite2 web service instead of
+GeoIP2 Precision, set the optional ``host`` keyword argument to
+``geolite.info``.
+
+After doing this, you may call the method corresponding to request type
+(e.g., ``city`` or ``country``), passing it the IP address you want to look up.
 
 If the request succeeds, the method call will return a model class for the
-end point you called. This model in turn contains multiple record classes,
+endpoint you called. This model in turn contains multiple record classes,
 each of which represents part of the data returned by the web service.
 
 If the request fails, the client class throws an exception.
@@ -66,12 +69,14 @@ Sync Web Service Example
     >>>
     >>> # This creates a Client object that can be reused across requests.
     >>> # Replace "42" with your account ID and "license_key" with your license
-    >>> # key.
+    >>> # key. Set the "host" keyword argument to "geolite.info" to use the
+    >>> # GeoLite2 web service instead of GeoIP2 Precision.
     >>> with geoip2.webservice.Client(42, 'license_key') as client:
     >>>
-    >>>     # Replace "insights" with the method corresponding to the web service
-    >>>     # that you are using, e.g., "country", "city".
-    >>>     response = client.insights('203.0.113.0')
+    >>>     # Replace "city" with the method corresponding to the web service
+    >>>     # that you are using, i.e., "country", "city", or "insights". Please
+    >>>     # note that Insights is not supported by the GeoLite2 web service.
+    >>>     response = client.city('203.0.113.0')
     >>>
     >>>     response.country.iso_code
     'US'
@@ -114,12 +119,14 @@ Async Web Service Example
     >>>     # loops, you must ensure the object is not used on another loop.
     >>>     #
     >>>     # Replace "42" with your account ID and "license_key" with your license
-    >>>     # key.
+    >>>     # key. Set the "host" keyword argument to "geolite.info" to use the
+    >>>     # GeoLite2 web service instead of GeoIP2 Precision.
     >>>     async with geoip2.webservice.AsyncClient(42, 'license_key') as client:
     >>>
-    >>>         # Replace "insights" with the method corresponding to the web service
-    >>>         # that you are using, e.g., "country", "city".
-    >>>         response = await client.insights('203.0.113.0')
+    >>>         # Replace "city" with the method corresponding to the web service
+    >>>         # that you are using, i.e., "country", "city", or "insights". Please
+    >>>         # note that Insights is not supported by the GeoLite2 web service.
+    >>>         response = await client.city('203.0.113.0')
     >>>
     >>>         response.country.iso_code
     'US'
@@ -169,8 +176,22 @@ returns any status code besides 200, 4xx, or 5xx, this also becomes an
 Finally, if the web service returns a 200 but the body is invalid, the client
 throws a ``GeoIP2Error``.
 
+Database Usage
+--------------
+
+To use the database API, you first construct a ``geoip2.database.Reader`` using
+the path to the file as the first argument. After doing this, you may call the
+method corresponding to database type (e.g., ``city`` or ``country``), passing it
+the IP address you want to look up.
+
+If the lookup succeeds, the method call will return a model class for the
+database method you called. This model in turn contains multiple record classes,
+each of which represents part of the data for the record.
+
+If the request fails, the reader class throws an exception.
+
 Database Example
--------------------
+----------------
 
 City Database
 ^^^^^^^^^^^^^
@@ -399,7 +420,7 @@ What data is returned?
 ----------------------
 
 While many of the models contain the same basic records, the attributes which
-can be populated vary between web service end points or databases. In
+can be populated vary between web service endpoints or databases. In
 addition, while a model may offer a particular piece of data, MaxMind does not
 always have every piece of data for any given IP address.
 
