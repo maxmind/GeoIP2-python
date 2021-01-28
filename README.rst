@@ -33,7 +33,7 @@ Database Reader Extension
 If you wish to use the C extension for the database reader, you must first
 install the `libmaxminddb C API <https://github.com/maxmind/libmaxminddb>`_.
 Please `see the instructions distributed with it
-<https://github.com/maxmind/libmaxminddb/blob/master/README.md>`_.
+<https://github.com/maxmind/libmaxminddb/blob/main/README.md>`_.
 
 IP Geolocation Usage
 --------------------
