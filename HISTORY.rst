@@ -3,7 +3,7 @@
 History
 -------
 
-4.2.0
+4.2.0 (2021-05-12)
 ++++++++++++++++++
 
 * You may now set a proxy to use when making web service requests by passing
