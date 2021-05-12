@@ -38,6 +38,6 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-:copyright: (c) 2013-2020 by MaxMind, Inc.
+:copyright: (c) 2013-2021 by MaxMind, Inc.
 :license: Apache License, Version 2.0
 
