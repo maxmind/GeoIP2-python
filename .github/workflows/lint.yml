@@ -19,12 +19,12 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8
+          python-version: 3.9
 
       - name: Install dependencies
         run: |
               python -m pip install --upgrade pip
-              pip install --upgrade pylint black mypy voluptuous-stubs chardet==3.0.4
+              pip install --upgrade pylint black mypy voluptuous-stubs chardet==3.0.4 types-requests types-maxminddb
 
       - name: Install
         run: python setup.py install
