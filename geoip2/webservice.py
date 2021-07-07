@@ -27,12 +27,21 @@ Requests to the web service are always made with SSL.
 
 import ipaddress
 import json
+import sys
 from typing import Any, Dict, cast, List, Optional, Type, Union
 
-import aiohttp
-import aiohttp.http
-import requests
-import requests.utils
+try:
+    import aiohttp
+    import aiohttp.http
+except ImportError:
+    pass
+
+try:
+    import requests
+    import requests.utils
+except ImportError:
+    pass
+
 
 import geoip2
 import geoip2.models
@@ -48,13 +57,28 @@ from geoip2.errors import (
 from geoip2.models import City, Country, Insights
 from geoip2.types import IPAddress
 
-_AIOHTTP_UA = (
-    f"GeoIP2-Python-Client/{geoip2.__version__} {aiohttp.http.SERVER_SOFTWARE}"
-)
+# If neither requests or aiohttp is installed then inform user how to
+# install them
+if "aiohttp" not in sys.modules and "requests" not in sys.modules:
+    raise ImportError(
+        """To enable geoip2.webservice,
+    install aiohttp or requests support.
+        pip install geoip2[aiohttp]
+        pip install geoip2[requests]
+        pip install geoip2[all]"""
+    )
 
-_REQUEST_UA = (
-    f"GeoIP2-Python-Client/{geoip2.__version__} {requests.utils.default_user_agent()}"
-)
+
+if "aiohttp" in sys.modules:
+    _AIOHTTP_UA = (
+        f"GeoIP2-Python-Client/{geoip2.__version__} {aiohttp.http.SERVER_SOFTWARE}"
+    )
+
+if "requests" in sys.modules:
+    _REQUEST_UA = (
+        f"GeoIP2-Python-Client/{geoip2.__version__}"
+        f" {requests.utils.default_user_agent()}"
+    )
 
 
 class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-methods
