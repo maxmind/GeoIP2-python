@@ -864,11 +864,10 @@ class Traits(Record):
         self._network = network
         self._prefix_len = prefix_len
 
-    # This code is duplicated for performance reasons
-    # pylint: disable=duplicate-code
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
         """The network for the record"""
+        # This code is duplicated for performance reasons
         network = self._network
         if isinstance(network, (ipaddress.IPv4Network, ipaddress.IPv6Network)):
             return network
