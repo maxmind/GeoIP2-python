@@ -1,5 +1,5 @@
 [MESSAGES CONTROL]
-disable=C0330,duplicate-code
+disable=duplicate-code
 
 [BASIC]
 
