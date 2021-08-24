@@ -1,6 +1,0 @@
-[MESSAGES CONTROL]
-disable=duplicate-code
-
-[BASIC]
-
-no-docstring-rgx=_.*
