@@ -5,11 +5,9 @@ MaxMind GeoIP2 Python API
 Description
 -----------
 
-This package provides an API for the GeoIP2 `web services
-<http://dev.maxmind.com/geoip/geoip2/web-services>`_ and `databases
-<http://dev.maxmind.com/geoip/geoip2/downloadable>`_. The API also works with
-MaxMind's free `GeoLite2 databases
-<http://dev.maxmind.com/geoip/geoip2/geolite2/>`_.
+This package provides an API for the GeoIP2 and GeoLite2 `web services
+<https://dev.maxmind.com/geoip/docs/web-services?lang=en>`_ and `databases
+<https://dev.maxmind.com/geoip/docs/databases?lang=en>`_. 
 
 Installation
 ------------
@@ -160,7 +158,7 @@ Web Service Client Exceptions
 -----------------------------
 
 For details on the possible errors returned by the web service itself, see
-http://dev.maxmind.com/geoip/geoip2/web-services for the GeoIP2 Precision web
+https://dev.maxmind.com/geoip/docs/web-services?lang=en for the GeoIP2 Precision web
 service docs.
 
 If the web service returns an explicit error document, this is thrown as a

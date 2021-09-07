@@ -7,7 +7,7 @@ web service and databases.
 
 The only difference between the City and Insights model classes is which
 fields in each record may be populated. See
-http://dev.maxmind.com/geoip/geoip2/web-services for more details.
+https://dev.maxmind.com/geoip/docs/web-services?lang=en for more details.
 
 """
 # pylint: disable=too-many-instance-attributes,too-few-public-methods
