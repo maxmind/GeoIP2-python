@@ -644,9 +644,7 @@ class Traits(Record):
 
     .. attribute:: is_anonymous_proxy
 
-      This is true if the IP is an anonymous
-      proxy. See http://dev.maxmind.com/faq/geoip#anonproxy for further
-      details.
+      This is true if the IP is an anonymous proxy.
 
       :type: bool
 
