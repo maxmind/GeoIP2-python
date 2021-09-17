@@ -67,9 +67,9 @@ class Reader:
     ) -> None:
         """Create GeoIP2 Reader.
 
-        :param fileish: The string path to the GeoIP2 database, or an existing
-          file descriptor pointing to the database. Note that this latter
-          usage is only valid when mode is MODE_FD.
+        :param fileish: A path to the GeoIP2 database or an existing file
+          descriptor pointing to the database. Note that a file descriptor
+          is only valid when mode is MODE_FD.
         :param locales: This is list of locale codes. This argument will be
           passed on to record classes to use when their name properties are
           called. The default value is ['en'].
