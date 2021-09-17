@@ -394,11 +394,11 @@ Database Reader Exceptions
 --------------------------
 
 If the database file does not exist or is not readable, the constructor will
-raise a ``FileNotFoundError``.  If the IP address passed to a method is
-invalid, a ``ValueError`` will be raised. If the file is invalid or there is a
-bug in the reader, a ``maxminddb.InvalidDatabaseError`` will be raised with a
-description of the problem. If an IP address is not in the database, a
-``AddressNotFoundError`` will be raised.
+raise a ``FileNotFoundError`` or a ``PermissionError``. If the IP address passed
+to a method is invalid, a ``ValueError`` will be raised. If the file is invalid
+or there is a bug in the reader, a ``maxminddb.InvalidDatabaseError`` will be
+raised with a description of the problem. If an IP address is not in the
+database, a ``AddressNotFoundError`` will be raised.
 
 Values to use for Database or Dictionary Keys
 ---------------------------------------------
