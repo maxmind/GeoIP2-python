@@ -3,6 +3,14 @@
 History
 -------
 
+4.2.1
+++++++++++++++++++
+
+* The type hints for the database file in the ``Reader`` constructor have
+  been expanded to match those specified by ``maxmindb.open_database``. In
+  particular, ``os.PathLike`` and ``IO`` have been added.
+
+
 4.2.0 (2021-05-12)
 ++++++++++++++++++
 
