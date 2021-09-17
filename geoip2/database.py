@@ -258,7 +258,9 @@ class Reader:
         record["prefix_len"] = prefix_len
         return model_class(record)
 
-    def metadata(self) -> maxminddb.reader.Metadata:
+    def metadata(
+        self,
+    ) -> Union[maxminddb.reader.Metadata, "maxminddb.extension.Metadata"]:
         """The metadata for the open database.
 
         :returns: :py:class:`maxminddb.reader.Metadata` object
