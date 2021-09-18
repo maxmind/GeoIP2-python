@@ -3,9 +3,11 @@
 History
 -------
 
-4.2.1
+4.3.0
 ++++++++++++++++++
 
+* Previously, the ``py.typed`` file was not being added to the source
+  distribution. It is now explicitly specified in the manifest.
 * The type hints for the database file in the ``Reader`` constructor have
   been expanded to match those specified by ``maxmindb.open_database``. In
   particular, ``os.PathLike`` and ``IO`` have been added.
