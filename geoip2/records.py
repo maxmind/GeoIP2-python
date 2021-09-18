@@ -19,7 +19,7 @@ class Record(SimpleEquality, metaclass=ABCMeta):
     """All records are subclasses of the abstract class ``Record``."""
 
     def __repr__(self) -> str:
-        args = ", ".join("%s=%r" % x for x in self.__dict__.items())
+        args = ", ".join(f"{k}={v!r}" for k, v in self.__dict__.items())
         return f"{self.__module__}.{self.__class__.__name__}({args})"
 
 
