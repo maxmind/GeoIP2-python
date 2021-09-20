@@ -5,7 +5,8 @@ GeoIP2 Database Reader
 
 """
 import inspect
-from typing import Any, cast, List, Optional, Type, Union
+import os
+from typing import Any, AnyStr, cast, IO, List, Optional, Type, Union
 
 import maxminddb
 
@@ -59,13 +60,16 @@ class Reader:
     """
 
     def __init__(
-        self, fileish: str, locales: Optional[List[str]] = None, mode: int = MODE_AUTO
+        self,
+        fileish: Union[AnyStr, int, os.PathLike, IO],
+        locales: Optional[List[str]] = None,
+        mode: int = MODE_AUTO,
     ) -> None:
         """Create GeoIP2 Reader.
 
-        :param fileish: The string path to the GeoIP2 database, or an existing
-          file descriptor pointing to the database. Note that this latter
-          usage is only valid when mode is MODE_FD.
+        :param fileish: A path to the GeoIP2 database or an existing file
+          descriptor pointing to the database. Note that a file descriptor
+          is only valid when mode is MODE_FD.
         :param locales: This is list of locale codes. This argument will be
           passed on to record classes to use when their name properties are
           called. The default value is ['en'].
@@ -254,7 +258,9 @@ class Reader:
         record["prefix_len"] = prefix_len
         return model_class(record)
 
-    def metadata(self) -> maxminddb.reader.Metadata:
+    def metadata(
+        self,
+    ) -> Union[maxminddb.reader.Metadata, "maxminddb.extension.Metadata"]:
         """The metadata for the open database.
 
         :returns: :py:class:`maxminddb.reader.Metadata` object
