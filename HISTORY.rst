@@ -3,7 +3,7 @@
 History
 -------
 
-4.4.0
+4.4.0 (2021-09-24)
 ++++++++++++++++++
 
 * The public API on ``geoip2.database`` is now explicitly defined by
