@@ -8,6 +8,8 @@ History
 
 * The public API on ``geoip2.database`` is now explicitly defined by
   setting ``__all__``.
+* The return type of the ``metadata()`` method on ``Reader`` is now
+  ``maxminddb.reader.Metadata`` rather than a union type.
 
 4.3.0 (2021-09-20)
 ++++++++++++++++++

@@ -269,7 +269,7 @@ class Reader:
 
     def metadata(
         self,
-    ) -> Union[maxminddb.reader.Metadata, "maxminddb.extension.Metadata"]:
+    ) -> maxminddb.reader.Metadata:
         """The metadata for the open database.
 
         :returns: :py:class:`maxminddb.reader.Metadata` object
