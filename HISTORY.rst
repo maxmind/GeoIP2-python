@@ -3,6 +3,12 @@
 History
 -------
 
+4.4.0
+++++++++++++++++++
+
+* The public API on ``geoip2.database`` is now explicitly defined by
+  setting ``__all__``.
+
 4.3.0 (2021-09-20)
 ++++++++++++++++++
 
