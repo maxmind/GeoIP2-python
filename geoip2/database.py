@@ -10,8 +10,7 @@ from typing import Any, AnyStr, cast, IO, List, Optional, Type, Union
 
 import maxminddb
 
-# pylint: disable=unused-import
-from maxminddb import (  # type: ignore
+from maxminddb import (
     MODE_AUTO,
     MODE_MMAP,
     MODE_MMAP_EXT,
@@ -34,6 +33,16 @@ from geoip2.models import (
     Enterprise,
     ISP,
 )
+
+__all__ = [
+    "MODE_AUTO",
+    "MODE_MMAP",
+    "MODE_MMAP_EXT",
+    "MODE_FILE",
+    "MODE_MEMORY",
+    "MODE_FD",
+    "Reader",
+]
 
 
 class Reader:
@@ -260,7 +269,7 @@ class Reader:
 
     def metadata(
         self,
-    ) -> Union[maxminddb.reader.Metadata, "maxminddb.extension.Metadata"]:
+    ) -> maxminddb.reader.Metadata:
         """The metadata for the open database.
 
         :returns: :py:class:`maxminddb.reader.Metadata` object
