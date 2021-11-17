@@ -13,6 +13,7 @@ History
   ``mobile_network_code`` attributes were added to ``geoip2.model.ISP``
   for the GeoIP2 ISP database and ``geoip2.record.Traits`` for the
   Enterprise database and the GeoIP2 City and Insights web services.
+  We expect this data to be available by late January, 2022.
 
 4.4.0 (2021-09-24)
 ++++++++++++++++++
