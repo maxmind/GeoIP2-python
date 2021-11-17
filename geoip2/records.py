@@ -713,7 +713,7 @@ class Traits(Record):
 
     .. attribute:: is_tor_exit_node
 
-      This is true if the IP address is a Tor exit node.  This attribute is
+      This is true if the IP address is a Tor exit node. This attribute is
       only available from GeoIP2 Precision Insights.
 
       :type: bool
@@ -725,6 +725,24 @@ class Traits(Record):
       GeoIP2 Enterprise database.
 
       :type: unicode
+
+    .. attribute: mobile_country_code
+
+      The `mobile country code (MCC)
+      <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
+      IP address and ISP. This attribute is available from the City and
+      Insights web services and the GeoIP2 Enterprise database.
+
+      :type: str
+
+    .. attribute: mobile_network_code
+
+      The `mobile network code (MCC)
+      <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
+      IP address and ISP. This attribute is available from the City and
+      Insights web services and the GeoIP2 Enterprise database.
+
+      :type: str
 
     .. attribute:: network
 
@@ -808,6 +826,8 @@ class Traits(Record):
     is_tor_exit_node: bool
     isp: Optional[str]
     ip_address: Optional[str]
+    mobile_country_code: Optional[str]
+    mobile_network_code: Optional[str]
     organization: Optional[str]
     static_ip_score: Optional[float]
     user_count: Optional[int]
@@ -838,6 +858,8 @@ class Traits(Record):
         static_ip_score: Optional[float] = None,
         user_count: Optional[int] = None,
         user_type: Optional[str] = None,
+        mobile_country_code: Optional[str] = None,
+        mobile_network_code: Optional[str] = None,
         **_,
     ) -> None:
         self.autonomous_system_number = autonomous_system_number
@@ -854,6 +876,8 @@ class Traits(Record):
         self.is_satellite_provider = is_satellite_provider
         self.is_tor_exit_node = is_tor_exit_node
         self.isp = isp
+        self.mobile_country_code = mobile_country_code
+        self.mobile_network_code = mobile_network_code
         self.organization = organization
         self.static_ip_score = static_ip_score
         self.user_type = user_type

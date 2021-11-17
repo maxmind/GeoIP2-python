@@ -199,27 +199,36 @@ class BaseTestReader(unittest.TestCase):
                 record.traits.network, ipaddress.ip_network("74.209.16.0/20")
             )
 
+            record = reader.enterprise("149.101.100.0")
+
+            self.assertEqual(record.traits.mobile_country_code, "310")
+            self.assertEqual(record.traits.mobile_network_code, "004")
+
     def test_isp(self) -> None:
-        reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-ISP-Test.mmdb")
+        with geoip2.database.Reader(
+            "tests/data/test-data/GeoIP2-ISP-Test.mmdb"
+        ) as reader:
+            ip_address = "1.128.0.0"
+            record = reader.isp(ip_address)
+            self.assertEqual(record, eval(repr(record)), "ISP repr can be eval'd")
 
-        ip_address = "1.128.0.0"
-        record = reader.isp(ip_address)
-        self.assertEqual(record, eval(repr(record)), "ISP repr can be eval'd")
+            self.assertEqual(record.autonomous_system_number, 1221)
+            self.assertEqual(record.autonomous_system_organization, "Telstra Pty Ltd")
+            self.assertEqual(record.isp, "Telstra Internet")
+            self.assertEqual(record.organization, "Telstra Internet")
+            self.assertEqual(record.ip_address, ip_address)
+            self.assertEqual(record.network, ipaddress.ip_network("1.128.0.0/11"))
 
-        self.assertEqual(record.autonomous_system_number, 1221)
-        self.assertEqual(record.autonomous_system_organization, "Telstra Pty Ltd")
-        self.assertEqual(record.isp, "Telstra Internet")
-        self.assertEqual(record.organization, "Telstra Internet")
-        self.assertEqual(record.ip_address, ip_address)
-        self.assertEqual(record.network, ipaddress.ip_network("1.128.0.0/11"))
+            self.assertRegex(
+                str(record),
+                r"ISP\(\{.*Telstra.*\}\)",
+                "ISP str representation is reasonable",
+            )
 
-        self.assertRegex(
-            str(record),
-            r"ISP\(\{.*Telstra.*\}\)",
-            "ISP str representation is reasonable",
-        )
+            record = reader.isp("149.101.100.0")
 
-        reader.close()
+            self.assertEqual(record.mobile_country_code, "310")
+            self.assertEqual(record.mobile_network_code, "004")
 
     def test_context_manager(self) -> None:
         with geoip2.database.Reader(

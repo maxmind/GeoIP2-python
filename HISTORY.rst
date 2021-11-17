@@ -1,7 +1,18 @@
+
 .. :changelog:
 
 History
 -------
+
+4.5.0
+++++++++++++++++++
+
+* Support for mobile country code (MCC) and mobile network codes (MNC) was
+  added for the GeoIP2 ISP and Enterprise databases as well as the GeoIP2
+  City and Insights web services. ``mobile_country_code`` and
+  ``mobile_network_code`` attributes were added to ``geoip2.model.ISP``
+  for the GeoIP2 ISP database and ``geoip2.record.Traits`` for the
+  Enterprise database and the GeoIP2 City and Insights web services.
 
 4.4.0 (2021-09-24)
 ++++++++++++++++++
