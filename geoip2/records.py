@@ -76,7 +76,7 @@ class City(PlaceRecord):
       The name of the city based on the locales list passed to the
       constructor.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: names
 
@@ -117,7 +117,7 @@ class Continent(PlaceRecord):
       A two character continent code like "NA" (North America)
       or "OC" (Oceania).
 
-      :type: unicode
+      :type: str
 
     .. attribute:: geoname_id
 
@@ -130,7 +130,7 @@ class Continent(PlaceRecord):
       Returns the name of the continent based on the locales list passed to
       the constructor.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: names
 
@@ -191,14 +191,14 @@ class Country(PlaceRecord):
       <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the
       country.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: name
 
       The name of the country based on the locales list passed to the
       constructor.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: names
 
@@ -266,14 +266,14 @@ class RepresentedCountry(Country):
       The two-character `ISO 3166-1
       <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the country.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: name
 
       The name of the country based on the locales list passed to the
       constructor.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: names
 
@@ -289,7 +289,7 @@ class RepresentedCountry(Country):
       country. Currently we only return ``military`` but this could expand to
       include other types in the future.
 
-      :type: unicode
+      :type: str
 
     """
 
@@ -376,7 +376,7 @@ class Location(Record):
       Zone Database <http://www.iana.org/time-zones>`_, e.g.,
       "America/New_York".
 
-      :type: unicode
+      :type: str
 
     """
 
@@ -443,7 +443,7 @@ class Postal(Record):
       codes are not available for all countries. In some countries, this will
       only contain part of the postal code.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: confidence
 
@@ -496,14 +496,14 @@ class Subdivision(PlaceRecord):
       contain the subdivision portion of the `ISO 3166-2 code
       <http://en.wikipedia.org/wiki/ISO_3166-2>`_.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: name
 
       The name of the subdivision based on the locales list passed to the
       constructor.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: names
 
@@ -598,7 +598,7 @@ class Traits(Record):
       the IP address. This attribute is only available from the City and
       Insights web service end points and the GeoIP2 Enterprise database.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: connection_type
 
@@ -613,7 +613,7 @@ class Traits(Record):
 
       This attribute is only available in the GeoIP2 Enterprise database.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: domain
 
@@ -623,7 +623,7 @@ class Traits(Record):
       from the City and Insights web service end points and the GeoIP2
       Enterprise database.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: ip_address
 
@@ -633,7 +633,7 @@ class Traits(Record):
       running on. If the system is behind a NAT, this may differ from the IP
       address locally assigned to it.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: is_anonymous
 
@@ -724,7 +724,7 @@ class Traits(Record):
       only available from the City and Insights web service end points and the
       GeoIP2 Enterprise database.
 
-      :type: unicode
+      :type: str
 
     .. attribute: mobile_country_code
 
@@ -758,7 +758,7 @@ class Traits(Record):
       attribute is only available from the City and Insights web service end
       points and the GeoIP2 Enterprise database.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: static_ip_score
 
@@ -807,7 +807,7 @@ class Traits(Record):
       This attribute is only available from the Insights end point and the
       GeoIP2 Enterprise database.
 
-      :type: unicode
+      :type: str
 
     """
 

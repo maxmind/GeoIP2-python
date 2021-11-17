@@ -404,7 +404,7 @@ class AnonymousIP(SimpleModel):
 
       The IP address used in the lookup.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: network
 
@@ -448,13 +448,13 @@ class ASN(SimpleModel):
       The organization associated with the registered autonomous system number
       for the IP address.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: ip_address
 
       The IP address used in the lookup.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: network
 
@@ -495,13 +495,13 @@ class ConnectionType(SimpleModel):
 
       Additional values may be added in the future.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: ip_address
 
       The IP address used in the lookup.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: network
 
@@ -528,13 +528,13 @@ class Domain(SimpleModel):
 
       The domain associated with the IP address.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: ip_address
 
       The IP address used in the lookup.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: network
 
@@ -569,13 +569,13 @@ class ISP(ASN):
       The organization associated with the registered autonomous system number
       for the IP address.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: isp
 
       The name of the ISP associated with the IP address.
 
-      :type: unicode
+      :type: str
 
     .. attribute: mobile_country_code
 
@@ -598,13 +598,13 @@ class ISP(ASN):
 
       The name of the organization associated with the IP address.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: ip_address
 
       The IP address used in the lookup.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: network
 
