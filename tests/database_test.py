@@ -117,7 +117,7 @@ class BaseTestReader(unittest.TestCase):
         self.assertEqual(
             record.country.name, "United Kingdom", "The default locale is en"
         )
-        self.assertEqual(record.country.is_in_european_union, True)
+        self.assertEqual(record.country.is_in_european_union, False)
         self.assertEqual(
             record.location.accuracy_radius, 100, "The accuracy_radius is populated"
         )
@@ -156,7 +156,7 @@ class BaseTestReader(unittest.TestCase):
             record.traits.ip_address, "81.2.69.160", "IP address is added to model"
         )
         self.assertEqual(record.traits.network, ipaddress.ip_network("81.2.69.160/27"))
-        self.assertEqual(record.country.is_in_european_union, True)
+        self.assertEqual(record.country.is_in_european_union, False)
         self.assertEqual(record.registered_country.is_in_european_union, False)
         reader.close()
 
