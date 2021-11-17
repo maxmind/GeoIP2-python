@@ -587,12 +587,11 @@ class ISP(ASN):
 
     .. attribute: mobile_network_code
 
-      The `mobile network code (MCC)
+      The `mobile network code (MNC)
       <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
       IP address and ISP.
 
       :type: str
-
 
     .. attribute:: organization
 
