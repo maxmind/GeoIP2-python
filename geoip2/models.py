@@ -404,7 +404,7 @@ class AnonymousIP(SimpleModel):
 
       The IP address used in the lookup.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: network
 
@@ -448,13 +448,13 @@ class ASN(SimpleModel):
       The organization associated with the registered autonomous system number
       for the IP address.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: ip_address
 
       The IP address used in the lookup.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: network
 
@@ -495,13 +495,13 @@ class ConnectionType(SimpleModel):
 
       Additional values may be added in the future.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: ip_address
 
       The IP address used in the lookup.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: network
 
@@ -528,13 +528,13 @@ class Domain(SimpleModel):
 
       The domain associated with the IP address.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: ip_address
 
       The IP address used in the lookup.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: network
 
@@ -569,25 +569,41 @@ class ISP(ASN):
       The organization associated with the registered autonomous system number
       for the IP address.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: isp
 
       The name of the ISP associated with the IP address.
 
-      :type: unicode
+      :type: str
+
+    .. attribute: mobile_country_code
+
+      The `mobile country code (MCC)
+      <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
+      IP address and ISP.
+
+      :type: str
+
+    .. attribute: mobile_network_code
+
+      The `mobile network code (MNC)
+      <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
+      IP address and ISP.
+
+      :type: str
 
     .. attribute:: organization
 
       The name of the organization associated with the IP address.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: ip_address
 
       The IP address used in the lookup.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: network
 
@@ -599,10 +615,14 @@ class ISP(ASN):
     """
 
     isp: Optional[str]
+    mobile_country_code: Optional[str]
+    mobile_network_code: Optional[str]
     organization: Optional[str]
 
     # pylint:disable=too-many-arguments
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
         super().__init__(raw)
         self.isp = cast(Optional[str], raw.get("isp"))
+        self.mobile_country_code = cast(Optional[str], raw.get("mobile_country_code"))
+        self.mobile_network_code = cast(Optional[str], raw.get("mobile_network_code"))
         self.organization = cast(Optional[str], raw.get("organization"))

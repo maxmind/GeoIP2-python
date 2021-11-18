@@ -76,7 +76,7 @@ class City(PlaceRecord):
       The name of the city based on the locales list passed to the
       constructor.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: names
 
@@ -117,7 +117,7 @@ class Continent(PlaceRecord):
       A two character continent code like "NA" (North America)
       or "OC" (Oceania).
 
-      :type: unicode
+      :type: str
 
     .. attribute:: geoname_id
 
@@ -130,7 +130,7 @@ class Continent(PlaceRecord):
       Returns the name of the continent based on the locales list passed to
       the constructor.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: names
 
@@ -191,14 +191,14 @@ class Country(PlaceRecord):
       <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the
       country.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: name
 
       The name of the country based on the locales list passed to the
       constructor.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: names
 
@@ -266,14 +266,14 @@ class RepresentedCountry(Country):
       The two-character `ISO 3166-1
       <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the country.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: name
 
       The name of the country based on the locales list passed to the
       constructor.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: names
 
@@ -289,7 +289,7 @@ class RepresentedCountry(Country):
       country. Currently we only return ``military`` but this could expand to
       include other types in the future.
 
-      :type: unicode
+      :type: str
 
     """
 
@@ -376,7 +376,7 @@ class Location(Record):
       Zone Database <http://www.iana.org/time-zones>`_, e.g.,
       "America/New_York".
 
-      :type: unicode
+      :type: str
 
     """
 
@@ -443,7 +443,7 @@ class Postal(Record):
       codes are not available for all countries. In some countries, this will
       only contain part of the postal code.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: confidence
 
@@ -496,14 +496,14 @@ class Subdivision(PlaceRecord):
       contain the subdivision portion of the `ISO 3166-2 code
       <http://en.wikipedia.org/wiki/ISO_3166-2>`_.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: name
 
       The name of the subdivision based on the locales list passed to the
       constructor.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: names
 
@@ -598,7 +598,7 @@ class Traits(Record):
       the IP address. This attribute is only available from the City and
       Insights web service end points and the GeoIP2 Enterprise database.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: connection_type
 
@@ -613,7 +613,7 @@ class Traits(Record):
 
       This attribute is only available in the GeoIP2 Enterprise database.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: domain
 
@@ -623,7 +623,7 @@ class Traits(Record):
       from the City and Insights web service end points and the GeoIP2
       Enterprise database.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: ip_address
 
@@ -633,7 +633,7 @@ class Traits(Record):
       running on. If the system is behind a NAT, this may differ from the IP
       address locally assigned to it.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: is_anonymous
 
@@ -713,7 +713,7 @@ class Traits(Record):
 
     .. attribute:: is_tor_exit_node
 
-      This is true if the IP address is a Tor exit node.  This attribute is
+      This is true if the IP address is a Tor exit node. This attribute is
       only available from GeoIP2 Precision Insights.
 
       :type: bool
@@ -724,7 +724,25 @@ class Traits(Record):
       only available from the City and Insights web service end points and the
       GeoIP2 Enterprise database.
 
-      :type: unicode
+      :type: str
+
+    .. attribute: mobile_country_code
+
+      The `mobile country code (MCC)
+      <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
+      IP address and ISP. This attribute is available from the City and
+      Insights web services and the GeoIP2 Enterprise database.
+
+      :type: str
+
+    .. attribute: mobile_network_code
+
+      The `mobile network code (MNC)
+      <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
+      IP address and ISP. This attribute is available from the City and
+      Insights web services and the GeoIP2 Enterprise database.
+
+      :type: str
 
     .. attribute:: network
 
@@ -740,7 +758,7 @@ class Traits(Record):
       attribute is only available from the City and Insights web service end
       points and the GeoIP2 Enterprise database.
 
-      :type: unicode
+      :type: str
 
     .. attribute:: static_ip_score
 
@@ -789,7 +807,7 @@ class Traits(Record):
       This attribute is only available from the Insights end point and the
       GeoIP2 Enterprise database.
 
-      :type: unicode
+      :type: str
 
     """
 
@@ -808,6 +826,8 @@ class Traits(Record):
     is_tor_exit_node: bool
     isp: Optional[str]
     ip_address: Optional[str]
+    mobile_country_code: Optional[str]
+    mobile_network_code: Optional[str]
     organization: Optional[str]
     static_ip_score: Optional[float]
     user_count: Optional[int]
@@ -838,6 +858,8 @@ class Traits(Record):
         static_ip_score: Optional[float] = None,
         user_count: Optional[int] = None,
         user_type: Optional[str] = None,
+        mobile_country_code: Optional[str] = None,
+        mobile_network_code: Optional[str] = None,
         **_,
     ) -> None:
         self.autonomous_system_number = autonomous_system_number
@@ -854,6 +876,8 @@ class Traits(Record):
         self.is_satellite_provider = is_satellite_provider
         self.is_tor_exit_node = is_tor_exit_node
         self.isp = isp
+        self.mobile_country_code = mobile_country_code
+        self.mobile_network_code = mobile_network_code
         self.organization = organization
         self.static_ip_score = static_ip_score
         self.user_type = user_type
