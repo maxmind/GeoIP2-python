@@ -3,19 +3,19 @@
 WebServices Client API
 ============================
 
-This class provides a client API for all the GeoIP2 Precision web service end
-points. The end points are Country, City, and Insights. Each end point returns
-a different set of data about an IP address, with Country returning the least
+This class provides a client API for all the GeoIP2 web services. The web
+services are Country, City Plus, and Insights. Each service returns a
+different set of data about an IP address, with Country returning the least
 data and Insights the most.
 
-Each web service end point is represented by a different model class, and
-these model classes in turn contain multiple record classes. The record
-classes have attributes which contain data about the IP address.
+Each service is represented by a different model class, and these model
+classes in turn contain multiple record classes. The record classes have
+attributes which contain data about the IP address.
 
-If the web service does not return a particular piece of data for an IP
-address, the associated attribute is not populated.
+If the service does not return a particular piece of data for an IP address,
+the associated attribute is not populated.
 
-The web service may not return any information for an entire record, in which
+The service may not return any information for an entire record, in which
 case all of the attributes for that record class will be empty.
 
 SSL
@@ -219,8 +219,8 @@ class AsyncClient(BaseClient):
     The following keyword arguments are also accepted:
 
     :param host: The hostname to make a request against. This defaults to
-      "geoip.maxmind.com". To use the GeoLite2 web service instead of GeoIP2
-      Precision, set this to "geolite.info".
+      "geoip.maxmind.com". To use the GeoLite2 web service instead of the
+      GeoIP2 web service, set this to "geolite.info".
     :param locales: This is list of locale codes. This argument will be
       passed on to record classes to use when their name properties are
       called. The default value is ['en'].
@@ -276,7 +276,7 @@ class AsyncClient(BaseClient):
         self._proxy = proxy
 
     async def city(self, ip_address: IPAddress = "me") -> City:
-        """Call City endpoint with the specified IP.
+        """Call City Plus endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no
            address is provided, the address that the web service is
@@ -307,7 +307,7 @@ class AsyncClient(BaseClient):
     async def insights(self, ip_address: IPAddress = "me") -> Insights:
         """Call the Insights endpoint with the specified IP.
 
-        Insights is only supported by GeoIP2 Precision. The GeoLite2 web
+        Insights is only supported by the GeoIP2 web service. The GeoLite2 web
         service does not support it.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
@@ -378,8 +378,8 @@ class Client(BaseClient):
     The following keyword arguments are also accepted:
 
     :param host: The hostname to make a request against. This defaults to
-      "geoip.maxmind.com". To use the GeoLite2 web service instead of GeoIP2
-      Precision, set this to "geolite.info".
+      "geoip.maxmind.com". To use the GeoLite2 web service instead of the
+      GeoIP2 web service, set this to "geolite.info".
     :param locales: This is list of locale codes. This argument will be
       passed on to record classes to use when their name properties are
       called. The default value is ['en'].
@@ -437,7 +437,7 @@ class Client(BaseClient):
             self._proxies = {"https": proxy}
 
     def city(self, ip_address: IPAddress = "me") -> City:
-        """Call City endpoint with the specified IP.
+        """Call City Plus endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no
            address is provided, the address that the web service is
@@ -465,7 +465,7 @@ class Client(BaseClient):
     def insights(self, ip_address: IPAddress = "me") -> Insights:
         """Call the Insights endpoint with the specified IP.
 
-        Insights is only supported by GeoIP2 Precision. The GeoLite2 web
+        Insights is only supported by the GeoIP2 web service. The GeoLite2 web
         service does not support it.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address

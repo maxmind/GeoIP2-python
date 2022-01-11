@@ -46,7 +46,7 @@ Web Service Usage
 To use this API, you first construct either a ``geoip2.webservice.Client`` or
 ``geoip2.webservice.AsyncClient``, passing your MaxMind ``account_id`` and
 ``license_key`` to the constructor. To use the GeoLite2 web service instead of
-GeoIP2 Precision, set the optional ``host`` keyword argument to
+the GeoIP2 web service, set the optional ``host`` keyword argument to
 ``geolite.info``.
 
 After doing this, you may call the method corresponding to request type
@@ -68,7 +68,7 @@ Sync Web Service Example
     >>> # This creates a Client object that can be reused across requests.
     >>> # Replace "42" with your account ID and "license_key" with your license
     >>> # key. Set the "host" keyword argument to "geolite.info" to use the
-    >>> # GeoLite2 web service instead of GeoIP2 Precision.
+    >>> # GeoLite2 web service instead of the GeoIP2 web service.
     >>> with geoip2.webservice.Client(42, 'license_key') as client:
     >>>
     >>>     # Replace "city" with the method corresponding to the web service
@@ -118,7 +118,7 @@ Async Web Service Example
     >>>     #
     >>>     # Replace "42" with your account ID and "license_key" with your license
     >>>     # key. Set the "host" keyword argument to "geolite.info" to use the
-    >>>     # GeoLite2 web service instead of GeoIP2 Precision.
+    >>>     # GeoLite2 web service instead of the GeoIP2 web service.
     >>>     async with geoip2.webservice.AsyncClient(42, 'license_key') as client:
     >>>
     >>>         # Replace "city" with the method corresponding to the web service
@@ -158,7 +158,7 @@ Web Service Client Exceptions
 -----------------------------
 
 For details on the possible errors returned by the web service itself, see
-https://dev.maxmind.com/geoip/docs/web-services?lang=en for the GeoIP2 Precision web
+https://dev.maxmind.com/geoip/docs/web-services?lang=en for the GeoIP2 web
 service docs.
 
 If the web service returns an explicit error document, this is thrown as a

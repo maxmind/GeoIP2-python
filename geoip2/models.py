@@ -20,7 +20,7 @@ from geoip2.mixins import SimpleEquality
 
 
 class Country(SimpleEquality):
-    """Model for the GeoIP2 Precision: Country and the GeoIP2 Country database.
+    """Model for the Country web service and Country database.
 
     This class provides the following attributes:
 
@@ -105,7 +105,7 @@ class Country(SimpleEquality):
 
 
 class City(Country):
-    """Model for the GeoIP2 Precision: City and the GeoIP2 City database.
+    """Model for the City Plus web service and the City database.
 
     .. attribute:: city
 
@@ -193,7 +193,7 @@ class City(Country):
 
 
 class Insights(City):
-    """Model for the GeoIP2 Precision: Insights web service endpoint.
+    """Model for the GeoIP2 Insights web service.
 
     .. attribute:: city
 

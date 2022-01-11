@@ -61,7 +61,7 @@ class City(PlaceRecord):
 
       A value from 0-100 indicating MaxMind's
       confidence that the city is correct. This attribute is only available
-      from the Insights end point and the GeoIP2 Enterprise database.
+      from the Insights end point and the Enterprise database.
 
       :type: int
 
@@ -169,7 +169,7 @@ class Country(PlaceRecord):
 
       A value from 0-100 indicating MaxMind's confidence that
       the country is correct. This attribute is only available from the
-      Insights end point and the GeoIP2 Enterprise database.
+      Insights end point and the Enterprise database.
 
       :type: int
 
@@ -245,7 +245,7 @@ class RepresentedCountry(Country):
 
       A value from 0-100 indicating MaxMind's confidence that
       the country is correct. This attribute is only available from the
-      Insights end point and the GeoIP2 Enterprise database.
+      Insights end point and the Enterprise database.
 
       :type: int
 
@@ -449,8 +449,7 @@ class Postal(Record):
 
       A value from 0-100 indicating
       MaxMind's confidence that the postal code is correct. This attribute is
-      only available from the Insights end point and the GeoIP2 Enterprise
-      database.
+      only available from the Insights end point and the Enterprise database.
 
       :type: int
 
@@ -479,8 +478,7 @@ class Subdivision(PlaceRecord):
 
       This is a value from 0-100 indicating MaxMind's
       confidence that the subdivision is correct. This attribute is only
-      available from the Insights end point and the GeoIP2 Enterprise
-      database.
+      available from the Insights end point and the Enterprise database.
 
       :type: int
 
@@ -586,8 +584,7 @@ class Traits(Record):
       The `autonomous system
       number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_
       associated with the IP address. This attribute is only available from
-      the City and Insights web service end points and the GeoIP2 Enterprise
-      database.
+      the City Plus and Insights web services and the Enterprise database.
 
       :type: int
 
@@ -595,8 +592,8 @@ class Traits(Record):
 
       The organization associated with the registered `autonomous system
       number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for
-      the IP address. This attribute is only available from the City and
-      Insights web service end points and the GeoIP2 Enterprise database.
+      the IP address. This attribute is only available from the City Plus and
+      Insights web service end points and the Enterprise database.
 
       :type: str
 
@@ -611,7 +608,7 @@ class Traits(Record):
 
       Additional values may be added in the future.
 
-      This attribute is only available in the GeoIP2 Enterprise database.
+      This attribute is only available in the Enterprise database.
 
       :type: str
 
@@ -620,7 +617,7 @@ class Traits(Record):
       The second level domain associated with the
       IP address. This will be something like "example.com" or
       "example.co.uk", not "foo.example.com". This attribute is only available
-      from the City and Insights web service end points and the GeoIP2
+      from the City Plus and Insights web service end points and the
       Enterprise database.
 
       :type: str
@@ -638,7 +635,7 @@ class Traits(Record):
     .. attribute:: is_anonymous
 
       This is true if the IP address belongs to any sort of anonymous network.
-      This attribute is only available from GeoIP2 Precision Insights.
+      This attribute is only available from Insights.
 
       :type: bool
 
@@ -662,7 +659,7 @@ class Traits(Record):
       them, we will likely only flag their IP ranges using the
       ``is_hosting_provider`` attribute.
 
-      This attribute is only available from GeoIP2 Precision Insights.
+      This attribute is only available from Insights.
 
       :type: bool
 
@@ -670,7 +667,7 @@ class Traits(Record):
 
       This is true if the IP address belongs to a hosting or VPN provider
       (see description of ``is_anonymous_vpn`` attribute).
-      This attribute is only available from GeoIP2 Precision Insights.
+      This attribute is only available from Insights.
 
       :type: bool
 
@@ -678,14 +675,14 @@ class Traits(Record):
 
       This attribute is true if MaxMind believes this IP address to be a
       legitimate proxy, such as an internal VPN used by a corporation. This
-      attribute is only available in the GeoIP2 Enterprise database.
+      attribute is only available in the Enterprise database.
 
       :type: bool
 
     .. attribute:: is_public_proxy
 
       This is true if the IP address belongs to a public proxy. This attribute
-      is only available from GeoIP2 Precision Insights.
+      is only available from Insights.
 
       :type: bool
 
@@ -693,7 +690,7 @@ class Traits(Record):
 
       This is true if the IP address is on a suspected anonymizing network
       and belongs to a residential ISP. This attribute is only available from
-      GeoIP2 Precision Insights.
+      Insights.
 
       :type: bool
 
@@ -714,15 +711,15 @@ class Traits(Record):
     .. attribute:: is_tor_exit_node
 
       This is true if the IP address is a Tor exit node. This attribute is
-      only available from GeoIP2 Precision Insights.
+      only available from Insights.
 
       :type: bool
 
     .. attribute:: isp
 
       The name of the ISP associated with the IP address. This attribute is
-      only available from the City and Insights web service end points and the
-      GeoIP2 Enterprise database.
+      only available from the City Plus and Insights web services and the
+      Enterprise database.
 
       :type: str
 
@@ -730,8 +727,8 @@ class Traits(Record):
 
       The `mobile country code (MCC)
       <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
-      IP address and ISP. This attribute is available from the City and
-      Insights web services and the GeoIP2 Enterprise database.
+      IP address and ISP. This attribute is available from the City Plus and
+      Insights web services and the Enterprise database.
 
       :type: str
 
@@ -739,8 +736,8 @@ class Traits(Record):
 
       The `mobile network code (MNC)
       <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
-      IP address and ISP. This attribute is available from the City and
-      Insights web services and the GeoIP2 Enterprise database.
+      IP address and ISP. This attribute is available from the City Plus and
+      Insights web services and the Enterprise database.
 
       :type: str
 
@@ -755,8 +752,8 @@ class Traits(Record):
     .. attribute:: organization
 
       The name of the organization associated with the IP address. This
-      attribute is only available from the City and Insights web service end
-      points and the GeoIP2 Enterprise database.
+      attribute is only available from the City Plus and Insights web services
+      and the Enterprise database.
 
       :type: str
 
@@ -769,8 +766,8 @@ class Traits(Record):
       thirty.
 
       This indicator can be useful for deciding whether an IP address represents
-      the same user over time. This attribute is only available from GeoIP2
-      Precision Insights.
+      the same user over time. This attribute is only available from
+      Insights.
 
       :type: float
 
@@ -778,8 +775,8 @@ class Traits(Record):
 
       The estimated number of users sharing the IP/network during the past 24
       hours. For IPv4, the count is for the individual IP. For IPv6, the count
-      is for the /64 network. This attribute is only available from GeoIP2
-      Precision Insights.
+      is for the /64 network. This attribute is only available from
+      Insights.
 
       :type: int
 
@@ -805,7 +802,7 @@ class Traits(Record):
       * traveler
 
       This attribute is only available from the Insights end point and the
-      GeoIP2 Enterprise database.
+      Enterprise database.
 
       :type: str
 
