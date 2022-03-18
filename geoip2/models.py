@@ -325,11 +325,13 @@ class SimpleModel(SimpleEquality, metaclass=ABCMeta):
 
     raw: Dict[str, Union[bool, str, int]]
     ip_address: str
+    _network: Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]
+    _prefix_len: int
 
     def __init__(self, raw: Dict[str, Union[bool, str, int]]) -> None:
         self.raw = raw
         self._network = None
-        self._prefix_len = raw.get("prefix_len")
+        self._prefix_len = cast(int, raw.get("prefix_len"))
         self.ip_address = cast(str, raw.get("ip_address"))
 
     def __repr__(self) -> str:
@@ -340,7 +342,7 @@ class SimpleModel(SimpleEquality, metaclass=ABCMeta):
         """The network for the record"""
         # This code is duplicated for performance reasons
         network = self._network
-        if isinstance(network, (ipaddress.IPv4Network, ipaddress.IPv6Network)):
+        if network is not None:
             return network
 
         ip_address = self.ip_address
