@@ -45,4 +45,7 @@ setup(
         "Topic :: Internet :: Proxy Servers",
         "Topic :: Internet",
     ],
+    project_urls={
+        "Source": "https://github.com/maxmind/GeoIP2-python",
+    },
 )
