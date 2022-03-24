@@ -830,7 +830,7 @@ class Traits(Record):
     static_ip_score: Optional[float]
     user_count: Optional[int]
     user_type: Optional[str]
-    _network: Optional[str]
+    _network: Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]
     _prefix_len: Optional[int]
 
     def __init__(
@@ -881,7 +881,13 @@ class Traits(Record):
         self.user_type = user_type
         self.user_count = user_count
         self.ip_address = ip_address
-        self._network = network
+        if network is None:
+            self._network = None
+        else:
+            self._network = ipaddress.ip_network(network, False)
+        # We don't construct the network using prefix_len here as that is
+        # for database lookups. Customers using the database tend to be
+        # much more performance sensitive than web service users.
         self._prefix_len = prefix_len
 
     @property
@@ -889,15 +895,13 @@ class Traits(Record):
         """The network for the record"""
         # This code is duplicated for performance reasons
         network = self._network
-        if isinstance(network, (ipaddress.IPv4Network, ipaddress.IPv6Network)):
+        if network is not None:
             return network
 
-        if network is None:
-            ip_address = self.ip_address
-            prefix_len = self._prefix_len
-            if ip_address is None or prefix_len is None:
-                return None
-            network = f"{ip_address}/{prefix_len}"
-        network = ipaddress.ip_network(network, False)
+        ip_address = self.ip_address
+        prefix_len = self._prefix_len
+        if ip_address is None or prefix_len is None:
+            return None
+        network = ipaddress.ip_network(f"{ip_address}/{prefix_len}", False)
         self._network = network
-        return network  # type: ignore
+        return network
