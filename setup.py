@@ -46,6 +46,8 @@ setup(
         "Topic :: Internet",
     ],
     project_urls={
-        "Source": "https://github.com/maxmind/GeoIP2-python",
+        "Documentation": "https://geoip2.readthedocs.org/",
+        "Source Code": "https://github.com/maxmind/GeoIP2-python",
+        "Issue Tracker": "https://github.com/maxmind/GeoIP2-python/issues",
     },
 )
