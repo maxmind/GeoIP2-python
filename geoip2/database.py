@@ -239,6 +239,8 @@ class Reader:
         if record is None:
             raise geoip2.errors.AddressNotFoundError(
                 f"The address {ip_address} is not in the database.",
+                str(ip_address),
+                prefix_len,
             )
         return record, prefix_len
 

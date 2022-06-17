@@ -4,7 +4,9 @@ Errors
 
 """
 
-from typing import Optional
+import ipaddress
+
+from typing import Optional, Union
 
 
 class GeoIP2Error(RuntimeError):
@@ -17,7 +19,39 @@ class GeoIP2Error(RuntimeError):
 
 
 class AddressNotFoundError(GeoIP2Error):
-    """The address you were looking up was not found."""
+    """The address you were looking up was not found.
+
+    .. attribute:: ip_address
+
+      The IP address used in the lookup.
+
+      :type: str
+
+    .. attribute:: network
+
+      The network associated with the error. In particular, this is the
+      largest network where no address would be found.
+
+    """
+
+    def __init__(
+        self,
+        message: str,
+        ip_address: Optional[str] = None,
+        prefix_len: Optional[int] = None,
+    ) -> None:
+        super().__init__(message)
+        self.ip_address = ip_address
+        self.prefix_len = prefix_len
+
+    @property
+    def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
+        """The network for the error"""
+
+        if self.ip_address is None or self.prefix_len is None:
+            return None
+        network = ipaddress.ip_network(f"{self.ip_address}/{self.prefix_len}", False)
+        return network
 
 
 class AuthenticationError(GeoIP2Error):
