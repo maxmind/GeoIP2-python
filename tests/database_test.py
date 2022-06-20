@@ -10,6 +10,7 @@ import unittest
 sys.path.append("..")
 
 import geoip2.database
+import geoip2.errors
 import maxminddb
 
 try:
@@ -37,6 +38,18 @@ class BaseTestReader(unittest.TestCase):
         ):
             reader.city("10.10.10.10")
         reader.close()
+
+    def test_unknown_address_network(self) -> None:
+        reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
+        try:
+            reader.city("10.10.10.10")
+            self.fail("Expected AddressNotFoundError")
+        except geoip2.errors.AddressNotFoundError as e:
+            self.assertEqual(e.network, ipaddress.ip_network("10.0.0.0/8"))
+        except Exception as e:
+            self.fail(f"Expected AddressNotFoundError, got {type(e)}: {str(e)}")
+        finally:
+            reader.close()
 
     def test_wrong_database(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
