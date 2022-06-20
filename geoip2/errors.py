@@ -32,6 +32,8 @@ class AddressNotFoundError(GeoIP2Error):
       The network associated with the error. In particular, this is the
       largest network where no address would be found.
 
+      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
+
     """
 
     def __init__(
@@ -42,16 +44,15 @@ class AddressNotFoundError(GeoIP2Error):
     ) -> None:
         super().__init__(message)
         self.ip_address = ip_address
-        self.prefix_len = prefix_len
+        self._prefix_len = prefix_len
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
         """The network for the error"""
 
-        if self.ip_address is None or self.prefix_len is None:
+        if self.ip_address is None or self._prefix_len is None:
             return None
-        network = ipaddress.ip_network(f"{self.ip_address}/{self.prefix_len}", False)
-        return network
+        return ipaddress.ip_network(f"{self.ip_address}/{self._prefix_len}", False)
 
 
 class AuthenticationError(GeoIP2Error):
