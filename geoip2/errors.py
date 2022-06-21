@@ -36,6 +36,9 @@ class AddressNotFoundError(GeoIP2Error):
 
     """
 
+    ip_address: Optional[str]
+    _prefix_len: Optional[int]
+
     def __init__(
         self,
         message: str,
