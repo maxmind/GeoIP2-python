@@ -400,6 +400,31 @@ or there is a bug in the reader, a ``maxminddb.InvalidDatabaseError`` will be
 raised with a description of the problem. If an IP address is not in the
 database, a ``AddressNotFoundError`` will be raised.
 
+``AddressNotFoundError`` references the largest subnet where no address would be
+found. This can be used to efficiently enumerate entire subnets:
+
+.. code-block:: python
+
+    import geoip2.database
+    import geoip2.errors
+    import ipaddress
+
+    # This creates a Reader object. You should use the same object
+    # across multiple requests as creation of it is expensive.
+    with geoip2.database.Reader('/path/to/GeoLite2-ASN.mmdb') as reader:
+        network = ipaddress.ip_network("192.128.0.0/15")
+
+        ip_address = network[0]
+        while ip_address in network:
+            try:
+                response = reader.asn(ip_address)
+                response_network = response.network
+            except geoip2.errors.AddressNotFoundError as e:
+                response = None
+                response_network = e.network
+            print(f"{response_network}: {response!r}")
+            ip_address = response_network[-1] + 1  # move to next subnet
+
 Values to use for Database or Dictionary Keys
 ---------------------------------------------
 
