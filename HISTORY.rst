@@ -4,6 +4,15 @@
 History
 -------
 
+4.6.0 (2022-06-21)
+++++++++++++++++++
+
+* The ``AddressNotFoundError`` class now has an ``ip_address`` attribute
+  with the lookup address and ``network`` property for the empty network
+  in the database containing the IP address. These are only available
+  when using a database, not the web service. Pull request by illes.
+  GitHub #130.
+
 4.5.0 (2021-11-18)
 ++++++++++++++++++
 

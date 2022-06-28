@@ -23,18 +23,23 @@ class AddressNotFoundError(GeoIP2Error):
 
     .. attribute:: ip_address
 
-      The IP address used in the lookup.
+      The IP address used in the lookup. This is only available for database
+      lookups.
 
       :type: str
 
     .. attribute:: network
 
       The network associated with the error. In particular, this is the
-      largest network where no address would be found.
+      largest network where no address would be found. This is only
+      available for database lookups.
 
       :type: ipaddress.IPv4Network or ipaddress.IPv6Network
 
     """
+
+    ip_address: Optional[str]
+    _prefix_len: Optional[int]
 
     def __init__(
         self,
