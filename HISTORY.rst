@@ -4,6 +4,12 @@
 History
 -------
 
+4.7.0
+++++++++++++++++++
+
+* IMPORTANT: Python 3.7 or greater is required. If you are using an older
+  version, please use an earlier release.
+
 4.6.0 (2022-06-21)
 ++++++++++++++++++
 
