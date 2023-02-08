@@ -385,7 +385,6 @@ class TestModels(unittest.TestCase):
 
 
 class TestNames(unittest.TestCase):
-
     raw: Dict = {
         "continent": {
             "code": "NA",

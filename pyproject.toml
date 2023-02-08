@@ -1,0 +1,6 @@
+# We should probably migrate most of setup.cfg here
+
+[tool.black]
+# src is showing up in our GitHub linting builds. It seems to
+# contain deps.
+extend-exclude = '^/src/'

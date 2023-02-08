@@ -209,7 +209,6 @@ class TestBaseClient(unittest.TestCase):
         with self.assertRaisesRegex(
             HTTPError, r"Received a very surprising HTTP status \(300\) for"
         ):
-
             self.run_client(self.client.country("1.2.3.11"))
 
     @httprettified
