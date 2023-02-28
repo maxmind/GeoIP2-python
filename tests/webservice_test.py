@@ -298,16 +298,18 @@ class TestBaseClient(unittest.TestCase):
         self.assertEqual(
             request.path, "/geoip/v2.1/country/1.2.3.4", "correct URI is used"
         )
-        self.assertEqual(
-            request.headers["Accept"], "application/json", "correct Accept header"
-        )
+
+        # This is to prevent breakage if header normalization in Mocket
+        # changes again in the future.
+        headers = {k.lower(): v for k, v in request.headers.items()}
+        self.assertEqual(headers["accept"], "application/json", "correct Accept header")
         self.assertRegex(
-            request.headers["User-Agent"],
+            headers["user-agent"],
             "^GeoIP2-Python-Client/",
             "Correct User-Agent",
         )
         self.assertEqual(
-            request.headers["Authorization"],
+            headers["authorization"],
             "Basic NDI6YWJjZGVmMTIzNDU2",
             "correct auth",
         )
