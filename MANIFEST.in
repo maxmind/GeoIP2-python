@@ -1,2 +1,2 @@
-include HISTORY.rst README.rst LICENSE geoip2/py.typed requirements.txt tests/*.py tests/data/test-data/*.mmdb
+include HISTORY.rst README.rst LICENSE geoip2/py.typed tests/*.py tests/data/test-data/*.mmdb
 graft docs/html
