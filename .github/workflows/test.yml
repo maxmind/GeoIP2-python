@@ -14,7 +14,7 @@ jobs:
         # We don't test on Windows currently as it appears mocket may not
         # work there.
         platform: [ubuntu-latest, macos-latest]
-        python-version: [3.7, 3.8, 3.9, "3.10"]
+        python-version: [3.7, 3.8, 3.9, "3.10", 3.11]
 
     name: Python ${{ matrix.python-version }} on ${{ matrix.platform }}
     runs-on: ${{ matrix.platform }}
