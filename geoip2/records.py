@@ -605,6 +605,7 @@ class Traits(Record):
       - Cable/DSL
       - Corporate
       - Cellular
+      - Satellite
 
       Additional values may be added in the future.
 
