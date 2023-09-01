@@ -47,7 +47,9 @@ To use this API, you first construct either a ``geoip2.webservice.Client`` or
 ``geoip2.webservice.AsyncClient``, passing your MaxMind ``account_id`` and
 ``license_key`` to the constructor. To use the GeoLite2 web service instead of
 the GeoIP2 web service, set the optional ``host`` keyword argument to
-``geolite.info``.
+``geolite.info``. To use the Sandbox GeoIP2 web service instead of the
+production GeoIP2 web service, set the optional ``host`` keyword argument to
+``sandbox.maxmind.com``.
 
 After doing this, you may call the method corresponding to request type
 (e.g., ``city`` or ``country``), passing it the IP address you want to look up.
@@ -68,7 +70,9 @@ Sync Web Service Example
     >>> # This creates a Client object that can be reused across requests.
     >>> # Replace "42" with your account ID and "license_key" with your license
     >>> # key. Set the "host" keyword argument to "geolite.info" to use the
-    >>> # GeoLite2 web service instead of the GeoIP2 web service.
+    >>> # GeoLite2 web service instead of the GeoIP2 web service. Set the
+    >>> # "host" keyword argument to "sandbox.maxmind.com" to use the Sandbox
+    >>> # GeoIP2 web service instead of the production GeoIP2 web service.
     >>> with geoip2.webservice.Client(42, 'license_key') as client:
     >>>
     >>>     # Replace "city" with the method corresponding to the web service
@@ -118,7 +122,9 @@ Async Web Service Example
     >>>     #
     >>>     # Replace "42" with your account ID and "license_key" with your license
     >>>     # key. Set the "host" keyword argument to "geolite.info" to use the
-    >>>     # GeoLite2 web service instead of the GeoIP2 web service.
+    >>>     # GeoLite2 web service instead of the GeoIP2 web service. Set the
+    >>>     # "host" keyword argument to "sandbox.maxmind.com" to use the Sandbox
+    >>>     # GeoIP2 web service instead of the production GeoIP2 web service.
     >>>     async with geoip2.webservice.AsyncClient(42, 'license_key') as client:
     >>>
     >>>         # Replace "city" with the method corresponding to the web service
