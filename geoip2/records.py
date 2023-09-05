@@ -188,7 +188,7 @@ class Country(PlaceRecord):
     .. attribute:: iso_code
 
       The two-character `ISO 3166-1
-      <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the
+      <https://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the
       country.
 
       :type: str
@@ -264,7 +264,7 @@ class RepresentedCountry(Country):
     .. attribute:: iso_code
 
       The two-character `ISO 3166-1
-      <http://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the country.
+      <https://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the country.
 
       :type: str
 
@@ -373,7 +373,7 @@ class Location(Record):
     .. attribute:: time_zone
 
       The time zone associated with location, as specified by the `IANA Time
-      Zone Database <http://www.iana.org/time-zones>`_, e.g.,
+      Zone Database <https://www.iana.org/time-zones>`_, e.g.,
       "America/New_York".
 
       :type: str
@@ -492,7 +492,7 @@ class Subdivision(PlaceRecord):
 
       This is a string up to three characters long
       contain the subdivision portion of the `ISO 3166-2 code
-      <http://en.wikipedia.org/wiki/ISO_3166-2>`_.
+      <https://en.wikipedia.org/wiki/ISO_3166-2>`_.
 
       :type: str
 
@@ -582,7 +582,7 @@ class Traits(Record):
     .. attribute:: autonomous_system_number
 
       The `autonomous system
-      number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_
+      number <https://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_
       associated with the IP address. This attribute is only available from
       the City Plus and Insights web services and the Enterprise database.
 
@@ -591,7 +591,7 @@ class Traits(Record):
     .. attribute:: autonomous_system_organization
 
       The organization associated with the registered `autonomous system
-      number <http://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for
+      number <https://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for
       the IP address. This attribute is only available from the City Plus and
       Insights web service end points and the Enterprise database.
 

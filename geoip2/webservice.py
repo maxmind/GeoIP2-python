@@ -220,7 +220,10 @@ class AsyncClient(BaseClient):
 
     :param host: The hostname to make a request against. This defaults to
       "geoip.maxmind.com". To use the GeoLite2 web service instead of the
-      GeoIP2 web service, set this to "geolite.info".
+      GeoIP2 web service, set this to "geolite.info". To use the Sandbox
+      GeoIP2 web service instead of the production GeoIP2 web service, set
+      this to "sandbox.maxmind.com". The sandbox allows you to experiment
+      with the API without affecting your production data.
     :param locales: This is list of locale codes. This argument will be
       passed on to record classes to use when their name properties are
       called. The default value is ['en'].
@@ -379,7 +382,10 @@ class Client(BaseClient):
 
     :param host: The hostname to make a request against. This defaults to
       "geoip.maxmind.com". To use the GeoLite2 web service instead of the
-      GeoIP2 web service, set this to "geolite.info".
+      GeoIP2 web service, set this to "geolite.info". To use the Sandbox
+      GeoIP2 web service instead of the production GeoIP2 web service, set
+      this to "sandbox.maxmind.com". The sandbox allows you to experiment
+      with the API without affecting your production data.
     :param locales: This is list of locale codes. This argument will be
       passed on to record classes to use when their name properties are
       called. The default value is ['en'].

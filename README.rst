@@ -7,7 +7,7 @@ Description
 
 This package provides an API for the GeoIP2 and GeoLite2 `web services
 <https://dev.maxmind.com/geoip/docs/web-services?lang=en>`_ and `databases
-<https://dev.maxmind.com/geoip/docs/databases?lang=en>`_. 
+<https://dev.maxmind.com/geoip/docs/databases?lang=en>`_.
 
 Installation
 ------------
@@ -47,7 +47,9 @@ To use this API, you first construct either a ``geoip2.webservice.Client`` or
 ``geoip2.webservice.AsyncClient``, passing your MaxMind ``account_id`` and
 ``license_key`` to the constructor. To use the GeoLite2 web service instead of
 the GeoIP2 web service, set the optional ``host`` keyword argument to
-``geolite.info``.
+``geolite.info``. To use the Sandbox GeoIP2 web service instead of the
+production GeoIP2 web service, set the optional ``host`` keyword argument to
+``sandbox.maxmind.com``.
 
 After doing this, you may call the method corresponding to request type
 (e.g., ``city`` or ``country``), passing it the IP address you want to look up.
@@ -68,7 +70,9 @@ Sync Web Service Example
     >>> # This creates a Client object that can be reused across requests.
     >>> # Replace "42" with your account ID and "license_key" with your license
     >>> # key. Set the "host" keyword argument to "geolite.info" to use the
-    >>> # GeoLite2 web service instead of the GeoIP2 web service.
+    >>> # GeoLite2 web service instead of the GeoIP2 web service. Set the
+    >>> # "host" keyword argument to "sandbox.maxmind.com" to use the Sandbox
+    >>> # GeoIP2 web service instead of the production GeoIP2 web service.
     >>> with geoip2.webservice.Client(42, 'license_key') as client:
     >>>
     >>>     # Replace "city" with the method corresponding to the web service
@@ -118,7 +122,9 @@ Async Web Service Example
     >>>     #
     >>>     # Replace "42" with your account ID and "license_key" with your license
     >>>     # key. Set the "host" keyword argument to "geolite.info" to use the
-    >>>     # GeoLite2 web service instead of the GeoIP2 web service.
+    >>>     # GeoLite2 web service instead of the GeoIP2 web service. Set the
+    >>>     # "host" keyword argument to "sandbox.maxmind.com" to use the Sandbox
+    >>>     # GeoIP2 web service instead of the production GeoIP2 web service.
     >>>     async with geoip2.webservice.AsyncClient(42, 'license_key') as client:
     >>>
     >>>         # Replace "city" with the method corresponding to the web service
@@ -456,7 +462,7 @@ attribute in the ``geoip2.records.Traits`` record.
 Integration with GeoNames
 -------------------------
 
-`GeoNames <http://www.geonames.org/>`_ offers web services and downloadable
+`GeoNames <https://www.geonames.org/>`_ offers web services and downloadable
 databases with data on geographical features around the world, including
 populated places. They offer both free and paid premium data. Each feature is
 uniquely identified by a ``geoname_id``, which is an integer.
@@ -473,10 +479,10 @@ Reporting Data Problems
 -----------------------
 
 If the problem you find is that an IP address is incorrectly mapped, please
-`submit your correction to MaxMind <http://www.maxmind.com/en/correction>`_.
+`submit your correction to MaxMind <https://www.maxmind.com/en/correction>`_.
 
 If you find some other sort of mistake, like an incorrect spelling, please
-check the `GeoNames site <http://www.geonames.org/>`_ first. Once you've
+check the `GeoNames site <https://www.geonames.org/>`_ first. Once you've
 searched for a place and found it on the GeoNames map view, there are a
 number of links you can use to correct data ("move", "edit", "alternate
 names", etc.). Once the correction is part of the GeoNames data set, it
@@ -484,7 +490,7 @@ will be automatically incorporated into future MaxMind releases.
 
 If you are a paying MaxMind customer and you're not sure where to submit a
 correction, please `contact MaxMind support
-<http://www.maxmind.com/en/support>`_ for help.
+<https://www.maxmind.com/en/support>`_ for help.
 
 Requirements
 ------------
@@ -492,12 +498,12 @@ Requirements
 Python 3.7 or greater is required. Older versions are not supported.
 
 The Requests HTTP library is also required. See
-<http://python-requests.org> for details.
+<https://pypi.org/project/requests/> for details.
 
 Versioning
 ----------
 
-The GeoIP2 Python API uses `Semantic Versioning <http://semver.org/>`_.
+The GeoIP2 Python API uses `Semantic Versioning <https://semver.org/>`_.
 
 Support
 -------
@@ -507,4 +513,4 @@ Please report all issues with this code using the `GitHub issue tracker
 
 If you are having an issue with a MaxMind service that is not specific to the
 client API, please contact `MaxMind support
-<http://www.maxmind.com/en/support>`_ for assistance.
+<https://www.maxmind.com/en/support>`_ for assistance.
