@@ -609,7 +609,8 @@ class Traits(Record):
 
       Additional values may be added in the future.
 
-      This attribute is only available in the Enterprise database.
+      This attribute is only available from the City Plus and Insights web
+      service end points and the Enterprise database.
 
       :type: str
 
