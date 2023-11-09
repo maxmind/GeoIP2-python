@@ -37,6 +37,7 @@ fi
 pip install sphinx wheel
 
 perl -pi -e "s/(?<=__version__ = \").+?(?=\")/$version/gsm" geoip2/__init__.py
+perl -pi -e "s/(?<=^version = \").+?(?=\")/$version/gsm" pyproject.toml
 
 echo $"Test results:"
 python setup.py test
@@ -64,5 +65,5 @@ git push --tags
 
 rm -fr build dist
 python -m sphinx -M html ./docs ./build/sphinx
-python setup.py sdist bdist_wheel
+python -m pipx run build
 twine upload dist/*

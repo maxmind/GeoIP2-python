@@ -1,4 +1,55 @@
-# We should probably migrate most of setup.cfg here
+[build-system]
+requires = ["setuptools", "setuptools-scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geoip2"
+version = "4.7.0"
+description = "MaxMind GeoIP2 API"
+authors = [
+    {name = "Gregory Oschwald", email = "goschwald@maxmind.com"},
+]
+dependencies = [
+    "maxminddb",
+    "aiohttp>=3.6.2,<4.0.0",
+    "maxminddb>=2.3.0,<3.0.0",
+    "requests>=2.24.0,<3.0.0",
+    "setuptools>=60.0.0",
+]
+requires-python = ">=3.7"
+readme = "README.rst"
+license = {text = "Apache License, Version 2.0"}
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet",
+    "Topic :: Internet :: Proxy Servers",
+]
+
+[project.optional-dependencies]
+test = [
+    "mocket>=3.11.1",
+]
+
+[tool.setuptools.package-data]
+geoip2 = ["py.typed"]
+
+[project.urls]
+Homepage = "https://www.maxmind.com/"
+Documentation = "https://geoip2.readthedocs.org/"
+"Source Code" = "https://github.com/maxmind/GeoIP2-python"
+"Issue Tracker" = "https://github.com/maxmind/GeoIP2-python/issues"
 
 [tool.black]
 # src is showing up in our GitHub linting builds. It seems to
