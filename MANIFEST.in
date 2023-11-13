@@ -1,2 +1,3 @@
+exclude .* .github/**/* dev-bin/*
 include HISTORY.rst README.rst LICENSE geoip2/py.typed tests/*.py tests/data/test-data/*.mmdb
 graft docs/html
