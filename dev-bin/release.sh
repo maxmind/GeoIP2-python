@@ -33,9 +33,6 @@ if [ -n "$(git status --porcelain)" ]; then
     exit 1
 fi
 
-# Make sure Sphinx and wheel are installed with the current python
-pip install sphinx wheel
-
 perl -pi -e "s/(?<=__version__ = \").+?(?=\")/$version/gsm" geoip2/__init__.py
 perl -pi -e "s/(?<=^version = \").+?(?=\")/$version/gsm" pyproject.toml
 
@@ -62,8 +59,3 @@ git push
 gh release create --target "$(git branch --show-current)" -t "$version" -n "$notes" "$tag"
 
 git push --tags
-
-rm -fr build dist
-python -m sphinx -M html ./docs ./build/sphinx
-python -m pipx run build
-twine upload dist/*
