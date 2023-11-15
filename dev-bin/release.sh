@@ -21,7 +21,7 @@ version="${BASH_REMATCH[1]}"
 date="${BASH_REMATCH[2]}"
 notes="$(echo "${BASH_REMATCH[3]}" | sed -n -e '/^[0-9]\+\.[0-9]\+\.[0-9]\+/,$!p')"
 
-if [[ "$date" !=  "$(date +"%Y-%m-%d")" ]]; then
+if [[ "$date" != "$(date +"%Y-%m-%d")" ]]; then
     echo "$date is not today!"
     exit 1
 fi
@@ -33,14 +33,11 @@ if [ -n "$(git status --porcelain)" ]; then
     exit 1
 fi
 
-# Make sure Sphinx and wheel are installed with the current python
-pip install sphinx wheel
-
 perl -pi -e "s/(?<=__version__ = \").+?(?=\")/$version/gsm" geoip2/__init__.py
 perl -pi -e "s/(?<=^version = \").+?(?=\")/$version/gsm" pyproject.toml
 
 echo $"Test results:"
-python setup.py test
+tox
 
 echo $'\nDiff:'
 git diff
@@ -62,8 +59,3 @@ git push
 gh release create --target "$(git branch --show-current)" -t "$version" -n "$notes" "$tag"
 
 git push --tags
-
-rm -fr build dist
-python -m sphinx -M html ./docs ./build/sphinx
-python -m pipx run build
-twine upload dist/*
