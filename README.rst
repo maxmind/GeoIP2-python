@@ -495,7 +495,7 @@ correction, please `contact MaxMind support
 Requirements
 ------------
 
-Python 3.7 or greater is required. Older versions are not supported.
+Python 3.8 or greater is required. Older versions are not supported.
 
 The Requests HTTP library is also required. See
 <https://pypi.org/project/requests/> for details.
