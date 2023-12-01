@@ -9,6 +9,11 @@ History
 
 * IMPORTANT: Python 3.8 or greater is required. If you are using an older
   version, please use an earlier release.
+* The ``is_anycast`` attribute was added to ``geoip2.record.Traits``.
+  This returns ``True`` if the IP address belongs to an
+  `anycast network <https://en.wikipedia.org/wiki/Anycast>`_.
+  This is available for the GeoIP2 Country, City Plus, and Insights web services
+  and the GeoIP2 Country, City, and Enterprise databases.
 
 4.7.0 (2023-05-09)
 ++++++++++++++++++

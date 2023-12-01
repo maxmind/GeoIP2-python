@@ -135,6 +135,10 @@ class BaseTestReader(unittest.TestCase):
             record.location.accuracy_radius, 100, "The accuracy_radius is populated"
         )
         self.assertEqual(record.registered_country.is_in_european_union, False)
+        self.assertFalse(record.traits.is_anycast)
+
+        record = reader.city("214.1.1.0")
+        self.assertTrue(record.traits.is_anycast)
 
         reader.close()
 
@@ -171,6 +175,11 @@ class BaseTestReader(unittest.TestCase):
         self.assertEqual(record.traits.network, ipaddress.ip_network("81.2.69.160/27"))
         self.assertEqual(record.country.is_in_european_union, False)
         self.assertEqual(record.registered_country.is_in_european_union, False)
+        self.assertFalse(record.traits.is_anycast)
+
+        record = reader.country("214.1.1.0")
+        self.assertTrue(record.traits.is_anycast)
+
         reader.close()
 
     def test_domain(self) -> None:
@@ -211,11 +220,14 @@ class BaseTestReader(unittest.TestCase):
             self.assertEqual(
                 record.traits.network, ipaddress.ip_network("74.209.16.0/20")
             )
+            self.assertFalse(record.traits.is_anycast)
 
             record = reader.enterprise("149.101.100.0")
-
             self.assertEqual(record.traits.mobile_country_code, "310")
             self.assertEqual(record.traits.mobile_network_code, "004")
+
+            record = reader.enterprise("214.1.1.0")
+            self.assertTrue(record.traits.is_anycast)
 
     def test_isp(self) -> None:
         with geoip2.database.Reader(

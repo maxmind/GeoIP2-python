@@ -75,6 +75,7 @@ class TestModels(unittest.TestCase):
                 "connection_type": "Cable/DSL",
                 "domain": "example.com",
                 "ip_address": "1.2.3.4",
+                "is_anycast": True,
                 "is_anonymous": True,
                 "is_anonymous_proxy": True,
                 "is_anonymous_vpn": True,
@@ -191,6 +192,7 @@ class TestModels(unittest.TestCase):
         self.assertIs(model.registered_country.is_in_european_union, False)
         self.assertIs(model.represented_country.is_in_european_union, True)
 
+        self.assertIs(model.traits.is_anycast, True)
         self.assertIs(model.traits.is_anonymous, True)
         self.assertIs(model.traits.is_anonymous_proxy, True)
         self.assertIs(model.traits.is_anonymous_vpn, True)
@@ -321,6 +323,11 @@ class TestModels(unittest.TestCase):
             model.registered_country.name,
             "Canada",
             "registered_country name is correct",
+        )
+        self.assertEqual(
+            model.traits.is_anycast,
+            False,
+            "traits is_anycast returns False by default",
         )
         self.assertEqual(
             model.traits.is_anonymous_proxy,

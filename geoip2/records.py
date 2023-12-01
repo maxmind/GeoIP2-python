@@ -634,6 +634,14 @@ class Traits(Record):
 
       :type: str
 
+    .. attribute:: is_anycast
+
+      This is true if the IP address is anycast.
+      This attribute is available from the Country, City Plus, Insights
+      web services and the Country, City, Enterprise databases.
+
+      :type: bool
+
     .. attribute:: is_anonymous
 
       This is true if the IP address belongs to any sort of anonymous network.
@@ -815,6 +823,7 @@ class Traits(Record):
     autonomous_system_organization: Optional[str]
     connection_type: Optional[str]
     domain: Optional[str]
+    is_anycast: bool
     is_anonymous: bool
     is_anonymous_proxy: bool
     is_anonymous_vpn: bool
@@ -841,6 +850,7 @@ class Traits(Record):
         autonomous_system_organization: Optional[str] = None,
         connection_type: Optional[str] = None,
         domain: Optional[str] = None,
+        is_anycast: bool = False,
         is_anonymous: bool = False,
         is_anonymous_proxy: bool = False,
         is_anonymous_vpn: bool = False,
@@ -866,6 +876,7 @@ class Traits(Record):
         self.autonomous_system_organization = autonomous_system_organization
         self.connection_type = connection_type
         self.domain = domain
+        self.is_anycast = is_anycast
         self.is_anonymous = is_anonymous
         self.is_anonymous_proxy = is_anonymous_proxy
         self.is_anonymous_vpn = is_anonymous_vpn
