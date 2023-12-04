@@ -154,13 +154,13 @@ class BaseTestReader(unittest.TestCase):
             record, eval(repr(record)), "ConnectionType repr can be eval'd"
         )
 
-        self.assertEqual(record.connection_type, "Cable/DSL")
+        self.assertEqual(record.connection_type, "Cellular")
         self.assertEqual(record.ip_address, ip_address)
         self.assertEqual(record.network, ipaddress.ip_network("1.0.1.0/24"))
 
         self.assertRegex(
             str(record),
-            r"ConnectionType\(\{.*Cable/DSL.*\}\)",
+            r"ConnectionType\(\{.*Cellular.*\}\)",
             "ConnectionType str representation is reasonable",
         )
 

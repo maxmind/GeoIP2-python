@@ -47,7 +47,7 @@ class TestBaseClient(unittest.TestCase):
         "traits": {
             "ip_address": "1.2.3.4",
             "is_anycast": True,
-            "network": "1.2.3.0/24"
+            "network": "1.2.3.0/24",
         },
     }
 
