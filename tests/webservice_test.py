@@ -44,7 +44,11 @@ class TestBaseClient(unittest.TestCase):
             "iso_code": "DE",
             "names": {"en": "Germany"},
         },
-        "traits": {"ip_address": "1.2.3.4", "network": "1.2.3.0/24"},
+        "traits": {
+            "ip_address": "1.2.3.4",
+            "is_anycast": True,
+            "network": "1.2.3.0/24",
+        },
     }
 
     # this is not a comprehensive representation of the
@@ -104,6 +108,7 @@ class TestBaseClient(unittest.TestCase):
         self.assertEqual(
             country.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
         )
+        self.assertTrue(country.traits.is_anycast)
         self.assertEqual(country.raw, self.country, "raw response is correct")
 
     @httprettified
@@ -328,6 +333,7 @@ class TestBaseClient(unittest.TestCase):
         self.assertEqual(
             city.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
         )
+        self.assertTrue(city.traits.is_anycast)
 
     @httprettified
     def test_insights_ok(self):
@@ -345,6 +351,7 @@ class TestBaseClient(unittest.TestCase):
         self.assertEqual(
             insights.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
         )
+        self.assertTrue(insights.traits.is_anycast)
         self.assertEqual(insights.traits.static_ip_score, 1.3, "static_ip_score is 1.3")
         self.assertEqual(insights.traits.user_count, 2, "user_count is 2")
 
