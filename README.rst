@@ -514,21 +514,3 @@ Please report all issues with this code using the `GitHub issue tracker
 If you are having an issue with a MaxMind service that is not specific to the
 client API, please contact `MaxMind support
 <https://www.maxmind.com/en/support>`_ for assistance.
-
-Testing
--------
-
-Get the repository and its submodule.
-
-.. code-block:: bash
-
-    $ git clone https://github.com/maxmind/GeoIP2-python.git
-    $ cd ./GeoIP2-python/
-    $ git submodule update --init --recursive
-
-Install and run ``tox``.
-
-.. code-block:: bash
-
-    $ pip install tox
-    $ tox

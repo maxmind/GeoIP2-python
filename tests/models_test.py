@@ -75,10 +75,10 @@ class TestModels(unittest.TestCase):
                 "connection_type": "Cable/DSL",
                 "domain": "example.com",
                 "ip_address": "1.2.3.4",
-                "is_anycast": True,
                 "is_anonymous": True,
                 "is_anonymous_proxy": True,
                 "is_anonymous_vpn": True,
+                "is_anycast": True,
                 "is_hosting_provider": True,
                 "is_public_proxy": True,
                 "is_residential_proxy": True,
@@ -192,10 +192,10 @@ class TestModels(unittest.TestCase):
         self.assertIs(model.registered_country.is_in_european_union, False)
         self.assertIs(model.represented_country.is_in_european_union, True)
 
-        self.assertIs(model.traits.is_anycast, True)
         self.assertIs(model.traits.is_anonymous, True)
         self.assertIs(model.traits.is_anonymous_proxy, True)
         self.assertIs(model.traits.is_anonymous_vpn, True)
+        self.assertIs(model.traits.is_anycast, True)
         self.assertIs(model.traits.is_hosting_provider, True)
         self.assertIs(model.traits.is_public_proxy, True)
         self.assertIs(model.traits.is_residential_proxy, True)
@@ -325,14 +325,14 @@ class TestModels(unittest.TestCase):
             "registered_country name is correct",
         )
         self.assertEqual(
-            model.traits.is_anycast,
-            False,
-            "traits is_anycast returns False by default",
-        )
-        self.assertEqual(
             model.traits.is_anonymous_proxy,
             False,
             "traits is_anonymous_proxy returns False by default",
+        )
+        self.assertEqual(
+            model.traits.is_anycast,
+            False,
+            "traits is_anycast returns False by default",
         )
         self.assertEqual(
             model.traits.is_satellite_provider,
