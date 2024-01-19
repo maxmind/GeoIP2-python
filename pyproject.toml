@@ -37,7 +37,7 @@ classifiers = [
 
 [project.optional-dependencies]
 test = [
-    "mocket>=3.11.1",
+    "mocket>=3.12.3",
 ]
 
 [tool.setuptools.package-data]
