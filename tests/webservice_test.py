@@ -25,16 +25,11 @@ from geoip2.errors import (
     OutOfQueriesError,
     PermissionRequiredError,
 )
-import geoip2.webservice
 from geoip2.webservice import AsyncClient, Client
-
-# We have this so that we can avoid a mocket issue:
-# https://github.com/mindflayer/python-mocket/issues/209
-geoip2.webservice._SCHEME = "http"
 
 
 class TestBaseClient(unittest.TestCase):
-    base_uri = "http://geoip.maxmind.com/geoip/v2.1/"
+    base_uri = "https://geoip.maxmind.com/geoip/v2.1/"
     country = {
         "continent": {"code": "NA", "geoname_id": 42, "names": {"en": "North America"}},
         "country": {

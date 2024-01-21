@@ -56,10 +56,6 @@ _REQUEST_UA = (
     f"GeoIP2-Python-Client/{geoip2.__version__} {requests.utils.default_user_agent()}"
 )
 
-# We have this so that we can avoid a mocket issue:
-# https://github.com/mindflayer/python-mocket/issues/209
-_SCHEME = "https"
-
 
 class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-methods
     _account_id: str
@@ -88,7 +84,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
             account_id if isinstance(account_id, bytes) else str(account_id)
         )
         self._license_key = license_key
-        self._base_uri = f"{_SCHEME}://{host}/geoip/v2.1"
+        self._base_uri = f"https://{host}/geoip/v2.1"
         self._timeout = timeout
 
     def _uri(self, path: str, ip_address: IPAddress) -> str:
