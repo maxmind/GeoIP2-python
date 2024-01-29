@@ -1,4 +1,5 @@
 """This package contains utility mixins"""
+
 # pylint: disable=too-few-public-methods
 from abc import ABCMeta
 from typing import Any

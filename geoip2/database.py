@@ -4,6 +4,7 @@ GeoIP2 Database Reader
 ======================
 
 """
+
 import inspect
 import os
 from typing import Any, AnyStr, cast, IO, List, Optional, Type, Union
