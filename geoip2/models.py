@@ -10,6 +10,7 @@ fields in each record may be populated. See
 https://dev.maxmind.com/geoip/docs/web-services?lang=en for more details.
 
 """
+
 # pylint: disable=too-many-instance-attributes,too-few-public-methods
 import ipaddress
 from abc import ABCMeta
