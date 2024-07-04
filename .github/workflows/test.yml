@@ -11,8 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        # We don't test on Windows currently as it appears mocket may not
-        # work there.
+        # TODO: add windows-latest also
         platform: [ubuntu-latest, macos-latest]
         python-version: [3.8, 3.9, "3.10", 3.11, 3.12]
 
