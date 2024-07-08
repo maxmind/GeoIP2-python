@@ -66,7 +66,9 @@ class TestBaseClient(unittest.TestCase):
         self.httpserver = httpserver
 
     def test_country_ok(self):
-        self.httpserver.expect_request("/geoip/v2.1/country/1.2.3.4").respond_with_json(
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.2.3.4", method="GET"
+        ).respond_with_json(
             self.country,
             status=200,
             content_type=self._content_type("country"),
@@ -110,7 +112,9 @@ class TestBaseClient(unittest.TestCase):
         self.assertEqual(country.raw, self.country, "raw response is correct")
 
     def test_me(self):
-        self.httpserver.expect_request("/geoip/v2.1/country/me").respond_with_json(
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/me", method="GET"
+        ).respond_with_json(
             self.country,
             status=200,
             content_type=self._content_type("country"),
@@ -127,7 +131,9 @@ class TestBaseClient(unittest.TestCase):
         )
 
     def test_200_error(self):
-        self.httpserver.expect_request("/geoip/v2.1/country/1.1.1.1").respond_with_data(
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.1.1.1", method="GET"
+        ).respond_with_data(
             "",
             status=200,
             content_type=self._content_type("country"),
@@ -146,7 +152,7 @@ class TestBaseClient(unittest.TestCase):
 
     def test_no_body_error(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.7"
+            "/geoip/v2.1/country/1.2.3.7", method="GET"
         ).respond_with_data(
             "",
             status=400,
@@ -160,7 +166,7 @@ class TestBaseClient(unittest.TestCase):
     def test_weird_body_error(self):
 
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.8"
+            "/geoip/v2.1/country/1.2.3.8", method="GET"
         ).respond_with_json(
             {"wierd": 42},
             status=400,
@@ -176,7 +182,7 @@ class TestBaseClient(unittest.TestCase):
     def test_bad_body_error(self):
 
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.9"
+            "/geoip/v2.1/country/1.2.3.9", method="GET"
         ).respond_with_data(
             "bad body",
             status=400,
@@ -189,7 +195,7 @@ class TestBaseClient(unittest.TestCase):
 
     def test_500_error(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.10"
+            "/geoip/v2.1/country/1.2.3.10", method="GET"
         ).respond_with_data(
             "",
             status=500,
@@ -201,7 +207,7 @@ class TestBaseClient(unittest.TestCase):
     def test_300_error(self):
 
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.11"
+            "/geoip/v2.1/country/1.2.3.11", method="GET"
         ).respond_with_data(
             "",
             status=300,
@@ -249,7 +255,7 @@ class TestBaseClient(unittest.TestCase):
         msg = "Some error message"
         body = {"error": msg, "code": error_code}
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.18"
+            "/geoip/v2.1/country/1.2.3.18", method="GET"
         ).respond_with_json(
             body,
             status=status,
@@ -262,7 +268,9 @@ class TestBaseClient(unittest.TestCase):
         msg = "Unknown error type"
         ip = "1.2.3.19"
         body = {"error": msg, "code": "UNKNOWN_TYPE"}
-        self.httpserver.expect_request("/geoip/v2.1/country/" + ip).respond_with_json(
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/" + ip, method="GET"
+        ).respond_with_json(
             body,
             status=400,
             content_type=self._content_type("country"),
@@ -271,14 +279,17 @@ class TestBaseClient(unittest.TestCase):
             self.run_client(self.client.country(ip))
 
     def test_request(self):
-        matcher = HeaderValueMatcher({
-            "Accept": "application/json",
-            "Authorization":"Basic NDI6YWJjZGVmMTIzNDU2",                
-            "User-Agent": lambda x: x.startswith("GeoIP2-Python-Client/"),})
+        matcher = HeaderValueMatcher(
+            {
+                "Accept": "application/json",
+                "Authorization": "Basic NDI6YWJjZGVmMTIzNDU2",
+                "User-Agent": lambda x: x.startswith("GeoIP2-Python-Client/"),
+            }
+        )
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.4",
+            method="GET",
             header_value_matcher=matcher,
-            
         ).respond_with_json(
             self.country,
             status=200,
@@ -287,7 +298,9 @@ class TestBaseClient(unittest.TestCase):
         self.run_client(self.client.country("1.2.3.4"))
 
     def test_city_ok(self):
-        self.httpserver.expect_request("/geoip/v2.1/city/1.2.3.4").respond_with_json(
+        self.httpserver.expect_request(
+            "/geoip/v2.1/city/1.2.3.4", method="GET"
+        ).respond_with_json(
             self.country,
             status=200,
             content_type=self._content_type("city"),
@@ -301,7 +314,7 @@ class TestBaseClient(unittest.TestCase):
 
     def test_insights_ok(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/insights/1.2.3.4"
+            "/geoip/v2.1/insights/1.2.3.4", method="GET"
         ).respond_with_json(
             self.insights,
             status=200,
