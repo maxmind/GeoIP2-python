@@ -145,7 +145,7 @@ class TestBaseClient(unittest.TestCase):
 
     def test_no_body_error(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/" + "1.2.3.7"
+            "/geoip/v2.1/country/1.2.3.7"
         ).respond_with_data(
             "",
             status=400,
@@ -159,7 +159,7 @@ class TestBaseClient(unittest.TestCase):
     def test_weird_body_error(self):
 
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/" + "1.2.3.8"
+            "/geoip/v2.1/country/1.2.3.8"
         ).respond_with_json(
             {"wierd": 42},
             status=400,
@@ -175,7 +175,7 @@ class TestBaseClient(unittest.TestCase):
     def test_bad_body_error(self):
 
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/" + "1.2.3.9"
+            "/geoip/v2.1/country/1.2.3.9"
         ).respond_with_data(
             "bad body",
             status=400,
@@ -188,7 +188,7 @@ class TestBaseClient(unittest.TestCase):
 
     def test_500_error(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/" + "1.2.3.10"
+            "/geoip/v2.1/country/1.2.3.10"
         ).respond_with_data(
             "",
             status=500,
@@ -200,7 +200,7 @@ class TestBaseClient(unittest.TestCase):
     def test_300_error(self):
 
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/" + "1.2.3.11"
+            "/geoip/v2.1/country/1.2.3.11"
         ).respond_with_data(
             "",
             status=300,
@@ -248,7 +248,7 @@ class TestBaseClient(unittest.TestCase):
         msg = "Some error message"
         body = {"error": msg, "code": error_code}
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/" + "1.2.3.18"
+            "/geoip/v2.1/country/1.2.3.18"
         ).respond_with_json(
             body,
             status=status,
@@ -279,7 +279,7 @@ class TestBaseClient(unittest.TestCase):
             return ""
 
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/" + "1.2.3.4"
+            "/geoip/v2.1/country/1.2.3.4"
         ).respond_with_handler(custom_handler)
         try:
             self.run_client(self.client.country("1.2.3.4"))
@@ -319,7 +319,7 @@ class TestBaseClient(unittest.TestCase):
 
     def test_insights_ok(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/insights/" + "1.2.3.4"
+            "/geoip/v2.1/insights/1.2.3.4"
         ).respond_with_json(
             self.insights,
             status=200,
@@ -355,7 +355,7 @@ class TestClient(TestBaseClient):
     def setUp(self):
         self.client_class = Client
         self.client = Client(42, "abcdef123456")
-        self.client._base_uri = self.httpserver.url_for("/") + "geoip/v2.1"
+        self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
 
     def run_client(self, v):
         return v
@@ -366,7 +366,7 @@ class TestAsyncClient(TestBaseClient):
         self._loop = asyncio.new_event_loop()
         self.client_class = AsyncClient
         self.client = AsyncClient(42, "abcdef123456")
-        self.client._base_uri = self.httpserver.url_for("/") + "geoip/v2.1"
+        self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
 
     def tearDown(self):
         self._loop.run_until_complete(self.client.close())
