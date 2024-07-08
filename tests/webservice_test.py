@@ -8,6 +8,7 @@ import json
 import sys
 from typing import cast, Dict
 import unittest
+from pytest_httpserver import HeaderValueMatcher
 import pytest_httpserver
 import pytest
 
@@ -270,39 +271,20 @@ class TestBaseClient(unittest.TestCase):
             self.run_client(self.client.country(ip))
 
     def test_request(self):
-
-        request = None
-
-        def custom_handler(r):
-            nonlocal request
-            request = r
-            return ""
-
+        matcher = HeaderValueMatcher({
+            "Accept": "application/json",
+            "Authorization":"Basic NDI6YWJjZGVmMTIzNDU2",                
+            "User-Agent": lambda x: x.startswith("GeoIP2-Python-Client/"),})
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.4"
-        ).respond_with_handler(custom_handler)
-        try:
-            self.run_client(self.client.country("1.2.3.4"))
-        except Exception as e:
-            # just to avoid the exception
-            pass
-
-        self.assertEqual(
-            request.path, "/geoip/v2.1/country/1.2.3.4", "correct URI is used"
+            "/geoip/v2.1/country/1.2.3.4",
+            header_value_matcher=matcher,
+            
+        ).respond_with_json(
+            self.country,
+            status=200,
+            content_type=self._content_type("country"),
         )
-
-        headers = {k.lower(): v for k, v in request.headers.items()}
-        self.assertEqual(headers["accept"], "application/json", "correct Accept header")
-        self.assertRegex(
-            headers["user-agent"],
-            "^GeoIP2-Python-Client/",
-            "Correct User-Agent",
-        )
-        self.assertEqual(
-            headers["authorization"],
-            "Basic NDI6YWJjZGVmMTIzNDU2",
-            "correct auth",
-        )
+        self.run_client(self.client.country("1.2.3.4"))
 
     def test_city_ok(self):
         self.httpserver.expect_request("/geoip/v2.1/city/1.2.3.4").respond_with_json(
