@@ -279,17 +279,27 @@ class TestBaseClient(unittest.TestCase):
             self.run_client(self.client.country(ip))
 
     def test_request(self):
-        matcher = HeaderValueMatcher(
-            {
-                "Accept": "application/json",
-                "Authorization": "Basic NDI6YWJjZGVmMTIzNDU2",
-                "User-Agent": lambda x: x.startswith("GeoIP2-Python-Client/"),
-            }
-        )
+        def user_agent_compare(actual: str, expected: str) -> bool:
+            if actual is None:
+                return False
+            return actual.startswith("GeoIP2-Python-Client/")
+
+        def accept_compare(actual: str, expected: str) -> bool:
+            return actual == "application/json"
+
+        def authorization_compare(actual: str, expected: str) -> bool:
+            return actual == "Basic NDI6YWJjZGVmMTIzNDU2"
+
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.4",
             method="GET",
-            header_value_matcher=matcher,
+            header_value_matcher=HeaderValueMatcher(
+                {
+                    "User-Agent": user_agent_compare,
+                    "Accept": accept_compare,
+                    "Authorization": authorization_compare,
+                }
+            ),
         ).respond_with_json(
             self.country,
             status=200,
