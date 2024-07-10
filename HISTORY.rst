@@ -4,6 +4,12 @@
 History
 -------
 
+4.8.1
++++++++++++++++++++
+
+* ``setuptools`` was incorrectly listed as a runtime dependency. This has
+  been removed. Pull request by Mathieu Dupuy. GitHub #174.
+
 4.8.0 (2023-12-05)
 ++++++++++++++++++
 
