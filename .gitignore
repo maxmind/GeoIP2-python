@@ -19,3 +19,4 @@ pylint.txt
 *.swp
 .tox
 violations.pyflakes.txt
+/venv

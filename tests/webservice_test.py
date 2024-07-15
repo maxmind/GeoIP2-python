@@ -11,6 +11,8 @@ import unittest
 from pytest_httpserver import HeaderValueMatcher
 import pytest_httpserver
 import pytest
+from collections import defaultdict
+
 
 sys.path.append("..")
 import geoip2
@@ -284,21 +286,19 @@ class TestBaseClient(unittest.TestCase):
                 return False
             return actual.startswith("GeoIP2-Python-Client/")
 
-        def accept_compare(actual: str, expected: str) -> bool:
-            return actual == "application/json"
-
-        def authorization_compare(actual: str, expected: str) -> bool:
-            return actual == "Basic NDI6YWJjZGVmMTIzNDU2"
-
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.4",
             method="GET",
+            headers={
+                "Accept": "application/json",
+                "Authorization": "Basic NDI6YWJjZGVmMTIzNDU2",
+                "User-Agent": "GeoIP2-Python-Client/",
+            },
             header_value_matcher=HeaderValueMatcher(
-                {
-                    "User-Agent": user_agent_compare,
-                    "Accept": accept_compare,
-                    "Authorization": authorization_compare,
-                }
+                defaultdict(
+                    lambda: HeaderValueMatcher.default_header_value_matcher,
+                    {"User-Agent": user_agent_compare},
+                )
             ),
         ).respond_with_json(
             self.country,
