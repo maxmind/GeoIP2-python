@@ -8,13 +8,13 @@ import json
 import sys
 from typing import cast, Dict
 import unittest
+from pytest_httpserver import HeaderValueMatcher
+import pytest_httpserver
+import pytest
+from collections import defaultdict
+
 
 sys.path.append("..")
-
-# httpretty currently doesn't work, but mocket with the compat interface
-# does.
-from mocket import Mocket  # type: ignore
-from mocket.plugins.httpretty import httpretty, httprettified  # type: ignore
 import geoip2
 from geoip2.errors import (
     AddressNotFoundError,
@@ -29,7 +29,6 @@ from geoip2.webservice import AsyncClient, Client
 
 
 class TestBaseClient(unittest.TestCase):
-    base_uri = "https://geoip.maxmind.com/geoip/v2.1/"
     country = {
         "continent": {"code": "NA", "geoname_id": 42, "names": {"en": "North America"}},
         "country": {
@@ -64,12 +63,15 @@ class TestBaseClient(unittest.TestCase):
             + "+json; charset=UTF-8; version=1.0"
         )
 
-    @httprettified
+    @pytest.fixture(autouse=True)
+    def setup_httpserver(self, httpserver: pytest_httpserver.HTTPServer):
+        self.httpserver = httpserver
+
     def test_country_ok(self):
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "country/1.2.3.4",
-            body=json.dumps(self.country),
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.2.3.4", method="GET"
+        ).respond_with_json(
+            self.country,
             status=200,
             content_type=self._content_type("country"),
         )
@@ -111,12 +113,11 @@ class TestBaseClient(unittest.TestCase):
         self.assertTrue(country.traits.is_anycast)
         self.assertEqual(country.raw, self.country, "raw response is correct")
 
-    @httprettified
     def test_me(self):
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "country/me",
-            body=json.dumps(self.country),
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/me", method="GET"
+        ).respond_with_json(
+            self.country,
             status=200,
             content_type=self._content_type("country"),
         )
@@ -131,33 +132,31 @@ class TestBaseClient(unittest.TestCase):
             "country('me') returns Country object",
         )
 
-    @httprettified
     def test_200_error(self):
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "country/1.1.1.1",
-            body="",
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.1.1.1", method="GET"
+        ).respond_with_data(
+            "",
             status=200,
             content_type=self._content_type("country"),
         )
+
         with self.assertRaisesRegex(
             GeoIP2Error, "could not decode the response as JSON"
         ):
             self.run_client(self.client.country("1.1.1.1"))
 
-    @httprettified
     def test_bad_ip_address(self):
         with self.assertRaisesRegex(
             ValueError, "'1.2.3' does not appear to be an IPv4 " "or IPv6 address"
         ):
             self.run_client(self.client.country("1.2.3"))
 
-    @httprettified
     def test_no_body_error(self):
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "country/" + "1.2.3.7",
-            body="",
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.2.3.7", method="GET"
+        ).respond_with_data(
+            "",
             status=400,
             content_type=self._content_type("country"),
         )
@@ -166,27 +165,28 @@ class TestBaseClient(unittest.TestCase):
         ):
             self.run_client(self.client.country("1.2.3.7"))
 
-    @httprettified
     def test_weird_body_error(self):
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "country/" + "1.2.3.8",
-            body='{"wierd": 42}',
+
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.2.3.8", method="GET"
+        ).respond_with_json(
+            {"wierd": 42},
             status=400,
             content_type=self._content_type("country"),
         )
+
         with self.assertRaisesRegex(
             HTTPError,
             "Response contains JSON but it does not " "specify code or error keys",
         ):
             self.run_client(self.client.country("1.2.3.8"))
 
-    @httprettified
     def test_bad_body_error(self):
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "country/" + "1.2.3.9",
-            body="bad body",
+
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.2.3.9", method="GET"
+        ).respond_with_data(
+            "bad body",
             status=400,
             content_type=self._content_type("country"),
         )
@@ -195,19 +195,23 @@ class TestBaseClient(unittest.TestCase):
         ):
             self.run_client(self.client.country("1.2.3.9"))
 
-    @httprettified
     def test_500_error(self):
-        httpretty.register_uri(
-            httpretty.GET, self.base_uri + "country/" + "1.2.3.10", status=500
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.2.3.10", method="GET"
+        ).respond_with_data(
+            "",
+            status=500,
+            content_type=self._content_type("country"),
         )
         with self.assertRaisesRegex(HTTPError, r"Received a server error \(500\) for"):
             self.run_client(self.client.country("1.2.3.10"))
 
-    @httprettified
     def test_300_error(self):
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "country/" + "1.2.3.11",
+
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.2.3.11", method="GET"
+        ).respond_with_data(
+            "",
             status=300,
             content_type=self._content_type("country"),
         )
@@ -216,115 +220,98 @@ class TestBaseClient(unittest.TestCase):
         ):
             self.run_client(self.client.country("1.2.3.11"))
 
-    @httprettified
     def test_ip_address_required(self):
         self._test_error(400, "IP_ADDRESS_REQUIRED", InvalidRequestError)
 
-    @httprettified
     def test_ip_address_not_found(self):
         self._test_error(404, "IP_ADDRESS_NOT_FOUND", AddressNotFoundError)
 
-    @httprettified
     def test_ip_address_reserved(self):
         self._test_error(400, "IP_ADDRESS_RESERVED", AddressNotFoundError)
 
-    @httprettified
     def test_permission_required(self):
         self._test_error(403, "PERMISSION_REQUIRED", PermissionRequiredError)
 
-    @httprettified
     def test_auth_invalid(self):
         self._test_error(400, "AUTHORIZATION_INVALID", AuthenticationError)
 
-    @httprettified
     def test_license_key_required(self):
         self._test_error(401, "LICENSE_KEY_REQUIRED", AuthenticationError)
 
-    @httprettified
     def test_account_id_required(self):
         self._test_error(401, "ACCOUNT_ID_REQUIRED", AuthenticationError)
 
-    @httprettified
     def test_user_id_required(self):
         self._test_error(401, "USER_ID_REQUIRED", AuthenticationError)
 
-    @httprettified
     def test_account_id_unkown(self):
         self._test_error(401, "ACCOUNT_ID_UNKNOWN", AuthenticationError)
 
-    @httprettified
     def test_user_id_unkown(self):
         self._test_error(401, "USER_ID_UNKNOWN", AuthenticationError)
 
-    @httprettified
     def test_out_of_queries_error(self):
         self._test_error(402, "OUT_OF_QUERIES", OutOfQueriesError)
 
     def _test_error(self, status, error_code, error_class):
         msg = "Some error message"
         body = {"error": msg, "code": error_code}
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "country/1.2.3.18",
-            body=json.dumps(body),
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.2.3.18", method="GET"
+        ).respond_with_json(
+            body,
             status=status,
             content_type=self._content_type("country"),
         )
         with self.assertRaisesRegex(error_class, msg):
             self.run_client(self.client.country("1.2.3.18"))
 
-    @httprettified
     def test_unknown_error(self):
         msg = "Unknown error type"
         ip = "1.2.3.19"
         body = {"error": msg, "code": "UNKNOWN_TYPE"}
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "country/" + ip,
-            body=json.dumps(body),
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/" + ip, method="GET"
+        ).respond_with_json(
+            body,
             status=400,
             content_type=self._content_type("country"),
         )
         with self.assertRaisesRegex(InvalidRequestError, msg):
             self.run_client(self.client.country(ip))
 
-    @httprettified
     def test_request(self):
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "country/" + "1.2.3.4",
-            body=json.dumps(self.country),
+        def user_agent_compare(actual: str, expected: str) -> bool:
+            if actual is None:
+                return False
+            return actual.startswith("GeoIP2-Python-Client/")
+
+        self.httpserver.expect_request(
+            "/geoip/v2.1/country/1.2.3.4",
+            method="GET",
+            headers={
+                "Accept": "application/json",
+                "Authorization": "Basic NDI6YWJjZGVmMTIzNDU2",
+                "User-Agent": "GeoIP2-Python-Client/",
+            },
+            header_value_matcher=HeaderValueMatcher(
+                defaultdict(
+                    lambda: HeaderValueMatcher.default_header_value_matcher,
+                    {"User-Agent": user_agent_compare},
+                )
+            ),
+        ).respond_with_json(
+            self.country,
             status=200,
             content_type=self._content_type("country"),
         )
         self.run_client(self.client.country("1.2.3.4"))
-        request = httpretty.last_request
 
-        self.assertEqual(
-            request.path, "/geoip/v2.1/country/1.2.3.4", "correct URI is used"
-        )
-
-        # This is to prevent breakage if header normalization in Mocket
-        # changes again in the future.
-        headers = {k.lower(): v for k, v in request.headers.items()}
-        self.assertEqual(headers["accept"], "application/json", "correct Accept header")
-        self.assertRegex(
-            headers["user-agent"],
-            "^GeoIP2-Python-Client/",
-            "Correct User-Agent",
-        )
-        self.assertEqual(
-            headers["authorization"],
-            "Basic NDI6YWJjZGVmMTIzNDU2",
-            "correct auth",
-        )
-
-    @httprettified
     def test_city_ok(self):
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "city/" + "1.2.3.4",
-            body=json.dumps(self.country),
+        self.httpserver.expect_request(
+            "/geoip/v2.1/city/1.2.3.4", method="GET"
+        ).respond_with_json(
+            self.country,
             status=200,
             content_type=self._content_type("city"),
         )
@@ -335,14 +322,13 @@ class TestBaseClient(unittest.TestCase):
         )
         self.assertTrue(city.traits.is_anycast)
 
-    @httprettified
     def test_insights_ok(self):
-        httpretty.register_uri(
-            httpretty.GET,
-            self.base_uri + "insights/1.2.3.4",
-            body=json.dumps(self.insights),
+        self.httpserver.expect_request(
+            "/geoip/v2.1/insights/1.2.3.4", method="GET"
+        ).respond_with_json(
+            self.insights,
             status=200,
-            content_type=self._content_type("country"),
+            content_type=self._content_type("insights"),
         )
         insights = self.run_client(self.client.insights("1.2.3.4"))
         self.assertEqual(
@@ -374,6 +360,7 @@ class TestClient(TestBaseClient):
     def setUp(self):
         self.client_class = Client
         self.client = Client(42, "abcdef123456")
+        self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
 
     def run_client(self, v):
         return v
@@ -384,6 +371,7 @@ class TestAsyncClient(TestBaseClient):
         self._loop = asyncio.new_event_loop()
         self.client_class = AsyncClient
         self.client = AsyncClient(42, "abcdef123456")
+        self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
 
     def tearDown(self):
         self._loop.run_until_complete(self.client.close())

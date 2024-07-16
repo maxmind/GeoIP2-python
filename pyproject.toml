@@ -36,7 +36,7 @@ classifiers = [
 
 [project.optional-dependencies]
 test = [
-    "mocket>=3.12.8",
+    "pytest-httpserver>=1.0.10",
 ]
 
 [tool.setuptools.package-data]
