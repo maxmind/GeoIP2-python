@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import ipaddress
 import sys
 import unittest
+from unittest.mock import patch, MagicMock
 
 sys.path.append("..")
 
@@ -19,7 +20,7 @@ except ImportError:
     maxminddb.extension = None  # type: ignore
 
 
-class BaseTestReader(unittest.TestCase):
+class TestReader(unittest.TestCase):
     def test_language_list(self) -> None:
         reader = geoip2.database.Reader(
             "tests/data/test-data/GeoIP2-Country-Test.mmdb",
@@ -262,27 +263,13 @@ class BaseTestReader(unittest.TestCase):
             record = reader.country("81.2.69.160")
             self.assertEqual(record.traits.ip_address, "81.2.69.160")
 
+    @patch("maxminddb.open_database")
+    def test_modes(self, mock_open) -> None:
+        mock_open.return_value = MagicMock()
 
-@unittest.skipUnless(maxminddb.extension, "No C extension module found. Skipping tests")
-class TestExtensionReader(BaseTestReader):
-    mode = geoip2.database.MODE_MMAP_EXT
-
-
-class TestMMAPReader(BaseTestReader):
-    mode = geoip2.database.MODE_MMAP
-
-
-class TestFileReader(BaseTestReader):
-    mode = geoip2.database.MODE_FILE
-
-
-class TestMemoryReader(BaseTestReader):
-    mode = geoip2.database.MODE_MEMORY
-
-
-class TestFDReader(unittest.TestCase):
-    mode = geoip2.database.MODE_FD
-
-
-class TestAutoReader(BaseTestReader):
-    mode = geoip2.database.MODE_AUTO
+        path = "tests/data/test-data/GeoIP2-Country-Test.mmdb"
+        with geoip2.database.Reader(
+            path,
+            mode=geoip2.database.MODE_MMAP_EXT,
+        ) as reader:
+            mock_open.assert_called_once_with(path, geoip2.database.MODE_MMAP_EXT)
