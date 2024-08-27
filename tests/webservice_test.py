@@ -4,8 +4,6 @@
 import asyncio
 import copy
 import ipaddress
-import json
-import sys
 from typing import cast, Dict
 import unittest
 from pytest_httpserver import HeaderValueMatcher
@@ -14,7 +12,6 @@ import pytest
 from collections import defaultdict
 
 
-sys.path.append("..")
 import geoip2
 from geoip2.errors import (
     AddressNotFoundError,
