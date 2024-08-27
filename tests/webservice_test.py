@@ -123,14 +123,12 @@ class TestBaseClient(unittest.TestCase):
             content_type=self._content_type("country"),
         )
 
-        with self.assertRaisesRegex(
-            GeoIP2Error, "could not decode the response as JSON"
-        ):
+        with pytest.raises(GeoIP2Error, match="could not decode the response as JSON"):
             self.run_client(self.client.country("1.1.1.1"))
 
     def test_bad_ip_address(self):
-        with self.assertRaisesRegex(
-            ValueError, "'1.2.3' does not appear to be an IPv4 " "or IPv6 address"
+        with pytest.raises(
+            ValueError, match="'1.2.3' does not appear to be an IPv4 or IPv6 address"
         ):
             self.run_client(self.client.country("1.2.3"))
 
@@ -142,9 +140,7 @@ class TestBaseClient(unittest.TestCase):
             status=400,
             content_type=self._content_type("country"),
         )
-        with self.assertRaisesRegex(
-            HTTPError, "Received a 400 error for .* with no body"
-        ):
+        with pytest.raises(HTTPError, match="Received a 400 error for .* with no body"):
             self.run_client(self.client.country("1.2.3.7"))
 
     def test_weird_body_error(self):
@@ -157,9 +153,10 @@ class TestBaseClient(unittest.TestCase):
             content_type=self._content_type("country"),
         )
 
-        with self.assertRaisesRegex(
+        with pytest.raises(
             HTTPError,
-            "Response contains JSON but it does not " "specify code or error keys",
+            match="Response contains JSON but it does not "
+            "specify code or error keys",
         ):
             self.run_client(self.client.country("1.2.3.8"))
 
@@ -172,8 +169,8 @@ class TestBaseClient(unittest.TestCase):
             status=400,
             content_type=self._content_type("country"),
         )
-        with self.assertRaisesRegex(
-            HTTPError, "it did not include the expected JSON body"
+        with pytest.raises(
+            HTTPError, match="it did not include the expected JSON body"
         ):
             self.run_client(self.client.country("1.2.3.9"))
 
@@ -185,7 +182,7 @@ class TestBaseClient(unittest.TestCase):
             status=500,
             content_type=self._content_type("country"),
         )
-        with self.assertRaisesRegex(HTTPError, r"Received a server error \(500\) for"):
+        with pytest.raises(HTTPError, match=r"Received a server error \(500\) for"):
             self.run_client(self.client.country("1.2.3.10"))
 
     def test_300_error(self):
@@ -197,8 +194,8 @@ class TestBaseClient(unittest.TestCase):
             status=300,
             content_type=self._content_type("country"),
         )
-        with self.assertRaisesRegex(
-            HTTPError, r"Received a very surprising HTTP status \(300\) for"
+        with pytest.raises(
+            HTTPError, match=r"Received a very surprising HTTP status \(300\) for"
         ):
             self.run_client(self.client.country("1.2.3.11"))
 
@@ -245,7 +242,7 @@ class TestBaseClient(unittest.TestCase):
             status=status,
             content_type=self._content_type("country"),
         )
-        with self.assertRaisesRegex(error_class, msg):
+        with pytest.raises(error_class, match=msg):
             self.run_client(self.client.country("1.2.3.18"))
 
     def test_unknown_error(self):
@@ -259,7 +256,7 @@ class TestBaseClient(unittest.TestCase):
             status=400,
             content_type=self._content_type("country"),
         )
-        with self.assertRaisesRegex(InvalidRequestError, msg):
+        with pytest.raises(InvalidRequestError, match=msg):
             self.run_client(self.client.country(ip))
 
     def test_request(self):

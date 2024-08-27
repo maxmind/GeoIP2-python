@@ -2,8 +2,11 @@
 
 
 import ipaddress
+import re
 import unittest
 from unittest.mock import patch, MagicMock
+
+import pytest
 
 import geoip2.database
 import geoip2.errors
@@ -28,38 +31,34 @@ class TestReader(unittest.TestCase):
 
     def test_unknown_address(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
-        with self.assertRaisesRegex(
+        with pytest.raises(
             geoip2.errors.AddressNotFoundError,
-            "The address 10.10.10.10 is not in the " "database.",
+            match="The address 10.10.10.10 is not in the database.",
         ):
             reader.city("10.10.10.10")
         reader.close()
 
     def test_unknown_address_network(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
-        try:
+        with pytest.raises(geoip2.errors.AddressNotFoundError) as ei:
             reader.city("10.10.10.10")
-            self.fail("Expected AddressNotFoundError")
-        except geoip2.errors.AddressNotFoundError as e:
-            assert e.network == ipaddress.ip_network("10.0.0.0/8")
-        except Exception as e:
-            self.fail(f"Expected AddressNotFoundError, got {type(e)}: {str(e)}")
-        finally:
-            reader.close()
+        assert ei.value.network == ipaddress.ip_network("10.0.0.0/8")
+        reader.close()
 
     def test_wrong_database(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
-        with self.assertRaisesRegex(
+        with pytest.raises(
             TypeError,
-            "The country method cannot be used with " "the GeoIP2-City database",
+            match="The country method cannot be used with the GeoIP2-City database",
         ):
             reader.country("1.1.1.1")
         reader.close()
 
     def test_invalid_address(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
-        with self.assertRaisesRegex(
-            ValueError, "u?'invalid' does not appear to be an " "IPv4 or IPv6 address"
+        with pytest.raises(
+            ValueError,
+            match="u?'invalid' does not appear to be an " "IPv4 or IPv6 address",
         ):
             reader.city("invalid")
         reader.close()
@@ -111,11 +110,9 @@ class TestReader(unittest.TestCase):
         assert record.ip_address == ip_address
         assert record.network == ipaddress.ip_network("1.128.0.0/11")
 
-        self.assertRegex(
-            str(record),
-            r"geoip2.models.ASN\(.*1\.128\.0\.0.*\)",
-            "str representation is correct",
-        )
+        assert re.search(
+            r"geoip2.models.ASN\(.*1\.128\.0\.0.*\)", str(record)
+        ), "str representation is correct"
 
         reader.close()
 
@@ -149,13 +146,9 @@ class TestReader(unittest.TestCase):
         assert record.connection_type == "Cellular"
         assert record.ip_address == ip_address
         assert record.network == ipaddress.ip_network("1.0.1.0/24")
-
-        self.assertRegex(
-            str(record),
-            r"ConnectionType\(\{.*Cellular.*\}\)",
-            "ConnectionType str representation is reasonable",
-        )
-
+        assert re.search(
+            r"ConnectionType\(\{.*Cellular.*\}\)", str(record)
+        ), "ConnectionType str representation is reasonable"
         reader.close()
 
     def test_country(self) -> None:
@@ -183,12 +176,9 @@ class TestReader(unittest.TestCase):
         assert record.domain == "maxmind.com"
         assert record.ip_address == ip_address
         assert record.network == ipaddress.ip_network("1.2.0.0/16")
-
-        self.assertRegex(
-            str(record),
-            r"Domain\(\{.*maxmind.com.*\}\)",
-            "Domain str representation is reasonable",
-        )
+        assert re.search(
+            r"Domain\(\{.*maxmind.com.*\}\)", str(record)
+        ), "Domain str representation is reasonable"
 
         reader.close()
 
@@ -231,13 +221,9 @@ class TestReader(unittest.TestCase):
             assert record.organization == "Telstra Internet"
             assert record.ip_address == ip_address
             assert record.network == ipaddress.ip_network("1.128.0.0/11")
-
-            self.assertRegex(
-                str(record),
-                r"ISP\(\{.*Telstra.*\}\)",
-                "ISP str representation is reasonable",
-            )
-
+            assert re.search(
+                r"ISP\(\{.*Telstra.*\}\)", str(record)
+            ), "ISP str representation is reasonable"
             record = reader.isp("149.101.100.0")
 
             assert record.mobile_country_code == "310"

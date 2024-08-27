@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from typing import Dict
 import unittest
@@ -134,20 +136,13 @@ class TestModels(unittest.TestCase):
         assert model.location.longitude == 93.2636, "correct longitude"
         assert model.location.metro_code == 765, "correct metro_code"
         assert model.location.population_density == 1341, "correct population_density"
-
-        self.assertRegex(
-            str(model),
-            r"^geoip2.models.Insights\(\{.*geoname_id.*\}, \[.*en.*\]\)",
-            "Insights str representation looks reasonable",
-        )
-
+        assert re.search(
+            r"^geoip2.models.Insights\(\{.*geoname_id.*\}, \[.*en.*\]\)", str(model)
+        ), "Insights str representation looks reasonable"
         assert model == eval(repr(model)), "Insights repr can be eval'd"
-
-        self.assertRegex(
-            str(model.location),
-            r"^geoip2.records.Location\(.*longitude=.*\)",
-            "Location str representation is reasonable",
-        )
+        assert re.search(
+            r"^geoip2.records.Location\(.*longitude=.*\)", str(model.location)
+        ), "Location str representation is reasonable"
 
         assert model.location == eval(
             repr(model.location)
@@ -268,11 +263,9 @@ class TestModels(unittest.TestCase):
             model.traits.is_satellite_provider is True
         ), "traits is_setellite_provider is True"
         assert model.raw == raw, "raw method produces raw output"
-
-        self.assertRegex(
-            str(model), r"^geoip2.models.City\(\{.*geoname_id.*\}, \[.*en.*\]\)"
-        )
-
+        assert re.search(
+            r"^geoip2.models.City\(\{.*geoname_id.*\}, \[.*en.*\]\)", str(model)
+        ), "City str representation looks reasonable"
         assert not (model == True), "__eq__ does not blow up on weird input"
 
     def test_unknown_keys(self) -> None:
