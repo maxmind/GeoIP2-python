@@ -280,9 +280,5 @@ class TestMemoryReader(BaseTestReader):
     mode = geoip2.database.MODE_MEMORY
 
 
-class TestFDReader(unittest.TestCase):
-    mode = geoip2.database.MODE_FD
-
-
 class TestAutoReader(BaseTestReader):
     mode = geoip2.database.MODE_AUTO
