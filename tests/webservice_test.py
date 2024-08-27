@@ -3,17 +3,15 @@
 import asyncio
 import copy
 import ipaddress
-import sys
 import unittest
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from typing import cast, Callable, Union
+from typing import Callable, Union, cast
 
 import pytest
 import pytest_httpserver
 from pytest_httpserver import HeaderValueMatcher
 
-sys.path.append("..")
 import geoip2
 from geoip2.errors import (
     AddressNotFoundError,
