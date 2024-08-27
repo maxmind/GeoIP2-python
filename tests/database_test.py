@@ -23,7 +23,7 @@ class TestReader(unittest.TestCase):
         )
         record = reader.country("81.2.69.160")
 
-        self.assertEqual(record.country.name, "Великобритания")
+        assert record.country.name == "Великобритания"
         reader.close()
 
     def test_unknown_address(self) -> None:
@@ -41,7 +41,7 @@ class TestReader(unittest.TestCase):
             reader.city("10.10.10.10")
             self.fail("Expected AddressNotFoundError")
         except geoip2.errors.AddressNotFoundError as e:
-            self.assertEqual(e.network, ipaddress.ip_network("10.0.0.0/8"))
+            assert e.network == ipaddress.ip_network("10.0.0.0/8")
         except Exception as e:
             self.fail(f"Expected AddressNotFoundError, got {type(e)}: {str(e)}")
         finally:
@@ -71,14 +71,14 @@ class TestReader(unittest.TestCase):
         ip_address = "1.2.0.1"
 
         record = reader.anonymous_ip(ip_address)
-        self.assertEqual(record.is_anonymous, True)
-        self.assertEqual(record.is_anonymous_vpn, True)
-        self.assertEqual(record.is_hosting_provider, False)
-        self.assertEqual(record.is_public_proxy, False)
-        self.assertEqual(record.is_residential_proxy, False)
-        self.assertEqual(record.is_tor_exit_node, False)
-        self.assertEqual(record.ip_address, ip_address)
-        self.assertEqual(record.network, ipaddress.ip_network("1.2.0.0/16"))
+        assert record.is_anonymous is True
+        assert record.is_anonymous_vpn is True
+        assert record.is_hosting_provider is False
+        assert record.is_public_proxy is False
+        assert record.is_residential_proxy is False
+        assert record.is_tor_exit_node is False
+        assert record.ip_address == ip_address
+        assert record.network == ipaddress.ip_network("1.2.0.0/16")
         reader.close()
 
     def test_anonymous_ip_all_set(self) -> None:
@@ -88,14 +88,14 @@ class TestReader(unittest.TestCase):
         ip_address = "81.2.69.1"
 
         record = reader.anonymous_ip(ip_address)
-        self.assertEqual(record.is_anonymous, True)
-        self.assertEqual(record.is_anonymous_vpn, True)
-        self.assertEqual(record.is_hosting_provider, True)
-        self.assertEqual(record.is_public_proxy, True)
-        self.assertEqual(record.is_residential_proxy, True)
-        self.assertEqual(record.is_tor_exit_node, True)
-        self.assertEqual(record.ip_address, ip_address)
-        self.assertEqual(record.network, ipaddress.ip_network("81.2.69.0/24"))
+        assert record.is_anonymous is True
+        assert record.is_anonymous_vpn is True
+        assert record.is_hosting_provider is True
+        assert record.is_public_proxy is True
+        assert record.is_residential_proxy is True
+        assert record.is_tor_exit_node is True
+        assert record.ip_address == ip_address
+        assert record.network == ipaddress.ip_network("81.2.69.0/24")
         reader.close()
 
     def test_asn(self) -> None:
@@ -104,12 +104,12 @@ class TestReader(unittest.TestCase):
         ip_address = "1.128.0.0"
         record = reader.asn(ip_address)
 
-        self.assertEqual(record, eval(repr(record)), "ASN repr can be eval'd")
+        assert record == eval(repr(record)), "ASN repr can be eval'd"
 
-        self.assertEqual(record.autonomous_system_number, 1221)
-        self.assertEqual(record.autonomous_system_organization, "Telstra Pty Ltd")
-        self.assertEqual(record.ip_address, ip_address)
-        self.assertEqual(record.network, ipaddress.ip_network("1.128.0.0/11"))
+        assert record.autonomous_system_number == 1221
+        assert record.autonomous_system_organization == "Telstra Pty Ltd"
+        assert record.ip_address == ip_address
+        assert record.network == ipaddress.ip_network("1.128.0.0/11")
 
         self.assertRegex(
             str(record),
@@ -123,18 +123,16 @@ class TestReader(unittest.TestCase):
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
         record = reader.city("81.2.69.160")
 
-        self.assertEqual(
-            record.country.name, "United Kingdom", "The default locale is en"
-        )
-        self.assertEqual(record.country.is_in_european_union, False)
-        self.assertEqual(
-            record.location.accuracy_radius, 100, "The accuracy_radius is populated"
-        )
-        self.assertEqual(record.registered_country.is_in_european_union, False)
-        self.assertFalse(record.traits.is_anycast)
+        assert record.country.name == "United Kingdom", "The default locale is en"
+        assert record.country.is_in_european_union is False
+        assert (
+            record.location.accuracy_radius == 100
+        ), "The accuracy_radius is populated"
+        assert record.registered_country.is_in_european_union is False
+        assert not record.traits.is_anycast
 
         record = reader.city("214.1.1.0")
-        self.assertTrue(record.traits.is_anycast)
+        assert record.traits.is_anycast
 
         reader.close()
 
@@ -146,13 +144,11 @@ class TestReader(unittest.TestCase):
 
         record = reader.connection_type(ip_address)
 
-        self.assertEqual(
-            record, eval(repr(record)), "ConnectionType repr can be eval'd"
-        )
+        assert record == eval(repr(record)), "ConnectionType repr can be eval'd"
 
-        self.assertEqual(record.connection_type, "Cellular")
-        self.assertEqual(record.ip_address, ip_address)
-        self.assertEqual(record.network, ipaddress.ip_network("1.0.1.0/24"))
+        assert record.connection_type == "Cellular"
+        assert record.ip_address == ip_address
+        assert record.network == ipaddress.ip_network("1.0.1.0/24")
 
         self.assertRegex(
             str(record),
@@ -165,16 +161,14 @@ class TestReader(unittest.TestCase):
     def test_country(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-Country-Test.mmdb")
         record = reader.country("81.2.69.160")
-        self.assertEqual(
-            record.traits.ip_address, "81.2.69.160", "IP address is added to model"
-        )
-        self.assertEqual(record.traits.network, ipaddress.ip_network("81.2.69.160/27"))
-        self.assertEqual(record.country.is_in_european_union, False)
-        self.assertEqual(record.registered_country.is_in_european_union, False)
-        self.assertFalse(record.traits.is_anycast)
+        assert record.traits.ip_address == "81.2.69.160", "IP address is added to model"
+        assert record.traits.network == ipaddress.ip_network("81.2.69.160/27")
+        assert record.country.is_in_european_union is False
+        assert record.registered_country.is_in_european_union is False
+        assert not record.traits.is_anycast
 
         record = reader.country("214.1.1.0")
-        self.assertTrue(record.traits.is_anycast)
+        assert record.traits.is_anycast
 
         reader.close()
 
@@ -184,11 +178,11 @@ class TestReader(unittest.TestCase):
         ip_address = "1.2.0.0"
         record = reader.domain(ip_address)
 
-        self.assertEqual(record, eval(repr(record)), "Domain repr can be eval'd")
+        assert record == eval(repr(record)), "Domain repr can be eval'd"
 
-        self.assertEqual(record.domain, "maxmind.com")
-        self.assertEqual(record.ip_address, ip_address)
-        self.assertEqual(record.network, ipaddress.ip_network("1.2.0.0/16"))
+        assert record.domain == "maxmind.com"
+        assert record.ip_address == ip_address
+        assert record.network == ipaddress.ip_network("1.2.0.0/16")
 
         self.assertRegex(
             str(record),
@@ -204,26 +198,24 @@ class TestReader(unittest.TestCase):
         ) as reader:
             ip_address = "74.209.24.0"
             record = reader.enterprise(ip_address)
-            self.assertEqual(record.city.confidence, 11)
-            self.assertEqual(record.country.confidence, 99)
-            self.assertEqual(record.country.geoname_id, 6252001)
-            self.assertEqual(record.country.is_in_european_union, False)
-            self.assertEqual(record.location.accuracy_radius, 27)
-            self.assertEqual(record.registered_country.is_in_european_union, False)
-            self.assertEqual(record.traits.connection_type, "Cable/DSL")
-            self.assertTrue(record.traits.is_legitimate_proxy)
-            self.assertEqual(record.traits.ip_address, ip_address)
-            self.assertEqual(
-                record.traits.network, ipaddress.ip_network("74.209.16.0/20")
-            )
-            self.assertFalse(record.traits.is_anycast)
+            assert record.city.confidence == 11
+            assert record.country.confidence == 99
+            assert record.country.geoname_id == 6252001
+            assert record.country.is_in_european_union is False
+            assert record.location.accuracy_radius == 27
+            assert record.registered_country.is_in_european_union is False
+            assert record.traits.connection_type == "Cable/DSL"
+            assert record.traits.is_legitimate_proxy
+            assert record.traits.ip_address == ip_address
+            assert record.traits.network == ipaddress.ip_network("74.209.16.0/20")
+            assert not record.traits.is_anycast
 
             record = reader.enterprise("149.101.100.0")
-            self.assertEqual(record.traits.mobile_country_code, "310")
-            self.assertEqual(record.traits.mobile_network_code, "004")
+            assert record.traits.mobile_country_code == "310"
+            assert record.traits.mobile_network_code == "004"
 
             record = reader.enterprise("214.1.1.0")
-            self.assertTrue(record.traits.is_anycast)
+            assert record.traits.is_anycast
 
     def test_isp(self) -> None:
         with geoip2.database.Reader(
@@ -231,14 +223,14 @@ class TestReader(unittest.TestCase):
         ) as reader:
             ip_address = "1.128.0.0"
             record = reader.isp(ip_address)
-            self.assertEqual(record, eval(repr(record)), "ISP repr can be eval'd")
+            assert record == eval(repr(record)), "ISP repr can be eval'd"
 
-            self.assertEqual(record.autonomous_system_number, 1221)
-            self.assertEqual(record.autonomous_system_organization, "Telstra Pty Ltd")
-            self.assertEqual(record.isp, "Telstra Internet")
-            self.assertEqual(record.organization, "Telstra Internet")
-            self.assertEqual(record.ip_address, ip_address)
-            self.assertEqual(record.network, ipaddress.ip_network("1.128.0.0/11"))
+            assert record.autonomous_system_number == 1221
+            assert record.autonomous_system_organization == "Telstra Pty Ltd"
+            assert record.isp == "Telstra Internet"
+            assert record.organization == "Telstra Internet"
+            assert record.ip_address == ip_address
+            assert record.network == ipaddress.ip_network("1.128.0.0/11")
 
             self.assertRegex(
                 str(record),
@@ -248,15 +240,15 @@ class TestReader(unittest.TestCase):
 
             record = reader.isp("149.101.100.0")
 
-            self.assertEqual(record.mobile_country_code, "310")
-            self.assertEqual(record.mobile_network_code, "004")
+            assert record.mobile_country_code == "310"
+            assert record.mobile_network_code == "004"
 
     def test_context_manager(self) -> None:
         with geoip2.database.Reader(
             "tests/data/test-data/GeoIP2-Country-Test.mmdb"
         ) as reader:
             record = reader.country("81.2.69.160")
-            self.assertEqual(record.traits.ip_address, "81.2.69.160")
+            assert record.traits.ip_address == "81.2.69.160"
 
     @patch("maxminddb.open_database")
     def test_modes(self, mock_open) -> None:

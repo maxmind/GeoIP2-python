@@ -72,42 +72,30 @@ class TestBaseClient(unittest.TestCase):
             content_type=self._content_type("country"),
         )
         country = self.run_client(self.client.country("1.2.3.4"))
-        self.assertEqual(
-            type(country), geoip2.models.Country, "return value of client.country"
-        )
-        self.assertEqual(country.continent.geoname_id, 42, "continent geoname_id is 42")
-        self.assertEqual(country.continent.code, "NA", "continent code is NA")
-        self.assertEqual(
-            country.continent.name, "North America", "continent name is North America"
-        )
-        self.assertEqual(country.country.geoname_id, 1, "country geoname_id is 1")
-        self.assertIs(
-            country.country.is_in_european_union,
-            False,
-            "country is_in_european_union is False",
-        )
-        self.assertEqual(country.country.iso_code, "US", "country iso_code is US")
-        self.assertEqual(
-            country.country.names, {"en": "United States of America"}, "country names"
-        )
-        self.assertEqual(
-            country.country.name,
-            "United States of America",
-            "country name is United States of America",
-        )
-        self.assertEqual(
-            country.maxmind.queries_remaining, 11, "queries_remaining is 11"
-        )
-        self.assertIs(
-            country.registered_country.is_in_european_union,
-            True,
-            "registered_country is_in_european_union is True",
-        )
-        self.assertEqual(
-            country.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
-        )
-        self.assertTrue(country.traits.is_anycast)
-        self.assertEqual(country.raw, self.country, "raw response is correct")
+        assert type(country) == geoip2.models.Country, "return value of client.country"
+        assert country.continent.geoname_id == 42, "continent geoname_id is 42"
+        assert country.continent.code == "NA", "continent code is NA"
+        assert (
+            country.continent.name == "North America"
+        ), "continent name is North America"
+        assert country.country.geoname_id == 1, "country geoname_id is 1"
+        assert (
+            country.country.is_in_european_union is False
+        ), "country is_in_european_union is False"
+        assert country.country.iso_code == "US", "country iso_code is US"
+        assert country.country.names == {
+            "en": "United States of America"
+        }, "country names"
+        assert (
+            country.country.name == "United States of America"
+        ), "country name is United States of America"
+        assert country.maxmind.queries_remaining == 11, "queries_remaining is 11"
+        assert (
+            country.registered_country.is_in_european_union is True
+        ), "registered_country is_in_european_union is True"
+        assert country.traits.network == ipaddress.ip_network("1.2.3.0/24"), "network"
+        assert country.traits.is_anycast
+        assert country.raw == self.country, "raw response is correct"
 
     def test_me(self):
         self.httpserver.expect_request(
@@ -118,15 +106,13 @@ class TestBaseClient(unittest.TestCase):
             content_type=self._content_type("country"),
         )
         implicit_me = self.run_client(self.client.country())
-        self.assertEqual(
-            type(implicit_me), geoip2.models.Country, "country() returns Country object"
-        )
+        assert (
+            type(implicit_me) == geoip2.models.Country
+        ), "country() returns Country object"
         explicit_me = self.run_client(self.client.country())
-        self.assertEqual(
-            type(explicit_me),
-            geoip2.models.Country,
-            "country('me') returns Country object",
-        )
+        assert (
+            type(explicit_me) == geoip2.models.Country
+        ), "country('me') returns Country object"
 
     def test_200_error(self):
         self.httpserver.expect_request(
@@ -312,11 +298,9 @@ class TestBaseClient(unittest.TestCase):
             content_type=self._content_type("city"),
         )
         city = self.run_client(self.client.city("1.2.3.4"))
-        self.assertEqual(type(city), geoip2.models.City, "return value of client.city")
-        self.assertEqual(
-            city.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
-        )
-        self.assertTrue(city.traits.is_anycast)
+        assert type(city) == geoip2.models.City, "return value of client.city"
+        assert city.traits.network == ipaddress.ip_network("1.2.3.0/24"), "network"
+        assert city.traits.is_anycast
 
     def test_insights_ok(self):
         self.httpserver.expect_request(
@@ -327,28 +311,26 @@ class TestBaseClient(unittest.TestCase):
             content_type=self._content_type("insights"),
         )
         insights = self.run_client(self.client.insights("1.2.3.4"))
-        self.assertEqual(
-            type(insights), geoip2.models.Insights, "return value of client.insights"
-        )
-        self.assertEqual(
-            insights.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
-        )
-        self.assertTrue(insights.traits.is_anycast)
-        self.assertEqual(insights.traits.static_ip_score, 1.3, "static_ip_score is 1.3")
-        self.assertEqual(insights.traits.user_count, 2, "user_count is 2")
+        assert (
+            type(insights) == geoip2.models.Insights
+        ), "return value of client.insights"
+        assert insights.traits.network == ipaddress.ip_network("1.2.3.0/24"), "network"
+        assert insights.traits.is_anycast
+        assert insights.traits.static_ip_score == 1.3, "static_ip_score is 1.3"
+        assert insights.traits.user_count == 2, "user_count is 2"
 
     def test_named_constructor_args(self):
         id = 47
         key = "1234567890ab"
         client = self.client_class(account_id=id, license_key=key)
-        self.assertEqual(client._account_id, str(id))
-        self.assertEqual(client._license_key, key)
+        assert client._account_id == str(id)
+        assert client._license_key == key
 
     def test_missing_constructor_args(self):
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             self.client_class(license_key="1234567890ab")
 
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             self.client_class("47")
 
 
