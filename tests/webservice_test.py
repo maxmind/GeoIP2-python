@@ -3,7 +3,6 @@ from __future__ import annotations
 import asyncio
 import copy
 import ipaddress
-import sys
 import unittest
 from abc import ABC, abstractmethod
 from collections import defaultdict
@@ -13,7 +12,6 @@ import pytest
 import pytest_httpserver
 from pytest_httpserver import HeaderValueMatcher
 
-sys.path.append("..")
 import geoip2
 from geoip2.errors import (
     AddressNotFoundError,
