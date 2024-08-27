@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-
-
 import ipaddress
 import re
 import unittest

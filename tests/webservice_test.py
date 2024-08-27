@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import asyncio
 import copy
 import ipaddress
@@ -357,7 +355,3 @@ class TestAsyncClient(TestBaseClient):
 
 
 del TestBaseClient
-
-
-if __name__ == "__main__":
-    unittest.main()

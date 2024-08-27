@@ -377,7 +377,3 @@ class TestNames(unittest.TestCase):
         assert (
             model.continent.name == "Nordamerika"
         ), "Correct german name for continent"
-
-
-if __name__ == "__main__":
-    unittest.main()
