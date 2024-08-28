@@ -70,7 +70,9 @@ class TestBaseClient(unittest.TestCase):
             content_type=self._content_type("country"),
         )
         country = self.run_client(self.client.country("1.2.3.4"))
-        assert type(country) == geoip2.models.Country, "return value of client.country"
+        assert isinstance(
+            country, geoip2.models.Country
+        ), "return value of client.country"
         assert country.continent.geoname_id == 42, "continent geoname_id is 42"
         assert country.continent.code == "NA", "continent code is NA"
         assert (
@@ -104,12 +106,12 @@ class TestBaseClient(unittest.TestCase):
             content_type=self._content_type("country"),
         )
         implicit_me = self.run_client(self.client.country())
-        assert (
-            type(implicit_me) == geoip2.models.Country
+        assert isinstance(
+            implicit_me, geoip2.models.Country
         ), "country() returns Country object"
         explicit_me = self.run_client(self.client.country())
-        assert (
-            type(explicit_me) == geoip2.models.Country
+        assert isinstance(
+            explicit_me, geoip2.models.Country
         ), "country('me') returns Country object"
 
     def test_200_error(self):
@@ -293,7 +295,7 @@ class TestBaseClient(unittest.TestCase):
             content_type=self._content_type("city"),
         )
         city = self.run_client(self.client.city("1.2.3.4"))
-        assert type(city) == geoip2.models.City, "return value of client.city"
+        assert isinstance(city, geoip2.models.City), "return value of client.city"
         assert city.traits.network == ipaddress.ip_network("1.2.3.0/24"), "network"
         assert city.traits.is_anycast
 
@@ -306,8 +308,8 @@ class TestBaseClient(unittest.TestCase):
             content_type=self._content_type("insights"),
         )
         insights = self.run_client(self.client.insights("1.2.3.4"))
-        assert (
-            type(insights) == geoip2.models.Insights
+        assert isinstance(
+            insights, geoip2.models.Insights
         ), "return value of client.insights"
         assert insights.traits.network == ipaddress.ip_network("1.2.3.0/24"), "network"
         assert insights.traits.is_anycast

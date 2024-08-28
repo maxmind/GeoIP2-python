@@ -88,28 +88,30 @@ class TestModels:
         }
 
         model = geoip2.models.Insights(raw)
-        assert type(model) == geoip2.models.Insights, "geoip2.models.Insights object"
-        assert type(model.city) == geoip2.records.City, "geoip2.records.City object"
-        assert (
-            type(model.continent) == geoip2.records.Continent
+        assert isinstance(
+            model, geoip2.models.Insights
+        ), "geoip2.models.Insights object"
+        assert isinstance(model.city, geoip2.records.City), "geoip2.records.City object"
+        assert isinstance(
+            model.continent, geoip2.records.Continent
         ), "geoip2.records.Continent object"
-        assert (
-            type(model.country) == geoip2.records.Country
+        assert isinstance(
+            model.country, geoip2.records.Country
         ), "geoip2.records.Country object"
-        assert (
-            type(model.registered_country) == geoip2.records.Country
+        assert isinstance(
+            model.registered_country, geoip2.records.Country
         ), "geoip2.records.Country object"
-        assert (
-            type(model.represented_country) == geoip2.records.RepresentedCountry
+        assert isinstance(
+            model.represented_country, geoip2.records.RepresentedCountry
         ), "geoip2.records.RepresentedCountry object"
-        assert (
-            type(model.location) == geoip2.records.Location
+        assert isinstance(
+            model.location, geoip2.records.Location
         ), "geoip2.records.Location object"
-        assert (
-            type(model.subdivisions[0]) == geoip2.records.Subdivision
+        assert isinstance(
+            model.subdivisions[0], geoip2.records.Subdivision
         ), "geoip2.records.Subdivision object"
-        assert (
-            type(model.traits) == geoip2.records.Traits
+        assert isinstance(
+            model.traits, geoip2.records.Traits
         ), "geoip2.records.Traits object"
         assert model.raw == raw, "raw method returns raw input"
         assert model.subdivisions[0].iso_code == "MN", "div 1 has correct iso_code"
@@ -165,25 +167,27 @@ class TestModels:
 
     def test_insights_min(self) -> None:
         model = geoip2.models.Insights({"traits": {"ip_address": "5.6.7.8"}})
-        assert type(model) == geoip2.models.Insights, "geoip2.models.Insights object"
-        assert type(model.city) == geoip2.records.City, "geoip2.records.City object"
-        assert (
-            type(model.continent) == geoip2.records.Continent
+        assert isinstance(
+            model, geoip2.models.Insights
+        ), "geoip2.models.Insights object"
+        assert isinstance(model.city, geoip2.records.City), "geoip2.records.City object"
+        assert isinstance(
+            model.continent, geoip2.records.Continent
         ), "geoip2.records.Continent object"
-        assert (
-            type(model.country) == geoip2.records.Country
+        assert isinstance(
+            model.country, geoip2.records.Country
         ), "geoip2.records.Country object"
-        assert (
-            type(model.registered_country) == geoip2.records.Country
+        assert isinstance(
+            model.registered_country, geoip2.records.Country
         ), "geoip2.records.Country object"
-        assert (
-            type(model.location) == geoip2.records.Location
+        assert isinstance(
+            model.location, geoip2.records.Location
         ), "geoip2.records.Location object"
-        assert (
-            type(model.traits) == geoip2.records.Traits
+        assert isinstance(
+            model.traits, geoip2.records.Traits
         ), "geoip2.records.Traits object"
-        assert (
-            type(model.subdivisions.most_specific) == geoip2.records.Subdivision
+        assert isinstance(
+            model.subdivisions.most_specific, geoip2.records.Subdivision
         ), "geoip2.records.Subdivision object returned evenwhen none are available."
         assert model.subdivisions.most_specific.names == {}, "Empty names hash returned"
 
@@ -210,22 +214,22 @@ class TestModels:
             },
         }
         model = geoip2.models.City(raw)
-        assert type(model) == geoip2.models.City, "geoip2.models.City object"
-        assert type(model.city) == geoip2.records.City, "geoip2.records.City object"
-        assert (
-            type(model.continent) == geoip2.records.Continent
+        assert isinstance(model, geoip2.models.City), "geoip2.models.City object"
+        assert isinstance(model.city, geoip2.records.City), "geoip2.records.City object"
+        assert isinstance(
+            model.continent, geoip2.records.Continent
         ), "geoip2.records.Continent object"
-        assert (
-            type(model.country) == geoip2.records.Country
+        assert isinstance(
+            model.country, geoip2.records.Country
         ), "geoip2.records.Country object"
-        assert (
-            type(model.registered_country) == geoip2.records.Country
+        assert isinstance(
+            model.registered_country, geoip2.records.Country
         ), "geoip2.records.Country object"
-        assert (
-            type(model.location) == geoip2.records.Location
+        assert isinstance(
+            model.location, geoip2.records.Location
         ), "geoip2.records.Location object"
-        assert (
-            type(model.traits) == geoip2.records.Traits
+        assert isinstance(
+            model.traits, geoip2.records.Traits
         ), "geoip2.records.Traits object"
         assert model.raw == raw, "raw method returns raw input"
         assert model.continent.geoname_id == 42, "continent geoname_id is 42"
