@@ -2,12 +2,11 @@ import re
 
 import pytest
 from typing import Dict
-import unittest
 
 import geoip2.models
 
 
-class TestModels(unittest.TestCase):
+class TestModels:
     def test_insights_full(self) -> None:
         raw = {
             "city": {
@@ -313,7 +312,7 @@ class TestModels(unittest.TestCase):
         assert model.traits.ip_address == "1.2.3.4", "correct ip"
 
 
-class TestNames(unittest.TestCase):
+class TestNames:
     raw: Dict = {
         "continent": {
             "code": "NA",

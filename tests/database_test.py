@@ -1,6 +1,5 @@
 import ipaddress
 import re
-import unittest
 from unittest.mock import patch, MagicMock
 
 import pytest
@@ -15,7 +14,7 @@ except ImportError:
     maxminddb.extension = None  # type: ignore
 
 
-class TestReader(unittest.TestCase):
+class TestReader:
     def test_language_list(self) -> None:
         reader = geoip2.database.Reader(
             "tests/data/test-data/GeoIP2-Country-Test.mmdb",
