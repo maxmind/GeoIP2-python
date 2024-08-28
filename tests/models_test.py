@@ -269,7 +269,7 @@ class TestModels:
         assert re.search(
             r"^geoip2.models.City\(\{.*geoname_id.*\}, \[.*en.*\]\)", str(model)
         ), "City str representation looks reasonable"
-        assert not (model == True), "__eq__ does not blow up on weird input"
+        assert not (model == 8), "__eq__ does not blow up on weird input"
 
     def test_unknown_keys(self) -> None:
         model = geoip2.models.City(

@@ -240,5 +240,5 @@ class TestReader:
         with geoip2.database.Reader(
             path,
             mode=geoip2.database.MODE_MMAP_EXT,
-        ) as reader:
+        ):
             mock_open.assert_called_once_with(path, geoip2.database.MODE_MMAP_EXT)
