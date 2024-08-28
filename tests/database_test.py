@@ -4,11 +4,8 @@
 from __future__ import unicode_literals
 
 import ipaddress
-import sys
 import unittest
 from unittest.mock import patch, MagicMock
-
-sys.path.append("..")
 
 import geoip2.database
 import geoip2.errors

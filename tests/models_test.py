@@ -7,8 +7,6 @@ import sys
 from typing import Dict
 import unittest
 
-sys.path.append("..")
-
 import geoip2.models
 
 
