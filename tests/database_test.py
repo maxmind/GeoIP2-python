@@ -232,6 +232,13 @@ class TestReader:
             record = reader.country("81.2.69.160")
             assert record.traits.ip_address == "81.2.69.160"
 
+    def test_metadata(self) -> None:
+        with geoip2.database.Reader(
+            "tests/data/test-data/GeoIP2-Country-Test.mmdb"
+        ) as reader:
+            meta = reader.metadata()
+            assert meta.database_type == "GeoIP2-Country"
+
     @patch("maxminddb.open_database")
     def test_modes(self, mock_open) -> None:
         mock_open.return_value = MagicMock()
