@@ -1,6 +1,7 @@
 import asyncio
 import copy
 import ipaddress
+from contextlib import ExitStack, AsyncExitStack
 from typing import cast, Dict
 import unittest
 from pytest_httpserver import HeaderValueMatcher
@@ -333,9 +334,14 @@ class TestBaseClient(unittest.TestCase):
 
 class TestClient(TestBaseClient):
     def setUp(self):
+        self.stack = ExitStack()
         self.client_class = Client
         self.client = Client(42, "abcdef123456")
         self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
+        self.stack.enter_context(self.client)
+
+    def tearDown(self):
+        self.stack.close()
 
     def run_client(self, v):
         return v
@@ -343,12 +349,15 @@ class TestClient(TestBaseClient):
 
 class TestAsyncClient(TestBaseClient):
     def setUp(self):
+        self.stack = AsyncExitStack()
         self._loop = asyncio.new_event_loop()
         self.client_class = AsyncClient
         self.client = AsyncClient(42, "abcdef123456")
         self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
+        self._loop.run_until_complete(self.stack.enter_async_context(self.client))
 
     def tearDown(self):
+        self._loop.run_until_complete(self.stack.aclose())
         self._loop.run_until_complete(self.client.close())
         self._loop.close()
 
