@@ -36,6 +36,8 @@ classifiers = [
 
 [project.optional-dependencies]
 test = [
+    "pytest~=8.3",
+    "pytest-cov~=5.0",
     "pytest-httpserver>=1.0.10",
 ]
 
