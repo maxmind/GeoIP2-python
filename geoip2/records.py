@@ -5,7 +5,7 @@ Records
 
 """
 
-# pylint:disable=too-many-arguments,too-many-instance-attributes,too-many-locals
+# pylint:disable=too-many-arguments,too-many-positional-arguments,too-many-instance-attributes,too-many-locals
 
 import ipaddress
 

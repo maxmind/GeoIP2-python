@@ -73,7 +73,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         timeout: float,
     ) -> None:
         """Construct a Client."""
-        # pylint: disable=too-many-arguments
+        # pylint: disable=too-many-arguments,too-many-positional-arguments
         if locales is None:
             locales = ["en"]
 
@@ -260,7 +260,7 @@ class AsyncClient(BaseClient):
     _existing_session: aiohttp.ClientSession
     _proxy: Optional[str]
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         account_id: int,
         license_key: str,
@@ -423,7 +423,7 @@ class Client(BaseClient):
     _session: requests.Session
     _proxies: Optional[Dict[str, str]]
 
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         account_id: int,
         license_key: str,
