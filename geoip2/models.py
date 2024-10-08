@@ -471,7 +471,7 @@ class ASN(SimpleModel):
     autonomous_system_number: Optional[int]
     autonomous_system_organization: Optional[str]
 
-    # pylint:disable=too-many-arguments
+    # pylint:disable=too-many-arguments,too-many-positional-arguments
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
         super().__init__(raw)
         self.autonomous_system_number = cast(
@@ -623,7 +623,7 @@ class ISP(ASN):
     mobile_network_code: Optional[str]
     organization: Optional[str]
 
-    # pylint:disable=too-many-arguments
+    # pylint:disable=too-many-arguments,too-many-positional-arguments
     def __init__(self, raw: Dict[str, Union[str, int]]) -> None:
         super().__init__(raw)
         self.isp = cast(Optional[str], raw.get("isp"))
