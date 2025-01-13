@@ -4,6 +4,12 @@
 History
 -------
 
+4.9.0
+++++++++++++++++++
+
+* ``metro_code`` on ``geoip2.record.Location`` has been deprecated. The
+  code values are no longer being maintained.
+
 4.8.1 (2024-11-18)
 ++++++++++++++++++
 

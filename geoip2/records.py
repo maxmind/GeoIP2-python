@@ -357,10 +357,10 @@ class Location(Record):
 
     .. attribute:: metro_code
 
-      The metro code of the location if the
-      location is in the US. MaxMind returns the same metro codes as the
-      `Google AdWords API
-      <https://developers.google.com/adwords/api/docs/appendix/cities-DMAregions>`_.
+      The metro code is a no-longer-maintained code for targeting
+      advertisements in Google.
+
+      .. deprecated:: 4.9.0
 
       :type: int
 
