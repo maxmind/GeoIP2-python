@@ -4,7 +4,6 @@
 import asyncio
 import copy
 import ipaddress
-import json
 import sys
 from typing import cast, Dict
 import unittest
