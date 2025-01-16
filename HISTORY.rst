@@ -7,6 +7,8 @@ History
 4.9.0
 ++++++++++++++++++
 
+* IMPORTANT: Python 3.9 or greater is required. If you are using an older
+  version, please use an earlier release.
 * ``metro_code`` on ``geoip2.record.Location`` has been deprecated. The
   code values are no longer being maintained.
 * The type hinting for the optional `locales` keyword argument now allows
