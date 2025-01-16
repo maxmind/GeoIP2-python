@@ -9,6 +9,8 @@ History
 
 * ``metro_code`` on ``geoip2.record.Location`` has been deprecated. The
   code values are no longer being maintained.
+* The type hinting for the optional `locales` keyword argument now allows
+  any sequence of strings rather than only list of strings.
 
 4.8.1 (2024-11-18)
 ++++++++++++++++++

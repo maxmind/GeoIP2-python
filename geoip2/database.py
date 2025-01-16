@@ -7,7 +7,7 @@ GeoIP2 Database Reader
 
 import inspect
 import os
-from typing import Any, AnyStr, cast, IO, List, Optional, Type, Union
+from typing import Any, AnyStr, cast, IO, Optional, Sequence, Type, Union
 
 import maxminddb
 
@@ -72,7 +72,7 @@ class Reader:
     def __init__(
         self,
         fileish: Union[AnyStr, int, os.PathLike, IO],
-        locales: Optional[List[str]] = None,
+        locales: Optional[Sequence[str]] = None,
         mode: int = MODE_AUTO,
     ) -> None:
         """Create GeoIP2 Reader.

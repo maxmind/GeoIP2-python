@@ -11,7 +11,7 @@ import ipaddress
 
 # pylint:disable=R0903
 from abc import ABCMeta
-from typing import Dict, List, Optional, Type, Union
+from typing import Dict, Optional, Type, Sequence, Union
 
 from geoip2.mixins import SimpleEquality
 
@@ -28,11 +28,11 @@ class PlaceRecord(Record, metaclass=ABCMeta):
     """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`."""
 
     names: Dict[str, str]
-    _locales: List[str]
+    _locales: Sequence[str]
 
     def __init__(
         self,
-        locales: Optional[List[str]] = None,
+        locales: Optional[Sequence[str]] = None,
         names: Optional[Dict[str, str]] = None,
     ) -> None:
         if locales is None:
@@ -93,7 +93,7 @@ class City(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[List[str]] = None,
+        locales: Optional[Sequence[str]] = None,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         names: Optional[Dict[str, str]] = None,
@@ -147,7 +147,7 @@ class Continent(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[List[str]] = None,
+        locales: Optional[Sequence[str]] = None,
         code: Optional[str] = None,
         geoname_id: Optional[int] = None,
         names: Optional[Dict[str, str]] = None,
@@ -217,7 +217,7 @@ class Country(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[List[str]] = None,
+        locales: Optional[Sequence[str]] = None,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         is_in_european_union: bool = False,
@@ -298,7 +298,7 @@ class RepresentedCountry(Country):
 
     def __init__(
         self,
-        locales: Optional[List[str]] = None,
+        locales: Optional[Sequence[str]] = None,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         is_in_european_union: bool = False,
@@ -519,7 +519,7 @@ class Subdivision(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[List[str]] = None,
+        locales: Optional[Sequence[str]] = None,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         iso_code: Optional[str] = None,
@@ -545,14 +545,14 @@ class Subdivisions(tuple):
     """
 
     def __new__(
-        cls: Type["Subdivisions"], locales: Optional[List[str]], *subdivisions
+        cls: Type["Subdivisions"], locales: Optional[Sequence[str]], *subdivisions
     ) -> "Subdivisions":
         subobjs = tuple(Subdivision(locales, **x) for x in subdivisions)
         obj = super().__new__(cls, subobjs)  # type: ignore
         return obj
 
     def __init__(
-        self, locales: Optional[List[str]], *subdivisions  # pylint:disable=W0613
+        self, locales: Optional[Sequence[str]], *subdivisions  # pylint:disable=W0613
     ) -> None:
         self._locales = locales
         super().__init__()

@@ -27,7 +27,7 @@ Requests to the web service are always made with SSL.
 
 import ipaddress
 import json
-from typing import Any, Dict, cast, List, Optional, Type, Union
+from typing import Any, Dict, cast, Optional, Sequence, Type, Union
 
 import aiohttp
 import aiohttp.http
@@ -61,7 +61,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
     _account_id: str
     _host: str
     _license_key: str
-    _locales: List[str]
+    _locales: Sequence[str]
     _timeout: float
 
     def __init__(
@@ -69,7 +69,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         account_id: int,
         license_key: str,
         host: str,
-        locales: Optional[List[str]],
+        locales: Optional[Sequence[str]],
         timeout: float,
     ) -> None:
         """Construct a Client."""
@@ -265,7 +265,7 @@ class AsyncClient(BaseClient):
         account_id: int,
         license_key: str,
         host: str = "geoip.maxmind.com",
-        locales: Optional[List[str]] = None,
+        locales: Optional[Sequence[str]] = None,
         timeout: float = 60,
         proxy: Optional[str] = None,
     ) -> None:
@@ -428,7 +428,7 @@ class Client(BaseClient):
         account_id: int,
         license_key: str,
         host: str = "geoip.maxmind.com",
-        locales: Optional[List[str]] = None,
+        locales: Optional[Sequence[str]] = None,
         timeout: float = 60,
         proxy: Optional[str] = None,
     ) -> None:
