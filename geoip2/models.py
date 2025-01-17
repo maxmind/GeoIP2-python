@@ -14,7 +14,7 @@ https://dev.maxmind.com/geoip/docs/web-services?lang=en for more details.
 # pylint: disable=too-many-instance-attributes,too-few-public-methods
 import ipaddress
 from abc import ABCMeta
-from typing import Any, cast, Dict, List, Optional, Union
+from typing import Any, cast, Dict, Optional, Sequence, Union
 
 import geoip2.records
 from geoip2.mixins import SimpleEquality
@@ -76,7 +76,7 @@ class Country(SimpleEquality):
     traits: geoip2.records.Traits
 
     def __init__(
-        self, raw_response: Dict[str, Any], locales: Optional[List[str]] = None
+        self, raw_response: Dict[str, Any], locales: Optional[Sequence[str]] = None
     ) -> None:
         if locales is None:
             locales = ["en"]
@@ -182,7 +182,7 @@ class City(Country):
     subdivisions: geoip2.records.Subdivisions
 
     def __init__(
-        self, raw_response: Dict[str, Any], locales: Optional[List[str]] = None
+        self, raw_response: Dict[str, Any], locales: Optional[Sequence[str]] = None
     ) -> None:
         super().__init__(raw_response, locales)
         self.city = geoip2.records.City(locales, **raw_response.get("city", {}))
