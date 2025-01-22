@@ -110,7 +110,7 @@ class TestBaseClient(unittest.TestCase):
             country.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
         )
         self.assertTrue(country.traits.is_anycast)
-        self.assertEqual(country.raw, self.country, "raw response is correct")
+        self.assertEqual(country.to_dict(), self.country, "raw response is correct")
 
     def test_me(self):
         self.httpserver.expect_request(
@@ -357,6 +357,7 @@ class TestClient(TestBaseClient):
         self.client_class = Client
         self.client = Client(42, "abcdef123456")
         self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
+        self.maxDiff = 20_000
 
     def run_client(self, v):
         return v
@@ -368,6 +369,7 @@ class TestAsyncClient(TestBaseClient):
         self.client_class = AsyncClient
         self.client = AsyncClient(42, "abcdef123456")
         self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
+        self.maxDiff = 20_000
 
     def tearDown(self):
         self._loop.run_until_complete(self.client.close())

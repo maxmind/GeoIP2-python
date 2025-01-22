@@ -13,14 +13,14 @@ import ipaddress
 from abc import ABCMeta
 from typing import Dict, Optional, Type, Sequence, Union
 
-from geoip2.mixins import SimpleEquality
+from geoip2.mixins import Model
 
 
-class Record(SimpleEquality, metaclass=ABCMeta):
+class Record(Model, metaclass=ABCMeta):
     """All records are subclasses of the abstract class ``Record``."""
 
     def __repr__(self) -> str:
-        args = ", ".join(f"{k}={v!r}" for k, v in self.__dict__.items())
+        args = ", ".join(f"{k}={v!r}" for k, v in self.to_dict().items())
         return f"{self.__module__}.{self.__class__.__name__}({args})"
 
 

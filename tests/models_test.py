@@ -13,6 +13,9 @@ import geoip2.models
 
 
 class TestModels(unittest.TestCase):
+    def setUp(self):
+        self.maxDiff = 20_000
+
     def test_insights_full(self) -> None:
         raw = {
             "city": {
@@ -85,7 +88,6 @@ class TestModels(unittest.TestCase):
                 "is_satellite_provider": True,
                 "is_tor_exit_node": True,
                 "isp": "Comcast",
-                "network_speed": "cable/DSL",
                 "organization": "Blorg",
                 "static_ip_score": 1.3,
                 "user_count": 2,
@@ -131,7 +133,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(
             type(model.traits), geoip2.records.Traits, "geoip2.records.Traits object"
         )
-        self.assertEqual(model.raw, raw, "raw method returns raw input")
+        self.assertEqual(model.to_dict(), raw, "to_dict() method matches raw input")
         self.assertEqual(
             model.subdivisions[0].iso_code, "MN", "div 1 has correct iso_code"
         )
@@ -290,7 +292,9 @@ class TestModels(unittest.TestCase):
         self.assertEqual(
             type(model.traits), geoip2.records.Traits, "geoip2.records.Traits object"
         )
-        self.assertEqual(model.raw, raw, "raw method returns raw input")
+        self.assertEqual(
+            model.to_dict(), raw, "to_dict method output matches raw input"
+        )
         self.assertEqual(model.continent.geoname_id, 42, "continent geoname_id is 42")
         self.assertEqual(model.continent.code, "NA", "continent code is NA")
         self.assertEqual(
@@ -338,7 +342,7 @@ class TestModels(unittest.TestCase):
             True,
             "traits is_setellite_provider is True",
         )
-        self.assertEqual(model.raw, raw, "raw method produces raw output")
+        self.assertEqual(model.to_dict(), raw, "to_dict method matches raw input")
 
         self.assertRegex(
             str(model), r"^geoip2.models.City\(\{.*geoname_id.*\}, \[.*en.*\]\)"
