@@ -32,8 +32,8 @@ class PlaceRecord(Record, metaclass=ABCMeta):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
-        names: Optional[Dict[str, str]] = None,
+        locales: Optional[Sequence[str]],
+        names: Optional[Dict[str, str]],
     ) -> None:
         if locales is None:
             locales = ["en"]
@@ -93,7 +93,8 @@ class City(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
+        locales: Optional[Sequence[str]],
+        *,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         names: Optional[Dict[str, str]] = None,
@@ -147,7 +148,8 @@ class Continent(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
+        locales: Optional[Sequence[str]],
+        *,
         code: Optional[str] = None,
         geoname_id: Optional[int] = None,
         names: Optional[Dict[str, str]] = None,
@@ -217,7 +219,8 @@ class Country(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
+        locales: Optional[Sequence[str]],
+        *,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         is_in_european_union: bool = False,
@@ -298,7 +301,8 @@ class RepresentedCountry(Country):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
+        locales: Optional[Sequence[str]],
+        *,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         is_in_european_union: bool = False,
@@ -310,7 +314,12 @@ class RepresentedCountry(Country):
     ) -> None:
         self.type = type
         super().__init__(
-            locales, confidence, geoname_id, is_in_european_union, iso_code, names
+            locales,
+            confidence=confidence,
+            geoname_id=geoname_id,
+            is_in_european_union=is_in_european_union,
+            iso_code=iso_code,
+            names=names,
         )
 
 
@@ -391,6 +400,7 @@ class Location(Record):
 
     def __init__(
         self,
+        *,
         average_income: Optional[int] = None,
         accuracy_radius: Optional[int] = None,
         latitude: Optional[float] = None,
@@ -425,7 +435,7 @@ class MaxMind(Record):
 
     queries_remaining: Optional[int]
 
-    def __init__(self, queries_remaining: Optional[int] = None, **_) -> None:
+    def __init__(self, *, queries_remaining: Optional[int] = None, **_) -> None:
         self.queries_remaining = queries_remaining
 
 
@@ -460,7 +470,7 @@ class Postal(Record):
     confidence: Optional[int]
 
     def __init__(
-        self, code: Optional[str] = None, confidence: Optional[int] = None, **_
+        self, *, code: Optional[str] = None, confidence: Optional[int] = None, **_
     ) -> None:
         self.code = code
         self.confidence = confidence
@@ -519,7 +529,8 @@ class Subdivision(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
+        locales: Optional[Sequence[str]],
+        *,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         iso_code: Optional[str] = None,
@@ -850,6 +861,7 @@ class Traits(Record):
 
     def __init__(
         self,
+        *,
         autonomous_system_number: Optional[int] = None,
         autonomous_system_organization: Optional[str] = None,
         connection_type: Optional[str] = None,
