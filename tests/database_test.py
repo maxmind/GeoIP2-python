@@ -82,7 +82,7 @@ class TestReader(unittest.TestCase):
         self.assertEqual(record.is_public_proxy, False)
         self.assertEqual(record.is_residential_proxy, False)
         self.assertEqual(record.is_tor_exit_node, False)
-        self.assertEqual(record.ip_address, ip_address)
+        self.assertEqual(record.ip_address, ipaddress.ip_address(ip_address))
         self.assertEqual(record.network, ipaddress.ip_network("1.2.0.0/16"))
         reader.close()
 
@@ -99,7 +99,7 @@ class TestReader(unittest.TestCase):
         self.assertEqual(record.is_public_proxy, True)
         self.assertEqual(record.is_residential_proxy, True)
         self.assertEqual(record.is_tor_exit_node, True)
-        self.assertEqual(record.ip_address, ip_address)
+        self.assertEqual(record.ip_address, ipaddress.ip_address(ip_address))
         self.assertEqual(record.network, ipaddress.ip_network("81.2.69.0/24"))
         reader.close()
 
@@ -113,7 +113,7 @@ class TestReader(unittest.TestCase):
 
         self.assertEqual(record.autonomous_system_number, 1221)
         self.assertEqual(record.autonomous_system_organization, "Telstra Pty Ltd")
-        self.assertEqual(record.ip_address, ip_address)
+        self.assertEqual(record.ip_address, ipaddress.ip_address(ip_address))
         self.assertEqual(record.network, ipaddress.ip_network("1.128.0.0/11"))
 
         self.assertRegex(
@@ -156,7 +156,7 @@ class TestReader(unittest.TestCase):
         )
 
         self.assertEqual(record.connection_type, "Cellular")
-        self.assertEqual(record.ip_address, ip_address)
+        self.assertEqual(record.ip_address, ipaddress.ip_address(ip_address))
         self.assertEqual(record.network, ipaddress.ip_network("1.0.1.0/24"))
 
         self.assertRegex(
@@ -171,7 +171,9 @@ class TestReader(unittest.TestCase):
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-Country-Test.mmdb")
         record = reader.country("81.2.69.160")
         self.assertEqual(
-            record.traits.ip_address, "81.2.69.160", "IP address is added to model"
+            record.traits.ip_address,
+            ipaddress.ip_address("81.2.69.160"),
+            "IP address is added to model",
         )
         self.assertEqual(record.traits.network, ipaddress.ip_network("81.2.69.160/27"))
         self.assertEqual(record.country.is_in_european_union, False)
@@ -192,7 +194,7 @@ class TestReader(unittest.TestCase):
         self.assertEqual(record, eval(repr(record)), "Domain repr can be eval'd")
 
         self.assertEqual(record.domain, "maxmind.com")
-        self.assertEqual(record.ip_address, ip_address)
+        self.assertEqual(record.ip_address, ipaddress.ip_address(ip_address))
         self.assertEqual(record.network, ipaddress.ip_network("1.2.0.0/16"))
 
         self.assertRegex(
@@ -217,7 +219,7 @@ class TestReader(unittest.TestCase):
             self.assertEqual(record.registered_country.is_in_european_union, False)
             self.assertEqual(record.traits.connection_type, "Cable/DSL")
             self.assertTrue(record.traits.is_legitimate_proxy)
-            self.assertEqual(record.traits.ip_address, ip_address)
+            self.assertEqual(record.traits.ip_address, ipaddress.ip_address(ip_address))
             self.assertEqual(
                 record.traits.network, ipaddress.ip_network("74.209.16.0/20")
             )
@@ -242,7 +244,7 @@ class TestReader(unittest.TestCase):
             self.assertEqual(record.autonomous_system_organization, "Telstra Pty Ltd")
             self.assertEqual(record.isp, "Telstra Internet")
             self.assertEqual(record.organization, "Telstra Internet")
-            self.assertEqual(record.ip_address, ip_address)
+            self.assertEqual(record.ip_address, ipaddress.ip_address(ip_address))
             self.assertEqual(record.network, ipaddress.ip_network("1.128.0.0/11"))
 
             self.assertRegex(
@@ -261,7 +263,9 @@ class TestReader(unittest.TestCase):
             "tests/data/test-data/GeoIP2-Country-Test.mmdb"
         ) as reader:
             record = reader.country("81.2.69.160")
-            self.assertEqual(record.traits.ip_address, "81.2.69.160")
+            self.assertEqual(
+                record.traits.ip_address, ipaddress.ip_address("81.2.69.160")
+            )
 
     @patch("maxminddb.open_database")
     def test_modes(self, mock_open) -> None:

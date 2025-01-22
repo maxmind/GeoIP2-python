@@ -9,7 +9,7 @@ class Model(metaclass=ABCMeta):
     """Shared methods for MaxMind model classes"""
 
     def __eq__(self, other: Any) -> bool:
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+        return isinstance(other, self.__class__) and self.to_dict() == other.to_dict()
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -42,8 +42,10 @@ class Model(metaclass=ABCMeta):
             elif value is not None and value is not False:
                 result[key] = value
 
-        # network is a property for performance reasons
+        # network and ip_address properties for performance reasons
         # pylint: disable=no-member
+        if hasattr(self, "ip_address") and self.ip_address is not None:
+            result["ip_address"] = str(self.ip_address)
         if hasattr(self, "network") and self.network is not None:
             result["network"] = str(self.network)
 

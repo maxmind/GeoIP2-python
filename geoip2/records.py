@@ -838,7 +838,7 @@ class Traits(Record):
     autonomous_system_organization: Optional[str]
     connection_type: Optional[str]
     domain: Optional[str]
-    ip_address: Optional[str]
+    _ip_address: Optional[str]
     is_anonymous: bool
     is_anonymous_proxy: bool
     is_anonymous_vpn: bool
@@ -909,7 +909,7 @@ class Traits(Record):
         self.static_ip_score = static_ip_score
         self.user_type = user_type
         self.user_count = user_count
-        self.ip_address = ip_address
+        self._ip_address = ip_address
         if network is None:
             self._network = None
         else:
@@ -918,6 +918,15 @@ class Traits(Record):
         # for database lookups. Customers using the database tend to be
         # much more performance sensitive than web service users.
         self._prefix_len = prefix_len
+
+    @property
+    def ip_address(self):
+        """The IP address for the record"""
+        if not isinstance(
+            self._ip_address, (ipaddress.IPv4Address, ipaddress.IPv6Address)
+        ):
+            self._ip_address = ipaddress.ip_address(self._ip_address)
+        return self._ip_address
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:

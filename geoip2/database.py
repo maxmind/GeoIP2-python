@@ -265,7 +265,7 @@ class Reader:
         ip_address: IPAddress,
     ) -> Union[ConnectionType, ISP, AnonymousIP, Domain, ASN]:
         (record, prefix_len) = self._get(types, ip_address)
-        return model_class(ip_address=ip_address, prefix_len=prefix_len, **record)
+        return model_class(ip_address, prefix_len=prefix_len, **record)
 
     def metadata(
         self,

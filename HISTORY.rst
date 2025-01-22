@@ -10,8 +10,10 @@ History
 * BREAKING: The ``raw`` attribute on the model classes has been replaced
   with a ``to_dict()`` method. This can be used to get a representation of
   the object that is suitable for serialization.
+* BREAKING: The ``ip_address`` property on the model classes now always returns
+  a ``ipaddress.IPv4Address`` or ``ipaddress.IPv6Address``.
 * BREAKING: The model and record classes now require all arguments other than
-  ``locales`` to be keyword arguments.
+  ``locales`` and ``ip_address`` to be keyword arguments.
 * BREAKING: ``geoip2.mixins`` has been made internal. This normally would not
   have been used by external code.
 * IMPORTANT: Python 3.9 or greater is required. If you are using an older

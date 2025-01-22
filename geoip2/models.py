@@ -112,7 +112,7 @@ class Country(Model):
 
     def __repr__(self) -> str:
         return (
-            f"{self.__module__}.{self.__class__.__name__}({self._locales}, "
+            f"{self.__module__}.{self.__class__.__name__}({repr(self._locales)}, "
             f"{', '.join(f'{k}={repr(v)}' for k, v in self.to_dict().items())})"
         )
 
@@ -359,13 +359,13 @@ class Enterprise(City):
 class SimpleModel(Model, metaclass=ABCMeta):
     """Provides basic methods for non-location models"""
 
-    ip_address: str
+    _ip_address: IPAddress
     _network: Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]
-    _prefix_len: int
+    _prefix_len: Optional[int]
 
     def __init__(
         self,
-        ip_address: Optional[str],
+        ip_address: IPAddress,
         network: Optional[str],
         prefix_len: Optional[int],
     ) -> None:
@@ -378,13 +378,27 @@ class SimpleModel(Model, metaclass=ABCMeta):
             # used.
             self._network = None
             self._prefix_len = prefix_len
-        self.ip_address = ip_address
+        self._ip_address = ip_address
 
     def __repr__(self) -> str:
+        d = self.to_dict()
+        d.pop("ip_address", None)
         return (
-            f"{self.__module__}.{self.__class__.__name__}"
-            f"({', '.join(f'{k}={repr(v)}' for k, v in self.to_dict().items())})"
+            f"{self.__module__}.{self.__class__.__name__}("
+            + repr(str(self._ip_address))
+            + ", "
+            + ", ".join(f"{k}={repr(v)}" for k, v in d.items())
+            + ")"
         )
+
+    @property
+    def ip_address(self):
+        """The IP address for the record"""
+        if not isinstance(
+            self._ip_address, (ipaddress.IPv4Address, ipaddress.IPv6Address)
+        ):
+            self._ip_address = ipaddress.ip_address(self._ip_address)
+        return self._ip_address
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
@@ -475,6 +489,7 @@ class AnonymousIP(SimpleModel):
 
     def __init__(
         self,
+        ip_address: IPAddress,
         *,
         is_anonymous: bool = False,
         is_anonymous_vpn: bool = False,
@@ -482,7 +497,6 @@ class AnonymousIP(SimpleModel):
         is_public_proxy: bool = False,
         is_residential_proxy: bool = False,
         is_tor_exit_node: bool = False,
-        ip_address: Optional[str] = None,
         network: Optional[str] = None,
         prefix_len: Optional[int] = None,
         **_,
@@ -535,10 +549,10 @@ class ASN(SimpleModel):
     # pylint:disable=too-many-arguments,too-many-positional-arguments
     def __init__(
         self,
+        ip_address: IPAddress,
         *,
         autonomous_system_number: Optional[int] = None,
         autonomous_system_organization: Optional[str] = None,
-        ip_address: Optional[str] = None,
         network: Optional[str] = None,
         prefix_len: Optional[int] = None,
         **_,
@@ -586,9 +600,9 @@ class ConnectionType(SimpleModel):
 
     def __init__(
         self,
+        ip_address: IPAddress,
         *,
         connection_type: Optional[str] = None,
-        ip_address: Optional[str] = None,
         network: Optional[str] = None,
         prefix_len: Optional[int] = None,
         **_,
@@ -628,9 +642,9 @@ class Domain(SimpleModel):
 
     def __init__(
         self,
+        ip_address: IPAddress,
         *,
         domain: Optional[str] = None,
-        ip_address: Optional[str] = None,
         network: Optional[str] = None,
         prefix_len: Optional[int] = None,
         **_,
@@ -708,6 +722,7 @@ class ISP(ASN):
     # pylint:disable=too-many-arguments,too-many-positional-arguments
     def __init__(
         self,
+        ip_address: IPAddress,
         *,
         autonomous_system_number: Optional[int] = None,
         autonomous_system_organization: Optional[str] = None,
@@ -715,7 +730,6 @@ class ISP(ASN):
         mobile_country_code: Optional[str] = None,
         mobile_network_code: Optional[str] = None,
         organization: Optional[str] = None,
-        ip_address: Optional[str] = None,
         network: Optional[str] = None,
         prefix_len: Optional[int] = None,
         **_,

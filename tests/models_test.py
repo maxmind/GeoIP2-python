@@ -4,6 +4,7 @@
 from __future__ import unicode_literals
 
 import sys
+import ipaddress
 from typing import Dict
 import unittest
 
@@ -391,7 +392,9 @@ class TestModels(unittest.TestCase):
             model.unk_base  # type: ignore
         with self.assertRaises(AttributeError):
             model.traits.invalid  # type: ignore
-        self.assertEqual(model.traits.ip_address, "1.2.3.4", "correct ip")
+        self.assertEqual(
+            model.traits.ip_address, ipaddress.ip_address("1.2.3.4"), "correct ip"
+        )
 
 
 class TestNames(unittest.TestCase):
