@@ -13,7 +13,7 @@ import ipaddress
 from abc import ABCMeta
 from typing import Dict, Optional, Type, Sequence, Union
 
-from geoip2.mixins import Model
+from geoip2._internal import Model
 
 
 class Record(Model, metaclass=ABCMeta):

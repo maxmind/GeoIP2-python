@@ -17,7 +17,7 @@ from abc import ABCMeta
 from typing import Any, cast, Dict, Optional, Sequence, Union
 
 import geoip2.records
-from geoip2.mixins import Model
+from geoip2._internal import Model
 
 
 class Country(Model):
