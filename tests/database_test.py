@@ -161,7 +161,7 @@ class TestReader(unittest.TestCase):
 
         self.assertRegex(
             str(record),
-            r"ConnectionType\(\{.*Cellular.*\}\)",
+            r"ConnectionType\(.*Cellular.*\)",
             "ConnectionType str representation is reasonable",
         )
 
@@ -197,7 +197,7 @@ class TestReader(unittest.TestCase):
 
         self.assertRegex(
             str(record),
-            r"Domain\(\{.*maxmind.com.*\}\)",
+            r"Domain\(.*maxmind.com.*\)",
             "Domain str representation is reasonable",
         )
 
@@ -247,7 +247,7 @@ class TestReader(unittest.TestCase):
 
             self.assertRegex(
                 str(record),
-                r"ISP\(\{.*Telstra.*\}\)",
+                r"ISP\(.*Telstra.*\)",
                 "ISP str representation is reasonable",
             )
 
