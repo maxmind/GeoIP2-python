@@ -552,7 +552,9 @@ class Subdivisions(tuple):
         return obj
 
     def __init__(
-        self, locales: Optional[Sequence[str]], *subdivisions  # pylint:disable=W0613
+        self,
+        locales: Optional[Sequence[str]],
+        *subdivisions,  # pylint:disable=W0613
     ) -> None:
         self._locales = locales
         super().__init__()

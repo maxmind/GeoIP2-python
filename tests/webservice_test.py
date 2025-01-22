@@ -165,7 +165,6 @@ class TestBaseClient(unittest.TestCase):
             self.run_client(self.client.country("1.2.3.7"))
 
     def test_weird_body_error(self):
-
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.8", method="GET"
         ).respond_with_json(
@@ -181,7 +180,6 @@ class TestBaseClient(unittest.TestCase):
             self.run_client(self.client.country("1.2.3.8"))
 
     def test_bad_body_error(self):
-
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.9", method="GET"
         ).respond_with_data(
@@ -206,7 +204,6 @@ class TestBaseClient(unittest.TestCase):
             self.run_client(self.client.country("1.2.3.10"))
 
     def test_300_error(self):
-
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.11", method="GET"
         ).respond_with_data(
