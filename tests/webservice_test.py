@@ -147,7 +147,7 @@ class TestBaseClient(unittest.TestCase):
 
     def test_bad_ip_address(self):
         with self.assertRaisesRegex(
-            ValueError, "'1.2.3' does not appear to be an IPv4 " "or IPv6 address"
+            ValueError, "'1.2.3' does not appear to be an IPv4 or IPv6 address"
         ):
             self.run_client(self.client.country("1.2.3"))
 
@@ -176,7 +176,7 @@ class TestBaseClient(unittest.TestCase):
 
         with self.assertRaisesRegex(
             HTTPError,
-            "Response contains JSON but it does not " "specify code or error keys",
+            "Response contains JSON but it does not specify code or error keys",
         ):
             self.run_client(self.client.country("1.2.3.8"))
 
