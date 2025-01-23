@@ -10,6 +10,8 @@ on:
     types:
       - published
 
+permissions: {}
+
 jobs:
   build:
     name: Build source distribution
