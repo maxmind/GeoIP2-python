@@ -42,7 +42,7 @@ class Model(metaclass=ABCMeta):
             elif value is not None and value is not False:
                 result[key] = value
 
-        # network and ip_address properties for performance reasons
+        # network and ip_address are properties for performance reasons
         # pylint: disable=no-member
         if hasattr(self, "ip_address") and self.ip_address is not None:
             result["ip_address"] = str(self.ip_address)

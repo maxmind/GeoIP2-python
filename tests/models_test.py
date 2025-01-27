@@ -239,7 +239,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(
             type(model.subdivisions.most_specific),
             geoip2.records.Subdivision,
-            "geoip2.records.Subdivision object returned evenwhen none are available.",
+            "geoip2.records.Subdivision object returned even when none are available.",
         )
         self.assertEqual(
             model.subdivisions.most_specific.names, {}, "Empty names hash returned"
