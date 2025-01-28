@@ -4,7 +4,6 @@
 import ipaddress
 import sys
 import unittest
-from typing import Dict
 
 sys.path.append("..")
 
@@ -12,7 +11,7 @@ import geoip2.models
 
 
 class TestModels(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         self.maxDiff = 20_000
 
     def test_insights_full(self) -> None:
@@ -447,7 +446,7 @@ class TestModels(unittest.TestCase):
 
 
 class TestNames(unittest.TestCase):
-    raw: Dict = {
+    raw: dict = {
         "continent": {
             "code": "NA",
             "geoname_id": 42,

@@ -8,7 +8,7 @@ GeoIP2 Database Reader
 import inspect
 import os
 from collections.abc import Sequence
-from typing import IO, Any, AnyStr, Optional, Type, Union, cast
+from typing import IO, Any, AnyStr, Optional, Union, cast
 
 import maxminddb
 from maxminddb import (
@@ -253,7 +253,7 @@ class Reader:
 
     def _model_for(
         self,
-        model_class: Union[Type[Country], Type[Enterprise], Type[City]],
+        model_class: Union[type[Country], type[Enterprise], type[City]],
         types: str,
         ip_address: IPAddress,
     ) -> Union[Country, Enterprise, City]:
@@ -268,11 +268,11 @@ class Reader:
     def _flat_model_for(
         self,
         model_class: Union[
-            Type[Domain],
-            Type[ISP],
-            Type[ConnectionType],
-            Type[ASN],
-            Type[AnonymousIP],
+            type[Domain],
+            type[ISP],
+            type[ConnectionType],
+            type[ASN],
+            type[AnonymousIP],
         ],
         types: str,
         ip_address: IPAddress,

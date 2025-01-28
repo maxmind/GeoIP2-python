@@ -12,7 +12,7 @@ import ipaddress
 # pylint:disable=R0903
 from abc import ABCMeta
 from collections.abc import Sequence
-from typing import Dict, Optional, Type, Union
+from typing import Optional, Union
 
 from geoip2._internal import Model
 
@@ -28,13 +28,13 @@ class Record(Model, metaclass=ABCMeta):
 class PlaceRecord(Record, metaclass=ABCMeta):
     """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`."""
 
-    names: Dict[str, str]
+    names: dict[str, str]
     _locales: Sequence[str]
 
     def __init__(
         self,
         locales: Optional[Sequence[str]],
-        names: Optional[Dict[str, str]],
+        names: Optional[dict[str, str]],
     ) -> None:
         if locales is None:
             locales = ["en"]
@@ -98,7 +98,7 @@ class City(PlaceRecord):
         *,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
-        names: Optional[Dict[str, str]] = None,
+        names: Optional[dict[str, str]] = None,
         **_,
     ) -> None:
         self.confidence = confidence
@@ -152,7 +152,7 @@ class Continent(PlaceRecord):
         *,
         code: Optional[str] = None,
         geoname_id: Optional[int] = None,
-        names: Optional[Dict[str, str]] = None,
+        names: Optional[dict[str, str]] = None,
         **_,
     ) -> None:
         self.code = code
@@ -224,7 +224,7 @@ class Country(PlaceRecord):
         geoname_id: Optional[int] = None,
         is_in_european_union: bool = False,
         iso_code: Optional[str] = None,
-        names: Optional[Dict[str, str]] = None,
+        names: Optional[dict[str, str]] = None,
         **_,
     ) -> None:
         self.confidence = confidence
@@ -305,7 +305,7 @@ class RepresentedCountry(Country):
         geoname_id: Optional[int] = None,
         is_in_european_union: bool = False,
         iso_code: Optional[str] = None,
-        names: Optional[Dict[str, str]] = None,
+        names: Optional[dict[str, str]] = None,
         # pylint:disable=redefined-builtin
         type: Optional[str] = None,
         **_,
@@ -536,7 +536,7 @@ class Subdivision(PlaceRecord):
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         iso_code: Optional[str] = None,
-        names: Optional[Dict[str, str]] = None,
+        names: Optional[dict[str, str]] = None,
         **_,
     ) -> None:
         self.confidence = confidence
@@ -558,13 +558,12 @@ class Subdivisions(tuple):
     """
 
     def __new__(
-        cls: Type["Subdivisions"],
+        cls: type["Subdivisions"],
         locales: Optional[Sequence[str]],
         *subdivisions,
     ) -> "Subdivisions":
         subobjs = tuple(Subdivision(locales, **x) for x in subdivisions)
-        obj = super().__new__(cls, subobjs)  # type: ignore
-        return obj
+        return super().__new__(cls, subobjs)  # type: ignore
 
     def __init__(
         self,
@@ -925,7 +924,7 @@ class Traits(Record):
 
     @property
     def ip_address(self):
-        """The IP address for the record"""
+        """The IP address for the record."""
         if not isinstance(
             self._ip_address,
             (ipaddress.IPv4Address, ipaddress.IPv6Address),
@@ -935,7 +934,7 @@ class Traits(Record):
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
-        """The network for the record"""
+        """The network for the record."""
         # This code is duplicated for performance reasons
         network = self._network
         if network is not None:

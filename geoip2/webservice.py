@@ -28,7 +28,7 @@ Requests to the web service are always made with SSL.
 import ipaddress
 import json
 from collections.abc import Sequence
-from typing import Any, Dict, Optional, Type, Union, cast
+from typing import Any, Optional, Union, cast
 
 import aiohttp
 import aiohttp.http
@@ -358,7 +358,7 @@ class AsyncClient(BaseClient):
     async def _response_for(
         self,
         path: str,
-        model_class: Union[Type[Insights], Type[City], Type[Country]],
+        model_class: Union[type[Insights], type[City], type[Country]],
         ip_address: IPAddress,
     ) -> Union[Country, City, Insights]:
         uri = self._uri(path, ip_address)
@@ -372,8 +372,8 @@ class AsyncClient(BaseClient):
             decoded_body = self._handle_success(body, uri)
             return model_class(self._locales, **decoded_body)
 
-    async def close(self):
-        """Close underlying session
+    async def close(self) -> None:
+        """Close underlying session.
 
         This will close the session and any associated connections.
         """
@@ -441,7 +441,7 @@ class Client(BaseClient):
     """
 
     _session: requests.Session
-    _proxies: Optional[Dict[str, str]]
+    _proxies: Optional[dict[str, str]]
 
     def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
@@ -510,7 +510,7 @@ class Client(BaseClient):
     def _response_for(
         self,
         path: str,
-        model_class: Union[Type[Insights], Type[City], Type[Country]],
+        model_class: Union[type[Insights], type[City], type[Country]],
         ip_address: IPAddress,
     ) -> Union[Country, City, Insights]:
         uri = self._uri(path, ip_address)
@@ -523,8 +523,8 @@ class Client(BaseClient):
         decoded_body = self._handle_success(body, uri)
         return model_class(self._locales, **decoded_body)
 
-    def close(self):
-        """Close underlying session
+    def close(self) -> None:
+        """Close underlying session.
 
         This will close the session and any associated connections.
         """

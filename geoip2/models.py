@@ -15,7 +15,7 @@ https://dev.maxmind.com/geoip/docs/web-services?lang=en for more details.
 import ipaddress
 from abc import ABCMeta
 from collections.abc import Sequence
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 import geoip2.records
 from geoip2._internal import Model
@@ -81,14 +81,14 @@ class Country(Model):
         self,
         locales: Optional[Sequence[str]],
         *,
-        continent: Optional[Dict] = None,
-        country: Optional[Dict] = None,
+        continent: Optional[dict] = None,
+        country: Optional[dict] = None,
         ip_address: Optional[IPAddress] = None,
-        maxmind: Optional[Dict] = None,
+        maxmind: Optional[dict] = None,
         prefix_len: Optional[int] = None,
-        registered_country: Optional[Dict] = None,
-        represented_country: Optional[Dict] = None,
-        traits: Optional[Dict] = None,
+        registered_country: Optional[dict] = None,
+        represented_country: Optional[dict] = None,
+        traits: Optional[dict] = None,
         **_,
     ) -> None:
         self._locales = locales
@@ -200,18 +200,18 @@ class City(Country):
         self,
         locales: Optional[Sequence[str]],
         *,
-        city: Optional[Dict] = None,
-        continent: Optional[Dict] = None,
-        country: Optional[Dict] = None,
-        location: Optional[Dict] = None,
+        city: Optional[dict] = None,
+        continent: Optional[dict] = None,
+        country: Optional[dict] = None,
+        location: Optional[dict] = None,
         ip_address: Optional[IPAddress] = None,
-        maxmind: Optional[Dict] = None,
-        postal: Optional[Dict] = None,
+        maxmind: Optional[dict] = None,
+        postal: Optional[dict] = None,
         prefix_len: Optional[int] = None,
-        registered_country: Optional[Dict] = None,
-        represented_country: Optional[Dict] = None,
-        subdivisions: Optional[List[Dict]] = None,
-        traits: Optional[Dict] = None,
+        registered_country: Optional[dict] = None,
+        represented_country: Optional[dict] = None,
+        subdivisions: Optional[list[dict]] = None,
+        traits: Optional[dict] = None,
         **_,
     ) -> None:
         super().__init__(
@@ -360,7 +360,7 @@ class Enterprise(City):
 
 
 class SimpleModel(Model, metaclass=ABCMeta):
-    """Provides basic methods for non-location models"""
+    """Provides basic methods for non-location models."""
 
     _ip_address: IPAddress
     _network: Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]
@@ -396,7 +396,7 @@ class SimpleModel(Model, metaclass=ABCMeta):
 
     @property
     def ip_address(self):
-        """The IP address for the record"""
+        """The IP address for the record."""
         if not isinstance(
             self._ip_address,
             (ipaddress.IPv4Address, ipaddress.IPv6Address),
@@ -406,7 +406,7 @@ class SimpleModel(Model, metaclass=ABCMeta):
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
-        """The network for the record"""
+        """The network for the record."""
         # This code is duplicated for performance reasons
         network = self._network
         if network is not None:

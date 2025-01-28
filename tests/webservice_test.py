@@ -6,7 +6,7 @@ import ipaddress
 import sys
 import unittest
 from collections import defaultdict
-from typing import Dict, cast
+from typing import cast
 
 import pytest
 import pytest_httpserver
@@ -50,7 +50,7 @@ class TestBaseClient(unittest.TestCase):
 
     # this is not a comprehensive representation of the
     # JSON from the server
-    insights = cast(Dict, copy.deepcopy(country))
+    insights = cast(dict, copy.deepcopy(country))
     insights["traits"]["user_count"] = 2
     insights["traits"]["static_ip_score"] = 1.3
 
@@ -62,10 +62,10 @@ class TestBaseClient(unittest.TestCase):
         )
 
     @pytest.fixture(autouse=True)
-    def setup_httpserver(self, httpserver: pytest_httpserver.HTTPServer):
+    def setup_httpserver(self, httpserver: pytest_httpserver.HTTPServer) -> None:
         self.httpserver = httpserver
 
-    def test_country_ok(self):
+    def test_country_ok(self) -> None:
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.4",
             method="GET",
@@ -122,7 +122,7 @@ class TestBaseClient(unittest.TestCase):
         self.assertTrue(country.traits.is_anycast)
         self.assertEqual(country.to_dict(), self.country, "raw response is correct")
 
-    def test_me(self):
+    def test_me(self) -> None:
         self.httpserver.expect_request(
             "/geoip/v2.1/country/me",
             method="GET",
@@ -144,7 +144,7 @@ class TestBaseClient(unittest.TestCase):
             "country('me') returns Country object",
         )
 
-    def test_200_error(self):
+    def test_200_error(self) -> None:
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.1.1.1",
             method="GET",
@@ -160,14 +160,14 @@ class TestBaseClient(unittest.TestCase):
         ):
             self.run_client(self.client.country("1.1.1.1"))
 
-    def test_bad_ip_address(self):
+    def test_bad_ip_address(self) -> None:
         with self.assertRaisesRegex(
             ValueError,
             "'1.2.3' does not appear to be an IPv4 or IPv6 address",
         ):
             self.run_client(self.client.country("1.2.3"))
 
-    def test_no_body_error(self):
+    def test_no_body_error(self) -> None:
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.7",
             method="GET",
@@ -182,7 +182,7 @@ class TestBaseClient(unittest.TestCase):
         ):
             self.run_client(self.client.country("1.2.3.7"))
 
-    def test_weird_body_error(self):
+    def test_weird_body_error(self) -> None:
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.8",
             method="GET",
@@ -198,7 +198,7 @@ class TestBaseClient(unittest.TestCase):
         ):
             self.run_client(self.client.country("1.2.3.8"))
 
-    def test_bad_body_error(self):
+    def test_bad_body_error(self) -> None:
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.9",
             method="GET",
@@ -213,7 +213,7 @@ class TestBaseClient(unittest.TestCase):
         ):
             self.run_client(self.client.country("1.2.3.9"))
 
-    def test_500_error(self):
+    def test_500_error(self) -> None:
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.10",
             method="GET",
@@ -225,7 +225,7 @@ class TestBaseClient(unittest.TestCase):
         with self.assertRaisesRegex(HTTPError, r"Received a server error \(500\) for"):
             self.run_client(self.client.country("1.2.3.10"))
 
-    def test_300_error(self):
+    def test_300_error(self) -> None:
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.11",
             method="GET",
@@ -240,40 +240,40 @@ class TestBaseClient(unittest.TestCase):
         ):
             self.run_client(self.client.country("1.2.3.11"))
 
-    def test_ip_address_required(self):
+    def test_ip_address_required(self) -> None:
         self._test_error(400, "IP_ADDRESS_REQUIRED", InvalidRequestError)
 
-    def test_ip_address_not_found(self):
+    def test_ip_address_not_found(self) -> None:
         self._test_error(404, "IP_ADDRESS_NOT_FOUND", AddressNotFoundError)
 
-    def test_ip_address_reserved(self):
+    def test_ip_address_reserved(self) -> None:
         self._test_error(400, "IP_ADDRESS_RESERVED", AddressNotFoundError)
 
-    def test_permission_required(self):
+    def test_permission_required(self) -> None:
         self._test_error(403, "PERMISSION_REQUIRED", PermissionRequiredError)
 
-    def test_auth_invalid(self):
+    def test_auth_invalid(self) -> None:
         self._test_error(400, "AUTHORIZATION_INVALID", AuthenticationError)
 
-    def test_license_key_required(self):
+    def test_license_key_required(self) -> None:
         self._test_error(401, "LICENSE_KEY_REQUIRED", AuthenticationError)
 
-    def test_account_id_required(self):
+    def test_account_id_required(self) -> None:
         self._test_error(401, "ACCOUNT_ID_REQUIRED", AuthenticationError)
 
-    def test_user_id_required(self):
+    def test_user_id_required(self) -> None:
         self._test_error(401, "USER_ID_REQUIRED", AuthenticationError)
 
-    def test_account_id_unkown(self):
+    def test_account_id_unkown(self) -> None:
         self._test_error(401, "ACCOUNT_ID_UNKNOWN", AuthenticationError)
 
-    def test_user_id_unkown(self):
+    def test_user_id_unkown(self) -> None:
         self._test_error(401, "USER_ID_UNKNOWN", AuthenticationError)
 
-    def test_out_of_queries_error(self):
+    def test_out_of_queries_error(self) -> None:
         self._test_error(402, "OUT_OF_QUERIES", OutOfQueriesError)
 
-    def _test_error(self, status, error_code, error_class):
+    def _test_error(self, status, error_code, error_class) -> None:
         msg = "Some error message"
         body = {"error": msg, "code": error_code}
         self.httpserver.expect_request(
@@ -284,10 +284,10 @@ class TestBaseClient(unittest.TestCase):
             status=status,
             content_type=self._content_type("country"),
         )
-        with self.assertRaisesRegex(error_class, msg):
+        with pytest.raises(error_class, match=msg):
             self.run_client(self.client.country("1.2.3.18"))
 
-    def test_unknown_error(self):
+    def test_unknown_error(self) -> None:
         msg = "Unknown error type"
         ip = "1.2.3.19"
         body = {"error": msg, "code": "UNKNOWN_TYPE"}
@@ -299,10 +299,10 @@ class TestBaseClient(unittest.TestCase):
             status=400,
             content_type=self._content_type("country"),
         )
-        with self.assertRaisesRegex(InvalidRequestError, msg):
+        with pytest.raises(InvalidRequestError, match=msg):
             self.run_client(self.client.country(ip))
 
-    def test_request(self):
+    def test_request(self) -> None:
         def user_agent_compare(actual: str, expected: str) -> bool:
             if actual is None:
                 return False
@@ -329,7 +329,7 @@ class TestBaseClient(unittest.TestCase):
         )
         self.run_client(self.client.country("1.2.3.4"))
 
-    def test_city_ok(self):
+    def test_city_ok(self) -> None:
         self.httpserver.expect_request(
             "/geoip/v2.1/city/1.2.3.4",
             method="GET",
@@ -347,7 +347,7 @@ class TestBaseClient(unittest.TestCase):
         )
         self.assertTrue(city.traits.is_anycast)
 
-    def test_insights_ok(self):
+    def test_insights_ok(self) -> None:
         self.httpserver.expect_request(
             "/geoip/v2.1/insights/1.2.3.4",
             method="GET",
@@ -371,14 +371,14 @@ class TestBaseClient(unittest.TestCase):
         self.assertEqual(insights.traits.static_ip_score, 1.3, "static_ip_score is 1.3")
         self.assertEqual(insights.traits.user_count, 2, "user_count is 2")
 
-    def test_named_constructor_args(self):
+    def test_named_constructor_args(self) -> None:
         id = 47
         key = "1234567890ab"
         client = self.client_class(account_id=id, license_key=key)
         self.assertEqual(client._account_id, str(id))
         self.assertEqual(client._license_key, key)
 
-    def test_missing_constructor_args(self):
+    def test_missing_constructor_args(self) -> None:
         with self.assertRaises(TypeError):
             self.client_class(license_key="1234567890ab")
 
@@ -387,7 +387,7 @@ class TestBaseClient(unittest.TestCase):
 
 
 class TestClient(TestBaseClient):
-    def setUp(self):
+    def setUp(self) -> None:
         self.client_class = Client
         self.client = Client(42, "abcdef123456")
         self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
@@ -398,14 +398,14 @@ class TestClient(TestBaseClient):
 
 
 class TestAsyncClient(TestBaseClient):
-    def setUp(self):
+    def setUp(self) -> None:
         self._loop = asyncio.new_event_loop()
         self.client_class = AsyncClient
         self.client = AsyncClient(42, "abcdef123456")
         self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
         self.maxDiff = 20_000
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self._loop.run_until_complete(self.client.close())
         self._loop.close()
 

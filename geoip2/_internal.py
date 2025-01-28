@@ -1,11 +1,11 @@
-"""This package contains internal utilities"""
+"""This package contains internal utilities."""
 
 # pylint: disable=too-few-public-methods
 from abc import ABCMeta
 
 
 class Model(metaclass=ABCMeta):
-    """Shared methods for MaxMind model classes"""
+    """Shared methods for MaxMind model classes."""
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.to_dict() == other.to_dict()
@@ -15,7 +15,7 @@ class Model(metaclass=ABCMeta):
 
     # pylint: disable=too-many-branches
     def to_dict(self):
-        """Returns a dict of the object suitable for serialization"""
+        """Returns a dict of the object suitable for serialization."""
         result = {}
         for key, value in self.__dict__.items():
             if key.startswith("_"):
