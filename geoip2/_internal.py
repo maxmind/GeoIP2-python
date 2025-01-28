@@ -10,11 +10,11 @@ class Model(metaclass=ABCMeta):
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.to_dict() == other.to_dict()
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return not self.__eq__(other)
 
     # pylint: disable=too-many-branches
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """Returns a dict of the object suitable for serialization."""
         result = {}
         for key, value in self.__dict__.items():

@@ -12,9 +12,11 @@ import ipaddress
 # pylint:disable=R0903
 from abc import ABCMeta
 from collections.abc import Sequence
+from ipaddress import IPv4Address, IPv6Address
 from typing import Optional, Union
 
 from geoip2._internal import Model
+from geoip2.types import IPAddress
 
 
 class Record(Model, metaclass=ABCMeta):
@@ -841,7 +843,7 @@ class Traits(Record):
     autonomous_system_organization: Optional[str]
     connection_type: Optional[str]
     domain: Optional[str]
-    _ip_address: Optional[str]
+    _ip_address: IPAddress
     is_anonymous: bool
     is_anonymous_proxy: bool
     is_anonymous_vpn: bool
@@ -912,6 +914,8 @@ class Traits(Record):
         self.static_ip_score = static_ip_score
         self.user_type = user_type
         self.user_count = user_count
+        if ip_address is None:
+            raise TypeError("ip_address must be defined")
         self._ip_address = ip_address
         if network is None:
             self._network = None
@@ -923,12 +927,9 @@ class Traits(Record):
         self._prefix_len = prefix_len
 
     @property
-    def ip_address(self):
+    def ip_address(self) -> Union[IPv4Address, IPv6Address]:
         """The IP address for the record."""
-        if not isinstance(
-            self._ip_address,
-            (ipaddress.IPv4Address, ipaddress.IPv6Address),
-        ):
+        if not isinstance(self._ip_address, (IPv4Address, IPv6Address)):
             self._ip_address = ipaddress.ip_address(self._ip_address)
         return self._ip_address
 

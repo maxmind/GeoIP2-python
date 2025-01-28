@@ -16,6 +16,7 @@ import ipaddress
 from abc import ABCMeta
 from collections.abc import Sequence
 from typing import Optional, Union
+from ipaddress import IPv4Address, IPv6Address
 
 import geoip2.records
 from geoip2._internal import Model
@@ -395,12 +396,9 @@ class SimpleModel(Model, metaclass=ABCMeta):
         )
 
     @property
-    def ip_address(self):
+    def ip_address(self) -> Union[IPv4Address, IPv6Address]:
         """The IP address for the record."""
-        if not isinstance(
-            self._ip_address,
-            (ipaddress.IPv4Address, ipaddress.IPv6Address),
-        ):
+        if not isinstance(self._ip_address, (IPv4Address, IPv6Address)):
             self._ip_address = ipaddress.ip_address(self._ip_address)
         return self._ip_address
 
