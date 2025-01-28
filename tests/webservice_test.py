@@ -5,8 +5,9 @@ import copy
 import ipaddress
 import sys
 import unittest
+from abc import ABC, abstractmethod
 from collections import defaultdict
-from typing import cast
+from typing import cast, Callable, Union
 
 import pytest
 import pytest_httpserver
@@ -26,7 +27,10 @@ from geoip2.errors import (
 from geoip2.webservice import AsyncClient, Client
 
 
-class TestBaseClient(unittest.TestCase):
+class TestBaseClient(unittest.TestCase, ABC):
+    client: Union[AsyncClient, Client]
+    client_class: Callable[[int, str], Union[AsyncClient, Client]]
+
     country = {
         "continent": {"code": "NA", "geoname_id": 42, "names": {"en": "North America"}},
         "country": {
@@ -53,6 +57,9 @@ class TestBaseClient(unittest.TestCase):
     insights = cast(dict, copy.deepcopy(country))
     insights["traits"]["user_count"] = 2
     insights["traits"]["static_ip_score"] = 1.3
+
+    @abstractmethod
+    def run_client(self, v): ...
 
     def _content_type(self, endpoint):
         return (
@@ -319,7 +326,7 @@ class TestBaseClient(unittest.TestCase):
             header_value_matcher=HeaderValueMatcher(
                 defaultdict(
                     lambda: HeaderValueMatcher.default_header_value_matcher,
-                    {"User-Agent": user_agent_compare},
+                    {"User-Agent": user_agent_compare},  # type: ignore[dict-item]
                 ),
             ),
         ).respond_with_json(
@@ -374,19 +381,22 @@ class TestBaseClient(unittest.TestCase):
     def test_named_constructor_args(self) -> None:
         id = 47
         key = "1234567890ab"
-        client = self.client_class(account_id=id, license_key=key)
+        client = self.client_class(id, key)
         self.assertEqual(client._account_id, str(id))
         self.assertEqual(client._license_key, key)
 
     def test_missing_constructor_args(self) -> None:
         with self.assertRaises(TypeError):
-            self.client_class(license_key="1234567890ab")
+
+            self.client_class(license_key="1234567890ab")  # type: ignore[call-arg]
 
         with self.assertRaises(TypeError):
-            self.client_class("47")
+            self.client_class("47")  # type: ignore
 
 
 class TestClient(TestBaseClient):
+    client: Client
+
     def setUp(self) -> None:
         self.client_class = Client
         self.client = Client(42, "abcdef123456")
@@ -398,6 +408,8 @@ class TestClient(TestBaseClient):
 
 
 class TestAsyncClient(TestBaseClient):
+    client: AsyncClient
+
     def setUp(self) -> None:
         self._loop = asyncio.new_event_loop()
         self.client_class = AsyncClient
