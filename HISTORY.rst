@@ -4,7 +4,7 @@
 History
 -------
 
-5.0.0
+5.0.0 (2025-01-28)
 ++++++++++++++++++
 
 * BREAKING: The ``raw`` attribute on the model classes has been replaced
