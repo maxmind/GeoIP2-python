@@ -110,7 +110,7 @@ class TestBaseClient(unittest.TestCase):
             country.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
         )
         self.assertTrue(country.traits.is_anycast)
-        self.assertEqual(country.raw, self.country, "raw response is correct")
+        self.assertEqual(country.to_dict(), self.country, "raw response is correct")
 
     def test_me(self):
         self.httpserver.expect_request(
@@ -147,7 +147,7 @@ class TestBaseClient(unittest.TestCase):
 
     def test_bad_ip_address(self):
         with self.assertRaisesRegex(
-            ValueError, "'1.2.3' does not appear to be an IPv4 " "or IPv6 address"
+            ValueError, "'1.2.3' does not appear to be an IPv4 or IPv6 address"
         ):
             self.run_client(self.client.country("1.2.3"))
 
@@ -165,7 +165,6 @@ class TestBaseClient(unittest.TestCase):
             self.run_client(self.client.country("1.2.3.7"))
 
     def test_weird_body_error(self):
-
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.8", method="GET"
         ).respond_with_json(
@@ -176,12 +175,11 @@ class TestBaseClient(unittest.TestCase):
 
         with self.assertRaisesRegex(
             HTTPError,
-            "Response contains JSON but it does not " "specify code or error keys",
+            "Response contains JSON but it does not specify code or error keys",
         ):
             self.run_client(self.client.country("1.2.3.8"))
 
     def test_bad_body_error(self):
-
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.9", method="GET"
         ).respond_with_data(
@@ -206,7 +204,6 @@ class TestBaseClient(unittest.TestCase):
             self.run_client(self.client.country("1.2.3.10"))
 
     def test_300_error(self):
-
         self.httpserver.expect_request(
             "/geoip/v2.1/country/1.2.3.11", method="GET"
         ).respond_with_data(
@@ -360,6 +357,7 @@ class TestClient(TestBaseClient):
         self.client_class = Client
         self.client = Client(42, "abcdef123456")
         self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
+        self.maxDiff = 20_000
 
     def run_client(self, v):
         return v
@@ -371,6 +369,7 @@ class TestAsyncClient(TestBaseClient):
         self.client_class = AsyncClient
         self.client = AsyncClient(42, "abcdef123456")
         self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
+        self.maxDiff = 20_000
 
     def tearDown(self):
         self._loop.run_until_complete(self.client.close())

@@ -13,14 +13,14 @@ import ipaddress
 from abc import ABCMeta
 from typing import Dict, Optional, Type, Sequence, Union
 
-from geoip2.mixins import SimpleEquality
+from geoip2._internal import Model
 
 
-class Record(SimpleEquality, metaclass=ABCMeta):
+class Record(Model, metaclass=ABCMeta):
     """All records are subclasses of the abstract class ``Record``."""
 
     def __repr__(self) -> str:
-        args = ", ".join(f"{k}={v!r}" for k, v in self.__dict__.items())
+        args = ", ".join(f"{k}={v!r}" for k, v in self.to_dict().items())
         return f"{self.__module__}.{self.__class__.__name__}({args})"
 
 
@@ -32,8 +32,8 @@ class PlaceRecord(Record, metaclass=ABCMeta):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
-        names: Optional[Dict[str, str]] = None,
+        locales: Optional[Sequence[str]],
+        names: Optional[Dict[str, str]],
     ) -> None:
         if locales is None:
             locales = ["en"]
@@ -93,7 +93,8 @@ class City(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
+        locales: Optional[Sequence[str]],
+        *,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         names: Optional[Dict[str, str]] = None,
@@ -147,7 +148,8 @@ class Continent(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
+        locales: Optional[Sequence[str]],
+        *,
         code: Optional[str] = None,
         geoname_id: Optional[int] = None,
         names: Optional[Dict[str, str]] = None,
@@ -217,7 +219,8 @@ class Country(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
+        locales: Optional[Sequence[str]],
+        *,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         is_in_european_union: bool = False,
@@ -298,7 +301,8 @@ class RepresentedCountry(Country):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
+        locales: Optional[Sequence[str]],
+        *,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         is_in_european_union: bool = False,
@@ -310,7 +314,12 @@ class RepresentedCountry(Country):
     ) -> None:
         self.type = type
         super().__init__(
-            locales, confidence, geoname_id, is_in_european_union, iso_code, names
+            locales,
+            confidence=confidence,
+            geoname_id=geoname_id,
+            is_in_european_union=is_in_european_union,
+            iso_code=iso_code,
+            names=names,
         )
 
 
@@ -391,6 +400,7 @@ class Location(Record):
 
     def __init__(
         self,
+        *,
         average_income: Optional[int] = None,
         accuracy_radius: Optional[int] = None,
         latitude: Optional[float] = None,
@@ -425,7 +435,7 @@ class MaxMind(Record):
 
     queries_remaining: Optional[int]
 
-    def __init__(self, queries_remaining: Optional[int] = None, **_) -> None:
+    def __init__(self, *, queries_remaining: Optional[int] = None, **_) -> None:
         self.queries_remaining = queries_remaining
 
 
@@ -460,7 +470,7 @@ class Postal(Record):
     confidence: Optional[int]
 
     def __init__(
-        self, code: Optional[str] = None, confidence: Optional[int] = None, **_
+        self, *, code: Optional[str] = None, confidence: Optional[int] = None, **_
     ) -> None:
         self.code = code
         self.confidence = confidence
@@ -519,7 +529,8 @@ class Subdivision(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]] = None,
+        locales: Optional[Sequence[str]],
+        *,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         iso_code: Optional[str] = None,
@@ -552,7 +563,9 @@ class Subdivisions(tuple):
         return obj
 
     def __init__(
-        self, locales: Optional[Sequence[str]], *subdivisions  # pylint:disable=W0613
+        self,
+        locales: Optional[Sequence[str]],
+        *subdivisions,  # pylint:disable=W0613
     ) -> None:
         self._locales = locales
         super().__init__()
@@ -825,7 +838,7 @@ class Traits(Record):
     autonomous_system_organization: Optional[str]
     connection_type: Optional[str]
     domain: Optional[str]
-    ip_address: Optional[str]
+    _ip_address: Optional[str]
     is_anonymous: bool
     is_anonymous_proxy: bool
     is_anonymous_vpn: bool
@@ -848,6 +861,7 @@ class Traits(Record):
 
     def __init__(
         self,
+        *,
         autonomous_system_number: Optional[int] = None,
         autonomous_system_organization: Optional[str] = None,
         connection_type: Optional[str] = None,
@@ -895,7 +909,7 @@ class Traits(Record):
         self.static_ip_score = static_ip_score
         self.user_type = user_type
         self.user_count = user_count
-        self.ip_address = ip_address
+        self._ip_address = ip_address
         if network is None:
             self._network = None
         else:
@@ -904,6 +918,15 @@ class Traits(Record):
         # for database lookups. Customers using the database tend to be
         # much more performance sensitive than web service users.
         self._prefix_len = prefix_len
+
+    @property
+    def ip_address(self):
+        """The IP address for the record"""
+        if not isinstance(
+            self._ip_address, (ipaddress.IPv4Address, ipaddress.IPv6Address)
+        ):
+            self._ip_address = ipaddress.ip_address(self._ip_address)
+        return self._ip_address
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:

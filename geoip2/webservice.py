@@ -350,7 +350,7 @@ class AsyncClient(BaseClient):
             if status != 200:
                 raise self._exception_for_error(status, content_type, body, uri)
             decoded_body = self._handle_success(body, uri)
-            return model_class(decoded_body, locales=self._locales)
+            return model_class(self._locales, **decoded_body)
 
     async def close(self):
         """Close underlying session
@@ -499,7 +499,7 @@ class Client(BaseClient):
         if status != 200:
             raise self._exception_for_error(status, content_type, body, uri)
         decoded_body = self._handle_success(body, uri)
-        return model_class(decoded_body, locales=self._locales)
+        return model_class(self._locales, **decoded_body)
 
     def close(self):
         """Close underlying session

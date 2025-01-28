@@ -252,10 +252,9 @@ class Reader:
         ip_address: IPAddress,
     ) -> Union[Country, Enterprise, City]:
         (record, prefix_len) = self._get(types, ip_address)
-        traits = record.setdefault("traits", {})
-        traits["ip_address"] = ip_address
-        traits["prefix_len"] = prefix_len
-        return model_class(record, locales=self._locales)
+        return model_class(
+            self._locales, ip_address=ip_address, prefix_len=prefix_len, **record
+        )
 
     def _flat_model_for(
         self,
@@ -266,9 +265,7 @@ class Reader:
         ip_address: IPAddress,
     ) -> Union[ConnectionType, ISP, AnonymousIP, Domain, ASN]:
         (record, prefix_len) = self._get(types, ip_address)
-        record["ip_address"] = ip_address
-        record["prefix_len"] = prefix_len
-        return model_class(record)
+        return model_class(ip_address, prefix_len=prefix_len, **record)
 
     def metadata(
         self,
