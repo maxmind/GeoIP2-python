@@ -1,18 +1,17 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 
 import ipaddress
 import sys
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 sys.path.append("..")
 
+import maxminddb
+
 import geoip2.database
 import geoip2.errors
-import maxminddb
 
 try:
     import maxminddb.extension
@@ -48,7 +47,7 @@ class TestReader(unittest.TestCase):
         except geoip2.errors.AddressNotFoundError as e:
             self.assertEqual(e.network, ipaddress.ip_network("10.0.0.0/8"))
         except Exception as e:
-            self.fail(f"Expected AddressNotFoundError, got {type(e)}: {str(e)}")
+            self.fail(f"Expected AddressNotFoundError, got {type(e)}: {e!s}")
         finally:
             reader.close()
 
@@ -64,14 +63,15 @@ class TestReader(unittest.TestCase):
     def test_invalid_address(self) -> None:
         reader = geoip2.database.Reader("tests/data/test-data/GeoIP2-City-Test.mmdb")
         with self.assertRaisesRegex(
-            ValueError, "u?'invalid' does not appear to be an IPv4 or IPv6 address"
+            ValueError,
+            "u?'invalid' does not appear to be an IPv4 or IPv6 address",
         ):
             reader.city("invalid")
         reader.close()
 
     def test_anonymous_ip(self) -> None:
         reader = geoip2.database.Reader(
-            "tests/data/test-data/GeoIP2-Anonymous-IP-Test.mmdb"
+            "tests/data/test-data/GeoIP2-Anonymous-IP-Test.mmdb",
         )
         ip_address = "1.2.0.1"
 
@@ -88,7 +88,7 @@ class TestReader(unittest.TestCase):
 
     def test_anonymous_ip_all_set(self) -> None:
         reader = geoip2.database.Reader(
-            "tests/data/test-data/GeoIP2-Anonymous-IP-Test.mmdb"
+            "tests/data/test-data/GeoIP2-Anonymous-IP-Test.mmdb",
         )
         ip_address = "81.2.69.1"
 
@@ -129,11 +129,15 @@ class TestReader(unittest.TestCase):
         record = reader.city("81.2.69.160")
 
         self.assertEqual(
-            record.country.name, "United Kingdom", "The default locale is en"
+            record.country.name,
+            "United Kingdom",
+            "The default locale is en",
         )
         self.assertEqual(record.country.is_in_european_union, False)
         self.assertEqual(
-            record.location.accuracy_radius, 100, "The accuracy_radius is populated"
+            record.location.accuracy_radius,
+            100,
+            "The accuracy_radius is populated",
         )
         self.assertEqual(record.registered_country.is_in_european_union, False)
         self.assertFalse(record.traits.is_anycast)
@@ -145,14 +149,16 @@ class TestReader(unittest.TestCase):
 
     def test_connection_type(self) -> None:
         reader = geoip2.database.Reader(
-            "tests/data/test-data/GeoIP2-Connection-Type-Test.mmdb"
+            "tests/data/test-data/GeoIP2-Connection-Type-Test.mmdb",
         )
         ip_address = "1.0.1.0"
 
         record = reader.connection_type(ip_address)
 
         self.assertEqual(
-            record, eval(repr(record)), "ConnectionType repr can be eval'd"
+            record,
+            eval(repr(record)),
+            "ConnectionType repr can be eval'd",
         )
 
         self.assertEqual(record.connection_type, "Cellular")
@@ -207,7 +213,7 @@ class TestReader(unittest.TestCase):
 
     def test_enterprise(self) -> None:
         with geoip2.database.Reader(
-            "tests/data/test-data/GeoIP2-Enterprise-Test.mmdb"
+            "tests/data/test-data/GeoIP2-Enterprise-Test.mmdb",
         ) as reader:
             ip_address = "74.209.24.0"
             record = reader.enterprise(ip_address)
@@ -221,7 +227,8 @@ class TestReader(unittest.TestCase):
             self.assertTrue(record.traits.is_legitimate_proxy)
             self.assertEqual(record.traits.ip_address, ipaddress.ip_address(ip_address))
             self.assertEqual(
-                record.traits.network, ipaddress.ip_network("74.209.16.0/20")
+                record.traits.network,
+                ipaddress.ip_network("74.209.16.0/20"),
             )
             self.assertFalse(record.traits.is_anycast)
 
@@ -234,7 +241,7 @@ class TestReader(unittest.TestCase):
 
     def test_isp(self) -> None:
         with geoip2.database.Reader(
-            "tests/data/test-data/GeoIP2-ISP-Test.mmdb"
+            "tests/data/test-data/GeoIP2-ISP-Test.mmdb",
         ) as reader:
             ip_address = "1.128.0.0"
             record = reader.isp(ip_address)
@@ -260,11 +267,12 @@ class TestReader(unittest.TestCase):
 
     def test_context_manager(self) -> None:
         with geoip2.database.Reader(
-            "tests/data/test-data/GeoIP2-Country-Test.mmdb"
+            "tests/data/test-data/GeoIP2-Country-Test.mmdb",
         ) as reader:
             record = reader.country("81.2.69.160")
             self.assertEqual(
-                record.traits.ip_address, ipaddress.ip_address("81.2.69.160")
+                record.traits.ip_address,
+                ipaddress.ip_address("81.2.69.160"),
             )
 
     @patch("maxminddb.open_database")

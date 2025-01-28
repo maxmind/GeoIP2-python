@@ -11,7 +11,8 @@ import ipaddress
 
 # pylint:disable=R0903
 from abc import ABCMeta
-from typing import Dict, Optional, Type, Sequence, Union
+from collections.abc import Sequence
+from typing import Dict, Optional, Type, Union
 
 from geoip2._internal import Model
 
@@ -113,7 +114,6 @@ class Continent(PlaceRecord):
 
     Attributes:
 
-
     .. attribute:: code
 
       A two character continent code like "NA" (North America)
@@ -166,7 +166,6 @@ class Country(PlaceRecord):
     This class contains the country-level data associated with an IP address.
 
     Attributes:
-
 
     .. attribute:: confidence
 
@@ -243,7 +242,6 @@ class RepresentedCountry(Country):
     represented by something like a military base.
 
     Attributes:
-
 
     .. attribute:: confidence
 
@@ -470,7 +468,11 @@ class Postal(Record):
     confidence: Optional[int]
 
     def __init__(
-        self, *, code: Optional[str] = None, confidence: Optional[int] = None, **_
+        self,
+        *,
+        code: Optional[str] = None,
+        confidence: Optional[int] = None,
+        **_,
     ) -> None:
         self.code = code
         self.confidence = confidence
@@ -556,7 +558,9 @@ class Subdivisions(tuple):
     """
 
     def __new__(
-        cls: Type["Subdivisions"], locales: Optional[Sequence[str]], *subdivisions
+        cls: Type["Subdivisions"],
+        locales: Optional[Sequence[str]],
+        *subdivisions,
     ) -> "Subdivisions":
         subobjs = tuple(Subdivision(locales, **x) for x in subdivisions)
         obj = super().__new__(cls, subobjs)  # type: ignore
@@ -923,7 +927,8 @@ class Traits(Record):
     def ip_address(self):
         """The IP address for the record"""
         if not isinstance(
-            self._ip_address, (ipaddress.IPv4Address, ipaddress.IPv6Address)
+            self._ip_address,
+            (ipaddress.IPv4Address, ipaddress.IPv6Address),
         ):
             self._ip_address = ipaddress.ip_address(self._ip_address)
         return self._ip_address

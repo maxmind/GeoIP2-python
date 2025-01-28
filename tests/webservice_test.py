@@ -1,17 +1,16 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 import asyncio
 import copy
 import ipaddress
 import sys
-from typing import cast, Dict
 import unittest
-from pytest_httpserver import HeaderValueMatcher
-import pytest_httpserver
-import pytest
 from collections import defaultdict
+from typing import Dict, cast
 
+import pytest
+import pytest_httpserver
+from pytest_httpserver import HeaderValueMatcher
 
 sys.path.append("..")
 import geoip2
@@ -68,7 +67,8 @@ class TestBaseClient(unittest.TestCase):
 
     def test_country_ok(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.4", method="GET"
+            "/geoip/v2.1/country/1.2.3.4",
+            method="GET",
         ).respond_with_json(
             self.country,
             status=200,
@@ -76,12 +76,16 @@ class TestBaseClient(unittest.TestCase):
         )
         country = self.run_client(self.client.country("1.2.3.4"))
         self.assertEqual(
-            type(country), geoip2.models.Country, "return value of client.country"
+            type(country),
+            geoip2.models.Country,
+            "return value of client.country",
         )
         self.assertEqual(country.continent.geoname_id, 42, "continent geoname_id is 42")
         self.assertEqual(country.continent.code, "NA", "continent code is NA")
         self.assertEqual(
-            country.continent.name, "North America", "continent name is North America"
+            country.continent.name,
+            "North America",
+            "continent name is North America",
         )
         self.assertEqual(country.country.geoname_id, 1, "country geoname_id is 1")
         self.assertIs(
@@ -91,7 +95,9 @@ class TestBaseClient(unittest.TestCase):
         )
         self.assertEqual(country.country.iso_code, "US", "country iso_code is US")
         self.assertEqual(
-            country.country.names, {"en": "United States of America"}, "country names"
+            country.country.names,
+            {"en": "United States of America"},
+            "country names",
         )
         self.assertEqual(
             country.country.name,
@@ -99,7 +105,9 @@ class TestBaseClient(unittest.TestCase):
             "country name is United States of America",
         )
         self.assertEqual(
-            country.maxmind.queries_remaining, 11, "queries_remaining is 11"
+            country.maxmind.queries_remaining,
+            11,
+            "queries_remaining is 11",
         )
         self.assertIs(
             country.registered_country.is_in_european_union,
@@ -107,14 +115,17 @@ class TestBaseClient(unittest.TestCase):
             "registered_country is_in_european_union is True",
         )
         self.assertEqual(
-            country.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
+            country.traits.network,
+            ipaddress.ip_network("1.2.3.0/24"),
+            "network",
         )
         self.assertTrue(country.traits.is_anycast)
         self.assertEqual(country.to_dict(), self.country, "raw response is correct")
 
     def test_me(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/me", method="GET"
+            "/geoip/v2.1/country/me",
+            method="GET",
         ).respond_with_json(
             self.country,
             status=200,
@@ -122,7 +133,9 @@ class TestBaseClient(unittest.TestCase):
         )
         implicit_me = self.run_client(self.client.country())
         self.assertEqual(
-            type(implicit_me), geoip2.models.Country, "country() returns Country object"
+            type(implicit_me),
+            geoip2.models.Country,
+            "country() returns Country object",
         )
         explicit_me = self.run_client(self.client.country())
         self.assertEqual(
@@ -133,7 +146,8 @@ class TestBaseClient(unittest.TestCase):
 
     def test_200_error(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.1.1.1", method="GET"
+            "/geoip/v2.1/country/1.1.1.1",
+            method="GET",
         ).respond_with_data(
             "",
             status=200,
@@ -141,32 +155,37 @@ class TestBaseClient(unittest.TestCase):
         )
 
         with self.assertRaisesRegex(
-            GeoIP2Error, "could not decode the response as JSON"
+            GeoIP2Error,
+            "could not decode the response as JSON",
         ):
             self.run_client(self.client.country("1.1.1.1"))
 
     def test_bad_ip_address(self):
         with self.assertRaisesRegex(
-            ValueError, "'1.2.3' does not appear to be an IPv4 or IPv6 address"
+            ValueError,
+            "'1.2.3' does not appear to be an IPv4 or IPv6 address",
         ):
             self.run_client(self.client.country("1.2.3"))
 
     def test_no_body_error(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.7", method="GET"
+            "/geoip/v2.1/country/1.2.3.7",
+            method="GET",
         ).respond_with_data(
             "",
             status=400,
             content_type=self._content_type("country"),
         )
         with self.assertRaisesRegex(
-            HTTPError, "Received a 400 error for .* with no body"
+            HTTPError,
+            "Received a 400 error for .* with no body",
         ):
             self.run_client(self.client.country("1.2.3.7"))
 
     def test_weird_body_error(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.8", method="GET"
+            "/geoip/v2.1/country/1.2.3.8",
+            method="GET",
         ).respond_with_json(
             {"wierd": 42},
             status=400,
@@ -181,20 +200,23 @@ class TestBaseClient(unittest.TestCase):
 
     def test_bad_body_error(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.9", method="GET"
+            "/geoip/v2.1/country/1.2.3.9",
+            method="GET",
         ).respond_with_data(
             "bad body",
             status=400,
             content_type=self._content_type("country"),
         )
         with self.assertRaisesRegex(
-            HTTPError, "it did not include the expected JSON body"
+            HTTPError,
+            "it did not include the expected JSON body",
         ):
             self.run_client(self.client.country("1.2.3.9"))
 
     def test_500_error(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.10", method="GET"
+            "/geoip/v2.1/country/1.2.3.10",
+            method="GET",
         ).respond_with_data(
             "",
             status=500,
@@ -205,14 +227,16 @@ class TestBaseClient(unittest.TestCase):
 
     def test_300_error(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.11", method="GET"
+            "/geoip/v2.1/country/1.2.3.11",
+            method="GET",
         ).respond_with_data(
             "",
             status=300,
             content_type=self._content_type("country"),
         )
         with self.assertRaisesRegex(
-            HTTPError, r"Received a very surprising HTTP status \(300\) for"
+            HTTPError,
+            r"Received a very surprising HTTP status \(300\) for",
         ):
             self.run_client(self.client.country("1.2.3.11"))
 
@@ -253,7 +277,8 @@ class TestBaseClient(unittest.TestCase):
         msg = "Some error message"
         body = {"error": msg, "code": error_code}
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/1.2.3.18", method="GET"
+            "/geoip/v2.1/country/1.2.3.18",
+            method="GET",
         ).respond_with_json(
             body,
             status=status,
@@ -267,7 +292,8 @@ class TestBaseClient(unittest.TestCase):
         ip = "1.2.3.19"
         body = {"error": msg, "code": "UNKNOWN_TYPE"}
         self.httpserver.expect_request(
-            "/geoip/v2.1/country/" + ip, method="GET"
+            "/geoip/v2.1/country/" + ip,
+            method="GET",
         ).respond_with_json(
             body,
             status=400,
@@ -294,7 +320,7 @@ class TestBaseClient(unittest.TestCase):
                 defaultdict(
                     lambda: HeaderValueMatcher.default_header_value_matcher,
                     {"User-Agent": user_agent_compare},
-                )
+                ),
             ),
         ).respond_with_json(
             self.country,
@@ -305,7 +331,8 @@ class TestBaseClient(unittest.TestCase):
 
     def test_city_ok(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/city/1.2.3.4", method="GET"
+            "/geoip/v2.1/city/1.2.3.4",
+            method="GET",
         ).respond_with_json(
             self.country,
             status=200,
@@ -314,13 +341,16 @@ class TestBaseClient(unittest.TestCase):
         city = self.run_client(self.client.city("1.2.3.4"))
         self.assertEqual(type(city), geoip2.models.City, "return value of client.city")
         self.assertEqual(
-            city.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
+            city.traits.network,
+            ipaddress.ip_network("1.2.3.0/24"),
+            "network",
         )
         self.assertTrue(city.traits.is_anycast)
 
     def test_insights_ok(self):
         self.httpserver.expect_request(
-            "/geoip/v2.1/insights/1.2.3.4", method="GET"
+            "/geoip/v2.1/insights/1.2.3.4",
+            method="GET",
         ).respond_with_json(
             self.insights,
             status=200,
@@ -328,10 +358,14 @@ class TestBaseClient(unittest.TestCase):
         )
         insights = self.run_client(self.client.insights("1.2.3.4"))
         self.assertEqual(
-            type(insights), geoip2.models.Insights, "return value of client.insights"
+            type(insights),
+            geoip2.models.Insights,
+            "return value of client.insights",
         )
         self.assertEqual(
-            insights.traits.network, ipaddress.ip_network("1.2.3.0/24"), "network"
+            insights.traits.network,
+            ipaddress.ip_network("1.2.3.0/24"),
+            "network",
         )
         self.assertTrue(insights.traits.is_anycast)
         self.assertEqual(insights.traits.static_ip_score, 1.3, "static_ip_score is 1.3")

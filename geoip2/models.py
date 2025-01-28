@@ -14,7 +14,8 @@ https://dev.maxmind.com/geoip/docs/web-services?lang=en for more details.
 # pylint: disable=too-many-instance-attributes,too-few-public-methods,too-many-arguments
 import ipaddress
 from abc import ABCMeta
-from typing import Dict, List, Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import Dict, List, Optional, Union
 
 import geoip2.records
 from geoip2._internal import Model
@@ -94,10 +95,12 @@ class Country(Model):
         self.continent = geoip2.records.Continent(locales, **(continent or {}))
         self.country = geoip2.records.Country(locales, **(country or {}))
         self.registered_country = geoip2.records.Country(
-            locales, **(registered_country or {})
+            locales,
+            **(registered_country or {}),
         )
         self.represented_country = geoip2.records.RepresentedCountry(
-            locales, **(represented_country or {})
+            locales,
+            **(represented_country or {}),
         )
 
         self.maxmind = geoip2.records.MaxMind(**(maxmind or {}))
@@ -112,8 +115,8 @@ class Country(Model):
 
     def __repr__(self) -> str:
         return (
-            f"{self.__module__}.{self.__class__.__name__}({repr(self._locales)}, "
-            f"{', '.join(f'{k}={repr(v)}' for k, v in self.to_dict().items())})"
+            f"{self.__module__}.{self.__class__.__name__}({self._locales!r}, "
+            f"{', '.join(f'{k}={v!r}' for k, v in self.to_dict().items())})"
         )
 
 
@@ -387,7 +390,7 @@ class SimpleModel(Model, metaclass=ABCMeta):
             f"{self.__module__}.{self.__class__.__name__}("
             + repr(str(self._ip_address))
             + ", "
-            + ", ".join(f"{k}={repr(v)}" for k, v in d.items())
+            + ", ".join(f"{k}={v!r}" for k, v in d.items())
             + ")"
         )
 
@@ -395,7 +398,8 @@ class SimpleModel(Model, metaclass=ABCMeta):
     def ip_address(self):
         """The IP address for the record"""
         if not isinstance(
-            self._ip_address, (ipaddress.IPv4Address, ipaddress.IPv6Address)
+            self._ip_address,
+            (ipaddress.IPv4Address, ipaddress.IPv6Address),
         ):
             self._ip_address = ipaddress.ip_address(self._ip_address)
         return self._ip_address

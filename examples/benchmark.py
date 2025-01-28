@@ -1,14 +1,13 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
-from __future__ import print_function
 
 import argparse
-import geoip2.database
 import random
 import socket
 import struct
 import timeit
+
+import geoip2.database
 
 parser = argparse.ArgumentParser(description="Benchmark maxminddb.")
 parser.add_argument("--count", default=250000, type=int, help="number of lookups")

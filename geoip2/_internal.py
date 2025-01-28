@@ -2,13 +2,12 @@
 
 # pylint: disable=too-few-public-methods
 from abc import ABCMeta
-from typing import Any
 
 
 class Model(metaclass=ABCMeta):
     """Shared methods for MaxMind model classes"""
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.to_dict() == other.to_dict()
 
     def __ne__(self, other):
