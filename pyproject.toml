@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geoip2"
-version = "5.0.0"
+version = "5.0.1"
 description = "MaxMind GeoIP2 API"
 authors = [
     {name = "Gregory Oschwald", email = "goschwald@maxmind.com"},
