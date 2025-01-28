@@ -471,7 +471,7 @@ class AnonymousIP(SimpleModel):
 
       The IP address used in the lookup.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: network
 
@@ -534,7 +534,7 @@ class ASN(SimpleModel):
 
       The IP address used in the lookup.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: network
 
@@ -587,7 +587,7 @@ class ConnectionType(SimpleModel):
 
       The IP address used in the lookup.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: network
 
@@ -628,7 +628,7 @@ class Domain(SimpleModel):
 
       The IP address used in the lookup.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: network
 
@@ -705,7 +705,7 @@ class ISP(ASN):
 
       The IP address used in the lookup.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: network
 

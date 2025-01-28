@@ -651,7 +651,7 @@ class Traits(Record):
       running on. If the system is behind a NAT, this may differ from the IP
       address locally assigned to it.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: is_anonymous
 
