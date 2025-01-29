@@ -4,7 +4,13 @@
 History
 -------
 
-5.0.0
+5.0.1 (2025-01-28)
+++++++++++++++++++
+
+* Allow ``ip_address`` in the ``Traits`` record to be ``None`` again. The
+  primary use case for this is from the ``minfraud`` package.
+
+5.0.0 (2025-01-28)
 ++++++++++++++++++
 
 * BREAKING: The ``raw`` attribute on the model classes has been replaced

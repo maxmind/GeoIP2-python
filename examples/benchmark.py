@@ -1,14 +1,14 @@
 #!/usr/bin/python
-# -*- coding: utf-8 -*-
 
-from __future__ import print_function
 
 import argparse
-import geoip2.database
+import contextlib
 import random
 import socket
 import struct
 import timeit
+
+import geoip2.database
 
 parser = argparse.ArgumentParser(description="Benchmark maxminddb.")
 parser.add_argument("--count", default=250000, type=int, help="number of lookups")
@@ -20,12 +20,10 @@ args = parser.parse_args()
 reader = geoip2.database.Reader(args.file, mode=args.mode)
 
 
-def lookup_ip_address():
+def lookup_ip_address() -> None:
     ip = socket.inet_ntoa(struct.pack("!L", random.getrandbits(32)))
-    try:
-        record = reader.city(str(ip))
-    except geoip2.errors.AddressNotFoundError:
-        pass
+    with contextlib.suppress(geoip2.errors.AddressNotFoundError):
+        reader.city(str(ip))
 
 
 elapsed = timeit.timeit(

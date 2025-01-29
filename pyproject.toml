@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "geoip2"
-version = "4.8.1"
+version = "5.0.1"
 description = "MaxMind GeoIP2 API"
 authors = [
     {name = "Gregory Oschwald", email = "goschwald@maxmind.com"},
@@ -38,6 +38,33 @@ classifiers = [
 test = [
     "pytest-httpserver>=1.0.10",
 ]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    # Skip type annotation on **_
+    "ANN003",
+
+    # documenting magic methods
+    "D105",
+
+    # Line length. We let black handle this for now.
+    "E501",
+
+    # Don't bother with future imports for type annotations
+    "FA100",
+
+    # Magic numbers for HTTP status codes seem ok most of the time.
+    "PLR2004",
+
+    # pytest rules
+    "PT009",
+    "PT027",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"geoip2/{models,records}.py" = [ "D107", "PLR0913" ]
+"tests/*" = ["ANN201", "D"]
 
 [tool.setuptools.package-data]
 geoip2 = ["py.typed"]

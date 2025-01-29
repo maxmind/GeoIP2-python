@@ -53,8 +53,7 @@ class AddressNotFoundError(GeoIP2Error):
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
-        """The network for the error"""
-
+        """The network for the error."""
         if self.ip_address is None or self._prefix_len is None:
             return None
         return ipaddress.ip_network(f"{self.ip_address}/{self._prefix_len}", False)

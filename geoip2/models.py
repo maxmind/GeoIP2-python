@@ -14,7 +14,9 @@ https://dev.maxmind.com/geoip/docs/web-services?lang=en for more details.
 # pylint: disable=too-many-instance-attributes,too-few-public-methods,too-many-arguments
 import ipaddress
 from abc import ABCMeta
-from typing import Dict, List, Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import Optional, Union
+from ipaddress import IPv4Address, IPv6Address
 
 import geoip2.records
 from geoip2._internal import Model
@@ -80,24 +82,26 @@ class Country(Model):
         self,
         locales: Optional[Sequence[str]],
         *,
-        continent: Optional[Dict] = None,
-        country: Optional[Dict] = None,
+        continent: Optional[dict] = None,
+        country: Optional[dict] = None,
         ip_address: Optional[IPAddress] = None,
-        maxmind: Optional[Dict] = None,
+        maxmind: Optional[dict] = None,
         prefix_len: Optional[int] = None,
-        registered_country: Optional[Dict] = None,
-        represented_country: Optional[Dict] = None,
-        traits: Optional[Dict] = None,
+        registered_country: Optional[dict] = None,
+        represented_country: Optional[dict] = None,
+        traits: Optional[dict] = None,
         **_,
     ) -> None:
         self._locales = locales
         self.continent = geoip2.records.Continent(locales, **(continent or {}))
         self.country = geoip2.records.Country(locales, **(country or {}))
         self.registered_country = geoip2.records.Country(
-            locales, **(registered_country or {})
+            locales,
+            **(registered_country or {}),
         )
         self.represented_country = geoip2.records.RepresentedCountry(
-            locales, **(represented_country or {})
+            locales,
+            **(represented_country or {}),
         )
 
         self.maxmind = geoip2.records.MaxMind(**(maxmind or {}))
@@ -112,8 +116,8 @@ class Country(Model):
 
     def __repr__(self) -> str:
         return (
-            f"{self.__module__}.{self.__class__.__name__}({repr(self._locales)}, "
-            f"{', '.join(f'{k}={repr(v)}' for k, v in self.to_dict().items())})"
+            f"{self.__module__}.{self.__class__.__name__}({self._locales!r}, "
+            f"{', '.join(f'{k}={v!r}' for k, v in self.to_dict().items())})"
         )
 
 
@@ -197,18 +201,18 @@ class City(Country):
         self,
         locales: Optional[Sequence[str]],
         *,
-        city: Optional[Dict] = None,
-        continent: Optional[Dict] = None,
-        country: Optional[Dict] = None,
-        location: Optional[Dict] = None,
+        city: Optional[dict] = None,
+        continent: Optional[dict] = None,
+        country: Optional[dict] = None,
+        location: Optional[dict] = None,
         ip_address: Optional[IPAddress] = None,
-        maxmind: Optional[Dict] = None,
-        postal: Optional[Dict] = None,
+        maxmind: Optional[dict] = None,
+        postal: Optional[dict] = None,
         prefix_len: Optional[int] = None,
-        registered_country: Optional[Dict] = None,
-        represented_country: Optional[Dict] = None,
-        subdivisions: Optional[List[Dict]] = None,
-        traits: Optional[Dict] = None,
+        registered_country: Optional[dict] = None,
+        represented_country: Optional[dict] = None,
+        subdivisions: Optional[list[dict]] = None,
+        traits: Optional[dict] = None,
         **_,
     ) -> None:
         super().__init__(
@@ -357,7 +361,7 @@ class Enterprise(City):
 
 
 class SimpleModel(Model, metaclass=ABCMeta):
-    """Provides basic methods for non-location models"""
+    """Provides basic methods for non-location models."""
 
     _ip_address: IPAddress
     _network: Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]
@@ -387,22 +391,20 @@ class SimpleModel(Model, metaclass=ABCMeta):
             f"{self.__module__}.{self.__class__.__name__}("
             + repr(str(self._ip_address))
             + ", "
-            + ", ".join(f"{k}={repr(v)}" for k, v in d.items())
+            + ", ".join(f"{k}={v!r}" for k, v in d.items())
             + ")"
         )
 
     @property
-    def ip_address(self):
-        """The IP address for the record"""
-        if not isinstance(
-            self._ip_address, (ipaddress.IPv4Address, ipaddress.IPv6Address)
-        ):
+    def ip_address(self) -> Union[IPv4Address, IPv6Address]:
+        """The IP address for the record."""
+        if not isinstance(self._ip_address, (IPv4Address, IPv6Address)):
             self._ip_address = ipaddress.ip_address(self._ip_address)
         return self._ip_address
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
-        """The network for the record"""
+        """The network for the record."""
         # This code is duplicated for performance reasons
         network = self._network
         if network is not None:
@@ -469,7 +471,7 @@ class AnonymousIP(SimpleModel):
 
       The IP address used in the lookup.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: network
 
@@ -532,7 +534,7 @@ class ASN(SimpleModel):
 
       The IP address used in the lookup.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: network
 
@@ -585,7 +587,7 @@ class ConnectionType(SimpleModel):
 
       The IP address used in the lookup.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: network
 
@@ -626,7 +628,7 @@ class Domain(SimpleModel):
 
       The IP address used in the lookup.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: network
 
@@ -703,7 +705,7 @@ class ISP(ASN):
 
       The IP address used in the lookup.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: network
 

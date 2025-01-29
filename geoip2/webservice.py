@@ -27,7 +27,8 @@ Requests to the web service are always made with SSL.
 
 import ipaddress
 import json
-from typing import Any, Dict, cast, Optional, Sequence, Type, Union
+from collections.abc import Sequence
+from typing import Any, Optional, Union, cast
 
 import aiohttp
 import aiohttp.http
@@ -106,7 +107,11 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
             ) from ex
 
     def _exception_for_error(
-        self, status: int, content_type: str, body: str, uri: str
+        self,
+        status: int,
+        content_type: str,
+        body: str,
+        uri: str,
     ) -> GeoIP2Error:
         if 400 <= status < 500:
             return self._exception_for_4xx_status(status, content_type, body, uri)
@@ -115,7 +120,11 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         return self._exception_for_non_200_status(status, uri, body)
 
     def _exception_for_4xx_status(
-        self, status: int, content_type: str, body: str, uri: str
+        self,
+        status: int,
+        content_type: str,
+        body: str,
+        uri: str,
     ) -> GeoIP2Error:
         if not body:
             return HTTPError(
@@ -145,7 +154,10 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
 
         if "code" in decoded_body and "error" in decoded_body:
             return self._exception_for_web_service_error(
-                decoded_body.get("error"), decoded_body.get("code"), status, uri
+                decoded_body.get("error"),
+                decoded_body.get("code"),
+                status,
+                uri,
             )
         return HTTPError(
             "Response contains JSON but it does not specify code or error keys",
@@ -156,7 +168,10 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
 
     @staticmethod
     def _exception_for_web_service_error(
-        message: str, code: str, status: int, uri: str
+        message: str,
+        code: str,
+        status: int,
+        uri: str,
     ) -> Union[
         AuthenticationError,
         AddressNotFoundError,
@@ -184,7 +199,9 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
 
     @staticmethod
     def _exception_for_5xx_status(
-        status: int, uri: str, body: Optional[str]
+        status: int,
+        uri: str,
+        body: Optional[str],
     ) -> HTTPError:
         return HTTPError(
             f"Received a server error ({status}) for {uri}",
@@ -195,7 +212,9 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
 
     @staticmethod
     def _exception_for_non_200_status(
-        status: int, uri: str, body: Optional[str]
+        status: int,
+        uri: str,
+        body: Optional[str],
     ) -> HTTPError:
         return HTTPError(
             f"Received a very surprising HTTP status ({status}) for {uri}",
@@ -289,7 +308,8 @@ class AsyncClient(BaseClient):
 
         """
         return cast(
-            City, await self._response_for("city", geoip2.models.City, ip_address)
+            City,
+            await self._response_for("city", geoip2.models.City, ip_address),
         )
 
     async def country(self, ip_address: IPAddress = "me") -> Country:
@@ -338,7 +358,7 @@ class AsyncClient(BaseClient):
     async def _response_for(
         self,
         path: str,
-        model_class: Union[Type[Insights], Type[City], Type[Country]],
+        model_class: Union[type[Insights], type[City], type[Country]],
         ip_address: IPAddress,
     ) -> Union[Country, City, Insights]:
         uri = self._uri(path, ip_address)
@@ -352,8 +372,8 @@ class AsyncClient(BaseClient):
             decoded_body = self._handle_success(body, uri)
             return model_class(self._locales, **decoded_body)
 
-    async def close(self):
-        """Close underlying session
+    async def close(self) -> None:
+        """Close underlying session.
 
         This will close the session and any associated connections.
         """
@@ -421,7 +441,7 @@ class Client(BaseClient):
     """
 
     _session: requests.Session
-    _proxies: Optional[Dict[str, str]]
+    _proxies: Optional[dict[str, str]]
 
     def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
@@ -465,7 +485,8 @@ class Client(BaseClient):
 
         """
         return cast(
-            Country, self._response_for("country", geoip2.models.Country, ip_address)
+            Country,
+            self._response_for("country", geoip2.models.Country, ip_address),
         )
 
     def insights(self, ip_address: IPAddress = "me") -> Insights:
@@ -482,13 +503,14 @@ class Client(BaseClient):
 
         """
         return cast(
-            Insights, self._response_for("insights", geoip2.models.Insights, ip_address)
+            Insights,
+            self._response_for("insights", geoip2.models.Insights, ip_address),
         )
 
     def _response_for(
         self,
         path: str,
-        model_class: Union[Type[Insights], Type[City], Type[Country]],
+        model_class: Union[type[Insights], type[City], type[Country]],
         ip_address: IPAddress,
     ) -> Union[Country, City, Insights]:
         uri = self._uri(path, ip_address)
@@ -501,8 +523,8 @@ class Client(BaseClient):
         decoded_body = self._handle_success(body, uri)
         return model_class(self._locales, **decoded_body)
 
-    def close(self):
-        """Close underlying session
+    def close(self) -> None:
+        """Close underlying session.
 
         This will close the session and any associated connections.
         """

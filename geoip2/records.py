@@ -11,9 +11,12 @@ import ipaddress
 
 # pylint:disable=R0903
 from abc import ABCMeta
-from typing import Dict, Optional, Type, Sequence, Union
+from collections.abc import Sequence
+from ipaddress import IPv4Address, IPv6Address
+from typing import Optional, Union
 
 from geoip2._internal import Model
+from geoip2.types import IPAddress
 
 
 class Record(Model, metaclass=ABCMeta):
@@ -27,13 +30,13 @@ class Record(Model, metaclass=ABCMeta):
 class PlaceRecord(Record, metaclass=ABCMeta):
     """All records with :py:attr:`names` subclass :py:class:`PlaceRecord`."""
 
-    names: Dict[str, str]
+    names: dict[str, str]
     _locales: Sequence[str]
 
     def __init__(
         self,
         locales: Optional[Sequence[str]],
-        names: Optional[Dict[str, str]],
+        names: Optional[dict[str, str]],
     ) -> None:
         if locales is None:
             locales = ["en"]
@@ -97,7 +100,7 @@ class City(PlaceRecord):
         *,
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
-        names: Optional[Dict[str, str]] = None,
+        names: Optional[dict[str, str]] = None,
         **_,
     ) -> None:
         self.confidence = confidence
@@ -112,7 +115,6 @@ class Continent(PlaceRecord):
     address.
 
     Attributes:
-
 
     .. attribute:: code
 
@@ -152,7 +154,7 @@ class Continent(PlaceRecord):
         *,
         code: Optional[str] = None,
         geoname_id: Optional[int] = None,
-        names: Optional[Dict[str, str]] = None,
+        names: Optional[dict[str, str]] = None,
         **_,
     ) -> None:
         self.code = code
@@ -166,7 +168,6 @@ class Country(PlaceRecord):
     This class contains the country-level data associated with an IP address.
 
     Attributes:
-
 
     .. attribute:: confidence
 
@@ -225,7 +226,7 @@ class Country(PlaceRecord):
         geoname_id: Optional[int] = None,
         is_in_european_union: bool = False,
         iso_code: Optional[str] = None,
-        names: Optional[Dict[str, str]] = None,
+        names: Optional[dict[str, str]] = None,
         **_,
     ) -> None:
         self.confidence = confidence
@@ -243,7 +244,6 @@ class RepresentedCountry(Country):
     represented by something like a military base.
 
     Attributes:
-
 
     .. attribute:: confidence
 
@@ -307,7 +307,7 @@ class RepresentedCountry(Country):
         geoname_id: Optional[int] = None,
         is_in_european_union: bool = False,
         iso_code: Optional[str] = None,
-        names: Optional[Dict[str, str]] = None,
+        names: Optional[dict[str, str]] = None,
         # pylint:disable=redefined-builtin
         type: Optional[str] = None,
         **_,
@@ -470,7 +470,11 @@ class Postal(Record):
     confidence: Optional[int]
 
     def __init__(
-        self, *, code: Optional[str] = None, confidence: Optional[int] = None, **_
+        self,
+        *,
+        code: Optional[str] = None,
+        confidence: Optional[int] = None,
+        **_,
     ) -> None:
         self.code = code
         self.confidence = confidence
@@ -534,7 +538,7 @@ class Subdivision(PlaceRecord):
         confidence: Optional[int] = None,
         geoname_id: Optional[int] = None,
         iso_code: Optional[str] = None,
-        names: Optional[Dict[str, str]] = None,
+        names: Optional[dict[str, str]] = None,
         **_,
     ) -> None:
         self.confidence = confidence
@@ -556,11 +560,12 @@ class Subdivisions(tuple):
     """
 
     def __new__(
-        cls: Type["Subdivisions"], locales: Optional[Sequence[str]], *subdivisions
+        cls: type["Subdivisions"],
+        locales: Optional[Sequence[str]],
+        *subdivisions,
     ) -> "Subdivisions":
         subobjs = tuple(Subdivision(locales, **x) for x in subdivisions)
-        obj = super().__new__(cls, subobjs)  # type: ignore
-        return obj
+        return super().__new__(cls, subobjs)  # type: ignore
 
     def __init__(
         self,
@@ -646,7 +651,7 @@ class Traits(Record):
       running on. If the system is behind a NAT, this may differ from the IP
       address locally assigned to it.
 
-      :type: str
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
 
     .. attribute:: is_anonymous
 
@@ -838,7 +843,7 @@ class Traits(Record):
     autonomous_system_organization: Optional[str]
     connection_type: Optional[str]
     domain: Optional[str]
-    _ip_address: Optional[str]
+    _ip_address: Optional[IPAddress]
     is_anonymous: bool
     is_anonymous_proxy: bool
     is_anonymous_vpn: bool
@@ -920,17 +925,20 @@ class Traits(Record):
         self._prefix_len = prefix_len
 
     @property
-    def ip_address(self):
-        """The IP address for the record"""
-        if not isinstance(
-            self._ip_address, (ipaddress.IPv4Address, ipaddress.IPv6Address)
-        ):
-            self._ip_address = ipaddress.ip_address(self._ip_address)
-        return self._ip_address
+    def ip_address(self) -> Optional[Union[IPv4Address, IPv6Address]]:
+        """The IP address for the record."""
+        ip_address = self._ip_address
+        if ip_address is None:
+            return None
+
+        if not isinstance(ip_address, (IPv4Address, IPv6Address)):
+            ip_address = ipaddress.ip_address(ip_address)
+            self._ip_address = ip_address
+        return ip_address
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
-        """The network for the record"""
+        """The network for the record."""
         # This code is duplicated for performance reasons
         network = self._network
         if network is not None:
