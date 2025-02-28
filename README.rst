@@ -18,12 +18,12 @@ To install the ``geoip2`` module, type:
 
     $ pip install geoip2
 
-If you are not able to use pip, you may also use easy_install from the
+If you are not able to install from PyPI, you may also use ``pip`` from the
 source directory:
 
 .. code-block:: bash
 
-    $ easy_install .
+    $ python -m pip install .
 
 Database Reader Extension
 ^^^^^^^^^^^^^^^^^^^^^^^^^
