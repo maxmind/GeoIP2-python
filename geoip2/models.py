@@ -12,11 +12,12 @@ https://dev.maxmind.com/geoip/docs/web-services?lang=en for more details.
 """
 
 # pylint: disable=too-many-instance-attributes,too-few-public-methods,too-many-arguments
+import datetime
 import ipaddress
 from abc import ABCMeta
 from collections.abc import Sequence
-from typing import Optional, Union
 from ipaddress import IPv4Address, IPv6Address
+from typing import Optional, Union
 
 import geoip2.records
 from geoip2._internal import Model
@@ -510,6 +511,128 @@ class AnonymousIP(SimpleModel):
         self.is_public_proxy = is_public_proxy
         self.is_residential_proxy = is_residential_proxy
         self.is_tor_exit_node = is_tor_exit_node
+
+
+class AnonymousPlus(AnonymousIP):
+    """Model class for the GeoIP Anonymous Plus.
+
+    This class provides the following attribute:
+
+    .. attribute: anonymizer_confidence
+
+      A score ranging from 1 to 99 that is our percent confidence that the
+      network is currently part of an actively used VPN service.
+
+      :type: str
+
+    .. attribute:: is_anonymous
+
+      This is true if the IP address belongs to any sort of anonymous network.
+
+      :type: bool
+
+    .. attribute:: is_anonymous_vpn
+
+      This is true if the IP address is registered to an anonymous VPN
+      provider.
+
+      If a VPN provider does not register subnets under names associated with
+      them, we will likely only flag their IP ranges using the
+      ``is_hosting_provider`` attribute.
+
+      :type: bool
+
+    .. attribute:: is_hosting_provider
+
+      This is true if the IP address belongs to a hosting or VPN provider
+      (see description of ``is_anonymous_vpn`` attribute).
+
+      :type: bool
+
+    .. attribute:: is_public_proxy
+
+      This is true if the IP address belongs to a public proxy.
+
+      :type: bool
+
+    .. attribute:: is_residential_proxy
+
+      This is true if the IP address is on a suspected anonymizing network
+      and belongs to a residential ISP.
+
+      :type: bool
+
+    .. attribute:: is_tor_exit_node
+
+      This is true if the IP address is a Tor exit node.
+
+      :type: bool
+
+    .. attribute:: ip_address
+
+      The IP address used in the lookup.
+
+      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
+
+    .. attribute:: network
+
+      The network associated with the record. In particular, this is the
+      largest network where all of the fields besides ip_address have the same
+      value.
+
+      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
+
+    .. attribute:: network_last_seen
+
+      The last day that the network was sighted in our analysis of anonymized
+      networks.
+
+      :type: str
+
+    .. attribute:: provider_name
+
+      The name of the VPN provider (e.g., NordVPN, SurfShark, etc.) associated
+      with the network.
+
+      :type: str
+    """
+
+    anonymizer_confidence: Optional[int]
+    network_last_seen: Optional[datetime.date]
+    provider_name: Optional[str]
+
+    def __init__(
+        self,
+        ip_address: IPAddress,
+        *,
+        anonymizer_confidence: Optional[int] = None,
+        is_anonymous: bool = False,
+        is_anonymous_vpn: bool = False,
+        is_hosting_provider: bool = False,
+        is_public_proxy: bool = False,
+        is_residential_proxy: bool = False,
+        is_tor_exit_node: bool = False,
+        network: Optional[str] = None,
+        network_last_seen: Optional[str] = None,
+        prefix_len: Optional[int] = None,
+        provider_name: Optional[str] = None,
+        **_,
+    ) -> None:
+        super().__init__(
+            is_anonymous=is_anonymous,
+            is_anonymous_vpn=is_anonymous_vpn,
+            is_hosting_provider=is_hosting_provider,
+            is_public_proxy=is_public_proxy,
+            is_residential_proxy=is_residential_proxy,
+            is_tor_exit_node=is_tor_exit_node,
+            ip_address=ip_address,
+            network=network,
+            prefix_len=prefix_len,
+        )
+        self.anonymizer_confidence = anonymizer_confidence
+        if network_last_seen is not None:
+            self.network_last_seen = datetime.date.fromisoformat(network_last_seen)
+        self.provider_name = provider_name
 
 
 class ASN(SimpleModel):

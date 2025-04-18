@@ -27,6 +27,7 @@ from geoip2.models import (
     ASN,
     ISP,
     AnonymousIP,
+    AnonymousPlus,
     City,
     ConnectionType,
     Country,
@@ -163,6 +164,23 @@ class Reader:
             self._flat_model_for(
                 geoip2.models.AnonymousIP,
                 "GeoIP2-Anonymous-IP",
+                ip_address,
+            ),
+        )
+
+    def anonymous_plus(self, ip_address: IPAddress) -> AnonymousPlus:
+        """Get the AnonymousPlus object for the IP address.
+
+        :param ip_address: IPv4 or IPv6 address as a string.
+
+        :returns: :py:class:`geoip2.models.AnonymousPlus` object
+
+        """
+        return cast(
+            AnonymousPlus,
+            self._flat_model_for(
+                geoip2.models.AnonymousPlus,
+                "GeoIP-Anonymous-Plus",
                 ip_address,
             ),
         )

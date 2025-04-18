@@ -4,6 +4,13 @@
 History
 -------
 
+5.1.0
+++++++++++++++++++
+
+* Support for the GeoIP Anonymous Plus database has been added. To do a lookup
+  in this database, use the ``anonymous_plus`` method on ``Reader``.
+
+
 5.0.1 (2025-01-28)
 ++++++++++++++++++
 
