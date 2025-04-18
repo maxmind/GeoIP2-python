@@ -25,59 +25,33 @@ from geoip2.types import IPAddress
 
 
 class Country(Model):
-    """Model for the Country web service and Country database.
-
-    This class provides the following attributes:
-
-    .. attribute:: continent
-
-      Continent object for the requested IP address.
-
-      :type: :py:class:`geoip2.records.Continent`
-
-    .. attribute:: country
-
-      Country object for the requested IP address. This record represents the
-      country where MaxMind believes the IP is located.
-
-      :type: :py:class:`geoip2.records.Country`
-
-    .. attribute:: maxmind
-
-      Information related to your MaxMind account.
-
-      :type: :py:class:`geoip2.records.MaxMind`
-
-    .. attribute:: registered_country
-
-      The registered country object for the requested IP address. This record
-      represents the country where the ISP has registered a given IP block in
-      and may differ from the user's country.
-
-      :type: :py:class:`geoip2.records.Country`
-
-    .. attribute:: represented_country
-
-      Object for the country represented by the users of the IP address
-      when that country is different than the country in ``country``. For
-      instance, the country represented by an overseas military base.
-
-      :type: :py:class:`geoip2.records.RepresentedCountry`
-
-    .. attribute:: traits
-
-      Object with the traits of the requested IP address.
-
-      :type: :py:class:`geoip2.records.Traits`
-
-    """
+    """Model for the Country web service and Country database."""
 
     continent: geoip2.records.Continent
+    """Continent object for the requested IP address."""
+
     country: geoip2.records.Country
+    """Country object for the requested IP address. This record represents the
+    country where MaxMind believes the IP is located.
+    """
+
     maxmind: geoip2.records.MaxMind
+    """Information related to your MaxMind account."""
+
     registered_country: geoip2.records.Country
+    """The registered country object for the requested IP address. This record
+    represents the country where the ISP has registered a given IP block in
+    and may differ from the user's country.
+    """
+
     represented_country: geoip2.records.RepresentedCountry
+    """Object for the country represented by the users of the IP address
+    when that country is different than the country in ``country``. For
+    instance, the country represented by an overseas military base.
+    """
+
     traits: geoip2.records.Traits
+    """Object with the traits of the requested IP address."""
 
     def __init__(
         self,
@@ -123,80 +97,21 @@ class Country(Model):
 
 
 class City(Country):
-    """Model for the City Plus web service and the City database.
-
-    .. attribute:: city
-
-      City object for the requested IP address.
-
-      :type: :py:class:`geoip2.records.City`
-
-    .. attribute:: continent
-
-      Continent object for the requested IP address.
-
-      :type: :py:class:`geoip2.records.Continent`
-
-    .. attribute:: country
-
-      Country object for the requested IP address. This record represents the
-      country where MaxMind believes the IP is located.
-
-      :type: :py:class:`geoip2.records.Country`
-
-    .. attribute:: location
-
-      Location object for the requested IP address.
-
-      :type: :py:class:`geoip2.records.Location`
-
-    .. attribute:: maxmind
-
-      Information related to your MaxMind account.
-
-      :type: :py:class:`geoip2.records.MaxMind`
-
-    .. attribute:: postal
-
-      Postal object for the requested IP address.
-
-      :type: :py:class:`geoip2.records.Postal`
-
-    .. attribute:: registered_country
-
-      The registered country object for the requested IP address. This record
-      represents the country where the ISP has registered a given IP block in
-      and may differ from the user's country.
-
-      :type: :py:class:`geoip2.records.Country`
-
-    .. attribute:: represented_country
-
-      Object for the country represented by the users of the IP address
-      when that country is different than the country in ``country``. For
-      instance, the country represented by an overseas military base.
-
-      :type: :py:class:`geoip2.records.RepresentedCountry`
-
-    .. attribute:: subdivisions
-
-      Object (tuple) representing the subdivisions of the country to which
-      the location of the requested IP address belongs.
-
-      :type: :py:class:`geoip2.records.Subdivisions`
-
-    .. attribute:: traits
-
-      Object with the traits of the requested IP address.
-
-      :type: :py:class:`geoip2.records.Traits`
-
-    """
+    """Model for the City Plus web service and the City database."""
 
     city: geoip2.records.City
+    """City object for the requested IP address."""
+
     location: geoip2.records.Location
+    """Location object for the requested IP address."""
+
     postal: geoip2.records.Postal
+    """Postal object for the requested IP address."""
+
     subdivisions: geoip2.records.Subdivisions
+    """Object (tuple) representing the subdivisions of the country to which
+    the location of the requested IP address belongs.
+    """
 
     def __init__(
         self,
@@ -234,131 +149,11 @@ class City(Country):
 
 
 class Insights(City):
-    """Model for the GeoIP2 Insights web service.
-
-    .. attribute:: city
-
-      City object for the requested IP address.
-
-      :type: :py:class:`geoip2.records.City`
-
-    .. attribute:: continent
-
-      Continent object for the requested IP address.
-
-      :type: :py:class:`geoip2.records.Continent`
-
-    .. attribute:: country
-
-      Country object for the requested IP address. This record represents the
-      country where MaxMind believes the IP is located.
-
-      :type: :py:class:`geoip2.records.Country`
-
-    .. attribute:: location
-
-      Location object for the requested IP address.
-
-    .. attribute:: maxmind
-
-      Information related to your MaxMind account.
-
-      :type: :py:class:`geoip2.records.MaxMind`
-
-    .. attribute:: registered_country
-
-      The registered country object for the requested IP address. This record
-      represents the country where the ISP has registered a given IP block in
-      and may differ from the user's country.
-
-      :type: :py:class:`geoip2.records.Country`
-
-    .. attribute:: represented_country
-
-      Object for the country represented by the users of the IP address
-      when that country is different than the country in ``country``. For
-      instance, the country represented by an overseas military base.
-
-      :type: :py:class:`geoip2.records.RepresentedCountry`
-
-    .. attribute:: subdivisions
-
-      Object (tuple) representing the subdivisions of the country to which
-      the location of the requested IP address belongs.
-
-      :type: :py:class:`geoip2.records.Subdivisions`
-
-    .. attribute:: traits
-
-      Object with the traits of the requested IP address.
-
-      :type: :py:class:`geoip2.records.Traits`
-
-    """
+    """Model for the GeoIP2 Insights web service."""
 
 
 class Enterprise(City):
-    """Model for the GeoIP2 Enterprise database.
-
-    .. attribute:: city
-
-      City object for the requested IP address.
-
-      :type: :py:class:`geoip2.records.City`
-
-    .. attribute:: continent
-
-      Continent object for the requested IP address.
-
-      :type: :py:class:`geoip2.records.Continent`
-
-    .. attribute:: country
-
-      Country object for the requested IP address. This record represents the
-      country where MaxMind believes the IP is located.
-
-      :type: :py:class:`geoip2.records.Country`
-
-    .. attribute:: location
-
-      Location object for the requested IP address.
-
-    .. attribute:: maxmind
-
-      Information related to your MaxMind account.
-
-      :type: :py:class:`geoip2.records.MaxMind`
-
-    .. attribute:: registered_country
-
-      The registered country object for the requested IP address. This record
-      represents the country where the ISP has registered a given IP block in
-      and may differ from the user's country.
-
-      :type: :py:class:`geoip2.records.Country`
-
-    .. attribute:: represented_country
-
-      Object for the country represented by the users of the IP address
-      when that country is different than the country in ``country``. For
-      instance, the country represented by an overseas military base.
-
-      :type: :py:class:`geoip2.records.RepresentedCountry`
-
-    .. attribute:: subdivisions
-
-      Object (tuple) representing the subdivisions of the country to which
-      the location of the requested IP address belongs.
-
-      :type: :py:class:`geoip2.records.Subdivisions`
-
-    .. attribute:: traits
-
-      Object with the traits of the requested IP address.
-
-      :type: :py:class:`geoip2.records.Traits`
-
-    """
+    """Model for the GeoIP2 Enterprise database."""
 
 
 class SimpleModel(Model, metaclass=ABCMeta):
@@ -405,7 +200,11 @@ class SimpleModel(Model, metaclass=ABCMeta):
 
     @property
     def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
-        """The network for the record."""
+        """The network associated with the record.
+
+        In particular, this is the largest network where all of the fields besides
+        ip_address have the same value.
+        """
         # This code is duplicated for performance reasons
         network = self._network
         if network is not None:
@@ -421,74 +220,35 @@ class SimpleModel(Model, metaclass=ABCMeta):
 
 
 class AnonymousIP(SimpleModel):
-    """Model class for the GeoIP2 Anonymous IP.
-
-    This class provides the following attribute:
-
-    .. attribute:: is_anonymous
-
-      This is true if the IP address belongs to any sort of anonymous network.
-
-      :type: bool
-
-    .. attribute:: is_anonymous_vpn
-
-      This is true if the IP address is registered to an anonymous VPN
-      provider.
-
-      If a VPN provider does not register subnets under names associated with
-      them, we will likely only flag their IP ranges using the
-      ``is_hosting_provider`` attribute.
-
-      :type: bool
-
-    .. attribute:: is_hosting_provider
-
-      This is true if the IP address belongs to a hosting or VPN provider
-      (see description of ``is_anonymous_vpn`` attribute).
-
-      :type: bool
-
-    .. attribute:: is_public_proxy
-
-      This is true if the IP address belongs to a public proxy.
-
-      :type: bool
-
-    .. attribute:: is_residential_proxy
-
-      This is true if the IP address is on a suspected anonymizing network
-      and belongs to a residential ISP.
-
-      :type: bool
-
-    .. attribute:: is_tor_exit_node
-
-      This is true if the IP address is a Tor exit node.
-
-      :type: bool
-
-    .. attribute:: ip_address
-
-      The IP address used in the lookup.
-
-      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
-
-    .. attribute:: network
-
-      The network associated with the record. In particular, this is the
-      largest network where all of the fields besides ip_address have the same
-      value.
-
-      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
-    """
+    """Model class for the GeoIP2 Anonymous IP."""
 
     is_anonymous: bool
+    """This is true if the IP address belongs to any sort of anonymous network."""
+
     is_anonymous_vpn: bool
+    """This is true if the IP address is registered to an anonymous VPN
+    provider.
+
+    If a VPN provider does not register subnets under names associated with
+    them, we will likely only flag their IP ranges using the
+    ``is_hosting_provider`` attribute.
+    """
+
     is_hosting_provider: bool
+    """This is true if the IP address belongs to a hosting or VPN provider
+    (see description of ``is_anonymous_vpn`` attribute).
+    """
+
     is_public_proxy: bool
+    """This is true if the IP address belongs to a public proxy."""
+
     is_residential_proxy: bool
+    """This is true if the IP address is on a suspected anonymizing network
+    and belongs to a residential ISP.
+    """
+
     is_tor_exit_node: bool
+    """This is true if the IP address is a Tor exit node."""
 
     def __init__(
         self,
@@ -514,92 +274,22 @@ class AnonymousIP(SimpleModel):
 
 
 class AnonymousPlus(AnonymousIP):
-    """Model class for the GeoIP Anonymous Plus.
-
-    This class provides the following attribute:
-
-    .. attribute: anonymizer_confidence
-
-      A score ranging from 1 to 99 that is our percent confidence that the
-      network is currently part of an actively used VPN service.
-
-      :type: str
-
-    .. attribute:: is_anonymous
-
-      This is true if the IP address belongs to any sort of anonymous network.
-
-      :type: bool
-
-    .. attribute:: is_anonymous_vpn
-
-      This is true if the IP address is registered to an anonymous VPN
-      provider.
-
-      If a VPN provider does not register subnets under names associated with
-      them, we will likely only flag their IP ranges using the
-      ``is_hosting_provider`` attribute.
-
-      :type: bool
-
-    .. attribute:: is_hosting_provider
-
-      This is true if the IP address belongs to a hosting or VPN provider
-      (see description of ``is_anonymous_vpn`` attribute).
-
-      :type: bool
-
-    .. attribute:: is_public_proxy
-
-      This is true if the IP address belongs to a public proxy.
-
-      :type: bool
-
-    .. attribute:: is_residential_proxy
-
-      This is true if the IP address is on a suspected anonymizing network
-      and belongs to a residential ISP.
-
-      :type: bool
-
-    .. attribute:: is_tor_exit_node
-
-      This is true if the IP address is a Tor exit node.
-
-      :type: bool
-
-    .. attribute:: ip_address
-
-      The IP address used in the lookup.
-
-      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
-
-    .. attribute:: network
-
-      The network associated with the record. In particular, this is the
-      largest network where all of the fields besides ip_address have the same
-      value.
-
-      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
-
-    .. attribute:: network_last_seen
-
-      The last day that the network was sighted in our analysis of anonymized
-      networks.
-
-      :type: str
-
-    .. attribute:: provider_name
-
-      The name of the VPN provider (e.g., NordVPN, SurfShark, etc.) associated
-      with the network.
-
-      :type: str
-    """
+    """Model class for the GeoIP Anonymous Plus."""
 
     anonymizer_confidence: Optional[int]
+    """A score ranging from 1 to 99 that is our percent confidence that the
+    network is currently part of an actively used VPN service.
+    """
+
     network_last_seen: Optional[datetime.date]
+    """The last day that the network was sighted in our analysis of anonymized
+    networks.
+    """
+
     provider_name: Optional[str]
+    """The name of the VPN provider (e.g., NordVPN, SurfShark, etc.) associated
+    with the network.
+    """
 
     def __init__(
         self,
@@ -636,40 +326,15 @@ class AnonymousPlus(AnonymousIP):
 
 
 class ASN(SimpleModel):
-    """Model class for the GeoLite2 ASN.
-
-    This class provides the following attribute:
-
-    .. attribute:: autonomous_system_number
-
-      The autonomous system number associated with the IP address.
-
-      :type: int
-
-    .. attribute:: autonomous_system_organization
-
-      The organization associated with the registered autonomous system number
-      for the IP address.
-
-      :type: str
-
-    .. attribute:: ip_address
-
-      The IP address used in the lookup.
-
-      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
-
-    .. attribute:: network
-
-      The network associated with the record. In particular, this is the
-      largest network where all of the fields besides ip_address have the same
-      value.
-
-      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
-    """
+    """Model class for the GeoLite2 ASN."""
 
     autonomous_system_number: Optional[int]
+    """The autonomous system number associated with the IP address."""
+
     autonomous_system_organization: Optional[str]
+    """The organization associated with the registered autonomous system number
+    for the IP address.
+    """
 
     # pylint:disable=too-many-arguments,too-many-positional-arguments
     def __init__(
@@ -688,40 +353,19 @@ class ASN(SimpleModel):
 
 
 class ConnectionType(SimpleModel):
-    """Model class for the GeoIP2 Connection-Type.
-
-    This class provides the following attribute:
-
-    .. attribute:: connection_type
-
-      The connection type may take the following values:
-
-      - Dialup
-      - Cable/DSL
-      - Corporate
-      - Cellular
-      - Satellite
-
-      Additional values may be added in the future.
-
-      :type: str
-
-    .. attribute:: ip_address
-
-      The IP address used in the lookup.
-
-      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
-
-    .. attribute:: network
-
-      The network associated with the record. In particular, this is the
-      largest network where all of the fields besides ip_address have the same
-      value.
-
-      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
-    """
+    """Model class for the GeoIP2 Connection-Type."""
 
     connection_type: Optional[str]
+    """The connection type may take the following values:
+
+    - Dialup
+    - Cable/DSL
+    - Corporate
+    - Cellular
+    - Satellite
+
+    Additional values may be added in the future.
+    """
 
     def __init__(
         self,
@@ -737,33 +381,10 @@ class ConnectionType(SimpleModel):
 
 
 class Domain(SimpleModel):
-    """Model class for the GeoIP2 Domain.
-
-    This class provides the following attribute:
-
-    .. attribute:: domain
-
-      The domain associated with the IP address.
-
-      :type: str
-
-    .. attribute:: ip_address
-
-      The IP address used in the lookup.
-
-      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
-
-    .. attribute:: network
-
-      The network associated with the record. In particular, this is the
-      largest network where all of the fields besides ip_address have the same
-      value.
-
-      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
-
-    """
+    """Model class for the GeoIP2 Domain."""
 
     domain: Optional[str]
+    """The domain associated with the IP address."""
 
     def __init__(
         self,
@@ -779,70 +400,25 @@ class Domain(SimpleModel):
 
 
 class ISP(ASN):
-    """Model class for the GeoIP2 ISP.
-
-    This class provides the following attribute:
-
-    .. attribute:: autonomous_system_number
-
-      The autonomous system number associated with the IP address.
-
-      :type: int
-
-    .. attribute:: autonomous_system_organization
-
-      The organization associated with the registered autonomous system number
-      for the IP address.
-
-      :type: str
-
-    .. attribute:: isp
-
-      The name of the ISP associated with the IP address.
-
-      :type: str
-
-    .. attribute: mobile_country_code
-
-      The `mobile country code (MCC)
-      <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
-      IP address and ISP.
-
-      :type: str
-
-    .. attribute: mobile_network_code
-
-      The `mobile network code (MNC)
-      <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
-      IP address and ISP.
-
-      :type: str
-
-    .. attribute:: organization
-
-      The name of the organization associated with the IP address.
-
-      :type: str
-
-    .. attribute:: ip_address
-
-      The IP address used in the lookup.
-
-      :type: ipaddress.IPv4Address or ipaddress.IPv6Address
-
-    .. attribute:: network
-
-      The network associated with the record. In particular, this is the
-      largest network where all of the fields besides ip_address have the same
-      value.
-
-      :type: ipaddress.IPv4Network or ipaddress.IPv6Network
-    """
+    """Model class for the GeoIP2 ISP."""
 
     isp: Optional[str]
+    """The name of the ISP associated with the IP address."""
+
     mobile_country_code: Optional[str]
+    """The `mobile country code (MCC)
+    <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
+    IP address and ISP.
+    """
+
     mobile_network_code: Optional[str]
+    """The `mobile network code (MNC)
+    <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
+    IP address and ISP.
+    """
+
     organization: Optional[str]
+    """The name of the organization associated with the IP address."""
 
     # pylint:disable=too-many-arguments,too-many-positional-arguments
     def __init__(

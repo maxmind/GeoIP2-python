@@ -14,21 +14,33 @@ Modules
 
 .. automodule:: geoip2
     :members:
+    :inherited-members:
+    :show-inheritance:
 
 .. automodule:: geoip2.database
     :members:
+    :inherited-members:
+    :show-inheritance:
 
 .. automodule:: geoip2.webservice
     :members:
+    :inherited-members:
+    :show-inheritance:
 
 .. automodule:: geoip2.models
     :members:
+    :inherited-members:
+    :show-inheritance:
 
 .. automodule:: geoip2.records
     :members:
+    :inherited-members:
+    :show-inheritance:
 
 .. automodule:: geoip2.errors
     :members:
+    :inherited-members:
+    :show-inheritance:
 
 ==================
 Indices and tables
