@@ -46,7 +46,9 @@ class AddressNotFoundError(GeoIP2Error):
         """
         if self.ip_address is None or self._prefix_len is None:
             return None
-        return ipaddress.ip_network(f"{self.ip_address}/{self._prefix_len}", False)
+        return ipaddress.ip_network(
+            f"{self.ip_address}/{self._prefix_len}", strict=False
+        )
 
 
 class AuthenticationError(GeoIP2Error):

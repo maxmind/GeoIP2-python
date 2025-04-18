@@ -593,7 +593,7 @@ class Traits(Record):
         if network is None:
             self._network = None
         else:
-            self._network = ipaddress.ip_network(network, False)
+            self._network = ipaddress.ip_network(network, strict=False)
         # We don't construct the network using prefix_len here as that is
         # for database lookups. Customers using the database tend to be
         # much more performance sensitive than web service users.
@@ -633,6 +633,6 @@ class Traits(Record):
         prefix_len = self._prefix_len
         if ip_address is None or prefix_len is None:
             return None
-        network = ipaddress.ip_network(f"{ip_address}/{prefix_len}", False)
+        network = ipaddress.ip_network(f"{ip_address}/{prefix_len}", strict=False)
         self._network = network
         return network

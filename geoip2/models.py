@@ -170,7 +170,7 @@ class SimpleModel(Model, metaclass=ABCMeta):
         prefix_len: Optional[int],
     ) -> None:
         if network:
-            self._network = ipaddress.ip_network(network, False)
+            self._network = ipaddress.ip_network(network, strict=False)
             self._prefix_len = self._network.prefixlen
         else:
             # This case is for MMDB lookups where performance is paramount.
@@ -203,7 +203,7 @@ class SimpleModel(Model, metaclass=ABCMeta):
         """The network associated with the record.
 
         In particular, this is the largest network where all of the fields besides
-        ip_address have the same value.
+        ``ip_address`` have the same value.
         """
         # This code is duplicated for performance reasons
         network = self._network
@@ -214,7 +214,7 @@ class SimpleModel(Model, metaclass=ABCMeta):
         prefix_len = self._prefix_len
         if ip_address is None or prefix_len is None:
             return None
-        network = ipaddress.ip_network(f"{ip_address}/{prefix_len}", False)
+        network = ipaddress.ip_network(f"{ip_address}/{prefix_len}", strict=False)
         self._network = network
         return network
 
