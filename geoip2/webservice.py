@@ -1,10 +1,6 @@
-"""
-============================
-WebServices Client API
-============================
+"""Client for GeoIP2 and GeoLite2 web services.
 
-This class provides a client API for all the GeoIP2 web services. The web
-services are Country, City Plus, and Insights. Each service returns a
+The web services are Country, City Plus, and Insights. Each service returns a
 different set of data about an IP address, with Country returning the least
 data and Insights the most.
 

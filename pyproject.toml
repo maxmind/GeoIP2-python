@@ -34,9 +34,17 @@ classifiers = [
     "Topic :: Internet :: Proxy Servers",
 ]
 
-[project.optional-dependencies]
-test = [
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
     "pytest-httpserver>=1.0.10",
+    "types-requests>=2.32.0.20250328",
+]
+lint = [
+    "black>=25.1.0",
+    "mypy>=1.15.0",
+    "pylint>=3.3.6",
+    "ruff>=0.11.6",
 ]
 
 [tool.ruff.lint]
