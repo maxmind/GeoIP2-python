@@ -1,9 +1,4 @@
-"""
-======================
-GeoIP2 Database Reader
-======================
-
-"""
+"""The database reader for MaxMind MMDB files."""
 
 import inspect
 import os

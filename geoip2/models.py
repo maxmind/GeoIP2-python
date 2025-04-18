@@ -1,14 +1,8 @@
-"""
-Models
-======
-
-These classes provide models for the data returned by the GeoIP2
-web service and databases.
+"""The models for response from th GeoIP2 web service and databases.
 
 The only difference between the City and Insights model classes is which
 fields in each record may be populated. See
 https://dev.maxmind.com/geoip/docs/web-services?lang=en for more details.
-
 """
 
 # pylint: disable=too-many-instance-attributes,too-few-public-methods,too-many-arguments

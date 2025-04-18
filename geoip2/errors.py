@@ -1,11 +1,6 @@
-"""
-Errors
-======
-
-"""
+"""Typed errors thrown by this library."""
 
 import ipaddress
-
 from typing import Optional, Union
 
 

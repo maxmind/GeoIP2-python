@@ -1,9 +1,4 @@
-"""
-
-Records
-=======
-
-"""
+"""Record classes used within the response models."""
 
 # pylint:disable=too-many-arguments,too-many-positional-arguments,too-many-instance-attributes,too-many-locals
 
