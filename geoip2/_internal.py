@@ -1,4 +1,4 @@
-"""This package contains internal utilities."""
+"""Internal utilities."""
 
 # pylint: disable=too-few-public-methods
 from abc import ABCMeta
@@ -15,7 +15,7 @@ class Model(metaclass=ABCMeta):
 
     # pylint: disable=too-many-branches
     def to_dict(self) -> dict:
-        """Returns a dict of the object suitable for serialization."""
+        """Return a dict of the object suitable for serialization."""
         result = {}
         for key, value in self.__dict__.items():
             if key.startswith("_"):

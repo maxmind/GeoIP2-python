@@ -268,6 +268,42 @@ Anonymous IP Database
     >>>     response.network
     IPv4Network('203.0.113.0/24')
 
+Anonymous Plus Database
+^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: pycon
+
+    >>> import geoip2.database
+    >>>
+    >>> # This creates a Reader object. You should use the same object
+    >>> # across multiple requests as creation of it is expensive.
+    >>> with geoip2.database.Reader('/path/to/GeoIP-Anonymous-Plus.mmdb') as reader:
+    >>>
+    >>>     response = reader.anonymous_plus('203.0.113.0')
+    >>>
+    >>>     response.anonymizer_confidence
+    30
+    >>>     response.is_anonymous
+    True
+    >>>     response.is_anonymous_vpn
+    True
+    >>>     response.is_hosting_provider
+    False
+    >>>     response.is_public_proxy
+    False
+    >>>     response.is_residential_proxy
+    False
+    >>>     response.is_tor_exit_node
+    False
+    >>>     response.ip_address
+    '203.0.113.0'
+    >>>     response.network
+    IPv4Network('203.0.113.0/24')
+    >>>     response.network_last_seen
+    datetime.date(2025, 4, 18)
+    >>>     response.provider_name
+    FooBar VPNs
+
 ASN Database
 ^^^^^^^^^^^^
 

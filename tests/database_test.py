@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 
+import datetime
 import ipaddress
 import sys
 import unittest
@@ -85,6 +86,27 @@ class TestReader(unittest.TestCase):
         self.assertEqual(record.ip_address, ipaddress.ip_address(ip_address))
         self.assertEqual(record.network, ipaddress.ip_network("1.2.0.0/16"))
         reader.close()
+
+    def test_anonymous_plus(self) -> None:
+        with geoip2.database.Reader(
+            "tests/data/test-data/GeoIP-Anonymous-Plus-Test.mmdb",
+        ) as reader:
+
+            ip_address = "1.2.0.1"
+
+            record = reader.anonymous_plus(ip_address)
+
+            self.assertEqual(record.anonymizer_confidence, 30)
+            self.assertEqual(record.is_anonymous, True)
+            self.assertEqual(record.is_anonymous_vpn, True)
+            self.assertEqual(record.is_hosting_provider, False)
+            self.assertEqual(record.is_public_proxy, False)
+            self.assertEqual(record.is_residential_proxy, False)
+            self.assertEqual(record.is_tor_exit_node, False)
+            self.assertEqual(record.ip_address, ipaddress.ip_address(ip_address))
+            self.assertEqual(record.network, ipaddress.ip_network("1.2.0.1/32"))
+            self.assertEqual(record.network_last_seen, datetime.date(2025, 4, 14))
+            self.assertEqual(record.provider_name, "foo")
 
     def test_anonymous_ip_all_set(self) -> None:
         reader = geoip2.database.Reader(

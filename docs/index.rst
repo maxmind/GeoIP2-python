@@ -8,27 +8,55 @@
 
 .. include:: ../README.rst
 
-=======
-Modules
-=======
-
 .. automodule:: geoip2
     :members:
+    :inherited-members:
+    :show-inheritance:
+
+===============
+Database Reader
+===============
 
 .. automodule:: geoip2.database
     :members:
+    :inherited-members:
+    :show-inheritance:
+
+==================
+WebServices Client
+==================
 
 .. automodule:: geoip2.webservice
     :members:
+    :inherited-members:
+    :show-inheritance:
+
+======
+Models
+======
 
 .. automodule:: geoip2.models
     :members:
+    :inherited-members:
+    :show-inheritance:
+
+=======
+Records
+=======
 
 .. automodule:: geoip2.records
     :members:
+    :inherited-members:
+    :show-inheritance:
+
+======
+Errors
+======
 
 .. automodule:: geoip2.errors
     :members:
+    :inherited-members:
+    :show-inheritance:
 
 ==================
 Indices and tables
