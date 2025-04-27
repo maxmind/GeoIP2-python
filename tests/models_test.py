@@ -5,8 +5,6 @@ import ipaddress
 import sys
 import unittest
 
-sys.path.append("..")
-
 import geoip2.models
 
 
