@@ -37,6 +37,7 @@ dev = [
 ]
 lint = [
     "black>=25.1.0",
+    "flake8>=7.2.0",
     "mypy>=1.15.0",
     "pylint>=3.3.6",
     "ruff>=0.11.6",
@@ -89,3 +90,43 @@ ignore = [
 
 [tool.setuptools.package-data]
 geoip2 = ["py.typed"]
+
+[tool.tox]
+env_list = [
+    "3.9",
+    "3.10",
+    "3.11",
+    "3.12",
+    "3.13",
+    "lint",
+]
+skip_missing_interpreters = false
+
+[tool.tox.env_run_base]
+dependency_groups = [
+  "dev",
+]
+commands = [
+    ["pytest", "tests"],
+]
+
+[tool.tox.env.lint]
+description = "Code linting"
+python = "3.13"
+dependency_groups = [
+    "dev",
+    "lint",
+]
+commands = [
+    ["black", "--check", "--diff", "."],
+    ["flake8", "geoip2"],
+    ["mypy", "geoip2", "tests"],
+    ["pylint", "geoip2"],
+]
+
+[tool.tox.gh.python]
+"3.13" = ["3.13", "lint"]
+"3.12" = ["3.12"]
+"3.11" = ["3.11"]
+"3.10" = ["3.10"]
+"3.9" = ["3.9"]
