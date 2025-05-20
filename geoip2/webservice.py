@@ -62,6 +62,8 @@ _REQUEST_UA = (
 
 
 class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-methods
+    """Base class for AsyncClient and Client."""
+
     _account_id: str
     _host: str
     _license_key: str
@@ -291,6 +293,7 @@ class AsyncClient(BaseClient):
         timeout: float = 60,
         proxy: str | None = None,
     ) -> None:
+        """Initialize AsyncClient."""
         super().__init__(
             account_id,
             license_key,
@@ -460,6 +463,7 @@ class Client(BaseClient):
         timeout: float = 60,
         proxy: str | None = None,
     ) -> None:
+        """Initialize Client."""
         super().__init__(account_id, license_key, host, locales, timeout)
         self._session = requests.Session()
         self._session.auth = (self._account_id, self._license_key)

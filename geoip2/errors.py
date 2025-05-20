@@ -29,6 +29,15 @@ class AddressNotFoundError(GeoIP2Error):
         ip_address: str | None = None,
         prefix_len: int | None = None,
     ) -> None:
+        """Initialize self.
+
+        Arguments:
+            message: A message describing the error.
+            ip_address: The IP address that was not found.
+            prefix_len: The prefix length for the network associated with
+                        the IP address.
+
+        """
         super().__init__(message)
         self.ip_address = ip_address
         self._prefix_len = prefix_len
@@ -74,6 +83,15 @@ class HTTPError(GeoIP2Error):
         uri: str | None = None,
         decoded_content: str | None = None,
     ) -> None:
+        """Initialize self.
+
+        Arguments:
+            message: A descriptive message for the error.
+            http_status: The HTTP status code associated with the error, if any.
+            uri: The URI that was being accessed when the error occurred.
+            decoded_content: The decoded HTTP response body, if available.
+
+        """
         super().__init__(message)
         self.http_status = http_status
         self.uri = uri

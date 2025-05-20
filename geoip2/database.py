@@ -306,12 +306,12 @@ class Reader:
     def metadata(
         self,
     ) -> maxminddb.reader.Metadata:
-        """The metadata for the open database.
+        """Get the metadata for the open database.
 
         :returns: :py:class:`maxminddb.reader.Metadata` object
         """
         return self._db_reader.metadata()
 
     def close(self) -> None:
-        """Closes the GeoIP2 database."""
+        """Close the GeoIP2 database."""
         self._db_reader.close()

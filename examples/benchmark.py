@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+"""Simple benchmarking script."""
 
 import argparse
 import contextlib
@@ -21,6 +21,7 @@ reader = geoip2.database.Reader(args.file, mode=args.mode)
 
 
 def lookup_ip_address() -> None:
+    """Look up IP address."""
     ip = socket.inet_ntoa(struct.pack("!L", random.getrandbits(32)))
     with contextlib.suppress(geoip2.errors.AddressNotFoundError):
         reader.city(str(ip))

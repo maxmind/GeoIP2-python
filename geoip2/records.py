@@ -345,11 +345,30 @@ class Subdivisions(tuple):
     This attribute is returned by ``city``, ``enterprise``, and ``insights``.
     """
 
+    __slots__ = ("_locales",)
+
     def __new__(
         cls: type[Self],
         locales: Sequence[str] | None,
         *subdivisions: dict,
     ) -> Self:
+        """Create a new Subdivisions instance.
+
+        This method constructs the tuple with Subdivision objects created
+        from the provided dictionaries.
+
+        Arguments:
+            cls: The class to instantiate (Subdivisions).
+            locales: A sequence of locale strings (e.g., ['en', 'fr'])
+                or None, passed to each Subdivision object.
+            *subdivisions: A variable number of dictionaries, where each
+                dictionary contains the data for a single :py:class:`Subdivision`
+                object (e.g., name, iso_code).
+
+        Returns:
+            A new instance of Subdivisions containing :py:class:`Subdivision` objects.
+
+        """
         subobjs = tuple(Subdivision(locales, **x) for x in subdivisions)
         return super().__new__(cls, subobjs)
 
@@ -358,6 +377,7 @@ class Subdivisions(tuple):
         locales: Sequence[str] | None,
         *_: dict,
     ) -> None:
+        """Initialize the Subdivisions instance."""
         self._locales = locales
         super().__init__()
 
