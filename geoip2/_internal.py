@@ -4,7 +4,7 @@
 from abc import ABCMeta
 
 
-class Model(metaclass=ABCMeta):
+class Model(metaclass=ABCMeta):  # noqa: B024
     """Shared methods for MaxMind model classes."""
 
     def __eq__(self, other: object) -> bool:
@@ -14,7 +14,7 @@ class Model(metaclass=ABCMeta):
         return not self.__eq__(other)
 
     # pylint: disable=too-many-branches
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict:  # noqa: C901, PLR0912
         """Return a dict of the object suitable for serialization."""
         result = {}
         for key, value in self.__dict__.items():

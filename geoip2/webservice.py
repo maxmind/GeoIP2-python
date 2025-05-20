@@ -149,9 +149,10 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
             decoded_body = json.loads(body)
         except ValueError as ex:
             return HTTPError(
-                f"Received a {status} error for {uri} but it did not include "
-                + "the expected JSON body: "
-                + ", ".join(ex.args),
+                (
+                    f"Received a {status} error for {uri} but it did not include "
+                    f"the expected JSON body: {', '.join(ex.args)}"
+                ),
                 status,
                 uri,
                 body,
@@ -284,7 +285,7 @@ class AsyncClient(BaseClient):
     _existing_session: aiohttp.ClientSession
     _proxy: str | None
 
-    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913
         self,
         account_id: int,
         license_key: str,
@@ -454,7 +455,7 @@ class Client(BaseClient):
     _session: requests.Session
     _proxies: dict[str, str] | None
 
-    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913
         self,
         account_id: int,
         license_key: str,

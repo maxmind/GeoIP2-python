@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 from __future__ import annotations
 
 import asyncio
@@ -99,7 +97,7 @@ class TestBaseClient(unittest.TestCase, ABC):
         self.assertEqual(country.country.geoname_id, 1, "country geoname_id is 1")
         self.assertIs(
             country.country.is_in_european_union,
-            False,
+            False,  # noqa: FBT003
             "country is_in_european_union is False",
         )
         self.assertEqual(country.country.iso_code, "US", "country iso_code is US")
@@ -120,7 +118,7 @@ class TestBaseClient(unittest.TestCase, ABC):
         )
         self.assertIs(
             country.registered_country.is_in_european_union,
-            True,
+            True,  # noqa: FBT003
             "registered_country is_in_european_union is True",
         )
         self.assertEqual(
@@ -273,10 +271,10 @@ class TestBaseClient(unittest.TestCase, ABC):
     def test_user_id_required(self) -> None:
         self._test_error(401, "USER_ID_REQUIRED", AuthenticationError)
 
-    def test_account_id_unkown(self) -> None:
+    def test_account_id_unknown(self) -> None:
         self._test_error(401, "ACCOUNT_ID_UNKNOWN", AuthenticationError)
 
-    def test_user_id_unkown(self) -> None:
+    def test_user_id_unknown(self) -> None:
         self._test_error(401, "USER_ID_UNKNOWN", AuthenticationError)
 
     def test_out_of_queries_error(self) -> None:
@@ -386,11 +384,11 @@ class TestBaseClient(unittest.TestCase, ABC):
         self.assertEqual(insights.traits.user_count, 2, "user_count is 2")
 
     def test_named_constructor_args(self) -> None:
-        id = 47
+        account_id = 47
         key = "1234567890ab"
-        client = self.client_class(id, key)
-        self.assertEqual(client._account_id, str(id))
-        self.assertEqual(client._license_key, key)
+        client = self.client_class(account_id, key)
+        self.assertEqual(client._account_id, str(account_id))  # noqa: SLF001
+        self.assertEqual(client._license_key, key)  # noqa: SLF001
 
     def test_missing_constructor_args(self) -> None:
         with self.assertRaises(TypeError):
@@ -406,7 +404,7 @@ class TestClient(TestBaseClient):
     def setUp(self) -> None:
         self.client_class = Client
         self.client = Client(42, "abcdef123456")
-        self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
+        self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")  # noqa: SLF001
         self.maxDiff = 20_000
 
     def run_client(self, v):  # noqa: ANN001
@@ -420,7 +418,7 @@ class TestAsyncClient(TestBaseClient):
         self._loop = asyncio.new_event_loop()
         self.client_class = AsyncClient
         self.client = AsyncClient(42, "abcdef123456")
-        self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
+        self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")  # noqa: SLF001
         self.maxDiff = 20_000
 
     def tearDown(self) -> None:

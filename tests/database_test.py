@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-
-
 import datetime
 import ipaddress
 import sys
@@ -47,7 +44,7 @@ class TestReader(unittest.TestCase):
             self.fail("Expected AddressNotFoundError")
         except geoip2.errors.AddressNotFoundError as e:
             self.assertEqual(e.network, ipaddress.ip_network("10.0.0.0/8"))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             self.fail(f"Expected AddressNotFoundError, got {type(e)}: {e!s}")
         finally:
             reader.close()
@@ -130,7 +127,11 @@ class TestReader(unittest.TestCase):
         ip_address = "1.128.0.0"
         record = reader.asn(ip_address)
 
-        self.assertEqual(record, eval(repr(record)), "ASN repr can be eval'd")
+        self.assertEqual(
+            record,
+            eval(repr(record)),  # noqa: S307
+            "ASN repr can be eval'd",
+        )
 
         self.assertEqual(record.autonomous_system_number, 1221)
         self.assertEqual(record.autonomous_system_organization, "Telstra Pty Ltd")
@@ -178,7 +179,7 @@ class TestReader(unittest.TestCase):
 
         self.assertEqual(
             record,
-            eval(repr(record)),
+            eval(repr(record)),  # noqa: S307
             "ConnectionType repr can be eval'd",
         )
 
@@ -218,7 +219,11 @@ class TestReader(unittest.TestCase):
         ip_address = "1.2.0.0"
         record = reader.domain(ip_address)
 
-        self.assertEqual(record, eval(repr(record)), "Domain repr can be eval'd")
+        self.assertEqual(
+            record,
+            eval(repr(record)),  # noqa: S307
+            "Domain repr can be eval'd",
+        )
 
         self.assertEqual(record.domain, "maxmind.com")
         self.assertEqual(record.ip_address, ipaddress.ip_address(ip_address))
@@ -266,7 +271,11 @@ class TestReader(unittest.TestCase):
         ) as reader:
             ip_address = "1.128.0.0"
             record = reader.isp(ip_address)
-            self.assertEqual(record, eval(repr(record)), "ISP repr can be eval'd")
+            self.assertEqual(
+                record,
+                eval(repr(record)),  # noqa: S307
+                "ISP repr can be eval'd",
+            )
 
             self.assertEqual(record.autonomous_system_number, 1221)
             self.assertEqual(record.autonomous_system_organization, "Telstra Pty Ltd")

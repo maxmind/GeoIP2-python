@@ -9,6 +9,7 @@ import struct
 import timeit
 
 import geoip2.database
+import geoip2.errors
 
 parser = argparse.ArgumentParser(description="Benchmark maxminddb.")
 parser.add_argument("--count", default=250000, type=int, help="number of lookups")
@@ -33,4 +34,4 @@ elapsed = timeit.timeit(
     number=args.count,
 )
 
-print(args.count / elapsed, "lookups per second")
+print(args.count / elapsed, "lookups per second")  # noqa: T201

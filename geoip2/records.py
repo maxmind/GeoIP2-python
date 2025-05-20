@@ -176,7 +176,7 @@ class RepresentedCountry(Country):
         iso_code: str | None = None,
         names: dict[str, str] | None = None,
         # pylint:disable=redefined-builtin
-        type: str | None = None,
+        type: str | None = None,  # noqa: A002
         **_,
     ) -> None:
         self.type = type
@@ -333,7 +333,7 @@ class Subdivision(PlaceRecord):
         super().__init__(locales, names)
 
 
-class Subdivisions(tuple):
+class Subdivisions(tuple):  # noqa: SLOT001
     """A tuple-like collection of subdivisions associated with an IP address.
 
     This class contains the subdivisions of the country associated with the
@@ -344,8 +344,6 @@ class Subdivisions(tuple):
 
     This attribute is returned by ``city``, ``enterprise``, and ``insights``.
     """
-
-    __slots__ = ("_locales",)
 
     def __new__(
         cls: type[Self],

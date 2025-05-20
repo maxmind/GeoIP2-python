@@ -13,9 +13,8 @@ from maxminddb import (
     MODE_MEMORY,
     MODE_MMAP,
     MODE_MMAP_EXT,
+    InvalidDatabaseError,
 )
-
-from maxminddb import InvalidDatabaseError
 
 import geoip2
 import geoip2.errors
