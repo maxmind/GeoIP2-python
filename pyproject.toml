@@ -79,6 +79,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
+"docs/*" = ["ALL"]
 "geoip2/{models,records}.py" = [ "D107", "PLR0913" ]
 "tests/*" = ["ANN201", "D"]
 
