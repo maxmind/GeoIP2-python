@@ -1,9 +1,7 @@
-#!/usr/bin/env python
-
-
 import ipaddress
 import sys
 import unittest
+from typing import ClassVar
 
 sys.path.append("..")
 
@@ -93,7 +91,7 @@ class TestModels(unittest.TestCase):
             },
         }
 
-        model = geoip2.models.Insights(["en"], **raw)  # type: ignore
+        model = geoip2.models.Insights(["en"], **raw)  # type: ignore[arg-type]
         self.assertEqual(
             type(model),
             geoip2.models.Insights,
@@ -296,7 +294,7 @@ class TestModels(unittest.TestCase):
                 "is_satellite_provider": True,
             },
         }
-        model = geoip2.models.City(["en"], **raw)  # type: ignore
+        model = geoip2.models.City(["en"], **raw)  # type: ignore[arg-type]
         self.assertEqual(type(model), geoip2.models.City, "geoip2.models.City object")
         self.assertEqual(
             type(model.city),
@@ -446,7 +444,7 @@ class TestModels(unittest.TestCase):
 
 
 class TestNames(unittest.TestCase):
-    raw: dict = {
+    raw: ClassVar[dict] = {
         "continent": {
             "code": "NA",
             "geoname_id": 42,

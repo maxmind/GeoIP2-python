@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import annotations
+
 import asyncio
 import copy
 import ipaddress
@@ -7,7 +9,7 @@ import sys
 import unittest
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from typing import Callable, Union, cast
+from typing import Callable, ClassVar, cast
 
 import pytest
 import pytest_httpserver
@@ -28,10 +30,10 @@ from geoip2.webservice import AsyncClient, Client
 
 
 class TestBaseClient(unittest.TestCase, ABC):
-    client: Union[AsyncClient, Client]
-    client_class: Callable[[int, str], Union[AsyncClient, Client]]
+    client: AsyncClient | Client
+    client_class: Callable[[int, str], AsyncClient | Client]
 
-    country = {
+    country: ClassVar = {
         "continent": {"code": "NA", "geoname_id": 42, "names": {"en": "North America"}},
         "country": {
             "geoname_id": 1,
@@ -59,9 +61,9 @@ class TestBaseClient(unittest.TestCase, ABC):
     insights["traits"]["static_ip_score"] = 1.3
 
     @abstractmethod
-    def run_client(self, v): ...
+    def run_client(self, v): ...  # noqa: ANN001
 
-    def _content_type(self, endpoint):
+    def _content_type(self, endpoint: str) -> str:
         return (
             "application/vnd.maxmind.com-"
             + endpoint
@@ -280,7 +282,12 @@ class TestBaseClient(unittest.TestCase, ABC):
     def test_out_of_queries_error(self) -> None:
         self._test_error(402, "OUT_OF_QUERIES", OutOfQueriesError)
 
-    def _test_error(self, status, error_code, error_class) -> None:
+    def _test_error(
+        self,
+        status: int,
+        error_code: str,
+        error_class: type[Exception],
+    ) -> None:
         msg = "Some error message"
         body = {"error": msg, "code": error_code}
         self.httpserver.expect_request(
@@ -310,7 +317,7 @@ class TestBaseClient(unittest.TestCase, ABC):
             self.run_client(self.client.country(ip))
 
     def test_request(self) -> None:
-        def user_agent_compare(actual: str, expected: str) -> bool:
+        def user_agent_compare(actual: str, _: str) -> bool:
             if actual is None:
                 return False
             return actual.startswith("GeoIP2-Python-Client/")
@@ -390,7 +397,7 @@ class TestBaseClient(unittest.TestCase, ABC):
             self.client_class(license_key="1234567890ab")  # type: ignore[call-arg]
 
         with self.assertRaises(TypeError):
-            self.client_class("47")  # type: ignore
+            self.client_class("47")  # type: ignore[call-arg,arg-type,misc]
 
 
 class TestClient(TestBaseClient):
@@ -402,7 +409,7 @@ class TestClient(TestBaseClient):
         self.client._base_uri = self.httpserver.url_for("/geoip/v2.1")
         self.maxDiff = 20_000
 
-    def run_client(self, v):
+    def run_client(self, v):  # noqa: ANN001
         return v
 
 
@@ -420,7 +427,7 @@ class TestAsyncClient(TestBaseClient):
         self._loop.run_until_complete(self.client.close())
         self._loop.close()
 
-    def run_client(self, v):
+    def run_client(self, v):  # noqa: ANN001
         return self._loop.run_until_complete(v)
 
 

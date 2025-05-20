@@ -1,9 +1,9 @@
 """The database reader for MaxMind MMDB files."""
 
+from __future__ import annotations
+
 import inspect
-import os
-from collections.abc import Sequence
-from typing import IO, Any, AnyStr, Optional, Union, cast
+from typing import IO, TYPE_CHECKING, AnyStr, cast
 
 import maxminddb
 from maxminddb import (
@@ -15,21 +15,30 @@ from maxminddb import (
     MODE_MMAP_EXT,
 )
 
+from maxminddb import InvalidDatabaseError
+
 import geoip2
 import geoip2.errors
 import geoip2.models
-from geoip2.models import (
-    ASN,
-    ISP,
-    AnonymousIP,
-    AnonymousPlus,
-    City,
-    ConnectionType,
-    Country,
-    Domain,
-    Enterprise,
-)
-from geoip2.types import IPAddress
+
+if TYPE_CHECKING:
+    import os
+    from collections.abc import Sequence
+
+    from typing_extensions import Self
+
+    from geoip2.models import (
+        ASN,
+        ISP,
+        AnonymousIP,
+        AnonymousPlus,
+        City,
+        ConnectionType,
+        Country,
+        Domain,
+        Enterprise,
+    )
+    from geoip2.types import IPAddress
 
 __all__ = [
     "MODE_AUTO",
@@ -67,8 +76,8 @@ class Reader:
 
     def __init__(
         self,
-        fileish: Union[AnyStr, int, os.PathLike, IO],
-        locales: Optional[Sequence[str]] = None,
+        fileish: AnyStr | int | os.PathLike | IO,
+        locales: Sequence[str] | None = None,
         mode: int = MODE_AUTO,
     ) -> None:
         """Create GeoIP2 Reader.
@@ -117,10 +126,10 @@ class Reader:
         self._db_type = self._db_reader.metadata().database_type
         self._locales = locales
 
-    def __enter__(self) -> "Reader":
+    def __enter__(self) -> Self:
         return self
 
-    def __exit__(self, exc_type: None, exc_value: None, traceback: None) -> None:
+    def __exit__(self, exc_type: object, exc_value: object, traceback: object) -> None:
         self.close()
 
     def country(self, ip_address: IPAddress) -> Country:
@@ -249,10 +258,12 @@ class Reader:
             self._flat_model_for(geoip2.models.ISP, "GeoIP2-ISP", ip_address),
         )
 
-    def _get(self, database_type: str, ip_address: IPAddress) -> Any:
+    def _get(self, database_type: str, ip_address: IPAddress) -> tuple[dict, int]:
         if database_type not in self._db_type:
             caller = inspect.stack()[2][3]
-            msg = f"The {caller} method cannot be used with the {self._db_type} database"
+            msg = (
+                f"The {caller} method cannot be used with the {self._db_type} database"
+            )
             raise TypeError(
                 msg,
             )
@@ -264,14 +275,17 @@ class Reader:
                 str(ip_address),
                 prefix_len,
             )
+        if not isinstance(record, dict):
+            msg = f"Expected record to be a dict but was f{type(record)}"
+            raise InvalidDatabaseError(msg)
         return record, prefix_len
 
     def _model_for(
         self,
-        model_class: Union[type[Country], type[Enterprise], type[City]],
+        model_class: type[City | Country | Enterprise],
         types: str,
         ip_address: IPAddress,
-    ) -> Union[Country, Enterprise, City]:
+    ) -> City | Country | Enterprise:
         (record, prefix_len) = self._get(types, ip_address)
         return model_class(
             self._locales,
@@ -282,16 +296,10 @@ class Reader:
 
     def _flat_model_for(
         self,
-        model_class: Union[
-            type[Domain],
-            type[ISP],
-            type[ConnectionType],
-            type[ASN],
-            type[AnonymousIP],
-        ],
+        model_class: type[Domain | ISP | ConnectionType | ASN | AnonymousIP],
         types: str,
         ip_address: IPAddress,
-    ) -> Union[ConnectionType, ISP, AnonymousIP, Domain, ASN]:
+    ) -> ConnectionType | ISP | AnonymousIP | Domain | ASN:
         (record, prefix_len) = self._get(types, ip_address)
         return model_class(ip_address, prefix_len=prefix_len, **record)
 

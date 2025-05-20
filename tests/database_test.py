@@ -17,7 +17,7 @@ import geoip2.errors
 try:
     import maxminddb.extension
 except ImportError:
-    maxminddb.extension = None  # type: ignore
+    maxminddb.extension = None  # type: ignore[assignment]
 
 
 class TestReader(unittest.TestCase):
@@ -297,7 +297,7 @@ class TestReader(unittest.TestCase):
             )
 
     @patch("maxminddb.open_database")
-    def test_modes(self, mock_open) -> None:
+    def test_modes(self, mock_open: MagicMock) -> None:
         mock_open.return_value = MagicMock()
 
         path = "tests/data/test-data/GeoIP2-Country-Test.mmdb"

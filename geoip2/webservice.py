@@ -21,10 +21,11 @@ Requests to the web service are always made with SSL.
 
 """
 
+from __future__ import annotations
+
 import ipaddress
 import json
-from collections.abc import Sequence
-from typing import Any, Optional, Union, cast
+from typing import TYPE_CHECKING, cast
 
 import aiohttp
 import aiohttp.http
@@ -42,8 +43,14 @@ from geoip2.errors import (
     OutOfQueriesError,
     PermissionRequiredError,
 )
-from geoip2.models import City, Country, Insights
-from geoip2.types import IPAddress
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from typing_extensions import Self
+
+    from geoip2.models import City, Country, Insights
+    from geoip2.types import IPAddress
 
 _AIOHTTP_UA = (
     f"GeoIP2-Python-Client/{geoip2.__version__} {aiohttp.http.SERVER_SOFTWARE}"
@@ -66,7 +73,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         account_id: int,
         license_key: str,
         host: str,
-        locales: Optional[Sequence[str]],
+        locales: Sequence[str] | None,
         timeout: float,
     ) -> None:
         """Construct a Client."""
@@ -90,7 +97,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         return "/".join([self._base_uri, path, str(ip_address)])
 
     @staticmethod
-    def _handle_success(body: str, uri: str) -> Any:
+    def _handle_success(body: str, uri: str) -> dict:
         try:
             return json.loads(body)
         except ValueError as ex:
@@ -168,13 +175,13 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         code: str,
         status: int,
         uri: str,
-    ) -> Union[
-        AuthenticationError,
-        AddressNotFoundError,
-        PermissionRequiredError,
-        OutOfQueriesError,
-        InvalidRequestError,
-    ]:
+    ) -> (
+        AuthenticationError
+        | AddressNotFoundError
+        | PermissionRequiredError
+        | OutOfQueriesError
+        | InvalidRequestError
+    ):
         if code in ("IP_ADDRESS_NOT_FOUND", "IP_ADDRESS_RESERVED"):
             return AddressNotFoundError(message)
         if code in (
@@ -197,7 +204,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
     def _exception_for_5xx_status(
         status: int,
         uri: str,
-        body: Optional[str],
+        body: str | None,
     ) -> HTTPError:
         return HTTPError(
             f"Received a server error ({status}) for {uri}",
@@ -210,7 +217,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
     def _exception_for_non_200_status(
         status: int,
         uri: str,
-        body: Optional[str],
+        body: str | None,
     ) -> HTTPError:
         return HTTPError(
             f"Received a very surprising HTTP status ({status}) for {uri}",
@@ -273,16 +280,16 @@ class AsyncClient(BaseClient):
     """
 
     _existing_session: aiohttp.ClientSession
-    _proxy: Optional[str]
+    _proxy: str | None
 
     def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         account_id: int,
         license_key: str,
         host: str = "geoip.maxmind.com",
-        locales: Optional[Sequence[str]] = None,
+        locales: Sequence[str] | None = None,
         timeout: float = 60,
-        proxy: Optional[str] = None,
+        proxy: str | None = None,
     ) -> None:
         super().__init__(
             account_id,
@@ -354,9 +361,9 @@ class AsyncClient(BaseClient):
     async def _response_for(
         self,
         path: str,
-        model_class: Union[type[Insights], type[City], type[Country]],
+        model_class: type[City | Country | Insights],
         ip_address: IPAddress,
-    ) -> Union[Country, City, Insights]:
+    ) -> Country | City | Insights:
         uri = self._uri(path, ip_address)
         session = await self._session()
         async with await session.get(uri, proxy=self._proxy) as response:
@@ -376,10 +383,15 @@ class AsyncClient(BaseClient):
         if hasattr(self, "_existing_session"):
             await self._existing_session.close()
 
-    async def __aenter__(self) -> "AsyncClient":
+    async def __aenter__(self) -> Self:
         return self
 
-    async def __aexit__(self, exc_type: None, exc_value: None, traceback: None) -> None:
+    async def __aexit__(
+        self,
+        exc_type: object,
+        exc_value: object,
+        traceback: object,
+    ) -> None:
         await self.close()
 
 
@@ -437,16 +449,16 @@ class Client(BaseClient):
     """
 
     _session: requests.Session
-    _proxies: Optional[dict[str, str]]
+    _proxies: dict[str, str] | None
 
     def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         account_id: int,
         license_key: str,
         host: str = "geoip.maxmind.com",
-        locales: Optional[Sequence[str]] = None,
+        locales: Sequence[str] | None = None,
         timeout: float = 60,
-        proxy: Optional[str] = None,
+        proxy: str | None = None,
     ) -> None:
         super().__init__(account_id, license_key, host, locales, timeout)
         self._session = requests.Session()
@@ -506,9 +518,9 @@ class Client(BaseClient):
     def _response_for(
         self,
         path: str,
-        model_class: Union[type[Insights], type[City], type[Country]],
+        model_class: type[City | Country | Insights],
         ip_address: IPAddress,
-    ) -> Union[Country, City, Insights]:
+    ) -> Country | City | Insights:
         uri = self._uri(path, ip_address)
         response = self._session.get(uri, proxies=self._proxies, timeout=self._timeout)
         status = response.status_code
@@ -526,8 +538,8 @@ class Client(BaseClient):
         """
         self._session.close()
 
-    def __enter__(self) -> "Client":
+    def __enter__(self) -> Self:
         return self
 
-    def __exit__(self, exc_type: None, exc_value: None, traceback: None) -> None:
+    def __exit__(self, exc_type: object, exc_value: object, traceback: object) -> None:
         self.close()
