@@ -395,7 +395,7 @@ class TestModels(unittest.TestCase):
             r"^geoip2.models.City\(\[.*en.*\], .*geoname_id.*\)",
         )
 
-        self.assertFalse(model == True, "__eq__ does not blow up on weird input")
+        self.assertFalse(model is True, "__eq__ does not blow up on weird input")
 
     def test_unknown_keys(self) -> None:
         model = geoip2.models.City(
