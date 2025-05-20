@@ -36,9 +36,7 @@ dev = [
     "types-requests>=2.32.0.20250328",
 ]
 lint = [
-    "flake8>=7.2.0",
     "mypy>=1.15.0",
-    "pylint>=3.3.6",
     "ruff>=0.11.6",
 ]
 
@@ -113,9 +111,8 @@ dependency_groups = [
     "lint",
 ]
 commands = [
-    ["flake8", "geoip2"],
     ["mypy", "geoip2", "tests"],
-    ["pylint", "geoip2"],
+    ["ruff", "check"],
     ["ruff", "format", "--check", "--diff", "."],
 ]
 
