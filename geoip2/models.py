@@ -7,7 +7,6 @@ https://dev.maxmind.com/geoip/docs/web-services?lang=en for more details.
 
 from __future__ import annotations
 
-# pylint: disable=too-many-instance-attributes,too-few-public-methods,too-many-arguments
 import datetime
 import ipaddress
 from abc import ABCMeta
@@ -335,7 +334,6 @@ class ASN(SimpleModel):
     for the IP address.
     """
 
-    # pylint:disable=too-many-arguments,too-many-positional-arguments
     def __init__(
         self,
         ip_address: IPAddress,
@@ -419,7 +417,6 @@ class ISP(ASN):
     organization: str | None
     """The name of the organization associated with the IP address."""
 
-    # pylint:disable=too-many-arguments,too-many-positional-arguments
     def __init__(
         self,
         ip_address: IPAddress,

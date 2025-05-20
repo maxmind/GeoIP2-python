@@ -1,12 +1,8 @@
 """Record classes used within the response models."""
 
-# pylint:disable=too-many-arguments,too-many-positional-arguments,too-many-instance-attributes,too-many-locals
-
 from __future__ import annotations
 
 import ipaddress
-
-# pylint:disable=R0903
 from abc import ABCMeta
 from ipaddress import IPv4Address, IPv6Address
 from typing import TYPE_CHECKING
@@ -51,7 +47,6 @@ class PlaceRecord(Record, metaclass=ABCMeta):
     @property
     def name(self) -> str | None:
         """The name based on the locales list passed to the constructor."""
-        # pylint:disable=E1101
         return next((self.names.get(x) for x in self._locales if x in self.names), None)
 
 
@@ -175,7 +170,6 @@ class RepresentedCountry(Country):
         is_in_european_union: bool = False,
         iso_code: str | None = None,
         names: dict[str, str] | None = None,
-        # pylint:disable=redefined-builtin
         type: str | None = None,  # noqa: A002
         **_,
     ) -> None:
