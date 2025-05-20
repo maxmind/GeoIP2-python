@@ -7,7 +7,7 @@ import sys
 import unittest
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from typing import cast, Callable, Union
+from typing import Callable, Union, cast
 
 import pytest
 import pytest_httpserver
@@ -54,7 +54,7 @@ class TestBaseClient(unittest.TestCase, ABC):
 
     # this is not a comprehensive representation of the
     # JSON from the server
-    insights = cast(dict, copy.deepcopy(country))
+    insights = cast("dict", copy.deepcopy(country))
     insights["traits"]["user_count"] = 2
     insights["traits"]["static_ip_score"] = 1.3
 

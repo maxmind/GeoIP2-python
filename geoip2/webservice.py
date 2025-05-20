@@ -304,7 +304,7 @@ class AsyncClient(BaseClient):
 
         """
         return cast(
-            City,
+            "City",
             await self._response_for("city", geoip2.models.City, ip_address),
         )
 
@@ -319,7 +319,7 @@ class AsyncClient(BaseClient):
 
         """
         return cast(
-            Country,
+            "Country",
             await self._response_for("country", geoip2.models.Country, ip_address),
         )
 
@@ -337,7 +337,7 @@ class AsyncClient(BaseClient):
 
         """
         return cast(
-            Insights,
+            "Insights",
             await self._response_for("insights", geoip2.models.Insights, ip_address),
         )
 
@@ -468,7 +468,7 @@ class Client(BaseClient):
         :returns: :py:class:`geoip2.models.City` object
 
         """
-        return cast(City, self._response_for("city", geoip2.models.City, ip_address))
+        return cast("City", self._response_for("city", geoip2.models.City, ip_address))
 
     def country(self, ip_address: IPAddress = "me") -> Country:
         """Call the GeoIP2 Country endpoint with the specified IP.
@@ -481,7 +481,7 @@ class Client(BaseClient):
 
         """
         return cast(
-            Country,
+            "Country",
             self._response_for("country", geoip2.models.Country, ip_address),
         )
 
@@ -499,7 +499,7 @@ class Client(BaseClient):
 
         """
         return cast(
-            Insights,
+            "Insights",
             self._response_for("insights", geoip2.models.Insights, ip_address),
         )
 

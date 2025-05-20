@@ -132,7 +132,7 @@ class Reader:
 
         """
         return cast(
-            Country,
+            "Country",
             self._model_for(geoip2.models.Country, "Country", ip_address),
         )
 
@@ -144,7 +144,7 @@ class Reader:
         :returns: :py:class:`geoip2.models.City` object
 
         """
-        return cast(City, self._model_for(geoip2.models.City, "City", ip_address))
+        return cast("City", self._model_for(geoip2.models.City, "City", ip_address))
 
     def anonymous_ip(self, ip_address: IPAddress) -> AnonymousIP:
         """Get the AnonymousIP object for the IP address.
@@ -155,7 +155,7 @@ class Reader:
 
         """
         return cast(
-            AnonymousIP,
+            "AnonymousIP",
             self._flat_model_for(
                 geoip2.models.AnonymousIP,
                 "GeoIP2-Anonymous-IP",
@@ -172,7 +172,7 @@ class Reader:
 
         """
         return cast(
-            AnonymousPlus,
+            "AnonymousPlus",
             self._flat_model_for(
                 geoip2.models.AnonymousPlus,
                 "GeoIP-Anonymous-Plus",
@@ -189,7 +189,7 @@ class Reader:
 
         """
         return cast(
-            ASN,
+            "ASN",
             self._flat_model_for(geoip2.models.ASN, "GeoLite2-ASN", ip_address),
         )
 
@@ -202,7 +202,7 @@ class Reader:
 
         """
         return cast(
-            ConnectionType,
+            "ConnectionType",
             self._flat_model_for(
                 geoip2.models.ConnectionType,
                 "GeoIP2-Connection-Type",
@@ -219,7 +219,7 @@ class Reader:
 
         """
         return cast(
-            Domain,
+            "Domain",
             self._flat_model_for(geoip2.models.Domain, "GeoIP2-Domain", ip_address),
         )
 
@@ -232,7 +232,7 @@ class Reader:
 
         """
         return cast(
-            Enterprise,
+            "Enterprise",
             self._model_for(geoip2.models.Enterprise, "Enterprise", ip_address),
         )
 
@@ -245,7 +245,7 @@ class Reader:
 
         """
         return cast(
-            ISP,
+            "ISP",
             self._flat_model_for(geoip2.models.ISP, "GeoIP2-ISP", ip_address),
         )
 
