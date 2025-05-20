@@ -62,8 +62,11 @@ ignore = [
     # documenting magic methods
     "D105",
 
-    # Don't bother with future imports for type annotations
-    "FA100",
+    # Conflicts with D211
+    "D203",
+
+    # Conflicts with D212
+    "D213",
 
     # Magic numbers for HTTP status codes seem ok most of the time.
     "PLR2004",
