@@ -387,7 +387,6 @@ class TestBaseClient(unittest.TestCase, ABC):
 
     def test_missing_constructor_args(self) -> None:
         with self.assertRaises(TypeError):
-
             self.client_class(license_key="1234567890ab")  # type: ignore[call-arg]
 
         with self.assertRaises(TypeError):

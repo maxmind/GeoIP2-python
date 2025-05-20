@@ -91,7 +91,6 @@ class TestReader(unittest.TestCase):
         with geoip2.database.Reader(
             "tests/data/test-data/GeoIP-Anonymous-Plus-Test.mmdb",
         ) as reader:
-
             ip_address = "1.2.0.1"
 
             record = reader.anonymous_plus(ip_address)

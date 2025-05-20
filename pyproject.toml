@@ -36,7 +36,6 @@ dev = [
     "types-requests>=2.32.0.20250328",
 ]
 lint = [
-    "black>=25.1.0",
     "flake8>=7.2.0",
     "mypy>=1.15.0",
     "pylint>=3.3.6",
@@ -56,11 +55,6 @@ Documentation = "https://geoip2.readthedocs.org/"
 "Source Code" = "https://github.com/maxmind/GeoIP2-python"
 "Issue Tracker" = "https://github.com/maxmind/GeoIP2-python/issues"
 
-[tool.black]
-# src is showing up in our GitHub linting builds. It seems to
-# contain deps.
-extend-exclude = '^/src/'
-
 [tool.pylint."MESSAGES CONTROL"]
 disable = "duplicate-code"
 
@@ -72,9 +66,6 @@ ignore = [
 
     # documenting magic methods
     "D105",
-
-    # Line length. We let black handle this for now.
-    "E501",
 
     # Don't bother with future imports for type annotations
     "FA100",
@@ -121,10 +112,10 @@ dependency_groups = [
     "lint",
 ]
 commands = [
-    ["black", "--check", "--diff", "."],
     ["flake8", "geoip2"],
     ["mypy", "geoip2", "tests"],
     ["pylint", "geoip2"],
+    ["ruff", "format", "--check", "--diff", "."],
 ]
 
 [tool.tox.gh.python]
