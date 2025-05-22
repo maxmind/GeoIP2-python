@@ -21,10 +21,11 @@ Requests to the web service are always made with SSL.
 
 """
 
+from __future__ import annotations
+
 import ipaddress
 import json
-from collections.abc import Sequence
-from typing import Any, Optional, Union, cast
+from typing import TYPE_CHECKING, cast
 
 import aiohttp
 import aiohttp.http
@@ -42,8 +43,14 @@ from geoip2.errors import (
     OutOfQueriesError,
     PermissionRequiredError,
 )
-from geoip2.models import City, Country, Insights
-from geoip2.types import IPAddress
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from typing_extensions import Self
+
+    from geoip2.models import City, Country, Insights
+    from geoip2.types import IPAddress
 
 _AIOHTTP_UA = (
     f"GeoIP2-Python-Client/{geoip2.__version__} {aiohttp.http.SERVER_SOFTWARE}"
@@ -54,7 +61,9 @@ _REQUEST_UA = (
 )
 
 
-class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-methods
+class BaseClient:
+    """Base class for AsyncClient and Client."""
+
     _account_id: str
     _host: str
     _license_key: str
@@ -66,11 +75,10 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         account_id: int,
         license_key: str,
         host: str,
-        locales: Optional[Sequence[str]],
+        locales: Sequence[str] | None,
         timeout: float,
     ) -> None:
         """Construct a Client."""
-        # pylint: disable=too-many-arguments,too-many-positional-arguments
         if locales is None:
             locales = ["en"]
 
@@ -90,7 +98,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         return "/".join([self._base_uri, path, str(ip_address)])
 
     @staticmethod
-    def _handle_success(body: str, uri: str) -> Any:
+    def _handle_success(body: str, uri: str) -> dict:
         try:
             return json.loads(body)
         except ValueError as ex:
@@ -140,9 +148,10 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
             decoded_body = json.loads(body)
         except ValueError as ex:
             return HTTPError(
-                f"Received a {status} error for {uri} but it did not include "
-                + "the expected JSON body: "
-                + ", ".join(ex.args),
+                (
+                    f"Received a {status} error for {uri} but it did not include "
+                    f"the expected JSON body: {', '.join(ex.args)}"
+                ),
                 status,
                 uri,
                 body,
@@ -168,13 +177,13 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
         code: str,
         status: int,
         uri: str,
-    ) -> Union[
-        AuthenticationError,
-        AddressNotFoundError,
-        PermissionRequiredError,
-        OutOfQueriesError,
-        InvalidRequestError,
-    ]:
+    ) -> (
+        AuthenticationError
+        | AddressNotFoundError
+        | PermissionRequiredError
+        | OutOfQueriesError
+        | InvalidRequestError
+    ):
         if code in ("IP_ADDRESS_NOT_FOUND", "IP_ADDRESS_RESERVED"):
             return AddressNotFoundError(message)
         if code in (
@@ -197,7 +206,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
     def _exception_for_5xx_status(
         status: int,
         uri: str,
-        body: Optional[str],
+        body: str | None,
     ) -> HTTPError:
         return HTTPError(
             f"Received a server error ({status}) for {uri}",
@@ -210,7 +219,7 @@ class BaseClient:  # pylint: disable=missing-class-docstring, too-few-public-met
     def _exception_for_non_200_status(
         status: int,
         uri: str,
-        body: Optional[str],
+        body: str | None,
     ) -> HTTPError:
         return HTTPError(
             f"Received a very surprising HTTP status ({status}) for {uri}",
@@ -273,17 +282,18 @@ class AsyncClient(BaseClient):
     """
 
     _existing_session: aiohttp.ClientSession
-    _proxy: Optional[str]
+    _proxy: str | None
 
-    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def __init__(  # noqa: PLR0913
         self,
         account_id: int,
         license_key: str,
         host: str = "geoip.maxmind.com",
-        locales: Optional[Sequence[str]] = None,
+        locales: Sequence[str] | None = None,
         timeout: float = 60,
-        proxy: Optional[str] = None,
+        proxy: str | None = None,
     ) -> None:
+        """Initialize AsyncClient."""
         super().__init__(
             account_id,
             license_key,
@@ -304,7 +314,7 @@ class AsyncClient(BaseClient):
 
         """
         return cast(
-            City,
+            "City",
             await self._response_for("city", geoip2.models.City, ip_address),
         )
 
@@ -319,7 +329,7 @@ class AsyncClient(BaseClient):
 
         """
         return cast(
-            Country,
+            "Country",
             await self._response_for("country", geoip2.models.Country, ip_address),
         )
 
@@ -337,7 +347,7 @@ class AsyncClient(BaseClient):
 
         """
         return cast(
-            Insights,
+            "Insights",
             await self._response_for("insights", geoip2.models.Insights, ip_address),
         )
 
@@ -354,9 +364,9 @@ class AsyncClient(BaseClient):
     async def _response_for(
         self,
         path: str,
-        model_class: Union[type[Insights], type[City], type[Country]],
+        model_class: type[City | Country | Insights],
         ip_address: IPAddress,
-    ) -> Union[Country, City, Insights]:
+    ) -> Country | City | Insights:
         uri = self._uri(path, ip_address)
         session = await self._session()
         async with await session.get(uri, proxy=self._proxy) as response:
@@ -376,10 +386,15 @@ class AsyncClient(BaseClient):
         if hasattr(self, "_existing_session"):
             await self._existing_session.close()
 
-    async def __aenter__(self) -> "AsyncClient":
+    async def __aenter__(self) -> Self:
         return self
 
-    async def __aexit__(self, exc_type: None, exc_value: None, traceback: None) -> None:
+    async def __aexit__(
+        self,
+        exc_type: object,
+        exc_value: object,
+        traceback: object,
+    ) -> None:
         await self.close()
 
 
@@ -437,17 +452,18 @@ class Client(BaseClient):
     """
 
     _session: requests.Session
-    _proxies: Optional[dict[str, str]]
+    _proxies: dict[str, str] | None
 
-    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+    def __init__(  # noqa: PLR0913
         self,
         account_id: int,
         license_key: str,
         host: str = "geoip.maxmind.com",
-        locales: Optional[Sequence[str]] = None,
+        locales: Sequence[str] | None = None,
         timeout: float = 60,
-        proxy: Optional[str] = None,
+        proxy: str | None = None,
     ) -> None:
+        """Initialize Client."""
         super().__init__(account_id, license_key, host, locales, timeout)
         self._session = requests.Session()
         self._session.auth = (self._account_id, self._license_key)
@@ -468,7 +484,7 @@ class Client(BaseClient):
         :returns: :py:class:`geoip2.models.City` object
 
         """
-        return cast(City, self._response_for("city", geoip2.models.City, ip_address))
+        return cast("City", self._response_for("city", geoip2.models.City, ip_address))
 
     def country(self, ip_address: IPAddress = "me") -> Country:
         """Call the GeoIP2 Country endpoint with the specified IP.
@@ -481,7 +497,7 @@ class Client(BaseClient):
 
         """
         return cast(
-            Country,
+            "Country",
             self._response_for("country", geoip2.models.Country, ip_address),
         )
 
@@ -499,16 +515,16 @@ class Client(BaseClient):
 
         """
         return cast(
-            Insights,
+            "Insights",
             self._response_for("insights", geoip2.models.Insights, ip_address),
         )
 
     def _response_for(
         self,
         path: str,
-        model_class: Union[type[Insights], type[City], type[Country]],
+        model_class: type[City | Country | Insights],
         ip_address: IPAddress,
-    ) -> Union[Country, City, Insights]:
+    ) -> Country | City | Insights:
         uri = self._uri(path, ip_address)
         response = self._session.get(uri, proxies=self._proxies, timeout=self._timeout)
         status = response.status_code
@@ -526,8 +542,8 @@ class Client(BaseClient):
         """
         self._session.close()
 
-    def __enter__(self) -> "Client":
+    def __enter__(self) -> Self:
         return self
 
-    def __exit__(self, exc_type: None, exc_value: None, traceback: None) -> None:
+    def __exit__(self, exc_type: object, exc_value: object, traceback: object) -> None:
         self.close()

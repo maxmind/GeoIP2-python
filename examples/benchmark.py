@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+"""Simple benchmarking script."""
 
 import argparse
 import contextlib
@@ -9,6 +9,7 @@ import struct
 import timeit
 
 import geoip2.database
+import geoip2.errors
 
 parser = argparse.ArgumentParser(description="Benchmark maxminddb.")
 parser.add_argument("--count", default=250000, type=int, help="number of lookups")
@@ -21,6 +22,7 @@ reader = geoip2.database.Reader(args.file, mode=args.mode)
 
 
 def lookup_ip_address() -> None:
+    """Look up IP address."""
     ip = socket.inet_ntoa(struct.pack("!L", random.getrandbits(32)))
     with contextlib.suppress(geoip2.errors.AddressNotFoundError):
         reader.city(str(ip))
@@ -32,4 +34,4 @@ elapsed = timeit.timeit(
     number=args.count,
 )
 
-print(args.count / elapsed, "lookups per second")
+print(args.count / elapsed, "lookups per second")  # noqa: T201

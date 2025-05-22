@@ -1,20 +1,18 @@
 """Internal utilities."""
 
-# pylint: disable=too-few-public-methods
 from abc import ABCMeta
 
 
-class Model(metaclass=ABCMeta):
+class Model(metaclass=ABCMeta):  # noqa: B024
     """Shared methods for MaxMind model classes."""
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, self.__class__) and self.to_dict() == other.to_dict()
 
-    def __ne__(self, other) -> bool:
+    def __ne__(self, other: object) -> bool:
         return not self.__eq__(other)
 
-    # pylint: disable=too-many-branches
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict:  # noqa: C901, PLR0912
         """Return a dict of the object suitable for serialization."""
         result = {}
         for key, value in self.__dict__.items():
@@ -42,7 +40,6 @@ class Model(metaclass=ABCMeta):
                 result[key] = value
 
         # network and ip_address are properties for performance reasons
-        # pylint: disable=no-member
         if hasattr(self, "ip_address") and self.ip_address is not None:
             result["ip_address"] = str(self.ip_address)
         if hasattr(self, "network") and self.network is not None:

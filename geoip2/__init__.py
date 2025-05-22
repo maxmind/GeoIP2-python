@@ -1,4 +1,4 @@
-# pylint:disable=C0111
+"""geoip2 client library."""
 
 __title__ = "geoip2"
 __version__ = "5.1.0"

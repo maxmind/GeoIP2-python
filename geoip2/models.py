@@ -5,17 +5,21 @@ fields in each record may be populated. See
 https://dev.maxmind.com/geoip/docs/web-services?lang=en for more details.
 """
 
-# pylint: disable=too-many-instance-attributes,too-few-public-methods,too-many-arguments
+from __future__ import annotations
+
 import datetime
 import ipaddress
 from abc import ABCMeta
-from collections.abc import Sequence
 from ipaddress import IPv4Address, IPv6Address
-from typing import Optional, Union
+from typing import TYPE_CHECKING
 
 import geoip2.records
 from geoip2._internal import Model
-from geoip2.types import IPAddress
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from geoip2.types import IPAddress
 
 
 class Country(Model):
@@ -49,16 +53,16 @@ class Country(Model):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]],
+        locales: Sequence[str] | None,
         *,
-        continent: Optional[dict] = None,
-        country: Optional[dict] = None,
-        ip_address: Optional[IPAddress] = None,
-        maxmind: Optional[dict] = None,
-        prefix_len: Optional[int] = None,
-        registered_country: Optional[dict] = None,
-        represented_country: Optional[dict] = None,
-        traits: Optional[dict] = None,
+        continent: dict | None = None,
+        country: dict | None = None,
+        ip_address: IPAddress | None = None,
+        maxmind: dict | None = None,
+        prefix_len: int | None = None,
+        registered_country: dict | None = None,
+        represented_country: dict | None = None,
+        traits: dict | None = None,
         **_,
     ) -> None:
         self._locales = locales
@@ -109,20 +113,20 @@ class City(Country):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]],
+        locales: Sequence[str] | None,
         *,
-        city: Optional[dict] = None,
-        continent: Optional[dict] = None,
-        country: Optional[dict] = None,
-        location: Optional[dict] = None,
-        ip_address: Optional[IPAddress] = None,
-        maxmind: Optional[dict] = None,
-        postal: Optional[dict] = None,
-        prefix_len: Optional[int] = None,
-        registered_country: Optional[dict] = None,
-        represented_country: Optional[dict] = None,
-        subdivisions: Optional[list[dict]] = None,
-        traits: Optional[dict] = None,
+        city: dict | None = None,
+        continent: dict | None = None,
+        country: dict | None = None,
+        location: dict | None = None,
+        ip_address: IPAddress | None = None,
+        maxmind: dict | None = None,
+        postal: dict | None = None,
+        prefix_len: int | None = None,
+        registered_country: dict | None = None,
+        represented_country: dict | None = None,
+        subdivisions: list[dict] | None = None,
+        traits: dict | None = None,
         **_,
     ) -> None:
         super().__init__(
@@ -154,14 +158,14 @@ class SimpleModel(Model, metaclass=ABCMeta):
     """Provides basic methods for non-location models."""
 
     _ip_address: IPAddress
-    _network: Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]
-    _prefix_len: Optional[int]
+    _network: ipaddress.IPv4Network | ipaddress.IPv6Network | None
+    _prefix_len: int | None
 
     def __init__(
         self,
         ip_address: IPAddress,
-        network: Optional[str],
-        prefix_len: Optional[int],
+        network: str | None,
+        prefix_len: int | None,
     ) -> None:
         if network:
             self._network = ipaddress.ip_network(network, strict=False)
@@ -186,14 +190,14 @@ class SimpleModel(Model, metaclass=ABCMeta):
         )
 
     @property
-    def ip_address(self) -> Union[IPv4Address, IPv6Address]:
+    def ip_address(self) -> IPv4Address | IPv6Address:
         """The IP address for the record."""
         if not isinstance(self._ip_address, (IPv4Address, IPv6Address)):
             self._ip_address = ipaddress.ip_address(self._ip_address)
         return self._ip_address
 
     @property
-    def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
+    def network(self) -> ipaddress.IPv4Network | ipaddress.IPv6Network | None:
         """The network associated with the record.
 
         In particular, this is the largest network where all of the fields besides
@@ -254,8 +258,8 @@ class AnonymousIP(SimpleModel):
         is_public_proxy: bool = False,
         is_residential_proxy: bool = False,
         is_tor_exit_node: bool = False,
-        network: Optional[str] = None,
-        prefix_len: Optional[int] = None,
+        network: str | None = None,
+        prefix_len: int | None = None,
         **_,
     ) -> None:
         super().__init__(ip_address, network, prefix_len)
@@ -270,17 +274,17 @@ class AnonymousIP(SimpleModel):
 class AnonymousPlus(AnonymousIP):
     """Model class for the GeoIP Anonymous Plus."""
 
-    anonymizer_confidence: Optional[int]
+    anonymizer_confidence: int | None
     """A score ranging from 1 to 99 that is our percent confidence that the
     network is currently part of an actively used VPN service.
     """
 
-    network_last_seen: Optional[datetime.date]
+    network_last_seen: datetime.date | None
     """The last day that the network was sighted in our analysis of anonymized
     networks.
     """
 
-    provider_name: Optional[str]
+    provider_name: str | None
     """The name of the VPN provider (e.g., NordVPN, SurfShark, etc.) associated
     with the network.
     """
@@ -289,17 +293,17 @@ class AnonymousPlus(AnonymousIP):
         self,
         ip_address: IPAddress,
         *,
-        anonymizer_confidence: Optional[int] = None,
+        anonymizer_confidence: int | None = None,
         is_anonymous: bool = False,
         is_anonymous_vpn: bool = False,
         is_hosting_provider: bool = False,
         is_public_proxy: bool = False,
         is_residential_proxy: bool = False,
         is_tor_exit_node: bool = False,
-        network: Optional[str] = None,
-        network_last_seen: Optional[str] = None,
-        prefix_len: Optional[int] = None,
-        provider_name: Optional[str] = None,
+        network: str | None = None,
+        network_last_seen: str | None = None,
+        prefix_len: int | None = None,
+        provider_name: str | None = None,
         **_,
     ) -> None:
         super().__init__(
@@ -322,23 +326,22 @@ class AnonymousPlus(AnonymousIP):
 class ASN(SimpleModel):
     """Model class for the GeoLite2 ASN."""
 
-    autonomous_system_number: Optional[int]
+    autonomous_system_number: int | None
     """The autonomous system number associated with the IP address."""
 
-    autonomous_system_organization: Optional[str]
+    autonomous_system_organization: str | None
     """The organization associated with the registered autonomous system number
     for the IP address.
     """
 
-    # pylint:disable=too-many-arguments,too-many-positional-arguments
     def __init__(
         self,
         ip_address: IPAddress,
         *,
-        autonomous_system_number: Optional[int] = None,
-        autonomous_system_organization: Optional[str] = None,
-        network: Optional[str] = None,
-        prefix_len: Optional[int] = None,
+        autonomous_system_number: int | None = None,
+        autonomous_system_organization: str | None = None,
+        network: str | None = None,
+        prefix_len: int | None = None,
         **_,
     ) -> None:
         super().__init__(ip_address, network, prefix_len)
@@ -349,7 +352,7 @@ class ASN(SimpleModel):
 class ConnectionType(SimpleModel):
     """Model class for the GeoIP2 Connection-Type."""
 
-    connection_type: Optional[str]
+    connection_type: str | None
     """The connection type may take the following values:
 
     - Dialup
@@ -365,9 +368,9 @@ class ConnectionType(SimpleModel):
         self,
         ip_address: IPAddress,
         *,
-        connection_type: Optional[str] = None,
-        network: Optional[str] = None,
-        prefix_len: Optional[int] = None,
+        connection_type: str | None = None,
+        network: str | None = None,
+        prefix_len: int | None = None,
         **_,
     ) -> None:
         super().__init__(ip_address, network, prefix_len)
@@ -377,16 +380,16 @@ class ConnectionType(SimpleModel):
 class Domain(SimpleModel):
     """Model class for the GeoIP2 Domain."""
 
-    domain: Optional[str]
+    domain: str | None
     """The domain associated with the IP address."""
 
     def __init__(
         self,
         ip_address: IPAddress,
         *,
-        domain: Optional[str] = None,
-        network: Optional[str] = None,
-        prefix_len: Optional[int] = None,
+        domain: str | None = None,
+        network: str | None = None,
+        prefix_len: int | None = None,
         **_,
     ) -> None:
         super().__init__(ip_address, network, prefix_len)
@@ -396,37 +399,36 @@ class Domain(SimpleModel):
 class ISP(ASN):
     """Model class for the GeoIP2 ISP."""
 
-    isp: Optional[str]
+    isp: str | None
     """The name of the ISP associated with the IP address."""
 
-    mobile_country_code: Optional[str]
+    mobile_country_code: str | None
     """The `mobile country code (MCC)
     <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
     IP address and ISP.
     """
 
-    mobile_network_code: Optional[str]
+    mobile_network_code: str | None
     """The `mobile network code (MNC)
     <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
     IP address and ISP.
     """
 
-    organization: Optional[str]
+    organization: str | None
     """The name of the organization associated with the IP address."""
 
-    # pylint:disable=too-many-arguments,too-many-positional-arguments
     def __init__(
         self,
         ip_address: IPAddress,
         *,
-        autonomous_system_number: Optional[int] = None,
-        autonomous_system_organization: Optional[str] = None,
-        isp: Optional[str] = None,
-        mobile_country_code: Optional[str] = None,
-        mobile_network_code: Optional[str] = None,
-        organization: Optional[str] = None,
-        network: Optional[str] = None,
-        prefix_len: Optional[int] = None,
+        autonomous_system_number: int | None = None,
+        autonomous_system_organization: str | None = None,
+        isp: str | None = None,
+        mobile_country_code: str | None = None,
+        mobile_network_code: str | None = None,
+        organization: str | None = None,
+        network: str | None = None,
+        prefix_len: int | None = None,
         **_,
     ) -> None:
         super().__init__(

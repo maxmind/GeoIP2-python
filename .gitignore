@@ -13,10 +13,8 @@ geoip2.egg-info/
 MANIFEST
 .mypy_cache/
 *.pyc
-pylint.txt
 .pyre
 .pytype
 *.swp
 .tox
-violations.pyflakes.txt
 /venv

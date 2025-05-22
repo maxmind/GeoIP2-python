@@ -36,10 +36,7 @@ dev = [
     "types-requests>=2.32.0.20250328",
 ]
 lint = [
-    "black>=25.1.0",
-    "flake8>=7.2.0",
     "mypy>=1.15.0",
-    "pylint>=3.3.6",
     "ruff>=0.11.6",
 ]
 
@@ -56,28 +53,23 @@ Documentation = "https://geoip2.readthedocs.org/"
 "Source Code" = "https://github.com/maxmind/GeoIP2-python"
 "Issue Tracker" = "https://github.com/maxmind/GeoIP2-python/issues"
 
-[tool.black]
-# src is showing up in our GitHub linting builds. It seems to
-# contain deps.
-extend-exclude = '^/src/'
-
-[tool.pylint."MESSAGES CONTROL"]
-disable = "duplicate-code"
-
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
     # Skip type annotation on **_
     "ANN003",
 
+    # Redundant as the formatter handles missing trailing commas.
+    "COM812",
+
     # documenting magic methods
     "D105",
 
-    # Line length. We let black handle this for now.
-    "E501",
+    # Conflicts with D211
+    "D203",
 
-    # Don't bother with future imports for type annotations
-    "FA100",
+    # Conflicts with D212
+    "D213",
 
     # Magic numbers for HTTP status codes seem ok most of the time.
     "PLR2004",
@@ -88,6 +80,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
+"docs/*" = ["ALL"]
 "geoip2/{models,records}.py" = [ "D107", "PLR0913" ]
 "tests/*" = ["ANN201", "D"]
 
@@ -121,10 +114,9 @@ dependency_groups = [
     "lint",
 ]
 commands = [
-    ["black", "--check", "--diff", "."],
-    ["flake8", "geoip2"],
     ["mypy", "geoip2", "tests"],
-    ["pylint", "geoip2"],
+    ["ruff", "check"],
+    ["ruff", "format", "--check", "--diff", "."],
 ]
 
 [tool.tox.gh.python]

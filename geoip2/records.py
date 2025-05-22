@@ -1,17 +1,20 @@
 """Record classes used within the response models."""
 
-# pylint:disable=too-many-arguments,too-many-positional-arguments,too-many-instance-attributes,too-many-locals
+from __future__ import annotations
 
 import ipaddress
-
-# pylint:disable=R0903
 from abc import ABCMeta
-from collections.abc import Sequence
 from ipaddress import IPv4Address, IPv6Address
-from typing import Optional, Union
+from typing import TYPE_CHECKING
 
 from geoip2._internal import Model
-from geoip2.types import IPAddress
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
+
+    from typing_extensions import Self
+
+    from geoip2.types import IPAddress
 
 
 class Record(Model, metaclass=ABCMeta):
@@ -31,8 +34,8 @@ class PlaceRecord(Record, metaclass=ABCMeta):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]],
-        names: Optional[dict[str, str]],
+        locales: Sequence[str] | None,
+        names: dict[str, str] | None,
     ) -> None:
         if locales is None:
             locales = ["en"]
@@ -42,9 +45,8 @@ class PlaceRecord(Record, metaclass=ABCMeta):
         self.names = names
 
     @property
-    def name(self) -> Optional[str]:
+    def name(self) -> str | None:
         """The name based on the locales list passed to the constructor."""
-        # pylint:disable=E1101
         return next((self.names.get(x) for x in self._locales if x in self.names), None)
 
 
@@ -56,21 +58,21 @@ class City(PlaceRecord):
     This record is returned by ``city``, ``enterprise``, and ``insights``.
     """
 
-    confidence: Optional[int]
+    confidence: int | None
     """A value from 0-100 indicating MaxMind's
     confidence that the city is correct. This attribute is only available
     from the Insights end point and the Enterprise database.
     """
-    geoname_id: Optional[int]
+    geoname_id: int | None
     """The GeoName ID for the city."""
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]],
+        locales: Sequence[str] | None,
         *,
-        confidence: Optional[int] = None,
-        geoname_id: Optional[int] = None,
-        names: Optional[dict[str, str]] = None,
+        confidence: int | None = None,
+        geoname_id: int | None = None,
+        names: dict[str, str] | None = None,
         **_,
     ) -> None:
         self.confidence = confidence
@@ -85,20 +87,20 @@ class Continent(PlaceRecord):
     address.
     """
 
-    code: Optional[str]
+    code: str | None
     """A two character continent code like "NA" (North America)
     or "OC" (Oceania).
     """
-    geoname_id: Optional[int]
+    geoname_id: int | None
     """The GeoName ID for the continent."""
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]],
+        locales: Sequence[str] | None,
         *,
-        code: Optional[str] = None,
-        geoname_id: Optional[int] = None,
-        names: Optional[dict[str, str]] = None,
+        code: str | None = None,
+        geoname_id: int | None = None,
+        names: dict[str, str] | None = None,
         **_,
     ) -> None:
         self.code = code
@@ -112,16 +114,16 @@ class Country(PlaceRecord):
     This class contains the country-level data associated with an IP address.
     """
 
-    confidence: Optional[int]
+    confidence: int | None
     """A value from 0-100 indicating MaxMind's confidence that
     the country is correct. This attribute is only available from the
     Insights end point and the Enterprise database.
     """
-    geoname_id: Optional[int]
+    geoname_id: int | None
     """The GeoName ID for the country."""
     is_in_european_union: bool
     """This is true if the country is a member state of the European Union."""
-    iso_code: Optional[str]
+    iso_code: str | None
     """The two-character `ISO 3166-1
     <https://en.wikipedia.org/wiki/ISO_3166-1>`_ alpha code for the
     country.
@@ -129,13 +131,13 @@ class Country(PlaceRecord):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]],
+        locales: Sequence[str] | None,
         *,
-        confidence: Optional[int] = None,
-        geoname_id: Optional[int] = None,
+        confidence: int | None = None,
+        geoname_id: int | None = None,
         is_in_european_union: bool = False,
-        iso_code: Optional[str] = None,
-        names: Optional[dict[str, str]] = None,
+        iso_code: str | None = None,
+        names: dict[str, str] | None = None,
         **_,
     ) -> None:
         self.confidence = confidence
@@ -153,7 +155,7 @@ class RepresentedCountry(Country):
     represented by something like a military base.
     """
 
-    type: Optional[str]
+    type: str | None
     """A string indicating the type of entity that is representing the
     country. Currently we only return ``military`` but this could expand to
     include other types in the future.
@@ -161,15 +163,14 @@ class RepresentedCountry(Country):
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]],
+        locales: Sequence[str] | None,
         *,
-        confidence: Optional[int] = None,
-        geoname_id: Optional[int] = None,
+        confidence: int | None = None,
+        geoname_id: int | None = None,
         is_in_european_union: bool = False,
-        iso_code: Optional[str] = None,
-        names: Optional[dict[str, str]] = None,
-        # pylint:disable=redefined-builtin
-        type: Optional[str] = None,
+        iso_code: str | None = None,
+        names: dict[str, str] | None = None,
+        type: str | None = None,  # noqa: A002
         **_,
     ) -> None:
         self.type = type
@@ -191,37 +192,37 @@ class Location(Record):
     This record is returned by ``city``, ``enterprise``, and ``insights``.
     """
 
-    average_income: Optional[int]
+    average_income: int | None
     """The average income in US dollars associated with the requested IP
     address. This attribute is only available from the Insights end point.
     """
-    accuracy_radius: Optional[int]
+    accuracy_radius: int | None
     """The approximate accuracy radius in kilometers around the latitude and
     longitude for the IP address. This is the radius where we have a 67%
     confidence that the device using the IP address resides within the
     circle centered at the latitude and longitude with the provided radius.
     """
-    latitude: Optional[float]
+    latitude: float | None
     """The approximate latitude of the location associated with the IP
     address. This value is not precise and should not be used to identify a
     particular address or household.
     """
-    longitude: Optional[float]
+    longitude: float | None
     """The approximate longitude of the location associated with the IP
     address. This value is not precise and should not be used to identify a
     particular address or household.
     """
-    metro_code: Optional[int]
+    metro_code: int | None
     """The metro code is a no-longer-maintained code for targeting
     advertisements in Google.
 
     .. deprecated:: 4.9.0
     """
-    population_density: Optional[int]
+    population_density: int | None
     """The estimated population per square kilometer associated with the IP
     address. This attribute is only available from the Insights end point.
     """
-    time_zone: Optional[str]
+    time_zone: str | None
     """The time zone associated with location, as specified by the `IANA Time
     Zone Database <https://www.iana.org/time-zones>`_, e.g.,
     "America/New_York".
@@ -230,13 +231,13 @@ class Location(Record):
     def __init__(
         self,
         *,
-        average_income: Optional[int] = None,
-        accuracy_radius: Optional[int] = None,
-        latitude: Optional[float] = None,
-        longitude: Optional[float] = None,
-        metro_code: Optional[int] = None,
-        population_density: Optional[int] = None,
-        time_zone: Optional[str] = None,
+        average_income: int | None = None,
+        accuracy_radius: int | None = None,
+        latitude: float | None = None,
+        longitude: float | None = None,
+        metro_code: int | None = None,
+        population_density: int | None = None,
+        time_zone: str | None = None,
         **_,
     ) -> None:
         self.average_income = average_income
@@ -251,12 +252,12 @@ class Location(Record):
 class MaxMind(Record):
     """Contains data related to your MaxMind account."""
 
-    queries_remaining: Optional[int]
+    queries_remaining: int | None
     """The number of remaining queries you have for the end point you are
     calling.
     """
 
-    def __init__(self, *, queries_remaining: Optional[int] = None, **_) -> None:
+    def __init__(self, *, queries_remaining: int | None = None, **_) -> None:
         self.queries_remaining = queries_remaining
 
 
@@ -268,12 +269,12 @@ class Postal(Record):
     This attribute is returned by ``city``, ``enterprise``, and ``insights``.
     """
 
-    code: Optional[str]
+    code: str | None
     """The postal code of the location. Postal codes are not available for
     all countries. In some countries, this will only contain part of the
     postal code.
     """
-    confidence: Optional[int]
+    confidence: int | None
     """A value from 0-100 indicating MaxMind's confidence that the postal code
     is correct. This attribute is only available from the Insights end point
     and the Enterprise database.
@@ -282,8 +283,8 @@ class Postal(Record):
     def __init__(
         self,
         *,
-        code: Optional[str] = None,
-        confidence: Optional[int] = None,
+        code: str | None = None,
+        confidence: int | None = None,
         **_,
     ) -> None:
         self.code = code
@@ -298,26 +299,26 @@ class Subdivision(PlaceRecord):
     This attribute is returned by ``city``, ``enterprise``, and ``insights``.
     """
 
-    confidence: Optional[int]
+    confidence: int | None
     """This is a value from 0-100 indicating MaxMind's confidence that the
     subdivision is correct. This attribute is only available from the Insights
     end point and the Enterprise database.
     """
-    geoname_id: Optional[int]
+    geoname_id: int | None
     """This is a GeoName ID for the subdivision."""
-    iso_code: Optional[str]
+    iso_code: str | None
     """This is a string up to three characters long contain the subdivision
     portion of the `ISO 3166-2 code <https://en.wikipedia.org/wiki/ISO_3166-2>`_.
     """
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]],
+        locales: Sequence[str] | None,
         *,
-        confidence: Optional[int] = None,
-        geoname_id: Optional[int] = None,
-        iso_code: Optional[str] = None,
-        names: Optional[dict[str, str]] = None,
+        confidence: int | None = None,
+        geoname_id: int | None = None,
+        iso_code: str | None = None,
+        names: dict[str, str] | None = None,
         **_,
     ) -> None:
         self.confidence = confidence
@@ -326,7 +327,7 @@ class Subdivision(PlaceRecord):
         super().__init__(locales, names)
 
 
-class Subdivisions(tuple):
+class Subdivisions(tuple):  # noqa: SLOT001
     """A tuple-like collection of subdivisions associated with an IP address.
 
     This class contains the subdivisions of the country associated with the
@@ -339,18 +340,36 @@ class Subdivisions(tuple):
     """
 
     def __new__(
-        cls: type["Subdivisions"],
-        locales: Optional[Sequence[str]],
-        *subdivisions,
-    ) -> "Subdivisions":
+        cls: type[Self],
+        locales: Sequence[str] | None,
+        *subdivisions: dict,
+    ) -> Self:
+        """Create a new Subdivisions instance.
+
+        This method constructs the tuple with Subdivision objects created
+        from the provided dictionaries.
+
+        Arguments:
+            cls: The class to instantiate (Subdivisions).
+            locales: A sequence of locale strings (e.g., ['en', 'fr'])
+                or None, passed to each Subdivision object.
+            *subdivisions: A variable number of dictionaries, where each
+                dictionary contains the data for a single :py:class:`Subdivision`
+                object (e.g., name, iso_code).
+
+        Returns:
+            A new instance of Subdivisions containing :py:class:`Subdivision` objects.
+
+        """
         subobjs = tuple(Subdivision(locales, **x) for x in subdivisions)
-        return super().__new__(cls, subobjs)  # type: ignore
+        return super().__new__(cls, subobjs)
 
     def __init__(
         self,
-        locales: Optional[Sequence[str]],
-        *subdivisions,  # pylint:disable=W0613
+        locales: Sequence[str] | None,
+        *_: dict,
     ) -> None:
+        """Initialize the Subdivisions instance."""
         self._locales = locales
         super().__init__()
 
@@ -373,19 +392,19 @@ class Traits(Record):
     This class contains the traits data associated with an IP address.
     """
 
-    autonomous_system_number: Optional[int]
+    autonomous_system_number: int | None
     """The `autonomous system
     number <https://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_
     associated with the IP address. This attribute is only available from
     the City Plus and Insights web services and the Enterprise database.
     """
-    autonomous_system_organization: Optional[str]
+    autonomous_system_organization: str | None
     """The organization associated with the registered `autonomous system
     number <https://en.wikipedia.org/wiki/Autonomous_system_(Internet)>`_ for
     the IP address. This attribute is only available from the City Plus and
     Insights web service end points and the Enterprise database.
     """
-    connection_type: Optional[str]
+    connection_type: str | None
     """The connection type may take the following values:
 
     - Dialup
@@ -399,14 +418,14 @@ class Traits(Record):
     This attribute is only available from the City Plus and Insights web
     service end points and the Enterprise database.
     """
-    domain: Optional[str]
+    domain: str | None
     """The second level domain associated with the
     IP address. This will be something like "example.com" or
     "example.co.uk", not "foo.example.com". This attribute is only available
     from the City Plus and Insights web service end points and the
     Enterprise database.
     """
-    _ip_address: Optional[IPAddress]
+    _ip_address: IPAddress | None
     is_anonymous: bool
     """This is true if the IP address belongs to any sort of anonymous network.
     This attribute is only available from Insights.
@@ -468,29 +487,29 @@ class Traits(Record):
     """This is true if the IP address is a Tor exit node. This attribute is
     only available from Insights.
     """
-    isp: Optional[str]
+    isp: str | None
     """The name of the ISP associated with the IP address. This attribute is
     only available from the City Plus and Insights web services and the
     Enterprise database.
     """
-    mobile_country_code: Optional[str]
+    mobile_country_code: str | None
     """The `mobile country code (MCC)
     <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
     IP address and ISP. This attribute is available from the City Plus and
     Insights web services and the Enterprise database.
     """
-    mobile_network_code: Optional[str]
+    mobile_network_code: str | None
     """The `mobile network code (MNC)
     <https://en.wikipedia.org/wiki/Mobile_country_code>`_ associated with the
     IP address and ISP. This attribute is available from the City Plus and
     Insights web services and the Enterprise database.
     """
-    organization: Optional[str]
+    organization: str | None
     """The name of the organization associated with the IP address. This
     attribute is only available from the City Plus and Insights web services
     and the Enterprise database.
     """
-    static_ip_score: Optional[float]
+    static_ip_score: float | None
     """An indicator of how static or dynamic an IP address is. The value ranges
     from 0 to 99.99 with higher values meaning a greater static association.
     For example, many IP addresses with a user_type of cellular have a
@@ -501,13 +520,13 @@ class Traits(Record):
     the same user over time. This attribute is only available from
     Insights.
     """
-    user_count: Optional[int]
+    user_count: int | None
     """The estimated number of users sharing the IP/network during the past 24
     hours. For IPv4, the count is for the individual IP. For IPv6, the count
     is for the /64 network. This attribute is only available from
     Insights.
     """
-    user_type: Optional[str]
+    user_type: str | None
     """The user type associated with the IP
     address. This can be one of the following values:
 
@@ -531,16 +550,16 @@ class Traits(Record):
     This attribute is only available from the Insights end point and the
     Enterprise database.
     """
-    _network: Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]
-    _prefix_len: Optional[int]
+    _network: ipaddress.IPv4Network | ipaddress.IPv6Network | None
+    _prefix_len: int | None
 
     def __init__(
         self,
         *,
-        autonomous_system_number: Optional[int] = None,
-        autonomous_system_organization: Optional[str] = None,
-        connection_type: Optional[str] = None,
-        domain: Optional[str] = None,
+        autonomous_system_number: int | None = None,
+        autonomous_system_organization: str | None = None,
+        connection_type: str | None = None,
+        domain: str | None = None,
         is_anonymous: bool = False,
         is_anonymous_proxy: bool = False,
         is_anonymous_vpn: bool = False,
@@ -550,16 +569,16 @@ class Traits(Record):
         is_residential_proxy: bool = False,
         is_satellite_provider: bool = False,
         is_tor_exit_node: bool = False,
-        isp: Optional[str] = None,
-        ip_address: Optional[str] = None,
-        network: Optional[str] = None,
-        organization: Optional[str] = None,
-        prefix_len: Optional[int] = None,
-        static_ip_score: Optional[float] = None,
-        user_count: Optional[int] = None,
-        user_type: Optional[str] = None,
-        mobile_country_code: Optional[str] = None,
-        mobile_network_code: Optional[str] = None,
+        isp: str | None = None,
+        ip_address: str | None = None,
+        network: str | None = None,
+        organization: str | None = None,
+        prefix_len: int | None = None,
+        static_ip_score: float | None = None,
+        user_count: int | None = None,
+        user_type: str | None = None,
+        mobile_country_code: str | None = None,
+        mobile_network_code: str | None = None,
         is_anycast: bool = False,
         **_,
     ) -> None:
@@ -595,7 +614,7 @@ class Traits(Record):
         self._prefix_len = prefix_len
 
     @property
-    def ip_address(self) -> Optional[Union[IPv4Address, IPv6Address]]:
+    def ip_address(self) -> IPv4Address | IPv6Address | None:
         """The IP address that the data in the model is for.
 
         If you performed a "me" lookup against the web service, this will be
@@ -613,7 +632,7 @@ class Traits(Record):
         return ip_address
 
     @property
-    def network(self) -> Optional[Union[ipaddress.IPv4Network, ipaddress.IPv6Network]]:
+    def network(self) -> ipaddress.IPv4Network | ipaddress.IPv6Network | None:
         """The network associated with the record.
 
         In particular, this is the largest network where all of the fields besides
