@@ -41,11 +41,19 @@ lint = [
 ]
 
 [build-system]
-requires = [
-    "setuptools>=77.0.3",
-    "setuptools-scm",
+requires = ["uv_build>=0.7.19,<0.8.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+source-include = [
+    "HISTORY.rst",
+    "README.rst",
+    "LICENSE",
+    "docs/html",
+    "examples/*.py",
+    "tests/*.py",
+    "tests/data/test-data/*.mmdb"
 ]
-build-backend = "setuptools.build_meta"
 
 [project.urls]
 Homepage = "https://www.maxmind.com/"
@@ -81,11 +89,8 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "docs/*" = ["ALL"]
-"geoip2/{models,records}.py" = [ "D107", "PLR0913" ]
+"src/geoip2/{models,records}.py" = [ "D107", "PLR0913" ]
 "tests/*" = ["ANN201", "D"]
-
-[tool.setuptools.package-data]
-geoip2 = ["py.typed"]
 
 [tool.tox]
 env_list = [
@@ -114,7 +119,7 @@ dependency_groups = [
     "lint",
 ]
 commands = [
-    ["mypy", "geoip2", "tests"],
+    ["mypy", "src", "tests"],
     ["ruff", "check"],
     ["ruff", "format", "--check", "--diff", "."],
 ]
