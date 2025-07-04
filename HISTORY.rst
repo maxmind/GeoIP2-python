@@ -4,6 +4,12 @@
 History
 -------
 
+5.2.0
+++++++++++++++++++
+
+* Setuptools has been replaced with the uv build backend for building the
+  package.
+
 5.1.0 (2025-05-05)
 ++++++++++++++++++
 

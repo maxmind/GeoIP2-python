@@ -22,8 +22,11 @@ jobs:
           submodules: true
           persist-credentials: false
 
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba # 6.3.1
+
       - name: Build
-        run: pipx run build
+        run: uv build
 
       - uses: actions/upload-artifact@v4
         with:
