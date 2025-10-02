@@ -1,9 +1,6 @@
 import ipaddress
-import sys
 import unittest
 from typing import ClassVar
-
-sys.path.append("..")
 
 import geoip2.models
 
