@@ -23,7 +23,7 @@ jobs:
           submodules: true
           persist-credentials: false
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@3259c6206f993105e3a61b142c2d97bf4b9ef83d # 7.1.0
+        uses: astral-sh/setup-uv@2ddd2b9cb38ad8efd50337e8ab201519a34c9f24 # 7.1.1
       - name: Install tox
         run: uv tool install --python-preference only-managed --python 3.13 tox --with tox-uv --with tox-gh
       - name: Install Python
