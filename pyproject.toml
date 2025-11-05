@@ -10,7 +10,7 @@ dependencies = [
     "maxminddb>=2.7.0,<3.0.0",
     "requests>=2.24.0,<3.0.0",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 readme = "README.rst"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
@@ -21,11 +21,11 @@ classifiers = [
     "Intended Audience :: System Administrators",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Internet",
     "Topic :: Internet :: Proxy Servers",
 ]
@@ -95,11 +95,11 @@ ignore = [
 
 [tool.tox]
 env_list = [
-    "3.9",
     "3.10",
     "3.11",
     "3.12",
     "3.13",
+    "3.14",
     "lint",
 ]
 skip_missing_interpreters = false
@@ -114,7 +114,7 @@ commands = [
 
 [tool.tox.env.lint]
 description = "Code linting"
-python = "3.13"
+python = "3.14"
 dependency_groups = [
     "dev",
     "lint",
@@ -126,8 +126,8 @@ commands = [
 ]
 
 [tool.tox.gh.python]
-"3.13" = ["3.13", "lint"]
+"3.14" = ["3.14", "lint"]
+"3.13" = ["3.13"]
 "3.12" = ["3.12"]
 "3.11" = ["3.11"]
 "3.10" = ["3.10"]
-"3.9" = ["3.9"]

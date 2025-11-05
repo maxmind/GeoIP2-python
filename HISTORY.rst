@@ -7,6 +7,8 @@ History
 5.2.0
 ++++++++++++++++++
 
+* IMPORTANT: Python 3.10 or greater is required. If you are using an older
+  version, please use an earlier release.
 * Setuptools has been replaced with the uv build backend for building the
   package.
 
