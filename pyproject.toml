@@ -65,9 +65,6 @@ Documentation = "https://geoip2.readthedocs.org/"
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
-    # Skip type annotation on **_
-    "ANN003",
-
     # Redundant as the formatter handles missing trailing commas.
     "COM812",
 
@@ -90,7 +87,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "docs/*" = ["ALL"]
-"src/geoip2/{models,records}.py" = [ "D107", "PLR0913" ]
+"src/geoip2/{models,records}.py" = [ "ANN401", "D107", "PLR0913" ]
 "tests/*" = ["ANN201", "D"]
 
 [tool.tox]

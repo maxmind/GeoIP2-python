@@ -75,7 +75,9 @@ class Reader:
 
     def __init__(
         self,
-        fileish: AnyStr | int | os.PathLike | IO,
+        fileish: (
+            AnyStr | int | os.PathLike[str] | os.PathLike[bytes] | IO[str] | IO[bytes]
+        ),
         locales: Sequence[str] | None = None,
         mode: int = MODE_AUTO,
     ) -> None:

@@ -7,7 +7,7 @@ import sys
 import unittest
 from abc import ABC, abstractmethod
 from collections import defaultdict
-from typing import Callable, ClassVar, cast
+from typing import TYPE_CHECKING, ClassVar, cast
 
 import pytest
 import pytest_httpserver
@@ -25,6 +25,9 @@ from geoip2.errors import (
     PermissionRequiredError,
 )
 from geoip2.webservice import AsyncClient, Client
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 class TestBaseClient(unittest.TestCase, ABC):

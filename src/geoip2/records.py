@@ -5,7 +5,7 @@ from __future__ import annotations
 import ipaddress
 from abc import ABCMeta
 from ipaddress import IPv4Address, IPv6Address
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from geoip2._internal import Model
 
@@ -73,7 +73,7 @@ class City(PlaceRecord):
         confidence: int | None = None,
         geoname_id: int | None = None,
         names: dict[str, str] | None = None,
-        **_,
+        **_: Any,
     ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
@@ -101,7 +101,7 @@ class Continent(PlaceRecord):
         code: str | None = None,
         geoname_id: int | None = None,
         names: dict[str, str] | None = None,
-        **_,
+        **_: Any,
     ) -> None:
         self.code = code
         self.geoname_id = geoname_id
@@ -138,7 +138,7 @@ class Country(PlaceRecord):
         is_in_european_union: bool = False,
         iso_code: str | None = None,
         names: dict[str, str] | None = None,
-        **_,
+        **_: Any,
     ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
@@ -171,7 +171,7 @@ class RepresentedCountry(Country):
         iso_code: str | None = None,
         names: dict[str, str] | None = None,
         type: str | None = None,  # noqa: A002
-        **_,
+        **_: Any,
     ) -> None:
         self.type = type
         super().__init__(
@@ -238,7 +238,7 @@ class Location(Record):
         metro_code: int | None = None,
         population_density: int | None = None,
         time_zone: str | None = None,
-        **_,
+        **_: Any,
     ) -> None:
         self.average_income = average_income
         self.accuracy_radius = accuracy_radius
@@ -257,7 +257,7 @@ class MaxMind(Record):
     calling.
     """
 
-    def __init__(self, *, queries_remaining: int | None = None, **_) -> None:
+    def __init__(self, *, queries_remaining: int | None = None, **_: Any) -> None:
         self.queries_remaining = queries_remaining
 
 
@@ -285,7 +285,7 @@ class Postal(Record):
         *,
         code: str | None = None,
         confidence: int | None = None,
-        **_,
+        **_: Any,
     ) -> None:
         self.code = code
         self.confidence = confidence
@@ -319,7 +319,7 @@ class Subdivision(PlaceRecord):
         geoname_id: int | None = None,
         iso_code: str | None = None,
         names: dict[str, str] | None = None,
-        **_,
+        **_: Any,
     ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
@@ -342,7 +342,7 @@ class Subdivisions(tuple):  # noqa: SLOT001
     def __new__(
         cls: type[Self],
         locales: Sequence[str] | None,
-        *subdivisions: dict,
+        *subdivisions: dict[str, Any],
     ) -> Self:
         """Create a new Subdivisions instance.
 
@@ -367,7 +367,7 @@ class Subdivisions(tuple):  # noqa: SLOT001
     def __init__(
         self,
         locales: Sequence[str] | None,
-        *_: dict,
+        *_: dict[str, Any],
     ) -> None:
         """Initialize the Subdivisions instance."""
         self._locales = locales
@@ -580,7 +580,7 @@ class Traits(Record):
         mobile_country_code: str | None = None,
         mobile_network_code: str | None = None,
         is_anycast: bool = False,
-        **_,
+        **_: Any,
     ) -> None:
         self.autonomous_system_number = autonomous_system_number
         self.autonomous_system_organization = autonomous_system_organization
