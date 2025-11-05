@@ -27,10 +27,18 @@ import ipaddress
 import json
 from typing import TYPE_CHECKING, cast
 
-import aiohttp
-import aiohttp.http
-import requests
-import requests.utils
+try:
+    import aiohttp
+    import aiohttp.http
+except ImportError:
+    aiohttp = None  # type: ignore[assignment]
+
+try:
+    import requests
+    import requests.utils
+except ImportError:
+    requests = None  # type: ignore[assignment]
+
 
 import geoip2
 import geoip2.models
@@ -51,14 +59,6 @@ if TYPE_CHECKING:
 
     from geoip2.models import City, Country, Insights
     from geoip2.types import IPAddress
-
-_AIOHTTP_UA = (
-    f"GeoIP2-Python-Client/{geoip2.__version__} {aiohttp.http.SERVER_SOFTWARE}"
-)
-
-_REQUEST_UA = (
-    f"GeoIP2-Python-Client/{geoip2.__version__} {requests.utils.default_user_agent()}"
-)
 
 
 class BaseClient:
@@ -352,10 +352,18 @@ class AsyncClient(BaseClient):
         )
 
     async def _session(self) -> aiohttp.ClientSession:
+        if aiohttp is None:
+            msg = "aiohttp is required for async mode; install `GeoIP2[aiohttp]`"
+            raise ImportError(msg)
+
         if not hasattr(self, "_existing_session"):
+            user_agent = (
+                f"GeoIP2-Python-Client/{geoip2.__version__} "
+                f"{aiohttp.http.SERVER_SOFTWARE}"
+            )
             self._existing_session = aiohttp.ClientSession(
                 auth=aiohttp.BasicAuth(self._account_id, self._license_key),
-                headers={"Accept": "application/json", "User-Agent": _AIOHTTP_UA},
+                headers={"Accept": "application/json", "User-Agent": user_agent},
                 timeout=aiohttp.ClientTimeout(total=self._timeout),
             )
 
@@ -468,7 +476,10 @@ class Client(BaseClient):
         self._session = requests.Session()
         self._session.auth = (self._account_id, self._license_key)
         self._session.headers["Accept"] = "application/json"
-        self._session.headers["User-Agent"] = _REQUEST_UA
+        self._session.headers["User-Agent"] = (
+            f"GeoIP2-Python-Client/{geoip2.__version__}"
+            f" {requests.utils.default_user_agent()}"
+        )
         if proxy is None:
             self._proxies = None
         else:

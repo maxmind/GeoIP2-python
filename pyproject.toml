@@ -6,9 +6,7 @@ authors = [
     {name = "Gregory Oschwald", email = "goschwald@maxmind.com"},
 ]
 dependencies = [
-    "aiohttp>=3.6.2,<4.0.0",
     "maxminddb>=2.7.0,<3.0.0",
-    "requests>=2.24.0,<3.0.0",
 ]
 requires-python = ">=3.9"
 readme = "README.rst"
@@ -28,6 +26,14 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Internet",
     "Topic :: Internet :: Proxy Servers",
+]
+
+[project.optional-dependencies]
+aiohttp = [
+    "aiohttp>=3.6.2,<4.0.0",
+]
+requests = [
+    "requests>=2.24.0,<3.0.0",
 ]
 
 [dependency-groups]
@@ -115,6 +121,10 @@ commands = [
 [tool.tox.env.lint]
 description = "Code linting"
 python = "3.13"
+extras = [
+    "aiohttp",
+    "requests",
+]
 dependency_groups = [
     "dev",
     "lint",
