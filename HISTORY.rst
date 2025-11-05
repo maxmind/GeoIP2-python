@@ -9,6 +9,8 @@ History
 
 * IMPORTANT: Python 3.10 or greater is required. If you are using an older
   version, please use an earlier release.
+* `maxminddb` has been upgraded to 3.0.0. This includes free-threading
+  support.
 * Setuptools has been replaced with the uv build backend for building the
   package.
 
