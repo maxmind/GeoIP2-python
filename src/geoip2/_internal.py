@@ -1,5 +1,6 @@
 """Internal utilities."""
 
+import datetime
 import json
 from abc import ABCMeta
 from typing import Any
@@ -42,6 +43,8 @@ class Model(metaclass=ABCMeta):  # noqa: B024
             elif isinstance(value, dict):
                 if value:
                     result[key] = value
+            elif isinstance(value, datetime.date):
+                result[key] = value.isoformat()
             elif value is not None and value is not False:
                 result[key] = value
 

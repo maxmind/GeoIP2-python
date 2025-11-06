@@ -13,6 +13,20 @@ History
   support.
 * Setuptools has been replaced with the uv build backend for building the
   package.
+* A new ``anonymizer`` object has been added to ``geoip2.models.Insights``.
+  This object is a ``geoip2.records.Anonymizer`` and contains the following
+  fields: ``anonymizer_confidence``, ``network_last_seen``, ``provider_name``,
+  ``is_anonymous``, ``is_anonymous_vpn``, ``is_hosting_provider``,
+  ``is_public_proxy``, ``is_residential_proxy``, and ``is_tor_exit_node``.
+  These provide information about VPN and proxy usage.
+* A new ``ip_risk_snapshot`` property has been added to
+  ``geoip2.records.Traits``. This is a float ranging from 0.01 to 99 that
+  represents the risk associated with the IP address. A higher score indicates
+  a higher risk. This field is only available from the Insights end point.
+* The following properties on ``geoip2.records.Traits`` have been deprecated:
+  ``is_anonymous``, ``is_anonymous_vpn``, ``is_hosting_provider``,
+  ``is_public_proxy``, ``is_residential_proxy``, and ``is_tor_exit_node``.
+  Please use the ``anonymizer`` object in the ``Insights`` model instead.
 
 5.1.0 (2025-05-05)
 ++++++++++++++++++
