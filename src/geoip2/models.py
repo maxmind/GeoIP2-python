@@ -149,6 +149,47 @@ class City(Country):
 class Insights(City):
     """Model for the GeoIP2 Insights web service."""
 
+    anonymizer: geoip2.records.Anonymizer
+    """Anonymizer object for the requested IP address. This object contains
+    information about VPN and proxy usage.
+    """
+
+    def __init__(
+        self,
+        locales: Sequence[str] | None,
+        *,
+        anonymizer: dict[str, Any] | None = None,
+        city: dict[str, Any] | None = None,
+        continent: dict[str, Any] | None = None,
+        country: dict[str, Any] | None = None,
+        location: dict[str, Any] | None = None,
+        ip_address: IPAddress | None = None,
+        maxmind: dict[str, Any] | None = None,
+        postal: dict[str, Any] | None = None,
+        prefix_len: int | None = None,
+        registered_country: dict[str, Any] | None = None,
+        represented_country: dict[str, Any] | None = None,
+        subdivisions: list[dict[str, Any]] | None = None,
+        traits: dict[str, Any] | None = None,
+        **_: Any,
+    ) -> None:
+        super().__init__(
+            locales,
+            city=city,
+            continent=continent,
+            country=country,
+            location=location,
+            ip_address=ip_address,
+            maxmind=maxmind,
+            postal=postal,
+            prefix_len=prefix_len,
+            registered_country=registered_country,
+            represented_country=represented_country,
+            subdivisions=subdivisions,
+            traits=traits,
+        )
+        self.anonymizer = geoip2.records.Anonymizer(**(anonymizer or {}))
+
 
 class Enterprise(City):
     """Model for the GeoIP2 Enterprise database."""

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import datetime
 import ipaddress
 from abc import ABCMeta
 from ipaddress import IPv4Address, IPv6Address
@@ -261,6 +262,98 @@ class MaxMind(Record):
         self.queries_remaining = queries_remaining
 
 
+class Anonymizer(Record):
+    """Contains data for the anonymizer record associated with an IP address.
+
+    This class contains the anonymizer data associated with an IP address.
+
+    This record is returned by ``insights``.
+    """
+
+    confidence: int | None
+    """A score ranging from 1 to 99 that represents our percent confidence that
+    the network is currently part of an actively used VPN service. Currently
+    only values 30 and 99 are provided. This attribute is only available from
+    the Insights end point.
+    """
+
+    network_last_seen: datetime.date | None
+    """The last day that the network was sighted in our analysis of anonymized
+    networks. This attribute is only available from the Insights end point.
+    """
+
+    provider_name: str | None
+    """The name of the VPN provider (e.g., NordVPN, SurfShark, etc.) associated
+    with the network. This attribute is only available from the Insights end
+    point.
+    """
+
+    is_anonymous: bool
+    """This is true if the IP address belongs to any sort of anonymous network.
+    This attribute is only available from the Insights end point.
+    """
+
+    is_anonymous_vpn: bool
+    """This is true if the IP address is registered to an anonymous VPN provider.
+
+    If a VPN provider does not register subnets under names associated with
+    them, we will likely only flag their IP ranges using the
+    ``is_hosting_provider`` attribute.
+
+    This attribute is only available from the Insights end point.
+    """
+
+    is_hosting_provider: bool
+    """This is true if the IP address belongs to a hosting or VPN provider
+    (see description of ``is_anonymous_vpn`` attribute). This attribute is only
+    available from the Insights end point.
+    """
+
+    is_public_proxy: bool
+    """This is true if the IP address belongs to a public proxy. This attribute
+    is only available from the Insights end point.
+    """
+
+    is_residential_proxy: bool
+    """This is true if the IP address is on a suspected anonymizing network
+    and belongs to a residential ISP. This attribute is only available from the
+    Insights end point.
+    """
+
+    is_tor_exit_node: bool
+    """This is true if the IP address is a Tor exit node. This attribute is only
+    available from the Insights end point.
+    """
+
+    def __init__(
+        self,
+        *,
+        confidence: int | None = None,
+        is_anonymous: bool = False,
+        is_anonymous_vpn: bool = False,
+        is_hosting_provider: bool = False,
+        is_public_proxy: bool = False,
+        is_residential_proxy: bool = False,
+        is_tor_exit_node: bool = False,
+        network_last_seen: str | None = None,
+        provider_name: str | None = None,
+        **_: Any,
+    ) -> None:
+        self.confidence = confidence
+        self.is_anonymous = is_anonymous
+        self.is_anonymous_vpn = is_anonymous_vpn
+        self.is_hosting_provider = is_hosting_provider
+        self.is_public_proxy = is_public_proxy
+        self.is_residential_proxy = is_residential_proxy
+        self.is_tor_exit_node = is_tor_exit_node
+        self.network_last_seen = (
+            datetime.date.fromisoformat(network_last_seen)
+            if network_last_seen
+            else None
+        )
+        self.provider_name = provider_name
+
+
 class Postal(Record):
     """Contains data for the postal record associated with an IP address.
 
@@ -425,10 +518,24 @@ class Traits(Record):
     from the City Plus and Insights web service end points and the
     Enterprise database.
     """
+    ip_risk_snapshot: float | None
+    """The risk associated with the IP address. The value ranges from 0.01 to
+    99. A higher score indicates a higher risk.
+
+    Please note that the IP risk score provided in GeoIP products and services
+    is more static than the IP risk score provided in minFraud and is not
+    responsive to traffic on your network. If you need realtime IP risk scoring
+    based on behavioral signals on your own network, please use minFraud.
+
+    This attribute is only available from the Insights end point.
+    """
     _ip_address: IPAddress | None
     is_anonymous: bool
     """This is true if the IP address belongs to any sort of anonymous network.
     This attribute is only available from Insights.
+
+    .. deprecated:: 5.2.0
+       Use the ``anonymizer`` object in the ``Insights`` model instead.
     """
     is_anonymous_proxy: bool
     """This is true if the IP is an anonymous proxy.
@@ -447,6 +554,9 @@ class Traits(Record):
     ``is_hosting_provider`` attribute.
 
     This attribute is only available from Insights.
+
+    .. deprecated:: 5.2.0
+       Use the ``anonymizer`` object in the ``Insights`` model instead.
     """
     is_anycast: bool
     """This returns true if the IP address belongs to an
@@ -458,6 +568,9 @@ class Traits(Record):
     """This is true if the IP address belongs to a hosting or VPN provider
     (see description of ``is_anonymous_vpn`` attribute).
     This attribute is only available from Insights.
+
+    .. deprecated:: 5.2.0
+       Use the ``anonymizer`` object in the ``Insights`` model instead.
     """
     is_legitimate_proxy: bool
     """This attribute is true if MaxMind believes this IP address to be a
@@ -467,11 +580,17 @@ class Traits(Record):
     is_public_proxy: bool
     """This is true if the IP address belongs to a public proxy. This attribute
     is only available from Insights.
+
+    .. deprecated:: 5.2.0
+       Use the ``anonymizer`` object in the ``Insights`` model instead.
     """
     is_residential_proxy: bool
     """This is true if the IP address is on a suspected anonymizing network
     and belongs to a residential ISP. This attribute is only available from
     Insights.
+
+    .. deprecated:: 5.2.0
+       Use the ``anonymizer`` object in the ``Insights`` model instead.
     """
     is_satellite_provider: bool
     """This is true if the IP address is from a satellite provider that
@@ -486,6 +605,9 @@ class Traits(Record):
     is_tor_exit_node: bool
     """This is true if the IP address is a Tor exit node. This attribute is
     only available from Insights.
+
+    .. deprecated:: 5.2.0
+       Use the ``anonymizer`` object in the ``Insights`` model instead.
     """
     isp: str | None
     """The name of the ISP associated with the IP address. This attribute is
@@ -560,6 +682,7 @@ class Traits(Record):
         autonomous_system_organization: str | None = None,
         connection_type: str | None = None,
         domain: str | None = None,
+        ip_risk_snapshot: float | None = None,
         is_anonymous: bool = False,
         is_anonymous_proxy: bool = False,
         is_anonymous_vpn: bool = False,
@@ -586,6 +709,7 @@ class Traits(Record):
         self.autonomous_system_organization = autonomous_system_organization
         self.connection_type = connection_type
         self.domain = domain
+        self.ip_risk_snapshot = ip_risk_snapshot
         self.is_anonymous = is_anonymous
         self.is_anonymous_proxy = is_anonymous_proxy
         self.is_anonymous_vpn = is_anonymous_vpn
