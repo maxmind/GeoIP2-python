@@ -270,7 +270,7 @@ class Anonymizer(Record):
     This record is returned by ``insights``.
     """
 
-    anonymizer_confidence: int | None
+    confidence: int | None
     """A score ranging from 1 to 99 that represents our percent confidence that
     the network is currently part of an actively used VPN service. Currently
     only values 30 and 99 are provided. This attribute is only available from
@@ -328,7 +328,7 @@ class Anonymizer(Record):
     def __init__(
         self,
         *,
-        anonymizer_confidence: int | None = None,
+        confidence: int | None = None,
         is_anonymous: bool = False,
         is_anonymous_vpn: bool = False,
         is_hosting_provider: bool = False,
@@ -339,7 +339,7 @@ class Anonymizer(Record):
         provider_name: str | None = None,
         **_: Any,
     ) -> None:
-        self.anonymizer_confidence = anonymizer_confidence
+        self.confidence = confidence
         self.is_anonymous = is_anonymous
         self.is_anonymous_vpn = is_anonymous_vpn
         self.is_hosting_provider = is_hosting_provider

@@ -15,7 +15,7 @@ class TestModels(unittest.TestCase):
     def test_insights_full(self) -> None:  # noqa: PLR0915
         raw = {
             "anonymizer": {
-                "anonymizer_confidence": 99,
+                "confidence": 99,
                 "is_anonymous": True,
                 "is_anonymous_vpn": True,
                 "is_hosting_provider": True,
@@ -253,7 +253,7 @@ class TestModels(unittest.TestCase):
             geoip2.records.Anonymizer,
             "geoip2.records.Anonymizer object",
         )
-        self.assertEqual(model.anonymizer.anonymizer_confidence, 99)
+        self.assertEqual(model.anonymizer.confidence, 99)
         self.assertIs(model.anonymizer.is_anonymous, True)
         self.assertIs(model.anonymizer.is_anonymous_vpn, True)
         self.assertIs(model.anonymizer.is_hosting_provider, True)
@@ -319,7 +319,7 @@ class TestModels(unittest.TestCase):
             "Empty names hash returned",
         )
         # Test that anonymizer fields default correctly
-        self.assertIsNone(model.anonymizer.anonymizer_confidence)
+        self.assertIsNone(model.anonymizer.confidence)
         self.assertIsNone(model.anonymizer.network_last_seen)
         self.assertIsNone(model.anonymizer.provider_name)
         self.assertFalse(model.anonymizer.is_anonymous)

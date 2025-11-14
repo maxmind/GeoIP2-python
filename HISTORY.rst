@@ -15,7 +15,7 @@ History
   package.
 * A new ``anonymizer`` object has been added to ``geoip2.models.Insights``.
   This object is a ``geoip2.records.Anonymizer`` and contains the following
-  fields: ``anonymizer_confidence``, ``network_last_seen``, ``provider_name``,
+  fields: ``confidence``, ``network_last_seen``, ``provider_name``,
   ``is_anonymous``, ``is_anonymous_vpn``, ``is_hosting_provider``,
   ``is_public_proxy``, ``is_residential_proxy``, and ``is_tor_exit_node``.
   These provide information about VPN and proxy usage.
