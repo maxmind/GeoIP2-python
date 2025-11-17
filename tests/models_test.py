@@ -12,8 +12,19 @@ class TestModels(unittest.TestCase):
     def setUp(self) -> None:
         self.maxDiff = 20_000
 
-    def test_insights_full(self) -> None:
+    def test_insights_full(self) -> None:  # noqa: PLR0915
         raw = {
+            "anonymizer": {
+                "confidence": 99,
+                "is_anonymous": True,
+                "is_anonymous_vpn": True,
+                "is_hosting_provider": True,
+                "is_public_proxy": True,
+                "is_residential_proxy": True,
+                "is_tor_exit_node": True,
+                "network_last_seen": "2025-04-14",
+                "provider_name": "FooBar VPN",
+            },
             "city": {
                 "confidence": 76,
                 "geoname_id": 9876,
@@ -74,6 +85,7 @@ class TestModels(unittest.TestCase):
                 "connection_type": "Cable/DSL",
                 "domain": "example.com",
                 "ip_address": "1.2.3.4",
+                "ip_risk_snapshot": 12.5,
                 "is_anonymous": True,
                 "is_anonymous_proxy": True,
                 "is_anonymous_vpn": True,
@@ -212,27 +224,47 @@ class TestModels(unittest.TestCase):
             "Location repr can be eval'd",
         )
 
-        self.assertIs(model.country.is_in_european_union, False)  # noqa: FBT003
+        self.assertIs(model.country.is_in_european_union, False)
         self.assertIs(
             model.registered_country.is_in_european_union,
-            False,  # noqa: FBT003
+            False,
         )
         self.assertIs(
             model.represented_country.is_in_european_union,
-            True,  # noqa: FBT003
+            True,
         )
 
-        self.assertIs(model.traits.is_anonymous, True)  # noqa: FBT003
-        self.assertIs(model.traits.is_anonymous_proxy, True)  # noqa: FBT003
-        self.assertIs(model.traits.is_anonymous_vpn, True)  # noqa: FBT003
-        self.assertIs(model.traits.is_anycast, True)  # noqa: FBT003
-        self.assertIs(model.traits.is_hosting_provider, True)  # noqa: FBT003
-        self.assertIs(model.traits.is_public_proxy, True)  # noqa: FBT003
-        self.assertIs(model.traits.is_residential_proxy, True)  # noqa: FBT003
-        self.assertIs(model.traits.is_satellite_provider, True)  # noqa: FBT003
-        self.assertIs(model.traits.is_tor_exit_node, True)  # noqa: FBT003
+        self.assertIs(model.traits.is_anonymous, True)
+        self.assertIs(model.traits.is_anonymous_proxy, True)
+        self.assertIs(model.traits.is_anonymous_vpn, True)
+        self.assertIs(model.traits.is_anycast, True)
+        self.assertIs(model.traits.is_hosting_provider, True)
+        self.assertIs(model.traits.is_public_proxy, True)
+        self.assertIs(model.traits.is_residential_proxy, True)
+        self.assertIs(model.traits.is_satellite_provider, True)
+        self.assertIs(model.traits.is_tor_exit_node, True)
         self.assertEqual(model.traits.user_count, 2)
         self.assertEqual(model.traits.static_ip_score, 1.3)
+        self.assertEqual(model.traits.ip_risk_snapshot, 12.5)
+
+        # Test anonymizer object
+        self.assertEqual(
+            type(model.anonymizer),
+            geoip2.records.Anonymizer,
+            "geoip2.records.Anonymizer object",
+        )
+        self.assertEqual(model.anonymizer.confidence, 99)
+        self.assertIs(model.anonymizer.is_anonymous, True)
+        self.assertIs(model.anonymizer.is_anonymous_vpn, True)
+        self.assertIs(model.anonymizer.is_hosting_provider, True)
+        self.assertIs(model.anonymizer.is_public_proxy, True)
+        self.assertIs(model.anonymizer.is_residential_proxy, True)
+        self.assertIs(model.anonymizer.is_tor_exit_node, True)
+        self.assertEqual(
+            model.anonymizer.network_last_seen,
+            __import__("datetime").date(2025, 4, 14),
+        )
+        self.assertEqual(model.anonymizer.provider_name, "FooBar VPN")
 
     def test_insights_min(self) -> None:
         model = geoip2.models.Insights(["en"], traits={"ip_address": "5.6.7.8"})
@@ -272,6 +304,11 @@ class TestModels(unittest.TestCase):
             "geoip2.records.Traits object",
         )
         self.assertEqual(
+            type(model.anonymizer),
+            geoip2.records.Anonymizer,
+            "geoip2.records.Anonymizer object",
+        )
+        self.assertEqual(
             type(model.subdivisions.most_specific),
             geoip2.records.Subdivision,
             "geoip2.records.Subdivision object returned even when none are available.",
@@ -281,6 +318,12 @@ class TestModels(unittest.TestCase):
             {},
             "Empty names hash returned",
         )
+        # Test that anonymizer fields default correctly
+        self.assertIsNone(model.anonymizer.confidence)
+        self.assertIsNone(model.anonymizer.network_last_seen)
+        self.assertIsNone(model.anonymizer.provider_name)
+        self.assertFalse(model.anonymizer.is_anonymous)
+        self.assertFalse(model.anonymizer.is_anonymous_vpn)
 
     def test_city_full(self) -> None:
         raw = {

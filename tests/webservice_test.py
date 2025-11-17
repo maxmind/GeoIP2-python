@@ -100,7 +100,7 @@ class TestBaseClient(unittest.TestCase, ABC):
         self.assertEqual(country.country.geoname_id, 1, "country geoname_id is 1")
         self.assertIs(
             country.country.is_in_european_union,
-            False,  # noqa: FBT003
+            False,
             "country is_in_european_union is False",
         )
         self.assertEqual(country.country.iso_code, "US", "country iso_code is US")
@@ -121,7 +121,7 @@ class TestBaseClient(unittest.TestCase, ABC):
         )
         self.assertIs(
             country.registered_country.is_in_european_union,
-            True,  # noqa: FBT003
+            True,
             "registered_country is_in_european_union is True",
         )
         self.assertEqual(
