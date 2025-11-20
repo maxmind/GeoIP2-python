@@ -1,6 +1,6 @@
 [project]
 name = "geoip2"
-version = "5.1.0"
+version = "5.2.0"
 description = "MaxMind GeoIP2 API"
 authors = [
     {name = "Gregory Oschwald", email = "goschwald@maxmind.com"},
