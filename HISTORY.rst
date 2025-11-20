@@ -4,7 +4,7 @@
 History
 -------
 
-5.2.0
+5.2.0 (2025-11-20)
 ++++++++++++++++++
 
 * IMPORTANT: Python 3.10 or greater is required. If you are using an older
