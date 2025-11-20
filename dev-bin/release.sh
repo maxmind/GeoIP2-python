@@ -33,7 +33,7 @@ if [ -n "$(git status --porcelain)" ]; then
     exit 1
 fi
 
-perl -pi -e "s/(?<=__version__ = \").+?(?=\")/$version/gsm" geoip2/__init__.py
+perl -pi -e "s/(?<=__version__ = \").+?(?=\")/$version/gsm" src/geoip2/__init__.py
 perl -pi -e "s/(?<=^version = \").+?(?=\")/$version/gsm" pyproject.toml
 
 echo $"Test results:"
