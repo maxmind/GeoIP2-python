@@ -45,7 +45,7 @@ perl -pi -e "s/(?<=__version__ = \").+?(?=\")/$version/gsm" src/geoip2/__init__.
 perl -pi -e "s/(?<=^version = \").+?(?=\")/$version/gsm" pyproject.toml
 
 echo $"Test results:"
-tox
+uv run tox
 
 echo $'\nDiff:'
 git diff
