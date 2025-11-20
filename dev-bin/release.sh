@@ -2,6 +2,14 @@
 
 set -eu -o pipefail
 
+# Check that we're not on the main branch
+current_branch=$(git branch --show-current)
+if [ "$current_branch" = "main" ]; then
+    echo "Error: Releases should not be done directly on the main branch."
+    echo "Please create a release branch and run this script from there."
+    exit 1
+fi
+
 changelog=$(cat HISTORY.rst)
 
 regex='
@@ -33,11 +41,11 @@ if [ -n "$(git status --porcelain)" ]; then
     exit 1
 fi
 
-perl -pi -e "s/(?<=__version__ = \").+?(?=\")/$version/gsm" geoip2/__init__.py
+perl -pi -e "s/(?<=__version__ = \").+?(?=\")/$version/gsm" src/geoip2/__init__.py
 perl -pi -e "s/(?<=^version = \").+?(?=\")/$version/gsm" pyproject.toml
 
 echo $"Test results:"
-tox
+uv run tox
 
 echo $'\nDiff:'
 git diff
