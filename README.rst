@@ -528,14 +528,6 @@ If you are a paying MaxMind customer and you're not sure where to submit a
 correction, please `contact MaxMind support
 <https://www.maxmind.com/en/support>`_ for help.
 
-Requirements
-------------
-
-Python 3.9 or greater is required. Older versions are not supported.
-
-The Requests HTTP library is also required. See
-<https://pypi.org/project/requests/> for details.
-
 Versioning
 ----------
 
