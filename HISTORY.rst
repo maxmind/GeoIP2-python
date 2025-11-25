@@ -4,6 +4,13 @@
 History
 -------
 
+5.3.0
+++++++++++++++++++
+
+* The version is now retrieved from package metadata at runtime using
+  ``importlib.metadata``. This reduces the chance of version inconsistencies
+  during releases.
+
 5.2.0 (2025-11-20)
 ++++++++++++++++++
 
