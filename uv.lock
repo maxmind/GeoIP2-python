@@ -431,7 +431,6 @@ dev = [
     { name = "pytest" },
     { name = "pytest-httpserver" },
     { name = "tox-uv" },
-    { name = "types-requests" },
 ]
 lint = [
     { name = "mypy" },
@@ -450,7 +449,6 @@ dev = [
     { name = "pytest", specifier = ">=8.3.5" },
     { name = "pytest-httpserver", specifier = ">=1.0.10" },
     { name = "tox-uv", specifier = ">=1.29.0" },
-    { name = "types-requests", specifier = ">=2.32.0.20250328" },
 ]
 lint = [
     { name = "mypy", specifier = ">=1.15.0" },
@@ -1214,18 +1212,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/0a/cb/168dc1ccf24e4065a9a0a33df55709ed2b5eb73bd2b13ddd53187e5dffb8/tox_uv_bare-1.35.2.tar.gz", hash = "sha256:49e28a804c97f23ea17e25859960c0fa78f35bccb7e14344cfd840e89a9aade9", size = 32333, upload-time = "2026-05-05T01:34:18.916Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5f/53/4a33dc81da39db7b31e5622333df361e8fe055b7ec636bd5fea762c9182d/tox_uv_bare-1.35.2-py3-none-any.whl", hash = "sha256:c0d590a41d1054a1ad0874e9e5943ff52402786e3d4599d8f8d37a65b566ef53", size = 22307, upload-time = "2026-05-05T01:34:17.681Z" },
-]
-
-[[package]]
-name = "types-requests"
-version = "2.33.0.20260508"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "urllib3" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/c7/6b/eb226bdd61a982c9a03e02c657fb4ab001733506e6423906ac142331f2e3/types_requests-2.33.0.20260508.tar.gz", hash = "sha256:81b2ae5f0d20967714a6aa5ef9284c05570d7cb06b7de8f2a77b918b63ddd411", size = 23991, upload-time = "2026-05-08T04:50:56.818Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cb/96/080db0afdf2c5cc5fe512b41354e8d114fe8f65e9510c56ff8dfd40216ce/types_requests-2.33.0.20260508-py3-none-any.whl", hash = "sha256:fa01459cca184229713df03709db46a905325906d27e042cd4fd7ea3d15d3400", size = 20722, upload-time = "2026-05-08T04:50:55.548Z" },
 ]
 
 [[package]]
