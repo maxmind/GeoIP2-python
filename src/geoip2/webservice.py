@@ -1,4 +1,4 @@
-"""Client for GeoIP2 and GeoLite2 web services.
+"""Client for GeoIP and GeoLite web services.
 
 The web services are Country, City Plus, and Insights. Each service returns a
 different set of data about an IP address, with Country returning the least
@@ -243,9 +243,9 @@ class AsyncClient(BaseClient):
     The following keyword arguments are also accepted:
 
     :param host: The hostname to make a request against. This defaults to
-      "geoip.maxmind.com". To use the GeoLite2 web service instead of the
-      GeoIP2 web service, set this to "geolite.info". To use the Sandbox
-      GeoIP2 web service instead of the production GeoIP2 web service, set
+      "geoip.maxmind.com". To use the GeoLite web service instead of the
+      GeoIP web service, set this to "geolite.info". To use the Sandbox
+      GeoIP web service instead of the production GeoIP web service, set
       this to "sandbox.maxmind.com". The sandbox allows you to experiment
       with the API without affecting your production data.
     :param locales: This is list of locale codes. This argument will be
@@ -319,7 +319,7 @@ class AsyncClient(BaseClient):
         )
 
     async def country(self, ip_address: IPAddress = "me") -> Country:
-        """Call the GeoIP2 Country endpoint with the specified IP.
+        """Call the GeoIP Country endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
           is provided, the address that the web service is called from will
@@ -336,7 +336,7 @@ class AsyncClient(BaseClient):
     async def insights(self, ip_address: IPAddress = "me") -> Insights:
         """Call the Insights endpoint with the specified IP.
 
-        Insights is only supported by the GeoIP2 web service. The GeoLite2 web
+        Insights is only supported by the GeoIP web service. The GeoLite web
         service does not support it.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
@@ -412,9 +412,9 @@ class Client(BaseClient):
     The following keyword arguments are also accepted:
 
     :param host: The hostname to make a request against. This defaults to
-      "geoip.maxmind.com". To use the GeoLite2 web service instead of the
-      GeoIP2 web service, set this to "geolite.info". To use the Sandbox
-      GeoIP2 web service instead of the production GeoIP2 web service, set
+      "geoip.maxmind.com". To use the GeoLite web service instead of the
+      GeoIP web service, set this to "geolite.info". To use the Sandbox
+      GeoIP web service instead of the production GeoIP web service, set
       this to "sandbox.maxmind.com". The sandbox allows you to experiment
       with the API without affecting your production data.
     :param locales: This is list of locale codes. This argument will be
@@ -487,7 +487,7 @@ class Client(BaseClient):
         return cast("City", self._response_for("city", geoip2.models.City, ip_address))
 
     def country(self, ip_address: IPAddress = "me") -> Country:
-        """Call the GeoIP2 Country endpoint with the specified IP.
+        """Call the GeoIP Country endpoint with the specified IP.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address
           is provided, the address that the web service is called from will
@@ -504,7 +504,7 @@ class Client(BaseClient):
     def insights(self, ip_address: IPAddress = "me") -> Insights:
         """Call the Insights endpoint with the specified IP.
 
-        Insights is only supported by the GeoIP2 web service. The GeoLite2 web
+        Insights is only supported by the GeoIP web service. The GeoLite web
         service does not support it.
 
         :param ip_address: IPv4 or IPv6 address as a string. If no address

@@ -1,4 +1,4 @@
-"""The models for response from th GeoIP2 web service and databases.
+"""The models for response from th GeoIP web service and databases.
 
 The only difference between the City and Insights model classes is which
 fields in each record may be populated. See
@@ -147,7 +147,7 @@ class City(Country):
 
 
 class Insights(City):
-    """Model for the GeoIP2 Insights web service."""
+    """Model for the GeoIP Insights web service."""
 
     anonymizer: geoip2.records.Anonymizer
     """Anonymizer object for the requested IP address. This object contains
@@ -192,7 +192,7 @@ class Insights(City):
 
 
 class Enterprise(City):
-    """Model for the GeoIP2 Enterprise database."""
+    """Model for the GeoIP Enterprise database."""
 
 
 class SimpleModel(Model, metaclass=ABCMeta):
@@ -259,7 +259,7 @@ class SimpleModel(Model, metaclass=ABCMeta):
 
 
 class AnonymousIP(SimpleModel):
-    """Model class for the GeoIP2 Anonymous IP."""
+    """Model class for the GeoIP Anonymous IP."""
 
     is_anonymous: bool
     """This is true if the IP address belongs to any sort of anonymous network."""
@@ -365,7 +365,7 @@ class AnonymousPlus(AnonymousIP):
 
 
 class ASN(SimpleModel):
-    """Model class for the GeoLite2 ASN."""
+    """Model class for the GeoLite ASN."""
 
     autonomous_system_number: int | None
     """The autonomous system number associated with the IP address."""
@@ -391,7 +391,7 @@ class ASN(SimpleModel):
 
 
 class ConnectionType(SimpleModel):
-    """Model class for the GeoIP2 Connection-Type."""
+    """Model class for the GeoIP Connection-Type."""
 
     connection_type: str | None
     """The connection type may take the following values:
@@ -419,7 +419,7 @@ class ConnectionType(SimpleModel):
 
 
 class Domain(SimpleModel):
-    """Model class for the GeoIP2 Domain."""
+    """Model class for the GeoIP Domain."""
 
     domain: str | None
     """The domain associated with the IP address."""
@@ -438,7 +438,7 @@ class Domain(SimpleModel):
 
 
 class ISP(ASN):
-    """Model class for the GeoIP2 ISP."""
+    """Model class for the GeoIP ISP."""
 
     isp: str | None
     """The name of the ISP associated with the IP address."""

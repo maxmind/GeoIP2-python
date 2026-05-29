@@ -51,9 +51,9 @@ __all__ = [
 
 
 class Reader:
-    """GeoIP2 database Reader object.
+    """GeoIP database Reader object.
 
-    Instances of this class provide a reader for the GeoIP2 database format.
+    Instances of this class provide a reader for the GeoIP database format.
     IP addresses can be looked up using the ``country`` and ``city`` methods.
 
     The basic API for this class is the same for every database. First, you
@@ -83,7 +83,7 @@ class Reader:
     ) -> None:
         """Create GeoIP2 Reader.
 
-        :param fileish: A path to the GeoIP2 database or an existing file
+        :param fileish: A path to the GeoIP database or an existing file
           descriptor pointing to the database. Note that a file descriptor
           is only valid when mode is MODE_FD.
         :param locales: This is list of locale codes. This argument will be
@@ -314,5 +314,5 @@ class Reader:
         return self._db_reader.metadata()
 
     def close(self) -> None:
-        """Close the GeoIP2 database."""
+        """Close the GeoIP database."""
         self._db_reader.close()
