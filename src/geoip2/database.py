@@ -81,7 +81,7 @@ class Reader:
         locales: Sequence[str] | None = None,
         mode: int = MODE_AUTO,
     ) -> None:
-        """Create GeoIP2 Reader.
+        """Create GeoIP Reader.
 
         :param fileish: A path to the GeoIP database or an existing file
           descriptor pointing to the database. Note that a file descriptor
@@ -94,7 +94,7 @@ class Reader:
           multiple names (country, city, etc.), its name property will return
           the name in the first locale that has one.
 
-          Note that the only locale which is always present in the GeoIP2
+          Note that the only locale which is always present in the GeoIP
           data is "en". If you do not include this locale, the name property
           may end up returning None even when the record has an English name.
 

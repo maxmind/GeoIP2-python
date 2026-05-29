@@ -230,7 +230,7 @@ class BaseClient:
 
 
 class AsyncClient(BaseClient):
-    """An async GeoIP2 client.
+    """An async GeoIP client.
 
     It accepts the following required arguments:
 
@@ -256,7 +256,7 @@ class AsyncClient(BaseClient):
       multiple names (country, city, etc.), its name property will return
       the name in the first locale that has one.
 
-      Note that the only locale which is always present in the GeoIP2
+      Note that the only locale which is always present in the GeoIP
       data is "en". If you do not include this locale, the name property
       may end up returning None even when the record has an English name.
 
@@ -399,7 +399,7 @@ class AsyncClient(BaseClient):
 
 
 class Client(BaseClient):
-    """A synchronous GeoIP2 client.
+    """A synchronous GeoIP client.
 
     It accepts the following required arguments:
 
@@ -425,7 +425,7 @@ class Client(BaseClient):
       multiple names (country, city, etc.), its name property will return
       the name in the first locale that has one.
 
-      Note that the only locale which is always present in the GeoIP2
+      Note that the only locale which is always present in the GeoIP
       data is "en". If you do not include this locale, the name property
       may end up returning None even when the record has an English name.
 
