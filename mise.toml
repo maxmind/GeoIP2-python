@@ -1,0 +1,18 @@
+[settings]
+experimental = true
+lockfile = true
+disable_backends = [
+    "asdf",
+    "vfox",
+]
+
+[tools]
+python = "latest"
+uv = "latest"
+
+[hooks]
+enter = "mise install --quiet --locked"
+
+[[watch_files]]
+patterns = ["mise.toml", "mise.lock"]
+run = "mise install --quiet --locked"
