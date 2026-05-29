@@ -1,4 +1,4 @@
-"""The models for response from th GeoIP web service and databases.
+"""The models for response from the GeoIP web service and databases.
 
 The only difference between the City and Insights model classes is which
 fields in each record may be populated. See
