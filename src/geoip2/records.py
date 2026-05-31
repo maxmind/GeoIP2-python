@@ -546,8 +546,8 @@ class Traits(Record):
     """This is true if the IP is an anonymous proxy.
 
     .. deprecated:: 2.2.0
-       Use our `GeoIP2 Anonymous IP database
-       <https://www.maxmind.com/en/geoip2-anonymous-ip-database GeoIP2>`_
+       Use our `GeoIP Anonymous IP database
+       <https://www.maxmind.com/en/geoip2-anonymous-ip-database>`_
        instead.
     """
     is_anonymous_vpn: bool
@@ -566,8 +566,8 @@ class Traits(Record):
     is_anycast: bool
     """This returns true if the IP address belongs to an
     `anycast network <https://en.wikipedia.org/wiki/Anycast>`_.
-    This is available for the GeoIP2 Country, City Plus, and Insights
-    web services and the GeoIP2 Country, City, and Enterprise databases.
+    This is available for the GeoIP Country, City Plus, and Insights
+    web services and the GeoIP Country, City, and Enterprise databases.
     """
     is_hosting_provider: bool
     """This is true if the IP address belongs to a hosting or VPN provider

@@ -1,11 +1,11 @@
-=========================
-MaxMind GeoIP2 Python API
-=========================
+========================
+MaxMind GeoIP Python API
+========================
 
 Description
 -----------
 
-This package provides an API for the GeoIP2 and GeoLite2 `web services
+This package provides an API for the GeoIP and GeoLite `web services
 <https://dev.maxmind.com/geoip/docs/web-services?lang=en>`_ and `databases
 <https://dev.maxmind.com/geoip/docs/databases?lang=en>`_.
 
@@ -37,7 +37,7 @@ IP Geolocation Usage
 --------------------
 
 IP geolocation is inherently imprecise. Locations are often near the center of
-the population. Any location provided by a GeoIP2 database or web service
+the population. Any location provided by a GeoIP database or web service
 should not be used to identify a particular address or household.
 
 Web Service Usage
@@ -45,10 +45,10 @@ Web Service Usage
 
 To use this API, you first construct either a ``geoip2.webservice.Client`` or
 ``geoip2.webservice.AsyncClient``, passing your MaxMind ``account_id`` and
-``license_key`` to the constructor. To use the GeoLite2 web service instead of
-the GeoIP2 web service, set the optional ``host`` keyword argument to
-``geolite.info``. To use the Sandbox GeoIP2 web service instead of the
-production GeoIP2 web service, set the optional ``host`` keyword argument to
+``license_key`` to the constructor. To use the GeoLite web service instead of
+the GeoIP web service, set the optional ``host`` keyword argument to
+``geolite.info``. To use the Sandbox GeoIP web service instead of the
+production GeoIP web service, set the optional ``host`` keyword argument to
 ``sandbox.maxmind.com``.
 
 After doing this, you may call the method corresponding to request type
@@ -70,14 +70,14 @@ Sync Web Service Example
     >>> # This creates a Client object that can be reused across requests.
     >>> # Replace "42" with your account ID and "license_key" with your license
     >>> # key. Set the "host" keyword argument to "geolite.info" to use the
-    >>> # GeoLite2 web service instead of the GeoIP2 web service. Set the
+    >>> # GeoLite web service instead of the GeoIP web service. Set the
     >>> # "host" keyword argument to "sandbox.maxmind.com" to use the Sandbox
-    >>> # GeoIP2 web service instead of the production GeoIP2 web service.
+    >>> # GeoIP web service instead of the production GeoIP web service.
     >>> with geoip2.webservice.Client(42, 'license_key') as client:
     >>>
     >>>     # Replace "city" with the method corresponding to the web service
     >>>     # that you are using, i.e., "country", "city", or "insights". Please
-    >>>     # note that Insights is not supported by the GeoLite2 web service.
+    >>>     # note that Insights is not supported by the GeoLite web service.
     >>>     response = client.city('203.0.113.0')
     >>>
     >>>     response.country.iso_code
@@ -122,14 +122,14 @@ Async Web Service Example
     >>>     #
     >>>     # Replace "42" with your account ID and "license_key" with your license
     >>>     # key. Set the "host" keyword argument to "geolite.info" to use the
-    >>>     # GeoLite2 web service instead of the GeoIP2 web service. Set the
+    >>>     # GeoLite web service instead of the GeoIP web service. Set the
     >>>     # "host" keyword argument to "sandbox.maxmind.com" to use the Sandbox
-    >>>     # GeoIP2 web service instead of the production GeoIP2 web service.
+    >>>     # GeoIP web service instead of the production GeoIP web service.
     >>>     async with geoip2.webservice.AsyncClient(42, 'license_key') as client:
     >>>
     >>>         # Replace "city" with the method corresponding to the web service
     >>>         # that you are using, i.e., "country", "city", or "insights". Please
-    >>>         # note that Insights is not supported by the GeoLite2 web service.
+    >>>         # note that Insights is not supported by the GeoLite web service.
     >>>         response = await client.city('203.0.113.0')
     >>>
     >>>         response.country.iso_code
@@ -164,7 +164,7 @@ Web Service Client Exceptions
 -----------------------------
 
 For details on the possible errors returned by the web service itself, see
-https://dev.maxmind.com/geoip/docs/web-services?lang=en for the GeoIP2 web
+https://dev.maxmind.com/geoip/docs/web-services?lang=en for the GeoIP web
 service docs.
 
 If the web service returns an explicit error document, this is thrown as a
@@ -531,7 +531,7 @@ correction, please `contact MaxMind support
 Versioning
 ----------
 
-The GeoIP2 Python API uses `Semantic Versioning <https://semver.org/>`_.
+The GeoIP Python API uses `Semantic Versioning <https://semver.org/>`_.
 
 Support
 -------
