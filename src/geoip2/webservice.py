@@ -354,8 +354,14 @@ class AsyncClient(BaseClient):
     async def _session(self) -> aiohttp.ClientSession:
         if not hasattr(self, "_existing_session"):
             self._existing_session = aiohttp.ClientSession(
-                auth=aiohttp.BasicAuth(self._account_id, self._license_key),
-                headers={"Accept": "application/json", "User-Agent": _AIOHTTP_UA},
+                headers={
+                    "Accept": "application/json",
+                    "Authorization": aiohttp.encode_basic_auth(
+                        self._account_id,
+                        self._license_key,
+                    ),
+                    "User-Agent": _AIOHTTP_UA,
+                },
                 timeout=aiohttp.ClientTimeout(total=self._timeout),
             )
 
