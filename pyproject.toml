@@ -57,8 +57,8 @@ source-include = [
 ]
 
 [project.urls]
-Homepage = "https://www.maxmind.com/"
-Documentation = "https://geoip2.readthedocs.org/"
+Homepage = "https://www.maxmind.com/en/home"
+Documentation = "https://geoip2.readthedocs.io/en/latest/"
 "Source Code" = "https://github.com/maxmind/GeoIP2-python"
 "Issue Tracker" = "https://github.com/maxmind/GeoIP2-python/issues"
 
