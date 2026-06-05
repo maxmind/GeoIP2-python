@@ -19,3 +19,4 @@ MANIFEST
 *.swp
 .tox
 /venv
+.lycheecache

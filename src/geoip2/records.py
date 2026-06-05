@@ -547,7 +547,7 @@ class Traits(Record):
 
     .. deprecated:: 2.2.0
        Use our `GeoIP Anonymous IP database
-       <https://www.maxmind.com/en/geoip2-anonymous-ip-database>`_
+       <https://www.maxmind.com/en/geoip-anonymous-ip-database>`_
        instead.
     """
     is_anonymous_vpn: bool

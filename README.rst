@@ -6,8 +6,8 @@ Description
 -----------
 
 This package provides an API for the GeoIP and GeoLite `web services
-<https://dev.maxmind.com/geoip/docs/web-services?lang=en>`_ and `databases
-<https://dev.maxmind.com/geoip/docs/databases?lang=en>`_.
+<https://dev.maxmind.com/geoip/docs/web-services/?lang=en>`_ and `databases
+<https://dev.maxmind.com/geoip/docs/databases/?lang=en>`_.
 
 Installation
 ------------
@@ -164,7 +164,7 @@ Web Service Client Exceptions
 -----------------------------
 
 For details on the possible errors returned by the web service itself, see
-https://dev.maxmind.com/geoip/docs/web-services?lang=en for the GeoIP web
+https://dev.maxmind.com/geoip/docs/web-services/?lang=en for the GeoIP web
 service docs.
 
 If the web service returns an explicit error document, this is thrown as a
@@ -515,7 +515,8 @@ Reporting Data Problems
 -----------------------
 
 If the problem you find is that an IP address is incorrectly mapped, please
-`submit your correction to MaxMind <https://www.maxmind.com/en/correction>`_.
+`submit your correction to MaxMind
+<https://www.maxmind.com/en/geoip-data-correction-request>`_.
 
 If you find some other sort of mistake, like an incorrect spelling, please
 check the `GeoNames site <https://www.geonames.org/>`_ first. Once you've
@@ -526,7 +527,7 @@ will be automatically incorporated into future MaxMind releases.
 
 If you are a paying MaxMind customer and you're not sure where to submit a
 correction, please `contact MaxMind support
-<https://www.maxmind.com/en/support>`_ for help.
+<https://support.maxmind.com/knowledge-base>`_ for help.
 
 Versioning
 ----------
@@ -541,4 +542,4 @@ Please report all issues with this code using the `GitHub issue tracker
 
 If you are having an issue with a MaxMind service that is not specific to the
 client API, please contact `MaxMind support
-<https://www.maxmind.com/en/support>`_ for assistance.
+<https://support.maxmind.com/knowledge-base>`_ for assistance.

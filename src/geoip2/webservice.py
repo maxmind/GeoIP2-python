@@ -237,8 +237,8 @@ class AsyncClient(BaseClient):
     :param account_id: Your MaxMind account ID.
     :param license_key: Your MaxMind license key.
 
-    Go to https://www.maxmind.com/en/my_license_key to see your MaxMind
-    account ID and license key.
+    Go to https://www.maxmind.com/en/accounts/current/license-key to see
+    your MaxMind account ID and license key.
 
     The following keyword arguments are also accepted:
 
@@ -412,8 +412,8 @@ class Client(BaseClient):
     :param account_id: Your MaxMind account ID.
     :param license_key: Your MaxMind license key.
 
-    Go to https://www.maxmind.com/en/my_license_key to see your MaxMind
-    account ID and license key.
+    Go to https://www.maxmind.com/en/accounts/current/license-key to see
+    your MaxMind account ID and license key.
 
     The following keyword arguments are also accepted:
 

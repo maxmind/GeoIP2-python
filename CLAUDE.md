@@ -404,7 +404,7 @@ uv run tox
 
 ## Additional Resources
 
-- [API Documentation](https://geoip2.readthedocs.org/)
-- [GeoIP Web Services Docs](https://dev.maxmind.com/geoip/docs/web-services)
+- [API Documentation](https://geoip2.readthedocs.io/en/latest/)
+- [GeoIP Web Services Docs](https://dev.maxmind.com/geoip/docs/web-services/)
 - [MaxMind DB Format](https://maxmind.github.io/MaxMind-DB/)
 - GitHub Issues: https://github.com/maxmind/GeoIP2-python/issues
