@@ -32,7 +32,7 @@ classifiers = [
 
 [dependency-groups]
 dev = [
-    "pytest>=9.1.0",
+    "pytest>=9.1.1",
     "pytest-httpserver>=1.0.10",
     "tox-uv>=1.29.0",
 ]
