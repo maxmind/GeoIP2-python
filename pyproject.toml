@@ -38,7 +38,7 @@ dev = [
 ]
 lint = [
     "mypy>=1.15.0",
-    "ruff>=0.15.19",
+    "ruff>=0.15.20",
 ]
 
 [build-system]
