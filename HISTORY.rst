@@ -14,6 +14,13 @@ History
   ``aiohttp.encode_basic_auth()`` instead of the ``aiohttp.BasicAuth`` /
   ``auth=`` parameter, which are deprecated as of aiohttp 3.14.0. As a result,
   the minimum required ``aiohttp`` version is now 3.14.0.
+* A new ``residential`` attribute has been added to
+  ``geoip2.records.Anonymizer``. This is a ``geoip2.records.AnonymizerFeed``
+  object providing residential proxy data for the network and contains the
+  following fields: ``confidence``, ``network_last_seen``, and
+  ``provider_name``. This attribute may be populated even when no other
+  anonymizer attributes are set, so the ``anonymizer`` object may now
+  contain only this attribute.
 
 5.2.0 (2025-11-20)
 ++++++++++++++++++

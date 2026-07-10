@@ -262,10 +262,58 @@ class MaxMind(Record):
         self.queries_remaining = queries_remaining
 
 
+class AnonymizerFeed(Record):
+    """Contains data for one type of anonymizer detection.
+
+    This class contains data for one type of anonymizer detection,
+    currently residential proxies. Additional feeds may be added in the
+    future.
+
+    This record is returned by ``insights`` as the ``residential`` attribute
+    of :py:class:`Anonymizer`.
+    """
+
+    confidence: int | None
+    """A score ranging from 1 to 99 that represents our percent confidence
+    that the network is currently part of this anonymizer feed. This
+    attribute is only available from the Insights end point.
+    """
+
+    network_last_seen: datetime.date | None
+    """The last day that the network was sighted in our analysis of this
+    anonymizer feed. This attribute is only available from the Insights end
+    point.
+    """
+
+    provider_name: str | None
+    """The name of the provider associated with the network in this
+    anonymizer feed. This attribute is only available from the Insights end
+    point.
+    """
+
+    def __init__(
+        self,
+        *,
+        confidence: int | None = None,
+        network_last_seen: str | None = None,
+        provider_name: str | None = None,
+        **_: Any,
+    ) -> None:
+        self.confidence = confidence
+        self.network_last_seen = (
+            datetime.date.fromisoformat(network_last_seen)
+            if network_last_seen
+            else None
+        )
+        self.provider_name = provider_name
+
+
 class Anonymizer(Record):
     """Contains data for the anonymizer record associated with an IP address.
 
     This class contains the anonymizer data associated with an IP address.
+
+    Note that this object may contain only the ``residential`` attribute.
 
     This record is returned by ``insights``.
     """
@@ -286,6 +334,12 @@ class Anonymizer(Record):
     """The name of the VPN provider (e.g., NordVPN, SurfShark, etc.) associated
     with the network. This attribute is only available from the Insights end
     point.
+    """
+
+    residential: AnonymizerFeed
+    """Residential proxy data for the network associated with the IP address.
+    This may be populated even when no other anonymizer attributes are set.
+    This attribute is only available from the Insights end point.
     """
 
     is_anonymous: bool
@@ -337,6 +391,7 @@ class Anonymizer(Record):
         is_tor_exit_node: bool = False,
         network_last_seen: str | None = None,
         provider_name: str | None = None,
+        residential: dict[str, Any] | None = None,
         **_: Any,
     ) -> None:
         self.confidence = confidence
@@ -352,6 +407,7 @@ class Anonymizer(Record):
             else None
         )
         self.provider_name = provider_name
+        self.residential = AnonymizerFeed(**(residential or {}))
 
 
 class Postal(Record):
