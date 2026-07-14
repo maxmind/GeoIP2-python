@@ -74,7 +74,7 @@ class City(PlaceRecord):
         confidence: int | None = None,
         geoname_id: int | None = None,
         names: dict[str, str] | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
@@ -102,7 +102,7 @@ class Continent(PlaceRecord):
         code: str | None = None,
         geoname_id: int | None = None,
         names: dict[str, str] | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         self.code = code
         self.geoname_id = geoname_id
@@ -139,7 +139,7 @@ class Country(PlaceRecord):
         is_in_european_union: bool = False,
         iso_code: str | None = None,
         names: dict[str, str] | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
@@ -172,7 +172,7 @@ class RepresentedCountry(Country):
         iso_code: str | None = None,
         names: dict[str, str] | None = None,
         type: str | None = None,  # noqa: A002
-        **_: Any,
+        **_: object,
     ) -> None:
         self.type = type
         super().__init__(
@@ -239,7 +239,7 @@ class Location(Record):
         metro_code: int | None = None,
         population_density: int | None = None,
         time_zone: str | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         self.average_income = average_income
         self.accuracy_radius = accuracy_radius
@@ -258,7 +258,7 @@ class MaxMind(Record):
     calling.
     """
 
-    def __init__(self, *, queries_remaining: int | None = None, **_: Any) -> None:
+    def __init__(self, *, queries_remaining: int | None = None, **_: object) -> None:
         self.queries_remaining = queries_remaining
 
 
@@ -297,7 +297,7 @@ class AnonymizerFeed(Record):
         confidence: int | None = None,
         network_last_seen: str | None = None,
         provider_name: str | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         self.confidence = confidence
         self.network_last_seen = (
@@ -392,7 +392,7 @@ class Anonymizer(Record):
         network_last_seen: str | None = None,
         provider_name: str | None = None,
         residential: dict[str, Any] | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         self.confidence = confidence
         self.is_anonymous = is_anonymous
@@ -434,7 +434,7 @@ class Postal(Record):
         *,
         code: str | None = None,
         confidence: int | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         self.code = code
         self.confidence = confidence
@@ -468,7 +468,7 @@ class Subdivision(PlaceRecord):
         geoname_id: int | None = None,
         iso_code: str | None = None,
         names: dict[str, str] | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         self.confidence = confidence
         self.geoname_id = geoname_id
@@ -764,7 +764,7 @@ class Traits(Record):
         mobile_country_code: str | None = None,
         mobile_network_code: str | None = None,
         is_anycast: bool = False,
-        **_: Any,
+        **_: object,
     ) -> None:
         self.autonomous_system_number = autonomous_system_number
         self.autonomous_system_organization = autonomous_system_organization

@@ -65,13 +65,13 @@ def __init__(
     continent: dict[str, Any] | None = None,
     country: dict[str, Any] | None = None,
     # ... other keyword-only parameters
-    **_: Any,  # ignore unknown keys
+    **_: object,  # ignore unknown keys
 ) -> None:
 ```
 
 Key points:
 - Use `*` to enforce keyword-only arguments
-- Accept `**_: Any` to ignore unknown keys from the API
+- Accept `**_: object` to ignore unknown keys from the API
 - Use `| None = None` for optional parameters
 - Boolean fields default to `False` if not present
 
@@ -251,7 +251,7 @@ When creating a new model class:
 3. **Extend the appropriate base class** (e.g., `Country`, `City`, `SimpleModel`)
 4. **Use type hints** for all attributes
 5. **Use keyword-only arguments** with `*` separator
-6. **Accept `**_: Any`** to ignore unknown API keys
+6. **Accept `**_: object`** to ignore unknown API keys
 7. **Provide comprehensive docstrings** for all attributes
 8. **Add corresponding tests** with full coverage
 
