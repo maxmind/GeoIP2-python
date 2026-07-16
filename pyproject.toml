@@ -87,7 +87,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "docs/*" = ["ALL"]
-"src/geoip2/{models,records}.py" = [ "ANN401", "D107", "PLR0913" ]
+"src/geoip2/{models,records}.py" = [ "D107", "PLR0913" ]
 # FBT003: We use assertIs with boolean literals to verify values are actual
 # booleans (True/False), not just truthy/falsy values
 "tests/*" = ["ANN201", "D", "FBT003"]

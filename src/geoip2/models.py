@@ -63,7 +63,7 @@ class Country(Model):
         registered_country: dict[str, Any] | None = None,
         represented_country: dict[str, Any] | None = None,
         traits: dict[str, Any] | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         self._locales = locales
         self.continent = geoip2.records.Continent(locales, **(continent or {}))
@@ -127,7 +127,7 @@ class City(Country):
         represented_country: dict[str, Any] | None = None,
         subdivisions: list[dict[str, Any]] | None = None,
         traits: dict[str, Any] | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         super().__init__(
             locales,
@@ -171,7 +171,7 @@ class Insights(City):
         represented_country: dict[str, Any] | None = None,
         subdivisions: list[dict[str, Any]] | None = None,
         traits: dict[str, Any] | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         super().__init__(
             locales,
@@ -301,7 +301,7 @@ class AnonymousIP(SimpleModel):
         is_tor_exit_node: bool = False,
         network: str | None = None,
         prefix_len: int | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         super().__init__(ip_address, network, prefix_len)
         self.is_anonymous = is_anonymous
@@ -345,7 +345,7 @@ class AnonymousPlus(AnonymousIP):
         network_last_seen: str | None = None,
         prefix_len: int | None = None,
         provider_name: str | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         super().__init__(
             is_anonymous=is_anonymous,
@@ -383,7 +383,7 @@ class ASN(SimpleModel):
         autonomous_system_organization: str | None = None,
         network: str | None = None,
         prefix_len: int | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         super().__init__(ip_address, network, prefix_len)
         self.autonomous_system_number = autonomous_system_number
@@ -412,7 +412,7 @@ class ConnectionType(SimpleModel):
         connection_type: str | None = None,
         network: str | None = None,
         prefix_len: int | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         super().__init__(ip_address, network, prefix_len)
         self.connection_type = connection_type
@@ -431,7 +431,7 @@ class Domain(SimpleModel):
         domain: str | None = None,
         network: str | None = None,
         prefix_len: int | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         super().__init__(ip_address, network, prefix_len)
         self.domain = domain
@@ -470,7 +470,7 @@ class ISP(ASN):
         organization: str | None = None,
         network: str | None = None,
         prefix_len: int | None = None,
-        **_: Any,
+        **_: object,
     ) -> None:
         super().__init__(
             autonomous_system_number=autonomous_system_number,

@@ -1,3 +1,4 @@
+import datetime
 import ipaddress
 import sys
 import unittest
@@ -24,6 +25,11 @@ class TestModels(unittest.TestCase):
                 "is_tor_exit_node": True,
                 "network_last_seen": "2025-04-14",
                 "provider_name": "FooBar VPN",
+                "residential": {
+                    "confidence": 82,
+                    "network_last_seen": "2026-05-11",
+                    "provider_name": "quickshift",
+                },
             },
             "city": {
                 "confidence": 76,
@@ -262,9 +268,31 @@ class TestModels(unittest.TestCase):
         self.assertIs(model.anonymizer.is_tor_exit_node, True)
         self.assertEqual(
             model.anonymizer.network_last_seen,
-            __import__("datetime").date(2025, 4, 14),
+            datetime.date(2025, 4, 14),
         )
         self.assertEqual(model.anonymizer.provider_name, "FooBar VPN")
+
+        # Test anonymizer.residential object
+        self.assertEqual(
+            type(model.anonymizer.residential),
+            geoip2.records.AnonymizerFeed,
+            "geoip2.records.AnonymizerFeed object",
+        )
+        self.assertEqual(model.anonymizer.residential.confidence, 82)
+        self.assertEqual(
+            model.anonymizer.residential.network_last_seen,
+            datetime.date(2026, 5, 11),
+        )
+        self.assertEqual(model.anonymizer.residential.provider_name, "quickshift")
+        self.assertEqual(
+            model.anonymizer.to_dict()["residential"],
+            {
+                "confidence": 82,
+                "network_last_seen": "2026-05-11",
+                "provider_name": "quickshift",
+            },
+            "residential is serialized by to_dict",
+        )
 
     def test_insights_min(self) -> None:
         model = geoip2.models.Insights(["en"], traits={"ip_address": "5.6.7.8"})
@@ -324,6 +352,59 @@ class TestModels(unittest.TestCase):
         self.assertIsNone(model.anonymizer.provider_name)
         self.assertFalse(model.anonymizer.is_anonymous)
         self.assertFalse(model.anonymizer.is_anonymous_vpn)
+        # Test that anonymizer.residential defaults correctly
+        self.assertEqual(
+            type(model.anonymizer.residential),
+            geoip2.records.AnonymizerFeed,
+            "geoip2.records.AnonymizerFeed object",
+        )
+        self.assertIsNone(model.anonymizer.residential.confidence)
+        self.assertIsNone(model.anonymizer.residential.network_last_seen)
+        self.assertIsNone(model.anonymizer.residential.provider_name)
+        self.assertEqual(
+            model.to_dict(),
+            {"traits": {"ip_address": "5.6.7.8"}},
+            "empty anonymizer is not serialized by to_dict",
+        )
+
+    def test_insights_anonymizer_residential_only(self) -> None:
+        # The residential attribute may be populated even when no other
+        # anonymizer attributes are set, so the anonymizer object may
+        # contain only the residential attribute.
+        model = geoip2.models.Insights(
+            ["en"],
+            anonymizer={
+                "residential": {
+                    "confidence": 82,
+                    "network_last_seen": "2026-05-11",
+                    "provider_name": "quickshift",
+                },
+            },
+            traits={"ip_address": "5.6.7.8"},
+        )
+        self.assertIsNone(model.anonymizer.confidence)
+        self.assertIsNone(model.anonymizer.provider_name)
+        self.assertFalse(model.anonymizer.is_anonymous)
+        self.assertEqual(model.anonymizer.residential.confidence, 82)
+        self.assertEqual(
+            model.anonymizer.residential.network_last_seen,
+            datetime.date(2026, 5, 11),
+        )
+        self.assertEqual(model.anonymizer.residential.provider_name, "quickshift")
+        self.assertEqual(
+            model.to_dict(),
+            {
+                "anonymizer": {
+                    "residential": {
+                        "confidence": 82,
+                        "network_last_seen": "2026-05-11",
+                        "provider_name": "quickshift",
+                    },
+                },
+                "traits": {"ip_address": "5.6.7.8"},
+            },
+            "anonymizer contains only residential in to_dict output",
+        )
 
     def test_city_full(self) -> None:
         raw = {
