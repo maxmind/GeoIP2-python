@@ -66,6 +66,6 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-:copyright: (c) 2013-2025 by MaxMind, Inc.
+:copyright: (c) 2013-2026 by MaxMind, Inc.
 :license: Apache License, Version 2.0
 

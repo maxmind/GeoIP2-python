@@ -277,7 +277,7 @@ class AsyncClient(BaseClient):
       60.
     :param proxy: The URL of an HTTP proxy to use. It may optionally include
       a basic auth username and password, e.g.,
-      ``http://username:password@host:port``.
+      ``http://<username>:<password>@<host>:<port>``.
 
     """
 
@@ -452,7 +452,7 @@ class Client(BaseClient):
       60.
     :param proxy: The URL of an HTTP proxy to use. It may optionally include
       a basic auth username and password, e.g.,
-      ``http://username:password@host:port``.
+      ``http://<username>:<password>@<host>:<port>``.
 
 
     """

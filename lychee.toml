@@ -5,7 +5,7 @@
 #   lychee './**/*.md' './**/*.rst' './src/**/*.py' './pyproject.toml'
 
 # Include URL fragments in checks
-include_fragments = true
+include_fragments = "full"
 
 # Don't allow any redirects, so links that have moved are surfaced and can be
 # updated to their canonical destination.
