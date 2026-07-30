@@ -2,9 +2,77 @@ name: Dependabot Failure Watcher
 
 # Dependabot version updates run as GitHub Actions workflow runs named
 # "Dependabot Updates". This scheduled job looks back over the past week for any
-# of those runs that failed and fails itself if it finds one, so a silently-broken
-# ecosystem surfaces as a red scheduled run instead of only a red triangle in the
-# Dependabot tab that nobody checks.
+# version-update run that failed and fails itself if it finds one, so a
+# silently-broken ecosystem surfaces as a red scheduled run instead of only a red
+# triangle in the Dependabot tab that nobody checks. Security-update runs share
+# that workflow name and are deliberately excluded -- see below.
+#
+# GitHub reuses the "Dependabot Updates" name for three different kinds of run:
+#
+#   1. A version update's scheduled scan: one run per .github/dependabot.yml
+#      entry, on the schedule set there. It works out what is out of date and
+#      opens or updates pull requests. This is the kind this watcher primarily
+#      exists to catch -- when a scan breaks, the whole ecosystem quietly stops
+#      being updated and nothing else tells anyone.
+#   2. A version update's per-pull-request refresh: one run per already-open
+#      Dependabot pull request, rebasing or re-checking it. These are not driven
+#      by the schedule at all -- a push to the base branch, a rebase, or an
+#      "@dependabot recreate" comment triggers them, so they arrive in bursts
+#      after merges rather than at the scheduled time. A failure here means one
+#      open pull request has gone stale, which is worth knowing but is much
+#      narrower than a broken scan.
+#   3. A security update: one ad-hoc job per vulnerable package, triggered by a
+#      Dependabot alert rather than by dependabot.yml at all.
+#
+# Kind 3 routinely fails for reasons no pull request can fix: the advisory is
+# against a dependency this project does not declare directly, or no patched
+# version is reachable. Counting those would keep this workflow permanently red
+# and train everyone to ignore it, so they are filtered out below.
+#
+# Of the fields "gh run list --json" exposes, only the title separates the three
+# -- event, headBranch and actor are identical. Titles come in these shapes:
+#
+#   - "<eco> in /."                          -- kind 1 at the repo root, which
+#     has no " for " suffix
+#   - "<eco> in <configured-dir>"            -- kind 1 elsewhere, path verbatim
+#   - "<eco> in / for <deps>"                -- kind 2 at the repo root
+#   - "<eco> in <configured-dir> for <deps>" -- kind 2 elsewhere
+#   - "<eco> in /. for <one-dep>"            -- kind 3 at the repo root
+#   - "<eco> in <manifest-dir> for <one-dep>" -- kind 3 elsewhere, where
+#     <manifest-dir> is wherever the vulnerable manifest was discovered
+#
+# At the root, then, kind 3 is marked by "/." AND a " for " suffix together, and
+# BOTH HALVES of " in /. for " are load-bearing -- do not shorten it. Matching on
+# " in /." alone would also discard every kind 1 run, which is most of the runs
+# here and the shape both failures this watcher was written for actually took.
+#
+# Outside the root, kinds 2 and 3 cannot be told apart by title, so the filter
+# has to name directories instead. e2e/js and e2e/ts (in the Node repos this
+# workflow is shared with) are consumer smoke tests carrying committed
+# lockfiles, so their transitive dev dependencies attract advisories that no
+# pull request can fix, and nothing in them is shipped code.
+#
+# Be clear about the cost, because it is not zero: both Node repos configure npm
+# with directories: ["/", "**/*"], and that glob does match e2e/js and e2e/ts,
+# so those directories DO get version updates. Dropping the pattern therefore
+# discards their kind 2 failures as well as their kind 3 ones -- there is an
+# open version-update pull request under e2e/ts in both repos as this is
+# written. The npm ecosystem label does not rescue the distinction either:
+# Dependabot writes "npm_and_yarn" for both kinds, so "npm_and_yarn in /e2e/ts
+# for js-yaml" could be either a security job or the refresh of a
+# version-update pull request.
+#
+# Accepted deliberately anyway. Kind 1 is what this watcher primarily exists to
+# catch and is still reported for those directories, so what is given up is the
+# narrower "one open pull request has gone stale" signal, for two directories of
+# test scaffolding, in exchange for dropping 16 unactionable failures in each of
+# the two Node repos over retained history.
+#
+# Reading the directories out of dependabot.yml instead looks more general but is
+# worse: entries may use globs (directories: ["**/*"]), which never match a title
+# literally, so genuine failures would be dropped without a word. Prefer a
+# denylist: when it goes stale it re-introduces noise, which is loud, whereas a
+# stale allowlist hides failures, which is silent.
 #
 # Runs entirely within this repo (no external service). A failed scheduled run
 # emails the person who last edited the cron below. Note: GitHub auto-disables
@@ -22,22 +90,34 @@ jobs:
   check-dependabot-runs:
     runs-on: ubuntu-latest
     steps:
-      - name: Fail if any Dependabot update failed in the last 8 days
+      - name: Fail if any Dependabot version update failed in the last 8 days
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
         run: |
           since=$(date -u -d '8 days ago' +%Y-%m-%dT%H:%M:%SZ)
-          failures=$(gh run list \
+          # --created filters server-side, so --limit applies to runs already
+          # narrowed to the window rather than to all of history. Runs come back
+          # newest-first, so reaching the limit would drop the oldest in-window
+          # runs and this step would report all-clear without them -- hence a
+          # limit far above any plausible week's worth of runs.
+          runs=$(gh run list \
             --repo "$REPO" \
             --workflow "Dependabot Updates" \
-            --limit 100 \
-            --json conclusion,createdAt,displayTitle,url \
-            --jq "[.[] | select((.conclusion == \"failure\" or .conclusion == \"startup_failure\" or .conclusion == \"timed_out\") and .createdAt >= \"$since\")]")
+            --created ">=$since" \
+            --limit 500 \
+            --json conclusion,createdAt,displayTitle,url)
+          failures=$(echo "$runs" | jq '
+            [.[]
+             | select((.displayTitle | contains(" in /. for ")) | not)
+             | select((.displayTitle | test(" in /e2e/(js|ts) for ")) | not)
+             | select(.conclusion == "failure"
+                   or .conclusion == "startup_failure"
+                   or .conclusion == "timed_out")]')
           count=$(echo "$failures" | jq 'length')
           if [ "$count" -gt 0 ]; then
-            echo "::error::$count failed Dependabot update run(s) in the last 8 days:"
+            echo "::error::$count failed Dependabot version update run(s) in the last 8 days:"
             echo "$failures" | jq -r '.[] | "- \(.displayTitle) (\(.createdAt))\n  \(.url)"'
             exit 1
           fi
-          echo "No failed Dependabot update runs in the last 8 days."
+          echo "No failed Dependabot version update runs in the last 8 days."
