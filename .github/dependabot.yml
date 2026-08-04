@@ -21,3 +21,11 @@ updates:
           - github/codeql-action*
     cooldown:
       default-days: 7
+  - package-ecosystem: gitsubmodule
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '14:00'
+    cooldown:
+      default-days: 7
