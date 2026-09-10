@@ -284,7 +284,7 @@ class AsyncClient(BaseClient):
     _existing_session: aiohttp.ClientSession
     _proxy: str | None
 
-    def __init__(  # noqa: PLR0913
+    def __init__(  # noqa: PLR0913, PLR0917
         self,
         account_id: int,
         license_key: str,
@@ -460,7 +460,7 @@ class Client(BaseClient):
     _session: requests.Session
     _proxies: dict[str, str] | None
 
-    def __init__(  # noqa: PLR0913
+    def __init__(  # noqa: PLR0913, PLR0917
         self,
         account_id: int,
         license_key: str,

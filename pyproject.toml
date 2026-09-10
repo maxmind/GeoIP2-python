@@ -68,6 +68,9 @@ ignore = [
     # Redundant as the formatter handles missing trailing commas.
     "COM812",
 
+    # We do not want a copyright header on every file.
+    "CPY001",
+
     # documenting magic methods
     "D105",
 

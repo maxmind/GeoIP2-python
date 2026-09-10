@@ -264,9 +264,7 @@ When a field returns a date string from the API (e.g., "2025-04-14"):
    import datetime
 
    self.network_last_seen = (
-       datetime.date.fromisoformat(network_last_seen)
-       if network_last_seen
-       else None
+       datetime.date.fromisoformat(network_last_seen) if network_last_seen else None
    )
    ```
 
