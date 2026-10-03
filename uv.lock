@@ -441,8 +441,14 @@ name = "geoip2"
 version = "5.3.0"
 source = { editable = "." }
 dependencies = [
-    { name = "aiohttp" },
     { name = "maxminddb" },
+]
+
+[package.optional-dependencies]
+aiohttp = [
+    { name = "aiohttp" },
+]
+requests = [
     { name = "requests" },
 ]
 
@@ -459,10 +465,11 @@ lint = [
 
 [package.metadata]
 requires-dist = [
-    { name = "aiohttp", specifier = ">=3.14.1,<4.0.0" },
+    { name = "aiohttp", marker = "extra == 'aiohttp'", specifier = ">=3.14.1,<4.0.0" },
     { name = "maxminddb", specifier = ">=3.0.0,<4.0.0" },
-    { name = "requests", specifier = ">=2.24.0,<3.0.0" },
+    { name = "requests", marker = "extra == 'requests'", specifier = ">=2.24.0,<3.0.0" },
 ]
+provides-extras = ["aiohttp", "requests"]
 
 [package.metadata.requires-dev]
 dev = [
