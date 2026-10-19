@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import ipaddress
 import sys
 import unittest
@@ -101,7 +101,7 @@ class TestReader(unittest.TestCase):
             self.assertEqual(record.is_tor_exit_node, False)
             self.assertEqual(record.ip_address, ipaddress.ip_address(ip_address))
             self.assertEqual(record.network, ipaddress.ip_network("1.2.0.1/32"))
-            self.assertEqual(record.network_last_seen, datetime.date(2025, 4, 14))
+            self.assertEqual(record.network_last_seen, dt.date(2025, 4, 14))
             self.assertEqual(record.provider_name, "foo")
 
     def test_anonymous_ip_all_set(self) -> None:
