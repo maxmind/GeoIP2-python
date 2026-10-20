@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import ipaddress
 from abc import ABCMeta
 from ipaddress import IPv4Address, IPv6Address
@@ -279,7 +279,7 @@ class AnonymizerFeed(Record):
     attribute is only available from the Insights end point.
     """
 
-    network_last_seen: datetime.date | None
+    network_last_seen: dt.date | None
     """The last day that the network was sighted in our analysis of this
     anonymizer feed. This attribute is only available from the Insights end
     point.
@@ -301,9 +301,7 @@ class AnonymizerFeed(Record):
     ) -> None:
         self.confidence = confidence
         self.network_last_seen = (
-            datetime.date.fromisoformat(network_last_seen)
-            if network_last_seen
-            else None
+            dt.date.fromisoformat(network_last_seen) if network_last_seen else None
         )
         self.provider_name = provider_name
 
@@ -325,7 +323,7 @@ class Anonymizer(Record):
     the Insights end point.
     """
 
-    network_last_seen: datetime.date | None
+    network_last_seen: dt.date | None
     """The last day that the network was sighted in our analysis of anonymized
     networks. This attribute is only available from the Insights end point.
     """
@@ -402,9 +400,7 @@ class Anonymizer(Record):
         self.is_residential_proxy = is_residential_proxy
         self.is_tor_exit_node = is_tor_exit_node
         self.network_last_seen = (
-            datetime.date.fromisoformat(network_last_seen)
-            if network_last_seen
-            else None
+            dt.date.fromisoformat(network_last_seen) if network_last_seen else None
         )
         self.provider_name = provider_name
         self.residential = AnonymizerFeed(**(residential or {}))

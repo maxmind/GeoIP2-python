@@ -7,7 +7,7 @@ https://dev.maxmind.com/geoip/docs/web-services/?lang=en for more details.
 
 from __future__ import annotations
 
-import datetime
+import datetime as dt
 import ipaddress
 from abc import ABCMeta
 from ipaddress import IPv4Address, IPv6Address
@@ -320,7 +320,7 @@ class AnonymousPlus(AnonymousIP):
     network is currently part of an actively used VPN service.
     """
 
-    network_last_seen: datetime.date | None
+    network_last_seen: dt.date | None
     """The last day that the network was sighted in our analysis of anonymized
     networks.
     """
@@ -360,7 +360,7 @@ class AnonymousPlus(AnonymousIP):
         )
         self.anonymizer_confidence = anonymizer_confidence
         if network_last_seen is not None:
-            self.network_last_seen = datetime.date.fromisoformat(network_last_seen)
+            self.network_last_seen = dt.date.fromisoformat(network_last_seen)
         self.provider_name = provider_name
 
 

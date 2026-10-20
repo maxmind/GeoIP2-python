@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import ipaddress
 import sys
 import unittest
@@ -268,7 +268,7 @@ class TestModels(unittest.TestCase):
         self.assertIs(model.anonymizer.is_tor_exit_node, True)
         self.assertEqual(
             model.anonymizer.network_last_seen,
-            datetime.date(2025, 4, 14),
+            dt.date(2025, 4, 14),
         )
         self.assertEqual(model.anonymizer.provider_name, "FooBar VPN")
 
@@ -281,7 +281,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.anonymizer.residential.confidence, 82)
         self.assertEqual(
             model.anonymizer.residential.network_last_seen,
-            datetime.date(2026, 5, 11),
+            dt.date(2026, 5, 11),
         )
         self.assertEqual(model.anonymizer.residential.provider_name, "quickshift")
         self.assertEqual(
@@ -388,7 +388,7 @@ class TestModels(unittest.TestCase):
         self.assertEqual(model.anonymizer.residential.confidence, 82)
         self.assertEqual(
             model.anonymizer.residential.network_last_seen,
-            datetime.date(2026, 5, 11),
+            dt.date(2026, 5, 11),
         )
         self.assertEqual(model.anonymizer.residential.provider_name, "quickshift")
         self.assertEqual(
