@@ -1,10 +1,7 @@
 import datetime as dt
 import ipaddress
-import sys
 import unittest
 from unittest.mock import MagicMock, patch
-
-sys.path.append("..")
 
 import maxminddb
 
