@@ -22,9 +22,10 @@ jobs:
           submodules: true
           persist-credentials: false
 
-      - name: Install the latest version of uv
+      - name: Install the latest known version of uv
         uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
+          version: latest-known
           # Disable caching in the release workflow (zizmor cache-poisoning).
           enable-cache: false
 
