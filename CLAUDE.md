@@ -368,8 +368,8 @@ Breaking changes when adding required parameters.
 ### Setup
 
 ```bash
-# Install uv if not already installed
-curl -LsSf https://astral.sh/uv/install.sh | sh
+# Install the uv version in mise.lock, which CI also uses
+mise install uv
 
 # Install all dependencies including dev and lint groups
 uv sync --all-groups
