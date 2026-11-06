@@ -29,7 +29,7 @@ jobs:
       - name: Install tox
         shell: bash
         run: |
-          uv tool install --python-preference only-managed --python 3.13 tox --with tox-uv --with tox-gh
+          uv tool install --python-preference only-managed --python 3.13 tox --with tox-uv-bare --with tox-gh
           # mise-action, unlike setup-uv, does not add the uv tool bin
           # directory to PATH. Windows runners need it.
           uv tool dir --bin >> "$GITHUB_PATH"
