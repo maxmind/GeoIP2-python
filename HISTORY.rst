@@ -4,7 +4,7 @@
 History
 -------
 
-5.4.0
+5.4.0 (2026-11-17)
 ++++++++++++++++++
 
 * The minimum version of ``maxminddb`` is now 3.3.0. This version raises
