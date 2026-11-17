@@ -7,7 +7,7 @@ authors = [
 ]
 dependencies = [
     "aiohttp>=3.14.1,<4.0.0",
-    "maxminddb>=3.0.0,<4.0.0",
+    "maxminddb>=3.3.0,<4.0.0",
     "requests>=2.24.0,<3.0.0",
 ]
 requires-python = ">=3.10"

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import inspect
-from typing import IO, TYPE_CHECKING, AnyStr, cast
+from typing import TYPE_CHECKING, cast
 
 import maxminddb
 from maxminddb import (
@@ -21,9 +21,9 @@ import geoip2.errors
 import geoip2.models
 
 if TYPE_CHECKING:
-    import os
     from collections.abc import Sequence
 
+    from maxminddb.types import DatabaseSource
     from typing_extensions import Self
 
     from geoip2.models import (
@@ -57,7 +57,7 @@ class Reader:
     IP addresses can be looked up using the ``country`` and ``city`` methods.
 
     The basic API for this class is the same for every database. First, you
-    create a reader object, specifying a file name or file descriptor.
+    create a reader object, specifying a path or a binary file object.
     You then call the method corresponding to the specific database, passing
     it the IP address you want to look up.
 
@@ -75,17 +75,16 @@ class Reader:
 
     def __init__(
         self,
-        fileish: (
-            AnyStr | int | os.PathLike[str] | os.PathLike[bytes] | IO[str] | IO[bytes]
-        ),
+        fileish: DatabaseSource,
         locales: Sequence[str] | None = None,
         mode: int = MODE_AUTO,
     ) -> None:
         """Create GeoIP Reader.
 
-        :param fileish: A path to the GeoIP database or an existing file
-          descriptor pointing to the database. Note that a file descriptor
-          is only valid when mode is MODE_FD.
+        :param fileish: A path to the GeoIP database, or a binary file object
+          for MODE_FD or MODE_AUTO. MODE_MMAP, MODE_FILE, and MODE_MEMORY also
+          accept the file descriptor of a regular file. See
+          ``maxminddb.open_database`` for details.
         :param locales: This is list of locale codes. This argument will be
           passed on to record classes to use when their name properties are
           called. The default value is ['en'].
@@ -115,9 +114,10 @@ class Reader:
           * MODE_MMAP - read from memory map. Pure Python.
           * MODE_FILE - read database as standard file. Pure Python.
           * MODE_MEMORY - load database into memory. Pure Python.
-          * MODE_FD - the param passed via fileish is a file descriptor, not a
-             path. This mode implies MODE_MEMORY. Pure Python.
+          * MODE_FD - the param passed via fileish is a binary file object,
+             not a path. This mode implies MODE_MEMORY. Pure Python.
           * MODE_AUTO - try MODE_MMAP_EXT, MODE_MMAP, MODE_FILE in that order.
+             With a file object, read it into memory, as MODE_FD does.
              Default.
 
         """

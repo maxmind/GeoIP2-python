@@ -2,6 +2,7 @@ import datetime as dt
 import ipaddress
 import sys
 import unittest
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 sys.path.append("..")
@@ -304,6 +305,14 @@ class TestReader(unittest.TestCase):
                 record.traits.ip_address,
                 ipaddress.ip_address("81.2.69.160"),
             )
+
+    def test_file_object_in_auto_mode(self) -> None:
+        with (
+            Path("tests/data/test-data/GeoIP2-City-Test.mmdb").open("rb") as f,
+            geoip2.database.Reader(f) as reader,
+        ):
+            record = reader.city("81.2.69.160")
+            self.assertEqual(record.country.iso_code, "GB")
 
     @patch("maxminddb.open_database")
     def test_modes(self, mock_open: MagicMock) -> None:
