@@ -4,6 +4,21 @@
 History
 -------
 
+5.4.0 (2026-11-17)
+++++++++++++++++++
+
+* The minimum version of ``maxminddb`` is now 3.3.0. This version raises
+  ``InvalidDatabaseError`` for more kinds of corrupt databases, and it fixes
+  memory-safety and free-threading bugs in the C extension. It also lets
+  ``geoip2.database.Reader`` open a binary file object with ``MODE_AUTO``. See
+  the `maxminddb 3.3.0 release notes
+  <https://github.com/maxmind/MaxMind-DB-Reader-python/releases/tag/v3.3.0>`_.
+* The type hint for the ``fileish`` argument of ``geoip2.database.Reader`` is
+  now ``maxminddb.types.DatabaseSource``. With ``MODE_FD`` or ``MODE_AUTO``,
+  it accepts any object whose ``read()`` method returns ``bytes``, such as a
+  ``gzip.GzipFile``. It no longer accepts a text file object, which never
+  worked.
+
 5.3.0 (2026-07-16)
 ++++++++++++++++++
 
